@@ -1,0 +1,151 @@
+.top-navbar {
+  padding: 32px 56px 32px 56px;
+  display: flex;
+  flex-direction: row;
+  gap: 384px;
+  align-items: center;
+  justify-content: flex-start;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.left-nav-itmes {
+  display: flex;
+  flex-direction: row;
+  gap: 72px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.logo {
+  display: flex;
+  flex-direction: row;
+  gap: 11.39px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.group-18856 {
+  flex-shrink: 0;
+  width: 48.4px;
+  height: 26.11px;
+  position: static;
+}
+.rectangle-4 {
+  background: var(--colors-melrose, #afa3fd);
+  border-radius: 3.08px;
+  width: 18.47px;
+  height: 18.47px;
+  position: absolute;
+  left: 13.35px;
+  top: 2.95px;
+  transform-origin: 0 0;
+  transform: rotate(46.287deg) scale(1, 1);
+}
+.rectangle-5 {
+  background: var(--colors-melrose, #afa3fd);
+  border-radius: 3.08px;
+  opacity: 0.5;
+  width: 18.47px;
+  height: 18.47px;
+  position: absolute;
+  left: 35.63px;
+  top: 2.95px;
+  transform-origin: 0 0;
+  transform: rotate(46.287deg) scale(1, 1);
+}
+.macro {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Semibold", sans-serif;
+  font-size: 25.62108612060547px;
+  font-weight: 600;
+  text-transform: uppercase;
+  position: relative;
+}
+.nav-items {
+  display: flex;
+  flex-direction: row;
+  gap: 56px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.features {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.pricing {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.about-us {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.faq {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.frame-32 {
+  display: flex;
+  flex-direction: row;
+  gap: 48px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.how-it-works {
+  color: var(--colors-white, #ffffff);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.buttons {
+  background: var(--colors-melrose, #afa3fd);
+  border-radius: 16px;
+  padding: 16px 24px 16px 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.sign-up {
+  color: var(--colors-eerieblack, #1a1a1a);
+  text-align: left;
+  font-family: "ClashDisplay-Medium", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}

@@ -1,0 +1,335 @@
+.frame-1547755088,
+.frame-1547755088 * {
+  box-sizing: border-box;
+}
+
+.frame-1342{
+    color: var(--text-color);
+    text-align: center;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.frame-13421{
+    color: #848199;
+    text-align: center;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.frame-1547755088 {
+  background: var(--background);
+  padding: 0px 117px 0px 117px;
+  
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+.frame-15477550881{
+  max-width: 400px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.frame-1547755085 {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-1547755077 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  position: relative;
+}
+.rectangle-42020 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 40px;
+  position: relative;
+  cursor: pointer;
+}
+.devicon-google {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: calc(50% - 9.33px);
+  top: 11px;
+  overflow: visible;
+}
+.frame-1547755078 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+}
+.rectangle-42021 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 40px;
+  position: relative;
+}
+.fontisto-facebook {
+  flex-shrink: 0;
+  width: 8px;
+  height: 17px;
+  position: absolute;
+  left: calc(50% - 4px);
+  top: 11px;
+  overflow: visible;
+}
+.frame-1547755079 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  position: relative;
+  cursor: pointer;
+}
+.rectangle-42022 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 40px;
+  position: relative;
+}
+.ri-twitter-fill {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: calc(50% - 10.67px);
+  top: 8px;
+  overflow: visible;
+}
+.frame-1547755084 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.line-107 {
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px 0 0 0;
+  flex: 1;
+  height: 0px;
+  position: relative;
+}
+.or {
+  color: var(--border-color);
+  text-align: left;
+  font-size: 18px;
+  font-weight: 400;
+  position: relative;
+}
+.line-108 {
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px 0 0 0;
+  flex: 1;
+  height: 0px;
+  position: relative;
+}
+.frame-1547755111 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.rectangle-42024 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 49px;
+  position: relative;
+}
+.email-address {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  position: absolute;
+  left: 13px;
+  top: 13px;
+  input{
+    color: var(--text-color);
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+}
+.frame-1547755083 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: var(--border-color);
+  border-width: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 49px;
+  position: relative;
+}
+.frame-1547755082 {
+  padding: 0px 13px 0px 13px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.password {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  input{
+    color: var(--text-color);
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+}
+.vector8 {
+  flex-shrink: 0;
+  width: 22px;
+  height: 19px;
+  position: relative;
+  overflow: visible;
+  cursor: pointer;
+}
+.frame-1547755086 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-1547755081 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.vector9 {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  overflow: visible;
+}
+.remember-me {
+  color: var(--text-color);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+}
+.forgot-password {
+  color: var(--azul-electrico, #0000ff);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}
+.frame-1547755110 {
+  background: var(--azul-electrico, #0000ff);
+  border-radius: 4px;
+  padding: 11px 2px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.login {
+  color: var(--colores-blanco, #ffffff);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+}
+.frame-1547755080 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.don-t-have-an-account {
+  color: var(--text-color);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+}
+.sign-up {
+  color: var(--azul-electrico, #0000ff);
+  text-align: left;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}

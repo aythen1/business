@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgroup1171276705=self.webpackChunkgroup1171276705||[]).push([[626],{7626:(r,e,s)=>{s.r(e),s.d(e,{default:()=>d});s(2791);var u=s(184);const d=r=>{let{}=r;return(0,u.jsxs)("div",{children:[(0,u.jsx)("div",{children:"TokenBar #0401"}),(0,u.jsx)("div",{children:"Introduce tu token para usarlo puedes introducir varias"})]})}}}]);
+//# sourceMappingURL=626.bb4cbfec.chunk.js.map

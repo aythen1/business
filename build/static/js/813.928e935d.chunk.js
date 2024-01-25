@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgroup1171276705=self.webpackChunkgroup1171276705||[]).push([[813],{4813:(e,n,a)=>{a.r(n),a.d(n,{handleDeleteInstance:()=>s,handleDetachIP:()=>t,handleMoreInfo:()=>h,handlePowerOff:()=>l,handleReboot:()=>d,handleStandby:()=>o});const h=()=>{},l=()=>{},d=()=>{},o=()=>{},t=()=>{},s=e=>{}}}]);
+//# sourceMappingURL=813.928e935d.chunk.js.map

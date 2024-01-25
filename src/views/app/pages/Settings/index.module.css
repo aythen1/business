@@ -1,0 +1,33 @@
+
+.main{
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+
+.headerButtons{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* margin-bottom: -8px; */
+    margin-top: -8px;
+
+    button{
+        background: var(--background-button-topbar);
+        border-radius: 5px;
+        padding: 6px 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-start;
+        cursor: pointer;
+        border: none;
+        outline: none;
+
+        &.selected{
+            background: #000fff;
+            color: #fff;
+        }
+    }
+}

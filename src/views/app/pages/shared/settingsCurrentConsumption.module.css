@@ -1,0 +1,141 @@
+.boxConsumption{   
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 24px;
+    margin-top: 16px;
+}
+
+.grid2{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 20px;
+}
+
+
+.bar{
+    position: relative;
+    .image{
+
+    }
+
+    .box{
+        position: absolute;
+        margin: auto;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        top: calc(50% - 35px);
+        text-align: center;
+        left: calc(50% - 50px);
+        width: 100px;
+        .pricing{
+            font-size: 28px;
+            font-weight: 500;
+     
+        
+        }
+        .text{
+            font-size: 10px;
+            line-height: 12px;
+            
+        }
+    }
+
+
+}
+
+
+.listPricing{
+    color: var(--text-color-secondary);
+    font-size: 14px;
+    list-style-type: none;
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: auto;
+    gap: 4px;
+    .pricing{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        .dot{
+            width: 10px;
+            height: 10px;
+            background: rgb(239, 232, 232);
+            border-radius: 50%;
+
+            &.red{
+                background: red;
+            }
+            &.orange{
+                background: rgb(255, 175, 45);
+            }
+            &.blue{
+                background: rgb(5, 105, 255);
+            }
+            &.green{
+                background: rgb(53, 254, 39);
+            }
+        }
+    }
+}
+
+
+.footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    .buttons{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        button{
+            display: inline-flex;
+            height: 26px;
+            padding: 0px 8px;
+            flex-direction: row;
+            gap: 8px;
+            border-radius: 4px;
+            box-sizing: border-box;
+            width: auto;
+            align-items: center;
+            cursor: pointer;
+            justify-content: center;
+            outline-offset: 2px;
+            white-space: nowrap;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0px;
+            line-height: 20px;
+            background: none;
+            border: 1px solid rgb(181, 183, 189);
+            color: rgb(63, 66, 80);
+            svg{
+                width: 15px;
+                fill: #8b8282;
+            }
+        }
+    }
+
+    .updated{
+        font-size: 10px;
+        font-weight: 400;
+        letter-spacing: 0px;
+        line-height: 16px;
+        text-transform: none;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--text-color-secondary);
+        fill: var(--text-color-secondary);
+        svg{
+            fill: fillCurrent;
+            width: 20px;
+        }
+    }
+}

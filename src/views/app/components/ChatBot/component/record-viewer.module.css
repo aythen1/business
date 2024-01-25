@@ -1,0 +1,81 @@
+.containerRecordViewer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.recordViewer {
+  padding: 2px 6px;
+  background: #dce4ff;
+  color: #0000ff;
+  font-size: 12px;
+  border-radius: 6px;
+  display: flex;
+  gap: 2px;
+  align-items: center;  
+}
+
+.buttonPlay {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  .iconPlay {
+    width: 30px;
+    color: #54656f;
+  }
+}
+.buttonPause {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  .iconPause {
+    width: 30px;
+    color: #54656f;
+  }
+}
+
+.containerBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.barBox {
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 140px;
+  height: 20px;
+  /* background: #ececec; */
+  border-radius: 8px;
+
+  .bar {
+    /* background: red; */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    .splot {
+      width: 2px;
+      background: blue;
+      margin-right: 1px;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+.textTime {
+  font-size: 10px;
+}

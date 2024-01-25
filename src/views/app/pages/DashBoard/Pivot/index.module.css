@@ -1,0 +1,4 @@
+.components-grids{
+    display: flex;
+    flex-wrap: wrap;
+}

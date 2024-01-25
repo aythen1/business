@@ -1,0 +1,12 @@
+.grid-3{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    .grid{
+        border: 1px solid red;
+    }
+
+    .graph{
+        zoom: 0.25;
+    }
+}

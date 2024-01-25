@@ -1,0 +1,361 @@
+.frame-1171276727,
+.frame-1171276727 * {
+  box-sizing: border-box;
+}
+.frame-1171276727 {
+  background: var(--background-secondary);
+  padding: 20px 20px 50px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex: 1 1;
+  position: relative;
+}
+.frame-2087328702 {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-shrink: 0;
+  position: relative;
+  width: 100%;  
+  margin: 0 auto;
+}
+
+.frame-2087328701 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 50%;
+}
+.image {
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+  position: relative;
+  object-fit: cover;
+}
+.frame-2087328700 {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+  margin: 0 auto;
+}
+.button-container {
+  display: flex;
+  flex-direction: row;
+  gap: 44px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.component-4 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: var(--azul-electrico, #0000ff);
+  border-width: 2px;
+  padding: 7px 15px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* width: 136px; */
+  height: 30px;
+  position: relative;
+}
+.label {
+  color: var(--azul-electrico, #0000ff);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.component-5 {
+  background: #0000ff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* width: 136px; */
+  height: 30px;
+  position: relative;
+}
+.label2 {
+  color: #ffffff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inner-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 44px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex: 1;
+  position: relative;
+}
+.input {
+  background: var(--background-input);
+  border-radius: 8px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  height: 46px;
+  position: relative;
+}
+.input-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+}
+.label3 {
+  color: var(--black-4, #5e6366);
+  text-align: left;
+  font-family: "Poppins-Regular", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+.placehoder {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--black-2, #abafb1);
+  text-align: left;
+  font-family: "Poppins-Regular", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+.right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.phone-number-amount {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.country-code {
+  background: var(--background-input);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: auto;
+  height: 40px;
+  position: relative;
+}
+.input-content2 {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+}
+.frame-4 {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  position: relative;
+}
+.ng-1 {
+  flex-shrink: 0;
+  width: 35px;
+  height: 24px;
+  position: relative;
+  object-fit: cover;
+}
+.input-content3 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 1;
+  height: 42px;
+  position: relative;
+}
+._234 {
+  color: var(--black-2, #abafb1);
+  text-align: left;
+  font-family: var(
+    --input-placeholder-font-family,
+    "Inter-Regular",
+    sans-serif
+  );
+  font-size: var(--input-placeholder-font-size, 16px);
+  font-weight: var(--input-placeholder-font-weight, 400);
+  position: relative;
+  align-self: stretch;
+}
+.iconly-light-arrow-down-2 {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+.iconly-light-arrow-down-22 {
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  bottom: 0%;
+  top: 0%;
+  height: 100%;
+}
+.arrow-down-2 {
+  height: auto;
+  position: absolute;
+  right: 20.83%;
+  left: 20.83%;
+  width: 58.33%;
+  bottom: 35.42%;
+  top: 35.42%;
+  height: 29.17%;
+  overflow: visible;
+}
+.input2 {
+  background: var(--background-input);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: auto;
+  height: 40px;
+  position: relative;
+}
+.input-content4 {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+}
+.phone-number {
+  color: var(--black-4, #5e6366);
+  text-align: left;
+  font-family: "Poppins-Regular", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+._8023456789 {
+  color: var(--black-2, #abafb1);
+  text-align: left;
+  font-family: "Poppins-Regular", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .MenuLeft{
+
+    width: 350px;
+  }
+}

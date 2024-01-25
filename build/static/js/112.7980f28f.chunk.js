@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgroup1171276705=self.webpackChunkgroup1171276705||[]).push([[112],{6112:(e,s,u)=>{u.r(s),u.d(s,{PopupPricing:()=>p,default:()=>a});var r=u(184);const p=e=>{let{className:s,...u}=e;return(0,r.jsx)("div",{})},a=p}}]);
+//# sourceMappingURL=112.7980f28f.chunk.js.map

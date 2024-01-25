@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+    @media screen and (max-width: 375px) {
+      .TrialEndedEmail {
+        width: 375px !important;
+        height: 990px !important;
+        padding-top: 20px !important;
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+        background: #F5F7FA !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        display: inline-flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated {
+        align-self: stretch !important;
+        height: 672px !important;
+        padding: 40px !important;
+        background: white !important;
+        border-radius: 3px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 40px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand {
+        width: 124px !important;
+        height: 18px !important;
+        padding-right: 0.79px !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        gap: 7px !important;
+        display: inline-flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand .Logo {
+        width: 38px !important;
+        height: 18px !important;
+        position: relative !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand .Logo .Oval {
+        width: 18px !important;
+        height: 18px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+        opacity: 0.81 !important;
+        background: #0ABD9F !important;
+        border-radius: 9999px !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand .Logo .Oval+.Oval {
+        left: 10px !important;
+        background: #FFB313 !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand .Logo .Oval+.Oval+.Oval {
+        left: 20px !important;
+        background: #F35B44 !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .LogoBrand .Company {
+        width: 78.21px !important;
+        height: 17.48px !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .Header {
+        align-self: stretch !important;
+        color: #222D38 !important;
+        font-size: 24px !important;
+        font-family: Inter !important;
+        font-weight: 700 !important;
+        line-height: 32px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta {
+        align-self: stretch !important;
+        height: 430px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 24px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .HiCustomerName {
+        align-self: stretch !important;
+        color: #46586B !important;
+        font-size: 16px !important;
+        font-family: Inter !important;
+        font-weight: 400 !important;
+        line-height: 24px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .Text {
+        align-self: stretch !important;
+        color: #46586B !important;
+        font-size: 16px !important;
+        font-family: Inter !important;
+        font-weight: 400 !important;
+        line-height: 24px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta {
+        align-self: stretch !important;
+        height: 78px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta .ContainerPrimarySecondary {
+        align-self: stretch !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        display: inline-flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta .ContainerPrimarySecondary .Button {
+        padding-left: 32px !important;
+        padding-right: 32px !important;
+        padding-top: 12px !important;
+        padding-bottom: 12px !important;
+        background: #53AB97 !important;
+        box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.09) !important;
+        border-radius: 3px !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        gap: 16px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta .ContainerPrimarySecondary .Button .ButtonText {
+        text-align: center !important;
+        color: white !important;
+        font-size: 16px !important;
+        font-family: Inter !important;
+        font-weight: 700 !important;
+        line-height: 24px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta .SecondaryLinkAndDescription {
+        align-self: stretch !important;
+        height: 18px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .ContainerElevated .MessageCta .ContainerCta .SecondaryLinkAndDescription .CancelAnytimeFor {
+        color: #46586B !important;
+        font-size: 12px !important;
+        font-family: Inter !important;
+        font-weight: 400 !important;
+        line-height: 18px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .FooterApps {
+        align-self: stretch !important;
+        height: 298px !important;
+        padding-left: 40px !important;
+        padding-right: 40px !important;
+        padding-top: 32px !important;
+        padding-bottom: 32px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 24px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps {
+        align-self: stretch !important;
+        height: 78px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps {
+        align-self: stretch !important;
+        height: 78px !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame15 {
+        align-self: stretch !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 3px !important;
+        display: inline-flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame15 .ProductNameAtTh {
+        color: #46586B !important;
+        font-size: 12px !important;
+        font-family: Inter !important;
+        font-weight: 400 !important;
+        line-height: 18px !important;
+        word-wrap: break-word !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 {
+        width: 58px !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        display: inline-flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore {
+        width: 125px !important;
+        height: 32px !important;
+        padding-right: 0.72px !important;
+        justify-content: center !important;
+        align-items: center !important;
+        display: flex !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore {
+        width: 124.28px !important;
+        height: 32px !important;
+        position: relative !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group {
+        width: 124.28px !important;
+        height: 32px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group {
+        width: 124.28px !important;
+        height: 32px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group .Path {
+        width: 124.28px !important;
+        height: 32px !important;
+        left: 0px !important;
+        top: -0px !important;
+        position: absolute !important;
+        background: #A6A6A6 !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group .Path+.Path {
+        width: 122.89px !important;
+        height: 30.60px !important;
+        left: 0.70px !important;
+        top: 0.70px !important;
+        position: absolute !important;
+        background: black !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group2 {
+        width: 108.26px !important;
+        height: 19.82px !important;
+        left: 7.94px !important;
+        top: 6.98px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group2 .Group4 {
+        width: 14.11px !important;
+        height: 17.42px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group2 .Group4 .Path {
+        width: 14.11px !important;
+        height: 13.22px !important;
+        left: 0px !important;
+        top: 4.20px !important;
+        position: absolute !important;
+        background: white !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group2 .Group4 .Path2 {
+        width: 3.48px !important;
+        height: 4.02px !important;
+        left: 7.02px !important;
+        top: 0px !important;
+        position: absolute !important;
+        background: white !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group {
+        width: 88.05px !important;
+        height: 12.50px !important;
+        left: 20.20px !important;
+        top: 7.32px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group .Path {
+        width: 10px !important;
+        height: 9.93px !important;
+        left: 0px !important;
+        top: 0.17px !important;
+        position: absolute !important;
+        background: white !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group .Shape {
+        width: 6.13px !important;
+        height: 7.47px !important;
+        left: 11.18px !important;
+        top: 2.77px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame2 .LogoAppStore .LogoAppStore .Group .Group .Path2 {
+        width: 1.88px !important;
+        height: 3.18px !important;
+        left: 3.25px !important;
+        top: 0px !important;
+        position: absolute !important;
+        background: white !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame3 {
+        width: 36.99px !important;
+        height: 18.91px !important;
+        left: 46.50px !important;
+        top: 6.54px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame3 .Background {
+        width: 36.99px !important;
+        height: 18.91px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+        background: #A6A6A6 !important;
+        border-radius: 3px !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame3 .AppStoreIcon {
+        width: 14.50px !important;
+        height: 14.50px !important;
+        left: 11.74px !important;
+        top: 2px !important;
+        position: absolute !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame3 .AppStoreIcon .Icon {
+        width: 14.50px !important;
+        height: 14.50px !important;
+        position: relative !important;
+      }
+
+      .TrialEndedEmail .FooterApps .DownloadApps .FooterComponentDownloadApps .Frame3 .AppStoreIcon .Icon .Path {
+        width: 14.50px !important;
+        height: 14.50px !important;
+        left: 0px !important;
+        top: 0px !important;
+        position: absolute !important;
+        background: url('data:image/svg+xml;...') center/contain no-repeat !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="TrialEndedEmail"
+    style="width: 656px; height: 754px; padding-top: 32px; padding-left: 32px; padding-right: 32px; background: #F5F7FA; flex-direction: column; justify-content: center; align-items: flex-start; display: inline-flex">
+    <div class="ContainerElevated"
+      style="align-self: stretch; height: 496px; padding: 40px; background: white; border-radius: 3px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: flex">
+      <div class="LogoBrand"
+        style="width: 124px; height: 18px; padding-right: 0.79px; justify-content: center; align-items: flex-start; gap: 7px; display: inline-flex">
+        <div class="Logo" style="width: 38px; height: 18px; position: relative">
+          <div class="Oval"
+            style="width: 18px; height: 18px; left: 0px; top: 0px; position: absolute; opacity: 0.81; background: #0ABD9F; border-radius: 9999px">
+          </div>
+          <div class="Oval"
+            style="width: 18px; height: 18px; left: 10px; top: 0px; position: absolute; opacity: 0.81; background: #FFB313; border-radius: 9999px">
+          </div>
+          <div class="Oval"
+            style="width: 18px; height: 18px; left: 20px; top: 0px; position: absolute; opacity: 0.81; background: #F35B44; border-radius: 9999px">
+          </div>
+        </div>
+        <img class="Company" style="width: 78.21px; height: 17.48px" src="https://via.placeholder.com/78x17" />
+      </div>
+      <div class="Header"
+        style="align-self: stretch; color: #222D38; font-size: 24px; font-family: Inter; font-weight: 700; line-height: 32px; word-wrap: break-word">
+        {{trialEndedEmail}}</div>
+      <div class="MessageCta"
+        style="align-self: stretch; height: 286px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
+        <div class="HiCustomerName"
+          style="align-self: stretch; color: #46586B; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">
+          {{hiCustomerName}}</div>
+        <div class="Text"
+          style="align-self: stretch; color: #46586B; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">
+          {{text}}</div>
+        <div class="ContainerCta"
+          style="align-self: stretch; height: 78px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
+          <div class="ContainerPrimarySecondary"
+            style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 12px; display: inline-flex">
+            <div class="Button"
+              style="padding-left: 32px; padding-right: 32px; padding-top: 12px; padding-bottom: 12px; background: #53AB97; box-shadow: 0px 3px 9px rgba(0, 0, 0, 0.09); border-radius: 3px; justify-content: center; align-items: flex-start; gap: 16px; display: flex">
+              <div class="ButtonText"
+                style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 700; line-height: 24px; word-wrap: break-word">
+                {{upgradeNowButtonText}}</div>
+            </div>
+          </div>
+          <div class="SecondaryLinkAndDescription"
+            style="align-self: stretch; height: 18px; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
+            <div class="CancelAnytimeFor"
+              style="align-self: stretch; color: #46586B; font-size: 12px; font-family: Inter; font-weight: 400; line-height: 18px; word-wrap: break-word">
+              {{cancelAnytimeFor}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{footerHtml}}
+  </div>
+</body>
+
+</html>

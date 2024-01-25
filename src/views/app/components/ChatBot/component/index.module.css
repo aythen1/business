@@ -1,0 +1,182 @@
+
+.boxImageViewer{
+  img{
+    width: 100%;
+  }
+}
+
+
+
+.card {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 8px;
+
+  .avatar {
+    img {
+      width: 25px;
+      min-width: 25px;
+      height: 25px;
+      border-radius: 50%;
+    }
+  }
+
+  .box {
+    padding: 10px;
+    background: #f2f2f2;
+    border-radius: 10px;
+
+    .header {
+      font-size: 14px;
+      b {
+      }
+    }
+
+    .paragraph {
+      font-size: 12px;
+      margin: 2px 0px;
+    }
+  }
+}
+
+.pallete {
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    b {
+      font-size: 10px;
+    }
+
+    & > div {
+      display: flex;
+      & > div {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: white;
+        margin: 0 -5px;
+      }
+    }
+  }
+}
+
+
+.filePdf{
+  display: flex;
+  justify-content: flex-end;
+  
+
+  .file{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #dce4ff;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .iconPdf{
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .message{
+    display: flex;
+    flex-direction: column;
+
+    & > span:nth-child(1){
+      font-size: 12px;
+    }
+    & > span:nth-child(0){
+      font-size: 0px;
+    }
+  }
+
+  .iconUpgrade{
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+  }
+}
+
+.option {
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* margin-top: 4px; */
+  align-items: flex-end;
+  
+  &.bot{
+    align-items: flex-start;
+    
+  }
+
+  & > div {
+    padding: 6px 10px;
+    background: #dce4ff;
+    color: #0000ff;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+}
+
+.messages{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.components {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 6px;
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    background: #0000ff;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  span {
+    font-size: 8px;
+    display: block;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+}
+
+.labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+}
+
+.sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.chrome-picker {
+  background-color: #ff0000;
+}

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgroup1171276705=self.webpackChunkgroup1171276705||[]).push([[723],{1723:(e,t,r)=>{r.r(t),r.d(t,{getUser:()=>a,isAuthenticated:()=>n,login:()=>s,logout:()=>l,registerUser:()=>u});const o="user",s=(e,t)=>{const r={username:e};return localStorage.setItem(o,JSON.stringify(r)),r},l=()=>{localStorage.removeItem(o)},n=()=>{const e=localStorage.getItem(o);return Boolean(e)},a=()=>{const e=localStorage.getItem(o);return e?JSON.parse(e):null},u=()=>{}}}]);
+//# sourceMappingURL=723.b6506c5f.chunk.js.map

@@ -1,0 +1,430 @@
+.radar,
+.radar * {
+  box-sizing: border-box;
+}
+.radar {
+  width: 430px;
+  height: 433px;
+  position: relative;
+}
+.rectangle-2045 {
+  background: var(--white, #ffffff);
+  border-radius: 6px;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  bottom: 0%;
+  top: 0%;
+  height: 100%;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+}
+.primary-text {
+  color: var(--gray-1, #828282);
+  text-align: left;
+  font-family: var(--primary-text-font-family, "Roboto-SemiBold", sans-serif);
+  font-size: var(--primary-text-font-size, 16px);
+  font-weight: var(--primary-text-font-weight, 600);
+  position: absolute;
+  right: 38.37%;
+  left: 10.47%;
+  width: 51.16%;
+  bottom: 89.15%;
+  top: 6.47%;
+  height: 4.39%;
+}
+._5-987-34 {
+  color: var(--value-color, #0b1354);
+  text-align: left;
+  font-family: var(--value-font-family, "Roboto-Medium", sans-serif);
+  font-size: var(--value-font-size, 40px);
+  font-weight: var(--value-font-weight, 500);
+  position: absolute;
+  right: 38.37%;
+  left: 10.47%;
+  width: 51.16%;
+  bottom: 77.14%;
+  top: 12.01%;
+  height: 10.85%;
+}
+.secondary-text {
+  color: var(--gray-2, #4f4f4f);
+  text-align: left;
+  font-family: var(--secondary-text-font-family, "Roboto-Regular", sans-serif);
+  font-size: var(--secondary-text-font-size, 14px);
+  font-weight: var(--secondary-text-font-weight, 400);
+  position: absolute;
+  right: 38.37%;
+  left: 10.47%;
+  width: 51.16%;
+  bottom: 72.29%;
+  top: 24.02%;
+  height: 3.7%;
+}
+.group-2290 {
+  position: absolute;
+  inset: 0;
+}
+.ellipse-16 {
+  background: var(--gray-3, #bdbdbd);
+  border-radius: 50%;
+  position: absolute;
+  right: 8.6%;
+  left: 85.81%;
+  width: 5.58%;
+  bottom: 87.99%;
+  top: 6.47%;
+  height: 5.54%;
+}
+.group-5 {
+  width: 4px;
+  height: 16px;
+  position: static;
+}
+.rectangle-8 {
+  background: var(--white, #ffffff);
+  border-radius: 6px;
+  position: absolute;
+  right: 10.93%;
+  left: 88.14%;
+  width: 0.93%;
+  bottom: 88.91%;
+  top: 8.62%;
+  height: 2.46%;
+}
+.rectangle-9 {
+  background: var(--white, #ffffff);
+  border-radius: 6px;
+  position: absolute;
+  right: 10.93%;
+  left: 88.14%;
+  width: 0.93%;
+  bottom: 91.69%;
+  top: 7.39%;
+  height: 0.92%;
+}
+.vector-50 {
+  height: auto;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  bottom: 66.28%;
+  top: 33.72%;
+  height: 0%;
+  overflow: visible;
+}
+.vector-71 {
+  opacity: 0.6000000238418579;
+  height: auto;
+  position: absolute;
+  right: 57.79%;
+  left: 15.7%;
+  width: 26.51%;
+  bottom: 21.02%;
+  top: 56%;
+  height: 22.98%;
+  overflow: visible;
+}
+._100 {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 57.97%;
+  top: 38.34%;
+  height: 3.7%;
+}
+._80 {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 53.58%;
+  top: 42.73%;
+  height: 3.7%;
+}
+._60 {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 49.65%;
+  top: 46.65%;
+  height: 3.7%;
+}
+._40 {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 44.34%;
+  top: 51.96%;
+  height: 3.7%;
+}
+._20 {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 39.49%;
+  top: 56.81%;
+  height: 3.7%;
+}
+.group-2291 {
+  position: absolute;
+  inset: 0;
+}
+.product-1 {
+  color: var(--gray-2, #4f4f4f);
+  text-align: left;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 8.6%;
+  left: 77.21%;
+  width: 14.19%;
+  bottom: 54.04%;
+  top: 42.03%;
+  height: 3.93%;
+}
+.rectangle-1339 {
+  background: var(--data-1, #165baa);
+  position: absolute;
+  right: 24.88%;
+  left: 70.23%;
+  width: 4.88%;
+  bottom: 55.2%;
+  top: 42.96%;
+  height: 1.85%;
+}
+.product-2 {
+  color: var(--gray-2, #4f4f4f);
+  text-align: left;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 8.6%;
+  left: 77.21%;
+  width: 14.19%;
+  bottom: 48.96%;
+  top: 47.11%;
+  height: 3.93%;
+}
+.rectangle-1340 {
+  background: var(--data-2, #a155b9);
+  position: absolute;
+  right: 24.88%;
+  left: 70.23%;
+  width: 4.88%;
+  bottom: 50.12%;
+  top: 48.04%;
+  height: 1.85%;
+}
+.product-3 {
+  color: var(--gray-2, #4f4f4f);
+  text-align: left;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 8.6%;
+  left: 77.21%;
+  width: 14.19%;
+  bottom: 43.88%;
+  top: 52.19%;
+  height: 3.93%;
+}
+.rectangle-1341 {
+  background: var(--data-3, #f765a3);
+  position: absolute;
+  right: 24.88%;
+  left: 70.23%;
+  width: 4.88%;
+  bottom: 45.03%;
+  top: 53.12%;
+  height: 1.85%;
+}
+.product-4 {
+  color: var(--gray-2, #4f4f4f);
+  text-align: left;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 8.6%;
+  left: 77.21%;
+  width: 14.19%;
+  bottom: 38.8%;
+  top: 57.27%;
+  height: 3.93%;
+}
+.rectangle-1342 {
+  background: var(--data-4, #16bfd6);
+  position: absolute;
+  right: 24.88%;
+  left: 70.23%;
+  width: 4.88%;
+  bottom: 39.95%;
+  top: 58.2%;
+  height: 1.85%;
+}
+.group-2294 {
+  height: auto;
+  position: absolute;
+  right: 40.23%;
+  left: 9.77%;
+  width: 50%;
+  bottom: 7.59%;
+  top: 40.65%;
+  height: 51.76%;
+  overflow: visible;
+}
+.vector-70 {
+  opacity: 0.6000000238418579;
+  height: auto;
+  position: absolute;
+  right: 54.42%;
+  left: 23.6%;
+  width: 21.98%;
+  bottom: 19.98%;
+  top: 40.99%;
+  height: 39.03%;
+  overflow: visible;
+}
+.group-2295 {
+  height: auto;
+  position: absolute;
+  right: 45.12%;
+  left: 10%;
+  width: 44.88%;
+  bottom: 19.4%;
+  top: 40.42%;
+  height: 40.18%;
+  overflow: visible;
+}
+.jan {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 61.63%;
+  left: 30.93%;
+  width: 7.44%;
+  bottom: 61.66%;
+  top: 34.64%;
+  height: 3.7%;
+}
+.feb {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 38.6%;
+  left: 53.95%;
+  width: 7.44%;
+  bottom: 49.65%;
+  top: 46.65%;
+  height: 3.7%;
+}
+.mar {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 32.79%;
+  left: 59.77%;
+  width: 7.44%;
+  bottom: 27.94%;
+  top: 68.36%;
+  height: 3.7%;
+}
+.apr {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 46.98%;
+  left: 45.58%;
+  width: 7.44%;
+  bottom: 7.62%;
+  top: 88.68%;
+  height: 3.7%;
+}
+.may {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 75.12%;
+  left: 17.44%;
+  width: 7.44%;
+  bottom: 7.85%;
+  top: 88.45%;
+  height: 3.7%;
+}
+.jun {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 89.53%;
+  left: 3.02%;
+  width: 7.44%;
+  bottom: 28.87%;
+  top: 67.44%;
+  height: 3.7%;
+}
+.jul {
+  color: var(--gray-3, #bdbdbd);
+  text-align: center;
+  font-family: var(--product-font-family, "Inter-Regular", sans-serif);
+  font-size: var(--product-font-size, 12px);
+  font-weight: var(--product-font-weight, 400);
+  position: absolute;
+  right: 84.42%;
+  left: 8.14%;
+  width: 7.44%;
+  bottom: 49.88%;
+  top: 46.42%;
+  height: 3.7%;
+}

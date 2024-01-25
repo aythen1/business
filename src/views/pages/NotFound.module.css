@@ -1,0 +1,19 @@
+.main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    height: 90vh;
+
+    h2{
+        font-size: 40px;
+        margin: 0px;
+        color: #000fff;
+    }
+
+    p{
+        font-weight: 400;
+        font-size: 20px;
+    }
+}
