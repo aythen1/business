@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
+
+
 
 import styles from './home.module.css'
 
@@ -22,6 +25,12 @@ import {
 
 
 const News = ({ items }) => {
+    const navigate = useNavigate()
+
+    const onClickSupport = () => {
+        navigate('/es/app/settings/support')
+    }
+
     return (
         <div>
         {items.map( (item, index) => (
@@ -41,7 +50,10 @@ const News = ({ items }) => {
                     learning efficiency? Find out in part 1 of our series`}
                 </p>
             </div>
-            <button className={styles["button"]}>
+            <button 
+                onClick={() => onClickSupport()}
+                className={styles["button"]}
+            >
                 <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
             </button>
         </div>
@@ -49,11 +61,9 @@ const News = ({ items }) => {
         </div>
     )
 }
-const Changelog = ({ items }) => {
+const Changelog = ({ item }) => {
     return (
         <div>
-        {items.map( (item, index) => (
-        <div key={index}>
             <img src={ChangelogKubernetes} className={styles["image"]} />
             <div className={styles["labelContainer"]}>
                 <label>
@@ -81,14 +91,12 @@ const Changelog = ({ items }) => {
                 </div>
             </div>
         </div>
-        ))}
-        </div>
     )
 }
 const Home = ({ }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
-
+    
     const { changelogs, news } = useSelector((state) => state.iam)
 
     const [organization, setOrganization] = useState({
@@ -191,11 +199,16 @@ const Home = ({ }) => {
     }, [])
     
 
-    
+    const [indexChangelog, setIndexChangelog] = useState(0)
+    const [itemChangelog, setItemChangelog] = useState([])
     const [listChangelogs, setListChangelogs] = useState([])
+
     useEffect(() => {
         setListChangelogs(changelogs)
+        setItemChangelog(changelogs[indexChangelog])
     }, [changelogs])
+
+    
     
     
     const [listNotes, setListNotes] = useState([])
@@ -208,17 +221,29 @@ const Home = ({ }) => {
 
     useEffect(() => {
         if(changelogs.length == 0){
-            console.log('estupendo empezareeee')
             const token = localStorage.getItem('token')
             dispatch(fetchsDefault({token}))
         }
     }, [])
 
 
-
+    const onPrevChangelogs = () => {
+        if (indexChangelog > 0) {
+          setItemChangelog(changelogs[indexChangelog - 1]);
+          setIndexChangelog(indexChangelog - 1);
+        }
+      };
+    
+      const onNextChangelogs = () => {
+        if (indexChangelog < changelogs.length - 1) {
+          setItemChangelog(changelogs[indexChangelog + 1]);
+          setIndexChangelog(indexChangelog + 1);
+        }
+      };
+    // --------------------------------
 
     const handleClickBilling = () => {
-        navigate('/es/app/billing')
+        navigate('/es/app/settings/billing')
     }
 
 
@@ -353,14 +378,14 @@ const Home = ({ }) => {
                     </div>
                     <div className={styles["boxChangelog"]}>
                         <div className={styles["buttons"]}>
-                            <button>
+                            <button onClick={() => onPrevChangelogs( )}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
                             </button>
-                            <button>
+                            <button onClick={() => onNextChangelogs( )}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M10.7071 7.29289C11.0976 7.68342 11.0976 8.31658 10.7071 8.70711L6.70711 12.7071C6.31658 13.0976 5.68342 13.0976 5.29289 12.7071C4.90237 12.3166 4.90237 11.6834 5.29289 11.2929L8.58579 8L5.29289 4.70711C4.90237 4.31658 4.90237 3.68342 5.29289 3.29289C5.68342 2.90237 6.31658 2.90237 6.70711 3.29289L10.7071 7.29289Z"></path></svg>
                             </button>
                         </div>
-                        <Changelog items={listChangelogs} />
+                        <Changelog item={itemChangelog} />
 
                     </div>
                 </div>

@@ -11,6 +11,7 @@ import {
   verify,
   register,
   upgrade,
+  updateUser,
   recoverPassword,
   updatePasswordUser,
 
@@ -77,17 +78,14 @@ const iamSlice = createSlice({
     // Manejar las acciones generadas por createAsyncThunk
     builder
       .addCase(fetchsDefault.fulfilled, (state, action) => {
-        console.log('default', action.payload)
         state.changelogs = action.payload.changelogs
         state.news = action.payload.news
       })
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {
-        console.log('fetchsBilling', action.payload)
         // state.billing = action.payload
       })
       .addCase(updateBilling.fulfilled, (state, action) => {
-        console.log('updateBilling', action.payload)
         state.billing = action.payload
       })
 
@@ -145,6 +143,12 @@ const iamSlice = createSlice({
           state.user = null
         }
         state.error = action.error.message;
+      })
+      
+      .addCase(updateUser.fulfilled, (state, action) => {
+        localStorage.setItem('token', action.payload.token)
+        state.user = action.payload.user;
+        state.token = action.payload.token;
       })
       
       .addCase(recoverPassword.fulfilled, (state, action) => {

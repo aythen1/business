@@ -50,22 +50,17 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
   const [isElement, setIsElement] = useState(null);
 
-
-
-
   useEffect(() => {
       const fetchData = async () => {
         var token = localStorage.getItem('token')
-          console.log('tttt', token)
           if(!token) {
             navigate('/es/login')
             setIsElement(null)
             return false
           }
           var res = await dispatch(verify(token))
-          console.log('re', res)
 
-          if(res.error?.message == 501){
+          if(res.error?.message == 500){
             navigate('/es/login')
             setIsElement(null)
           }
@@ -109,6 +104,12 @@ const Layout = () => {
   useEffect(() => {
     i18n.changeLanguage(currentLanguage);
   }, [currentLanguage]);
+
+
+  // useEffect(() => {
+  //   const _token = localStorage.getItem('token')
+  //   if(_token) setIsAuth = true
+  // }, [])
   
   return (
     <I18nextProvider i18n={i18n}>
@@ -123,15 +124,15 @@ const Layout = () => {
 
               <Route
                 path="/:lng/register"
-                element={isAuth === true ? <App /> : <Register />}
+                element={isAuth ? <App /> : <Register />}
               />
               <Route
                 path="/:lng/login"
-                element={isAuth === true ? <App /> : <Login />}
+                element={isAuth ? <App /> : <Login />}
               />
               <Route
                 path="/:lng/recover-password"
-                element={isAuth === true ? <App /> : <RecoverPassword />}
+                element={isAuth ? <App /> : <RecoverPassword />}
               />
               <Route
                 path="/:lng/pivot"
