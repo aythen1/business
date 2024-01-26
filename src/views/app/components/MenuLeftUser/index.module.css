@@ -235,6 +235,10 @@
   height: 40px;
   position: relative;
 }
+.grid-input-content2{
+  display: flex;
+  gap: 5px;
+}
 .input-content2 {
   display: flex;
   flex-direction: row;

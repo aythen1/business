@@ -109,22 +109,23 @@ const fetchsBilling = async (req, res, next) => {
     return res.status(501).send('Not verify user')
   }
 
-
-  // const conditions = {
-  //   user_id: payload.id
-  // };
-  
-
-  // const resp = await getVector(path, 'billings', [0, 0], conditions, false)
-  
-  
   // ---------------------------------------------------------
  const options = `
  query {
-  users(id: 123) {
+  users(id: ${payload.id}) {
     user
     password
+    upgradedat
+    createdat
+    isverified
     billings(limit: 5) {
+      address
+      vat
+      email
+      limit
+      paymentmethod
+      upgradedat
+      createdat
       tests() {
         description
       }
@@ -132,16 +133,10 @@ const fetchsBilling = async (req, res, next) => {
   }
 }`
 
-console.log('options', options)
-
   const resp = await getVector(path, options, [0, 0])
 
 
-  console.log('grapql', resp)
-
-  // const resp = await addVector(path, 'billings', [0, 0], billing, {user: payload})
-
-  return res.status(200).send(resp[0])
+  return res.status(200).send(resp)
 }
 
 
@@ -159,13 +154,13 @@ const updateBilling = async (req, res, next) => {
   }
 
 
-  const resp = await addVector(path, 'billings', [0, 0], billing, {user: payload})
+  const resp = await addVector(path, 'billings', [0, 0], billing, {users: payload})
 
   var data = {
     title: 'title',
     description: 'description',
   }
-  const _resp = await addVector(path, 'tests', [0, 0], data, { user:payload, billing: resp[0] } )
+  const _resp = await addVector(path, 'tests', [0, 0], data, { users:payload, billings: resp[0] } )
 
   console.log('resp', resp)
   console.log('_resp', _resp)
@@ -182,7 +177,9 @@ const updateBilling = async (req, res, next) => {
   const verifyUser = async (req, res, next) => {
     const { token } = req.body
     const payload = await decodeToken(token)
-    console.log('pay', token, payload)
+    
+    console.log('uuuuu', payload)
+
 
     if (!payload) {
       return res.status(501).send('Not verify user')
@@ -192,6 +189,7 @@ const updateBilling = async (req, res, next) => {
       id: payload.id,
       isverified: true
     }
+
     // const user = await models.UserModel.findOne({ where: { email } })
     // id, name, vector = [1.3, 1.4], data, overwrite = false
     const path = encodeVector(ID)
@@ -209,24 +207,71 @@ const updateBilling = async (req, res, next) => {
   }
 
 
+
+  const avatarUser = async (req, res) => {
+    const { id } = req.params
+    const path = encodeVector(ID)
+    
+    const options = `
+    query {
+     users(id: ${id}) {
+       avatar
+   }`
+   
+     const resp = await getVector(path, options, [0, 0])
+
+     if(!resp.avatar){
+      throw 'Not exist user'
+     }
+
+     const base64Image = resp.avatar
+
+      // Verifica si el dato es válido antes de enviarlo
+    if (!base64Image || !/^data:image\/\w+;base64,/.test(base64Image)) {
+      res.status(400).send('Formato de imagen no válido');
+      return;
+    }
+
+    // Extrae el tipo de contenido de la imagen (png, jpeg, etc.)
+    const contentType = base64Image.split(';')[0].split(':')[1];
+
+    // Convierte el formato base64 a Buffer
+    const imageBuffer = Buffer.from(base64Image.split(',')[1], 'base64');
+
+    // Establece las cabeceras de la respuesta con el tipo de contenido
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': imageBuffer.length,
+    });
+
+    // Envía la imagen en formato Buffer como respuesta
+    res.end(imageBuffer);
+  }
+
+
+
+
   const updateUser = async (req, res, next) => {
     const { token, user } = req.body
 
     const payload = await decodeToken(token)
 
-    const _data = {
-      user: payload.user,
+    if(!payload){
+      return res.status(501).send('Not access granted')
     }
-    console.log('_data', payload)
+
+    user.id = payload.id
 
     // const user = await models.UserModel.findOne({ where: { email } })
     // id, name, vector = [1.3, 1.4], data, overwrite = false
     const path = encodeVector(ID)
 
-    const resp = await updateVector(path, 'users', [0, 0], _data, false)
+    const resp = await updateVector(path, 'users', [0, 0], user, false)
+
+    const _token = await generateToken(resp)
 
     if (resp.isverified) {
-      response(res, 200, { user: resp, token })
+      response(res, 200, { user: resp, token: _token })
     } else {
       response(res, 201, { message: 500 })
     }
@@ -306,7 +351,6 @@ const updateBilling = async (req, res, next) => {
 
   const registerUser = async (req, res, next) => {
     const { path, user, password } = req.body
-    console.log('register', user, password, path)
 
     const conditions = [
       { field: 'user', operator: '==', value: user }
@@ -316,33 +360,31 @@ const updateBilling = async (req, res, next) => {
     // const user = await models.UserModel.findOne({ where: { email } })
     // id, name, vector = [1.3, 1.4], data, overwrite = false
     const resp = await getVector(path, 'users', [0, 0], conditions, false)
-    console.log('r', resp)
 
+    console.log('register1', resp)
     if (resp.length > 0) {
       // throw new ClientError('User ya existe ' + JSON.stringify(resp.exist), 400)
       return res.status(400).send('User already exist')
     }
-
+    
     if (resp.error) {
       throw new ClientError(resp.error, 500)
     }
-
+    
     const data = {
       user: user,
       password: password,
       isverified: false,
       upgradedat: new Date(new Date().getTime() - 24 * 60 * 60 * 1000).toISOString()
     }
-
+    
     const _resp = await addVector(path, 'users', [0, 0], data, false)
-    console.log('rr', _resp)
 
-    const token = generateToken(_resp)
-    console.log('token', token)
+    const token = generateToken(_resp[0])
 
     const email = sendEmail('info@aythen.com', 'confirm-email', { token })
 
-    response(res, 200, { token: 'Sucusercess' })
+    response(res, 200, { token: 'Success' })
   }
 
 
@@ -796,6 +838,7 @@ const updateBilling = async (req, res, next) => {
     loginUser: catchedAsync(loginUser),
     registerUser: catchedAsync(registerUser),
     upgradeUser: catchedAsync(upgradeUser),
+    avatarUser: catchedAsync(avatarUser),
     updateUser: catchedAsync(updateUser),
     recoverPasswordUser: catchedAsync(recoverPasswordUser),
     updatePasswordUser: catchedAsync(updatePasswordUser),

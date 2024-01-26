@@ -86,7 +86,6 @@ export const App = ({ }) => {
   // };
 
   useEffect(() => {
-    console.log('dedddd', themeMode)
     if (themeMode == 'dark') {
       localStorage.setItem('darkMode', 'dark')
       darkMode.enable()

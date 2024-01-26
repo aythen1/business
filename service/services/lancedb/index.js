@@ -4,6 +4,7 @@ const fs = require('fs').promises
 const { v4: uuidv4 } = require('uuid');
 
 const { 
+    setValueByPath,
     generateSearchString,
     generateGraphSql
  } = require('./sql')
@@ -77,6 +78,11 @@ const decodeVector = (base64Str) => {
 
 
 const addRelationsToSchema  = (schema) => {
+    schema.properties.vector = { 
+        type: 'array', 
+        items: { type: 'number' } 
+    }
+
     schema.properties.relations = {
         type: 'string',
         default: '{}'
@@ -121,7 +127,6 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
     }
 
     
-    
     try{
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
@@ -145,6 +150,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
             };
         }
 
+        
         await db.createTable(name, [emptyData], {
             schema: schema,
             writeMode: 'overwrite'
@@ -218,6 +224,8 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
 async function updateVector(id, name, vector = [0, 0], data) {
     const { path0, path1 } = decodeVector(id);
     const uri = 'data/vector/' + path0 + '/' + path1;
+
+    console.log('update vector', data)
 
     try {
         const schemaExists = allSchemas.hasOwnProperty(name);
@@ -420,46 +428,66 @@ const validateAgainstSchema = (obj, schema) => {
 const getGraphVector = async (uri, conditions, _vector) => {
     const dbs = generateGraphSql(conditions)
 
-    const db = await lancedb.connect(uri)
+    
 
-    console.log('result', dbs)
+    // console.log('result', dbs)
+
     let vector = _vector
+    let current = []
     let data = {}
+
+    let filter = null
     
     for(var i = 0;i<dbs.length;i++){
+
+        try {
+
+        const db = await lancedb.connect(uri)
         const name = dbs[i].table
         const variable = dbs[i].variable
-        const filter = dbs[i].filter
-        console.log('name', name)
+        
+        filter = dbs[i].filter ? dbs[i].filter : filter 
+        
+        current.push(name)
+
         const tbl = await db.openTable(name)
 
         const query = await tbl
-            .search(vector)
-            .where(filter)
-            .execute()
-
-        console.log('ee', query )
-        vector = query[0].vector
-
+                .search([0,0])
+                .where(filter)
+                .execute()
+                
         const resp = variable.reduce((obj, key) => ({ ...obj, [key]: query[0][key] }), {});
+    
+        vector = query[0].vector
+        filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`
 
         if(Object.keys(data).length === 0){
-            console.log('query', resp)
+            // console.log('query', resp)
+            // when not exist
+            data = resp
         }else{
-            console.log('query', resp)
+            //when exist
+
+            path = current.slice(1).join('.');
+
+
+            console.log('path', data, path, resp)
+
+            eval(`data.${path} = resp`);
+
+            // data[path][name] = resp
+            // console.log('query', resp)
         }
 
+    }catch(err){
+        console.log('er', err)
     }
-    
-    
-    
-    const query = await tbl
-            .search(vector)
-            .where(searchQuery)
-            .execute()
 
-    console.log('result', query)
-    return result
+    }
+
+
+    return data
 }
 
 

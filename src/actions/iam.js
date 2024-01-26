@@ -46,7 +46,6 @@ createAsyncThunk('iam/fetchUser', async (userId, { dispatch }) => {
 export const fetchsBilling = 
 createAsyncThunk('iam/fetchsBilling', async ({token}, { dispatch }) => {
   try {
-    console.log('token', token)
     const response = await apiBackend.post(
       '/iam/billing/fetchs',
       {
@@ -54,7 +53,6 @@ createAsyncThunk('iam/fetchsBilling', async ({token}, { dispatch }) => {
       }
     )
 
-    console.log('res rrrr', response)
     return response.data
   } catch (error) {
     console.log('Error: ', error.response.data.data.message)
@@ -68,7 +66,6 @@ createAsyncThunk('iam/fetchsBilling', async ({token}, { dispatch }) => {
 export const updateBilling = 
 createAsyncThunk('iam/updateBilling', async ({token, billing}, { dispatch }) => {
   try {
-    console.log('token', token)
     const response = await apiBackend.post(
       '/iam/billing/update',
       {
@@ -77,7 +74,6 @@ createAsyncThunk('iam/updateBilling', async ({token, billing}, { dispatch }) => 
       }
     )
 
-    console.log('res rrrr', response)
     return response.data
   } catch (error) {
     console.log('Error: ', error.response.data.data.message)
@@ -164,17 +160,13 @@ createAsyncThunk('iam/userUpgrade', async ({token}, { dispatch }) => {
 
 export const fetchsDefault = 
 createAsyncThunk('iam/fetchsDefault', async ({token}, { dispatch }) => {
-  try {
-    console.log('wxwdkk')
-    
+  try {    
     const response = await apiBackend.post(
       '/iam/load/default',
       {
         token
       }
       )
-
-    console.log('response', response)
       
     return {
       changelogs: response.data.changelogs,
@@ -227,8 +219,10 @@ createAsyncThunk('iam/updateUser', async ({token, user}, { dispatch }) => {
       }
       )
 
-      console.log('response', response)
-    return response
+    return {
+      user: response.data.data.user,
+      token: response.data.data.token,
+    }
   } catch (error) {
     console.log('err', error)
     if(error.response.status == 400){
@@ -269,9 +263,6 @@ createAsyncThunk('iam/updatePasswordUser', async ({token, password}, { dispatch 
 export const verify = 
 createAsyncThunk('iam/verify', async (token, { dispatch }) => {
   try {
-
-    console.log('token', token)
-
     const response = await apiBackend.post(
       '/iam/user/verify',
       {
@@ -279,7 +270,6 @@ createAsyncThunk('iam/verify', async (token, { dispatch }) => {
       }
       )
 
-    console.log('rr', response)
     return {
       user: response.data.data.user,
       token: response.data.data.token

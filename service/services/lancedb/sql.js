@@ -61,7 +61,8 @@ function generateGraphSql (options) {
               table: tag.name, 
               variable: ['id'], 
               limit: parseInt(tag.config.limit) || 20, 
-              filter: tag.config.id ? `${tag.name}_id == '${tag.config.id}'` : null
+              // filter: tag.config.id ? `${tag.name}_id == '${tag.config.id}'` : null
+              filter: tag.config.id ? `id == '${tag.config.id}'` : null
           }
 
         } else if (line.includes('}')) {
@@ -145,9 +146,30 @@ function generateSearchString(conditionsData) {
 
 
 
+function setValueByPath(obj, path, value) {
+  // Dividir la cadena de la ruta en partes
+  const pathParts = path.split('][').join(']').split('[');
+  
+  // Recorrer las partes de la ruta y acceder al objeto
+  let current = obj;
+  for (let i = 0; i < pathParts.length - 1; i++) {
+    const part = pathParts[i];
+    if (part !== '') {
+      if (!current[part]) {
+        current[part] = {};
+      }
+      current = current[part];
+    }
+  }
+
+  // Establecer el valor en la última propiedad de la ruta
+  const lastPart = pathParts[pathParts.length - 1];
+  current[lastPart] = value;
+}
 
 
 module.exports = {
+    setValueByPath: setValueByPath,
     generateGraphSql: generateGraphSql,
     generateSearchString: generateSearchString
 }

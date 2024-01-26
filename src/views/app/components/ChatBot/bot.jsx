@@ -14,18 +14,18 @@ import {
   FileViewer,
   PdfViewer,
   ImageViewer,
-  WorkspaceViewer,
-  ProjectViewer,
-  SpaceViewer,
-  PageViewer,
-  ComponentViewer,
-  NewWorkspace,
-  NewProject,
-  NewSpace,
-  NewPage,
-  NewComponent,
-  NewPlugin,
-  PluginTranslate,
+  WorkspaceViewer, //
+  ProjectViewer, //
+  SpaceViewer, //
+  PageViewer, //
+  ComponentViewer, //
+  NewWorkspace, //
+  NewProject, //
+  NewSpace, //
+  NewPage, //
+  NewComponent, //
+  NewPlugin, //
+  PluginTranslate, 
   PluginModel,
   EditColor,
   EditText,
