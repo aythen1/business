@@ -84,7 +84,6 @@ const ChatBot = ({
   
   
     const changeTokenVector = (token) => {
-      console.log('token', token)
       setTokenVector(token)
   
       localStorage.setItem('tokenVector', token)

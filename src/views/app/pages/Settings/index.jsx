@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { Route, Routes, Outlet, useParams } from 'react-router-dom';
+import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-router-dom';
 
-import { useNavigate } from 'react-router-dom';
+// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+// import { Route, Routes, Outlet, useParams } from 'react-router-dom';
+// import { useNavigate  } from 'react-router-dom';
+
 
 import styles from './index.module.css'
 
@@ -15,26 +17,32 @@ import Support from './support'
 
 
 
-const getComponentByTag = (tag) => {
-    switch (tag) {
-      case 'home':
-        return <Home />;
-      case 'billing':
-        return <Billing />;
-      case 'contracts':
-        return <Contract />;
-      case 'support':
-        return <Support />;
-      default:
-        return <Home />;
-    }
-  };
+
+
+const SettingsPath = () => {
+  const { settingsTag } = useParams();
+
+  let content;
+
+  if (settingsTag === 'billing') {
+    content = <Billing />;
+  } else if (settingsTag === 'contracts') {
+    content = <Contract />;
+  } else if (settingsTag === 'support') {
+    content = <Support />;
+  } else {
+    content = <Home />;
+  }
+
+  return content
+};
+
+
 
 
 const Settings = ({ }) => {
     const { settingsTag } = useParams();
 
-    console.log('ddsettingsTag', settingsTag)
 
     const navigate = useNavigate();
     const [tag, setTag] = useState(settingsTag || 'home');
@@ -76,7 +84,9 @@ const Settings = ({ }) => {
                 </button>
             </div>
             <div>
-                {getComponentByTag(tag)}
+                <Routes>
+                  <Route path="" element={<SettingsPath />} />
+                </Routes>
             </div>
             
         </div>

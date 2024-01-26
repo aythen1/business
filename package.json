@@ -36,7 +36,7 @@
         "react-icons": "^5.0.1",
         "react-monaco-editor": "^0.55.0",
         "react-redux": "^9.0.4",
-        "react-router-dom": "^6.21.1",
+        "react-router-dom": "^6.21.3",
         "sendmail": "^1.6.1",
         "signia": "^0.1.5",
         "signia-react": "^0.1.5",

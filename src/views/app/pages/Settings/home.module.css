@@ -449,9 +449,10 @@
                     }
                 }
                 .button{
+                    cursor: pointer;
                     background: rgb(249, 249, 250);
                     padding: 8px;
-                border-radius: 4px;
+                    border-radius: 4px;
                     min-width: 35px;
                     max-width: 35px;
                     height: 35px;

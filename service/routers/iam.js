@@ -12,6 +12,7 @@ const {
   loginUser,
   registerUser,
   upgradeUser,
+  avatarUser,
   updateUser,
   recoverPasswordUser,
   updatePasswordUser,
@@ -49,6 +50,7 @@ routerIAM
 .post('/user/login', loginUser)
 .post('/user/register', registerUser)
 .post('/user/upgrade', upgradeUser)
+.get('/user/:id', avatarUser)
 .post('/user', updateUser)
 .post('/user/recover-password', recoverPasswordUser)
 .post('/user/password', updatePasswordUser)
