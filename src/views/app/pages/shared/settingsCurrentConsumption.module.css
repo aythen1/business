@@ -15,9 +15,6 @@
 
 .bar{
     position: relative;
-    .image{
-
-    }
 
     .box{
         position: absolute;
@@ -32,12 +29,13 @@
         .pricing{
             font-size: 28px;
             font-weight: 500;
-     
+            color: var(--text-primary);
         
         }
         .text{
             font-size: 10px;
             line-height: 12px;
+            color: var(--text-primary);
             
         }
     }

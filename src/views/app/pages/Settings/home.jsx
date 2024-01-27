@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import { useHistory } from 'react-router-dom';
 
-
-
 import styles from './home.module.css'
-
 
 import Table from './table'
 
@@ -33,31 +30,31 @@ const News = ({ items }) => {
 
     return (
         <div>
-        {items.map( (item, index) => (
-        <div
-            key={index}
-            className={styles["items"]}
-        >
-            <div className={styles["info"]}>
-                <span>
-                    {item?.date || 'Thu Dec 21 2023'}
-                </span>
-                <b>
-                    {item?.title || 'Quantization, a game-changer for cloud-based machine learning efficiency - Part 1'}
-                </b>
-                <p>
-                    {item?.description || `What is quantization? And how can it make such a big difference to machine
+            {items.map((item, index) => (
+                <div
+                    key={index}
+                    className={styles["items"]}
+                >
+                    <div className={styles["info"]}>
+                        <span className={styles["date"]}>
+                            {item?.date || 'Thu Dec 21 2023'}
+                        </span>
+                        <b>
+                            {item?.title || 'Quantization, a game-changer for cloud-based machine learning efficiency - Part 1'}
+                        </b>
+                        <p>
+                            {item?.description || `What is quantization? And how can it make such a big difference to machine
                     learning efficiency? Find out in part 1 of our series`}
-                </p>
-            </div>
-            <button 
-                onClick={() => onClickSupport()}
-                className={styles["button"]}
-            >
-                <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
-            </button>
-        </div>
-        ))}
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => onClickSupport()}
+                        className={styles["button"]}
+                    >
+                        <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
+                    </button>
+                </div>
+            ))}
         </div>
     )
 }
@@ -96,7 +93,7 @@ const Changelog = ({ item }) => {
 const Home = ({ }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
-    
+
     const { changelogs, news } = useSelector((state) => state.iam)
 
     const [organization, setOrganization] = useState({
@@ -197,7 +194,7 @@ const Home = ({ }) => {
     useEffect(() => {
         setListAddons(initial)
     }, [])
-    
+
 
     const [indexChangelog, setIndexChangelog] = useState(0)
     const [itemChangelog, setItemChangelog] = useState([])
@@ -208,38 +205,35 @@ const Home = ({ }) => {
         setItemChangelog(changelogs[indexChangelog])
     }, [changelogs])
 
-    
-    
-    
     const [listNotes, setListNotes] = useState([])
     useEffect(() => {
-        if(news.length > 0){
+        if (news.length > 0) {
             setListNotes(news)
         }
     }, [news])
 
 
     useEffect(() => {
-        if(changelogs.length == 0){
+        if (changelogs.length == 0) {
             const token = localStorage.getItem('token')
-            dispatch(fetchsDefault({token}))
+            dispatch(fetchsDefault({ token }))
         }
     }, [])
 
 
     const onPrevChangelogs = () => {
         if (indexChangelog > 0) {
-          setItemChangelog(changelogs[indexChangelog - 1]);
-          setIndexChangelog(indexChangelog - 1);
+            setItemChangelog(changelogs[indexChangelog - 1]);
+            setIndexChangelog(indexChangelog - 1);
         }
-      };
-    
-      const onNextChangelogs = () => {
+    };
+
+    const onNextChangelogs = () => {
         if (indexChangelog < changelogs.length - 1) {
-          setItemChangelog(changelogs[indexChangelog + 1]);
-          setIndexChangelog(indexChangelog + 1);
+            setItemChangelog(changelogs[indexChangelog + 1]);
+            setIndexChangelog(indexChangelog + 1);
         }
-      };
+    };
     // --------------------------------
 
     const handleClickBilling = () => {
@@ -250,7 +244,7 @@ const Home = ({ }) => {
     const handleClickIAM = () => {
         navigate('/es/app/iam')
     }
-    
+
     const handleClickApplyNow = () => {
         navigate('/es/app/drive')
     }
@@ -293,7 +287,7 @@ const Home = ({ }) => {
                         vectores guardado en un pendrive, con ay-cloud puedes generar pivots para calcular datos tan fácil como
                         usar [ 1, 2, 3, ..].
                     </p>
-                    <button 
+                    <button
                         onClick={() => handleClickApplyNow()}
                         className={styles["applyNow"]}
                     >
@@ -378,10 +372,10 @@ const Home = ({ }) => {
                     </div>
                     <div className={styles["boxChangelog"]}>
                         <div className={styles["buttons"]}>
-                            <button onClick={() => onPrevChangelogs( )}>
+                            <button onClick={() => onPrevChangelogs()}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
                             </button>
-                            <button onClick={() => onNextChangelogs( )}>
+                            <button onClick={() => onNextChangelogs()}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M10.7071 7.29289C11.0976 7.68342 11.0976 8.31658 10.7071 8.70711L6.70711 12.7071C6.31658 13.0976 5.68342 13.0976 5.29289 12.7071C4.90237 12.3166 4.90237 11.6834 5.29289 11.2929L8.58579 8L5.29289 4.70711C4.90237 4.31658 4.90237 3.68342 5.29289 3.29289C5.68342 2.90237 6.31658 2.90237 6.70711 3.29289L10.7071 7.29289Z"></path></svg>
                             </button>
                         </div>
@@ -402,7 +396,7 @@ const Home = ({ }) => {
                         </a>
                     </div>
                     <div className={styles["boxNews"]}>
-                        <News items={listNotes}/>
+                        <News items={listNotes} />
                     </div>
                 </div>
                 <div className={styles["containerKey"]}>

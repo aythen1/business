@@ -24,6 +24,7 @@
         cursor: pointer;
         border: none;
         outline: none;
+        color: var(--text-primary);
 
         &.selected{
             background: #000fff;

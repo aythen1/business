@@ -15,7 +15,7 @@
     --background-modal: #ffffff;
     --overlay: rgb(231 231 231 / 90%);
     
-    --text-primary: #000fff;
+    --text-primary: #000000;
     --text-color: #060510;
     --text-color-secondary: #231D4F;
     
@@ -41,7 +41,7 @@ body.dark-mode {
     --overlay: #010101b3;
     
     
-    --text-primary: #000fff;
+    --text-primary: #fff3f3;
     --text-color: #fff;
     --text-color-secondary: #c3c3c3;
 
