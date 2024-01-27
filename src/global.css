@@ -20,6 +20,8 @@
     --text-color-secondary: #231D4F;
     
     --border-color: rgb(217, 218, 221);
+
+    --default: #0404E4;
 }
 
 /* Estilo para dark-mode */
@@ -47,3 +49,4 @@ body.dark-mode {
 
     --border-color: #212121;
   }
+

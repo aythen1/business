@@ -13,9 +13,17 @@ import {
 } from '@/actions/iam'
 
 
+const getRandomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
 export const MenuLeftUser = ({
   setOpenMenuLeft
 }) => {
+
+
+  const [randomColor1, setRandomColor1] = useState(getRandomColor());
+  const [randomColor2, setRandomColor2] = useState(getRandomColor());
+  const [randomColor3, setRandomColor3] = useState(getRandomColor());
+
   const { user } = useSelector((state) => state.iam);
   const dispatch = useDispatch()
 
@@ -37,6 +45,10 @@ export const MenuLeftUser = ({
   // address ---------------------
 
   useEffect(() => {
+    // Generate random colors when the component mounts
+    setRandomColor1(getRandomColor());
+    setRandomColor2(getRandomColor());
+    setRandomColor3(getRandomColor());
     // Verifica si user.address es una cadena JSON válida
     try {
       const parsedAddress = JSON.parse(user.address || '{}');
@@ -344,6 +356,12 @@ export const MenuLeftUser = ({
             </div>
           </div>
         </div>
+      </div>
+      <div className={styles["horizontal-color-containers"]}>
+        <div className={styles["color-container"]} style={{ background: 'var(--default)' }}></div>
+        <div className={styles["color-container"]} style={{ background: randomColor1 }}></div>
+        <div className={styles["color-container"]} style={{ background: randomColor2 }}></div>
+        <div className={styles["color-container"]} style={{ background: randomColor3 }}></div>
       </div>
     </div>
   );
