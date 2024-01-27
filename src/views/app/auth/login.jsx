@@ -83,8 +83,16 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPasswords] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  //Evento para darle click enter
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin(); // Llama a la función de login cuando se presiona Enter
+    }
+  };
 
 
+  // Constante para poder visualizar las contraseñas
   const handleShowPassword = (inputName) => {
     setShowPasswords(prevPasswords => ({
       ...prevPasswords,
@@ -92,12 +100,18 @@ const Login = ({ onLogin }) => {
     }));
   };
 
-  
-
   const handleLogin = async () => {
+
+    if (!username || !password) {
+      setErrorMessage("Invalid credentials");
+      return;
+    }
+
     // Realizar redirección a la ruta /app
     dispatch(login({ user: username, password }))
+    
   };
+
 
   const handleSignUp = () => {
     navigate(`/${lng}/register`);
@@ -208,7 +222,12 @@ const Login = ({ onLogin }) => {
         <div className={styles["line-107"]}></div>
         <div className={styles["or"]}>OR </div>
         <div className={styles["line-108"]}></div>
-      </div>
+        </div>
+        {errorMessage && (
+          <div className={styles["error-message"]}>
+            {errorMessage}
+          </div>
+        )}
       <div className={styles["frame-1547755111"]}>
         <div className={styles["rectangle-42024"]}></div>
         <div className={styles["email-address"]}>
@@ -216,7 +235,8 @@ const Login = ({ onLogin }) => {
             type="text"
             placeholder="Email Address"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleKeyPress}
           />
         </div>
       </div>
@@ -227,7 +247,8 @@ const Login = ({ onLogin }) => {
                 type={showPassword[`password`] ? "text" : "password"}
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyPress}
             />
           </div>
             <svg
@@ -285,19 +306,24 @@ const Login = ({ onLogin }) => {
         <div
           onClick={() => handleLogin()}
           className={styles["login"]}
+          tabIndex="0"
         >
           LOGIN 
         </div>
-      </div>
-      {error && (
+        </div>
+
+      
+      {/* {error && (
         <div>
           {error}
         </div>
-      )}
+        )} */}
+        
       <div className={styles["frame-1547755080"]}>
         <div className={styles["don-t-have-an-account"]}>Don’t have an account? </div>
         <div 
-          onClick={() => handleSignUp()}
+            onClick={() => handleSignUp()}
+            
           className={styles["sign-up"]}
         >
           Sign up 
