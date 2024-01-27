@@ -148,9 +148,11 @@ export const TopBar = ({
     setThemeMode(theme)
   }
   
-  const handleClickLogout = () => {
-    logout();
+  const handleClickLogout = async () => {
+    await logout();
     navigate(`/${'es'}/login`);
+    window.location.reload();
+   
   }
   
   const handleClickOpenMenu = () => {
