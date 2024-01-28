@@ -30,7 +30,7 @@
             font-size: 12px;
             border-radius: 4px;
             padding: 12px;
-            font-weight: 700;
+            font-weight: 500;
             display: flex;
             align-items: center; 
             gap: 12px;
@@ -61,7 +61,7 @@
     padding: 24px;
     font-size: 24px;
     .title{
-        color: #000fff;
+        color: var(--text-color);
         font-size: 21px;
         font-weight: 500;
         letter-spacing: 0px;
@@ -329,6 +329,7 @@
                 -webkit-box-orient: vertical;
                 text-overflow: ellipsis;
                 display: -webkit-box;
+                
 
             }
             p{
@@ -399,7 +400,7 @@
             justify-content: normal;
             border-radius: 4px;
             border: 1px solid var(--border-color);
-            background: rgb(255, 255, 255);
+            /* background: rgb(255, 255, 255); */
             min-width: 0px;
             .items{
                 display: flex;
@@ -414,30 +415,45 @@
                     justify-content: normal;
                     min-width: 0px;
                     span{
-                        color: rgb(114, 118, 131);
-                        font-size: 12px;
-                        font-weight: 400;
-                        letter-spacing: 0px;
-                        line-height: 16px;
-                        text-transform: none;
-                        text-decoration: none;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        overflow: hidden;
+                        font-weight: 500;
+                            letter-spacing: 0px;
+                            text-decoration: none;
+                            display: inline-flex;
+                            -webkit-box-align: center;
+                            align-items: center;
+                            -webkit-box-pack: center;
+                            justify-content: center;
+                            white-space: nowrap;
+                            border-radius: 16px;
+                            gap: 4px;
+                            width: fit-content;
+                            text-transform: uppercase;
+                            font-size: 10px;
+                            color: rgb(63, 66, 80);
+                            background: rgb(249, 249, 250);
+                            border: 1px solid var(--border-color);
+                            padding: 8px;
+                            height: 12px;
+                            line-height: 12px;
+                            margin-bottom: 4px;
                     }
                     b{
-                        color: rgb(63, 66, 80);
+                    color: var(--text-color);
                         font-size: 16px;
                         font-weight: 500;
                         letter-spacing: 0px;
+                        line-height: 24px;
                         text-transform: none;
                         text-decoration: none;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
+                        max-height: 50px;
                         overflow: hidden;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
                     }
                     p{
-                        color: rgb(63, 66, 80);
+                        color: var(--text-primary);
                         font-size: 14px;
                         font-weight: 400;
                         letter-spacing: 0px;
@@ -450,17 +466,18 @@
                 }
                 .button{
                     cursor: pointer;
-                    background: rgb(249, 249, 250);
-                    padding: 8px;
-                    border-radius: 4px;
-                    min-width: 35px;
-                    max-width: 35px;
-                    height: 35px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    outline: none;
-                    border: none;
+                        background: rgb(249, 249, 250);
+                        padding: 8px;
+                        border-radius: 4px;
+                        min-width: 35px;
+                        max-width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        margin-left: auto;
+                        outline: none;
+                        border: none;    
+                 
                     svg{
                         fill: rgb(63, 66, 80);
                         width: 22px;
@@ -485,9 +502,9 @@
             justify-content: normal;
             margin-top: 40px;
             padding: 16px;
-            background-color: rgb(224, 242, 255);
+            /* background-color: rgb(224, 242, 255); */
             border-radius: 4px;
-            border: 1px solid rgb(224, 242, 255);
+            border: 1px solid var(--border-color);
             height: 232px;
             .icon{
                 display: flex;
@@ -510,13 +527,15 @@
 
             .text{
                 font-size: 16px;
-                font-weight: 400;
+                font-weight: 500;
                 letter-spacing: 0px;
                 line-height: 24px;
                 text-transform: none;
                 text-decoration: none;
+                color: var(--text-primary);
             }
             .paragraph{
+                color: var(--text-primary) !important;
                 font-size: 14px;
                 font-weight: 400;
                 letter-spacing: 0px;

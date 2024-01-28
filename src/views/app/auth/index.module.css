@@ -279,7 +279,7 @@
   position: relative;
 }
 .forgot-password {
-  color: var(--azul-electrico, #0000ff);
+  color: var(--text-primary, #0000ff);
   text-align: left;
   font-size: 14px;
   font-weight: 400;
@@ -326,10 +326,15 @@
   position: relative;
 }
 .sign-up {
-  color: var(--azul-electrico, #0000ff);
+  color: #f0f0ff;
   text-align: left;
   font-size: 14px;
   font-weight: 400;
   position: relative;
   cursor: pointer;
+}
+
+.sign-up:hover{
+  color: #5f5fe2;
+  text-shadow: 2px 2px 4px #333333;
 }

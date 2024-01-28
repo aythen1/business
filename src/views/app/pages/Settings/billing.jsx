@@ -216,7 +216,7 @@ const Billing = ({ }) => {
 
             <div className={styles.containerAlerts}>
                 <h2 className={styles.title}>
-                    Límiite de banca
+                    Límite de banca
                 </h2>
                 <div className={styles.boxAlerts}>
                     <div className={styles.alert}>

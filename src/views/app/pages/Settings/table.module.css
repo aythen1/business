@@ -33,7 +33,20 @@
       }
     }
   }
-  
+  .title{
+    color: var(--text-color);
+  }
+  .title_two{
+  border: 1px solid rgb(181, 183, 189);
+    color: #8b8282 !important;
+    background: none;
+    padding: 5px;
+      border-radius: 4px;
+      svg {
+          width: 15px !important;
+          fill: #8b8282  !important;
+        }
+  }
   /**/
   .boxTable {
     max-width: 900px;

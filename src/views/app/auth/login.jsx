@@ -13,10 +13,7 @@ import { useTranslation } from 'react-i18next';
 import useDarkMode from 'use-dark-mode';
 
 
-import {
-  verify,
-  login
-} from '@/actions/iam'
+import { verify, login } from '@/actions/iam'
 // import { verifyUser } from '../../../../service/controllers/iam';
 
 
@@ -85,12 +82,36 @@ const Login = ({ onLogin }) => {
   // ---------------------------------
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPasswords] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null);
+  //Evento para darle click enter
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleLogin(); // Llama a la función de login cuando se presiona Enter
+    }
+  };
 
+
+  // Constante para poder visualizar las contraseñas
+  const handleShowPassword = (inputName) => {
+    setShowPasswords(prevPasswords => ({
+      ...prevPasswords,
+      [inputName]: !prevPasswords[inputName],
+    }));
+  };
 
   const handleLogin = async () => {
+
+    if (!username || !password) {
+      setErrorMessage("Invalid credentials");
+      return;
+    }
+
     // Realizar redirección a la ruta /app
     dispatch(login({ user: username, password }))
+    
   };
+
 
   const handleSignUp = () => {
     navigate(`/${lng}/register`);
@@ -100,6 +121,8 @@ const Login = ({ onLogin }) => {
   const handlePassword = () => {
     navigate(`/${lng}/recover-password`);
   }
+
+  
 
   return (
     <div className={styles["frame-1547755088"]}>
@@ -112,7 +135,7 @@ const Login = ({ onLogin }) => {
           Inicia Sesión o Regístrate
         </h2>
         <p className={styles["frame-13421"]}>
-          Y accede a tu espacio personal
+          Y accede a tu espacio personal 
         </p>
       </div>
       <div className={styles["frame-1547755085"]}>
@@ -199,7 +222,12 @@ const Login = ({ onLogin }) => {
         <div className={styles["line-107"]}></div>
         <div className={styles["or"]}>OR </div>
         <div className={styles["line-108"]}></div>
-      </div>
+        </div>
+        {errorMessage && (
+          <div className={styles["error-message"]}>
+            {errorMessage}
+          </div>
+        )}
       <div className={styles["frame-1547755111"]}>
         <div className={styles["rectangle-42024"]}></div>
         <div className={styles["email-address"]}>
@@ -207,7 +235,8 @@ const Login = ({ onLogin }) => {
             type="text"
             placeholder="Email Address"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleKeyPress}
           />
         </div>
       </div>
@@ -215,13 +244,15 @@ const Login = ({ onLogin }) => {
         <div className={styles["frame-1547755082"]}>
           <div className={styles["password"]}>
             <input
-              type="password"
+                type={showPassword[`password`] ? "text" : "password"}
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyPress}
             />
           </div>
-          <svg
+            <svg
+              onClick={() => handleShowPassword(`password`)}
             className={styles["vector8"]}
             width="22"
             height="19"
@@ -229,10 +260,21 @@ const Login = ({ onLogin }) => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M10.83 6L14 9.16C14 9.11 14 9.05 14 9C14 8.20435 13.6839 7.44129 13.1213 6.87868C12.5587 6.31607 11.7956 6 11 6C10.94 6 10.89 6 10.83 6ZM6.53 6.8L8.08 8.35C8.03 8.56 8 8.77 8 9C8 9.79565 8.31607 10.5587 8.87868 11.1213C9.44129 11.6839 10.2044 12 11 12C11.22 12 11.44 11.97 11.65 11.92L13.2 13.47C12.53 13.8 11.79 14 11 14C9.67392 14 8.40215 13.4732 7.46447 12.5355C6.52678 11.5979 6 10.3261 6 9C6 8.21 6.2 7.47 6.53 6.8ZM1 1.27L3.28 3.55L3.73 4C2.08 5.3 0.78 7 0 9C1.73 13.39 6 16.5 11 16.5C12.55 16.5 14.03 16.2 15.38 15.66L15.81 16.08L18.73 19L20 17.73L2.27 0M11 4C12.3261 4 13.5979 4.52678 14.5355 5.46447C15.4732 6.40215 16 7.67392 16 9C16 9.64 15.87 10.26 15.64 10.82L18.57 13.75C20.07 12.5 21.27 10.86 22 9C20.27 4.61 16 1.5 11 1.5C9.6 1.5 8.26 1.75 7 2.2L9.17 4.35C9.74 4.13 10.35 4 11 4Z"
-              fill="#292A2B"
-            />
+           
+              {showPassword['password'] ? (
+
+                <path
+                  d="M10.83 6L14 9.16C14 9.11 14 9.05 14 9C14 8.20435 13.6839 7.44129 13.1213 6.87868C12.5587 6.31607 11.7956 6 11 6C10.94 6 10.89 6 10.83 6ZM6.53 6.8L8.08 8.35C8.03 8.56 8 8.77 8 9C8 9.79565 8.31607 10.5587 8.87868 11.1213C9.44129 11.6839 10.2044 12 11 12C11.22 12 11.44 11.97 11.65 11.92L13.2 13.47C12.53 13.8 11.79 14 11 14C9.67392 14 8.40215 13.4732 7.46447 12.5355C6.52678 11.5979 6 10.3261 6 9C6 8.21 6.2 7.47 6.53 6.8ZM1 1.27L3.28 3.55L3.73 4C2.08 5.3 0.78 7 0 9C1.73 13.39 6 16.5 11 16.5C12.55 16.5 14.03 16.2 15.38 15.66L15.81 16.08L18.73 19L20 17.73L2.27 0M11 4C12.3261 4 13.5979 4.52678 14.5355 5.46447C15.4732 6.40215 16 7.67392 16 9C16 9.64 15.87 10.26 15.64 10.82L18.57 13.75C20.07 12.5 21.27 10.86 22 9C20.27 4.61 16 1.5 11 1.5C9.6 1.5 8.26 1.75 7 2.2L9.17 4.35C9.74 4.13 10.35 4 11 4Z"
+                  fill="#292A2B"
+                />
+                
+
+              ) : (
+                  <path
+                    d="M10.83 6L14 9.16C14 9.11 14 9.05 14 9C14 8.20435 13.6839 7.44129 13.1213 6.87868C12.5587 6.31607 11.7956 6 11 6C10.94 6 10.89 6 10.83 6ZM6.53 6.8L8.08 8.35C8.03 8.56 8 8.77 8 9C8 9.79565 8.31607 10.5587 8.87868 11.1213C9.44129 11.6839 10.2044 12 11 12C11.22 12 11.44 11.97 11.65 11.92L13.2 13.47C12.53 13.8 11.79 14 11 14C9.67392 14 8.40215 13.4732 7.46447 12.5355C6.52678 11.5979 6 10.3261 6 9C6 8.21 6.2 7.47 6.53 6.8ZM1 1.27L3.28 3.55L3.73 4C2.08 5.3 0.78 7 0 9C1.73 13.39 6 16.5 11 16.5C12.55 16.5 14.03 16.2 15.38 15.66L15.81 16.08L18.73 19L20 17.73L2.27 0M11 4C12.3261 4 13.5979 4.52678 14.5355 5.46447C15.4732 6.40215 16 7.67392 16 9C16 9.64 15.87 10.26 15.64 10.82L18.57 13.75C20.07 12.5 21.27 10.86 22 9C20.27 4.61 16 1.5 11 1.5C9.6 1.5 8.26 1.75 7 2.2L9.17 4.35C9.74 4.13 10.35 4 11 4Z"
+                    fill="#292A2B"
+                  />
+              )}
           </svg>
         </div>
       </div>
@@ -264,19 +306,24 @@ const Login = ({ onLogin }) => {
         <div
           onClick={() => handleLogin()}
           className={styles["login"]}
+          tabIndex="0"
         >
           LOGIN 
         </div>
-      </div>
-      {error && (
+        </div>
+
+      
+      {/* {error && (
         <div>
           {error}
         </div>
-      )}
+        )} */}
+        
       <div className={styles["frame-1547755080"]}>
         <div className={styles["don-t-have-an-account"]}>Don’t have an account? </div>
         <div 
-          onClick={() => handleSignUp()}
+            onClick={() => handleSignUp()}
+            
           className={styles["sign-up"]}
         >
           Sign up 
