@@ -1,0 +1,390 @@
+.main_drive_page {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px;
+  gap: 12px;
+}
+
+.drive_header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.drive_header_left_title_container {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 0px;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.drive_header_left_title {
+  color: var(--textContent);
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  /* 127.273% */
+}
+
+.drive_header_right {
+  display: flex;
+  gap: 7px;
+}
+
+.drive_header_right_filter {
+  cursor: pointer;
+  display: flex;
+  /* width: 160px; */
+  height: 33px;
+  padding: 13px;
+  align-items: center;
+  gap: 12px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  background: var(--background-menu-left);
+}
+
+.drive_header_right_filter_text {
+  color: var(--textContent);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.drive_suggested_main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.drive_suggested_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 12px;
+  }
+}
+
+.drive_suggested_title {
+  color: #3c4043;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  /* 142.857% */
+}
+
+.drive_suggested_container {
+  display: inline-flex;
+  gap: 20px;
+}
+
+.drive_suggestion_container {
+  width: 120px;
+  height: 120px;
+  border-radius: 6px;
+  border: 1px solid #e5e5e5;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  .file {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .vector {
+      height: 10px;
+      /* margin-top: 90%; */
+      img {
+        width: 45px;
+      }
+      svg {
+        width: 60px;
+        height: 70px;
+        margin-top: -20px;
+      }
+    }
+  }
+
+  .content {
+    width: 100%;
+    border-top: 1px solid #e5e5e5;
+    padding: 4px;
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      .readmeRm {
+        padding: 2px;
+        background: #e1ffe0;
+        font-size: 14px;
+        color: #4a4a4a;
+        line-height: 8px;
+      }
+      .kb {
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-left: auto;
+        color: #000;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .progress {
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 2px;
+      width: 100%;
+      height: 14px;
+      background: #f2f2f2;
+      border-radius: 8px;
+      margin-top: 5px;
+      .bar {
+        position: relative;
+        top: 0px;
+        left: 0px;
+        width: 20%;
+        height: 100%;
+        background: blue;
+        border-radius: 8px;
+      }
+
+      .loader1 {
+        position: absolute;
+        right: 3px;
+        font-size: 8px;
+        font-weight: 600;
+        top: 1px;
+        color: #cccccc;
+      }
+    }
+  }
+}
+
+.drive_folders_main_container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.drive_folders_title_container {
+  padding: 5px 0px;
+  display: inline-flex;
+  gap: 9px;
+}
+
+.drive_folders_title {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  color: var(--textContent);
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  /* 142.857% */
+  cursor: pointer;
+  border-radius: 5px 8px;
+  padding: 5px;
+
+  &:hover {
+    background-color: #e3e3e3;
+  }
+}
+
+.drive_folders_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.drive_folders_filters_container {
+  padding: 0px 10px 10px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.drive_folders_filters_title_container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  flex-basis: 300px;
+  width: 300px;
+
+  .input {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.drive_folders_filters_title {
+  color: var(--textContent);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.drive_folder_container {
+  position: relative;
+  display: inline-flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--background-checkbox);
+  width: 100%;
+  cursor: pointer;
+  transition: 0.2s linear;
+
+  &:hover {
+    background-color: var(--background-checkbox);
+  }
+}
+
+.drive_folder_title_container,
+.drive_folder_size_container,
+.drive_folder_lastmodified_container {
+  display: inline-flex;
+  gap: 8px;
+  /* flex-basis: 0; */
+  /* Inicialmente, cada hijo tomará un espacio igual */
+  /* flex-grow: 1; */
+  /* Permitirá que los hijos crezcan para ocupar el espacio disponible */
+  /* flex-shrink: 1; */
+  /* Permitirá que los hijos se contraigan si hay poco espacio disponible */
+
+  /* Puedes añadir estilos adicionales según tus preferencias */
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.drive_folder_title_container {
+  flex-basis: 300px;
+  width: 300px;
+
+  input {
+    width: 15px;
+    height: 15px;
+    margin-right: 2px;
+  }
+}
+
+.drive_folder_size_container {
+  flex-basis: 266px;
+  width: 265px;
+}
+
+.drive_folder_lastmodified_container {
+  flex-basis: 200px;
+  width: 200px;
+}
+
+.drive_folder_title {
+  display: inline-flex;
+  align-items: center;
+  color: var(--textContent);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.fileRightSection {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fileOption {
+  cursor: pointer;
+  border-radius: 100px;
+  padding: 8px 15px;
+
+  &:hover {
+    background-color: #ebebeb;
+  }
+}
+
+.drive_clickeable_folder_container {
+  display: inline-flex;
+  flex-grow: 1;
+}
+
+.drive_banner_data {
+  position: fixed;
+  bottom: 10px;
+  margin: 0 auto;
+  z-index: 999;
+  background: var(--background);
+  box-shadow: 0px 2px 8px -4px #737373;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  width: 600px;
+  padding: 7px;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    input {
+      height: 20px;
+      width: 20px;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
+
+  button {
+    display: inline-flex;
+    height: 32px;
+    padding: 0px 8px;
+    flex-direction: row;
+    gap: 8px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 32px;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    outline-offset: 2px;
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 20px;
+    background: none;
+
+    &.buttonDB {
+      fill: #000fff;
+      border: 1px solid #000fff;
+    }
+    &.buttonDelete {
+      color: rgb(179, 20, 77);
+      border: 1px solid rgb(179, 20, 77);
+    }
+    svg {
+      vertical-align: middle;
+      fill: currentcolor;
+      height: 16px;
+      width: 16px;
+      min-width: 16px;
+      min-height: 16px;
+    }
+  }
+}

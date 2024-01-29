@@ -11,6 +11,7 @@ import MenuLeftUser from './components/MenuLeftUser';
 import MenuLeftData from './components/MenuLeftData';
 import MenuRightData from './components/MenuRightData';
 import MenuRightGraph from './components/MenuRightGraph';
+import MenuRightComponent from './components/MenuRightComponent';
 import ChatBot from './components/ChatBot';
 import Modal from './components/Modal';
 import NotFound from '../pages/NotFound'
@@ -25,10 +26,10 @@ import DashBoard from './pages/DashBoard'
 import Pivot from './pages/DashBoard/Pivot'
 
 import Settings from './pages/Settings'
-import SettingsIAM from './pages/Settings/IAM'
+import SettingsIAM from './pages/Settings/iam'
 // import SettingsBilling from './pages/Settings/billing'
 // import SettingsContract from './pages/Settings/contract'
-import Drive from './pages/Drive'
+// import Drive from './pages/Drive'
 import Addon from './pages/Addon'
 import GPTs from './pages/OpenAi'
 import LangChain from './pages/LangChain'
@@ -136,7 +137,7 @@ export const App = ({ }) => {
   const {
     component,
     components
-  } = useSelector((state) => state.component);
+  } = useSelector((state) => state.pivot);
 
 
   const _selectedComponent = (index) => {
@@ -208,16 +209,15 @@ export const App = ({ }) => {
                 <Route path="iam" element={<SettingsIAM />} />
 
                 <Route path="" element={<Settings />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="settings/:settingsTag" element={<Settings />} />
+                <Route path="settings/:settingsTag/*" element={<Settings />} />
+                {/* <Route path="settings/:settingsTag" element={<Settings />} /> */}
                 {/* <Route path="billing" element={<SettingsBilling />} /> */}
                 {/* <Route path="contract" element={<SettingsContract />} /> */}
-                <Route path="addon/*" element={<Addon />} />
-                <Route path="addon" element={<Addon />} />
-                <Route path="drive/:id" element={<Drive />} />
+                <Route path="addon/*" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot} />} />
+                <Route path="addon" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot}/>} />
+                {/* <Route path="drive/:id" element={<Drive />} /> */}
                 <Route path="gpt" element={<GPTs />} />
                 <Route path="langchain" element={<LangChain />} />
-                <Route path="drive" element={<Drive />} />
                 {/* <Route path=":id" element={<Pivot />} /> */}
                 <Route path="*" element={<NotFound />} />
                 {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
@@ -247,7 +247,7 @@ export const App = ({ }) => {
         )}
         {openMenuRight && (
           <div>
-            {openMenuRight == 'new' ? (
+            {openMenuRight == 'graph' ? (
               <div className={styles["MenuRightGraph"]}
                 style={{ display: 'block' }}
               >
@@ -255,11 +255,17 @@ export const App = ({ }) => {
                   setOpenMenuRight={setOpenMenuRight}
                 />
               </div>
-            ) : (
+            ) : openMenuRight == 'data' ? (
               <div className={styles["MenuRightData"]}
                 style={{ display: 'block' }}
               >
                 <MenuRightData
+                  setOpenMenuRight={setOpenMenuRight}
+                  />
+              </div>
+            ): openMenuRight == 'component' && (
+              <div className={styles["MenuRightComponent"]}>
+                <MenuRightComponent 
                   setOpenMenuRight={setOpenMenuRight}
                 />
               </div>

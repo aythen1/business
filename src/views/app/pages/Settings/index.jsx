@@ -14,6 +14,7 @@ import Home from './home'
 import Billing from './billing'
 import Contract from './contract'
 import Support from './support'
+import Drive from './drive'
 
 
 
@@ -22,6 +23,7 @@ import Support from './support'
 const SettingsPath = () => {
   const { settingsTag } = useParams();
 
+  console.log('edwdw', settingsTag)
   let content;
 
   if (settingsTag === 'billing') {
@@ -30,6 +32,8 @@ const SettingsPath = () => {
     content = <Contract />;
   } else if (settingsTag === 'support') {
     content = <Support />;
+  } else if (settingsTag === 'drive') {
+    content = <Drive />;
   } else {
     content = <Home />;
   }
@@ -65,6 +69,12 @@ const Settings = ({ }) => {
                     Home
                 </button>
                 <button 
+                    className={tag === 'drive' ? styles.selected : ''}
+                    onClick={() => selectTag('drive')}
+                >
+                    Drive
+                </button>
+                <button 
                     className={tag === 'billing' ? styles.selected : ''}
                     onClick={() => selectTag('billing')}
                 >
@@ -85,7 +95,9 @@ const Settings = ({ }) => {
             </div>
             <div>
                 <Routes>
-                  <Route path="" element={<SettingsPath />} />
+                  {/* <Route path="hello" element={<Drive />} /> */}
+                  <Route path="*" element={<SettingsPath />} />
+                  {/* <Route path="" element={<SettingsPath />} /> */}
                 </Routes>
             </div>
             

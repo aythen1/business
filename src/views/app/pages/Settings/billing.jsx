@@ -9,7 +9,7 @@ import Table from '@/views/app/pages/Settings/table'
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'
 
 
-import stylesModal from '../Settings/IAM/modal.module.css'
+import stylesModal from '../Settings/iam/modal.module.css'
 
 import {
     fetchsBilling,
