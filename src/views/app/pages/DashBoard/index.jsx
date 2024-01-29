@@ -24,8 +24,8 @@ import NoneInstance from './assets/NoneInstance.webp'
 // import { useParams } from 'next/navigation'
 
 import {
-  addDashboard
-} from '@/actions/dashboard'
+  addPivot
+} from '@/actions/pivot'
 
 
 import { useDispatch, useSelector } from 'react-redux'

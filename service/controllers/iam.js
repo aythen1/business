@@ -178,9 +178,7 @@ const updateBilling = async (req, res, next) => {
     const { token } = req.body
     const payload = await decodeToken(token)
     
-    console.log('uuuuu', payload)
-
-
+    // console.log('uuuuu', payload)
     if (!payload) {
       return res.status(501).send('Not verify user')
     }

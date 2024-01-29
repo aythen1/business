@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 
-import Table from './IAM/table'
+import Table from './iam/table'
 
 
 const Contract = ({ }) => {
