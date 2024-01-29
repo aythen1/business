@@ -153,7 +153,7 @@ const Billing = ({ }) => {
                             {organization?.name}
                         </h2>
                         <div className={styles.description}>
-                            <div>
+                            <div className={styles.descriptionOne}>
                                 {organization?.address?.mame}, {organization?.address?.num}<br />
                                 {organization?.address?.zip} {organization?.address?.city} <br />
                                 {organization?.address?.province} <br />
@@ -221,11 +221,11 @@ const Billing = ({ }) => {
                 <div className={styles.boxAlerts}>
                     <div className={styles.alert}>
                         <div>
-
-                        </div>
-                        <p className={styles.text}>
                             Billing alerts only provide a rough estimate of what may be charged to your monthly invoice. Additional costs
                             related to your usage before.
+                        </div>
+                        <p className={styles.text}>
+                          
                         </p>
                     </div>
                     <div className={styles.inputContainer}>
@@ -244,11 +244,15 @@ const Billing = ({ }) => {
                                     <input value={'€'} />
                                 </div>
                             </div>
+                            
+
                         </div>
                     </div>
                     <div className={styles.button}>
-                        <button>
-                            <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg>
+                        <button className={styles.buttonStyle}>
+                            <svg className={styles.icon} viewBox="0 0 24 24">
+                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
+                            </svg>
                             Create billing alert
                         </button>
                     </div>
