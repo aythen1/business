@@ -1,14 +1,15 @@
-.containerBilling{
+.containerBilling {
     max-width: 900px;
-    margin: 10px auto;
-    display: grid; 
+    margin: 40px auto;
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     align-items: start;
 }
 
 
-.title{
+.title {
+    color: var(--text-primary);
     font-size: 25px;
     font-weight: 400;
     letter-spacing: 0px;
@@ -17,9 +18,14 @@
     text-decoration: none;
 }
 
-.containerInformation{
+.description {
+    color: var(--text-primary);
+}
+
+.containerInformation {
     width: inherit;
-    .boxInformation{
+
+    .boxInformation {
         border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 18px;
@@ -30,9 +36,10 @@
         align-items: normal;
         -webkit-box-pack: justify;
         justify-content: space-between;
-        .button{
+
+        .button {
             display: inline-flex;
-            height: 48px;
+            height: 30px;
             padding: 0px 16px;
             flex-direction: row;
             gap: 8px;
@@ -45,7 +52,7 @@
             justify-content: center;
             outline-offset: 2px;
             white-space: nowrap;
-            font-size: 16px;
+            font-size: 12px;
             font-weight: 500;
             letter-spacing: 0px;
             line-height: 24px;
@@ -53,23 +60,32 @@
             border: none;
             color: rgb(34, 38, 56);
         }
-        .title{
+
+        .button:hover {
+            background: #000fff;
+            color: #ffffff;
+        }
+
+        .title {
             font-size: 21px;
             font-weight: 500;
             letter-spacing: 0px;
             line-height: 32px;
             text-transform: none;
             text-decoration: none;
+
         }
-        .decription{
-            div{
+
+        .decription {
+
+            div {
                 font-size: 16px;
                 font-weight: 400;
                 letter-spacing: 0px;
                 line-height: 24px;
                 text-transform: none;
                 text-decoration: none;
-            
+
             }
         }
     }
@@ -77,9 +93,10 @@
 
 
 
-.containerConsumption{
+.containerConsumption {
     width: inherit;
-    .boxConsumption{
+
+    .boxConsumption {
         border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 18px;
@@ -92,83 +109,99 @@
 
 
 
-.containerContact{
+.containerContact {
     grid-column: span 2;
     width: inherit;
-.boxContact{
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 18px;
-    margin-top: 14px;
-    .text{
-        font-size: 15px;
-        line-height: 20px;
-        margin-bottom: 8px;
-        display: block;
-    }
-    .grid2{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-    .input{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        border-radius: 2px;
-        background: #fff;
-        padding: 2px;
-        border: 1px solid #fafafa;
 
-        label{
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        input{
-            width: 100%;
-            border:none;
-            outline:none;
-            background: transparent;
-        }
-            
-    }
-    .button{
-        button{
-            display: inline-flex;
-            height: 48px;
-            padding: 0px 16px;
-            gap: 8px;
-            border-radius: 4px;
-            width: auto;
-            align-items: center;
-            cursor: not-allowed;
-            justify-content: center;
-            outline-offset: 2px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0px;
-            line-height: 24px;
-            border: none;
-            background: rgb(243, 243, 244);
-            color: rgb(181, 183, 189);
-        }
-    }
-    }
-}
-}
-
-
-.containerAlerts{
-    grid-column: span 2;
-    width: inherit;
-    .boxAlerts{
+    .boxContact {
         border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 18px;
-    margin-top: 14px;
-        .alert{
+        border-radius: 4px;
+        padding: 18px;
+        margin-top: 14px;
+
+        .text {
+            font-size: 15px;
+            line-height: 20px;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--text-primary);
+        }
+
+        .grid2 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            .input {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                border-radius: 2px;
+                background: #fff;
+                padding: 2px;
+                border: 1px solid #fafafa;
+                width: 100%;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+
+                label {
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    color: #9c9c9c;
+                }
+
+                input {
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+                }
+
+            }
+
+            .button {
+                button {
+                    display: inline-flex;
+                    height: 48px;
+                    padding: 0px 16px;
+                    gap: 8px;
+                    border-radius: 4px;
+                    width: auto;
+                    align-items: center;
+                    cursor: not-allowed;
+                    justify-content: center;
+                    outline-offset: 2px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    letter-spacing: 0px;
+                    line-height: 24px;
+                    border: none;
+                    background: rgb(243, 243, 244);
+                    color: rgb(34, 38, 56);
+                }
+            }
+        }
+    }
+}
+
+
+.containerAlerts {
+    grid-column: span 2;
+    width: inherit;
+
+    .boxAlerts {
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 18px;
+        margin-top: 14px;
+
+        .alert {
             display: flex;
             gap: 8px;
             flex-flow: row;
@@ -177,55 +210,66 @@
             background-color: rgb(255, 246, 230);
             color: rgb(124, 84, 0);
             border-left: 4px solid rgb(124, 84, 0);
-            .text{
-                
-            }
+            margin-bottom: 10px;
+
         }
     }
-    .inputContainer{
+
+    .inputContainer {
         display: flex;
         align-items: center;
         gap: 10px;
-        .toggle{
 
+        .toggle {
+            color: var(--text-primary);
         }
-        .input{
+
+        .input {
             width: 100%;
             display: flex;
             flex-direction: column;
             gap: 2px;
             border-radius: 2px;
             background: #fff;
-            padding: 2px;
+            padding: 10px;
             border: 1px solid #fafafa;
 
-            label{
+            .grid2 {
+                display: flex;
+            }
+
+            .value,
+            .current {
+                margin-right: -135px;
+                /* Ajusta el margen entre los campos según tus preferencias */
+            }
+
+    
+            label {
                 font-size: 12px;
                 text-transform: uppercase;
                 font-weight: 600;
+                color: #9c9c9c;
             }
-            input{
+
+            input {
                 width: 100%;
-                border:none;
-                outline:none;
+                border: none;
+                outline: none;
                 background: transparent;
             }
-            .label{
 
-            }
-            .value{
 
-            }
-            .current{
-                
-            }
         }
     }
-    .button{
-        button{
+
+
+    .button {
+        margin-top: 16px;
+        button {
             display: inline-flex;
-            height: 48px;
-            padding: 0px 16px;
+            height: 35px;
+            padding: 8px;
             flex-direction: row;
             gap: 8px;
             border-radius: 4px;
@@ -236,46 +280,63 @@
             outline-offset: 2px;
             white-space: nowrap;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 500;
             letter-spacing: 0px;
             line-height: 24px;
-            background: none;
+            background: #000fff;
             border: 1px solid #000fff;
-            color: #000fff;
+            color: #fff;
+       
+          
+            
         }
     }
 }
 
+.icon {
+    fill: #ffffff;
+}
 
-.containerPayment{
+.containerPayment {
     width: inherit;
-    .boxPayment{
+
+    .title{
+        color: var(--text-primary);
+    }
+    .boxPayment {
         border: 1px solid var(--border-color);
         border-radius: 4px;
         padding: 18px;
         margin-top: 14px;
-        .text{
 
+        .text {
+            color: var(--text-primary);
         }
-        .form{
-            margin-top: 20px;
-            .text{
 
-            }
-            .input{
+        .form {
+            margin-top: 20px;
+
+            .text {}
+
+            .input {
                 margin-top: 10px;
                 font-size: 20px;
-                .credit{
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                }
-                .sepa{
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
 
+                .credit {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.9rem;
+                    color: var(--text-primary);
+                }
+
+                .sepa {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.9rem;
+                    color: var(--text-primary);
                 }
             }
         }
@@ -283,106 +344,112 @@
 }
 
 
-.containerInvoices{
+.containerInvoices {
     width: inherit;
     grid-column: span 2;
-    .boxInvoices{
+
+    .boxInvoices {
         border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 18px;
-    margin-top: 14px;
-        .title{
+        border-radius: 4px;
+        padding: 18px;
+        margin-top: 14px;
 
+        .text {
+            color: var(--text-primary);
         }
     }
-    .table{
 
+
+}
+
+
+.containerContact {
+    width: inherit;
+
+    .boxContact {
+        .text {}
+
+        .grid2 {
+            .input {}
+
+            .button {}
+        }
     }
 }
 
 
-.containerContact{
+.containerVat {
     width: inherit;
-    .boxContact{
-        .text{
 
+    .boxContact {
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 18px;
+        margin-top: 14px;
+
+        .text {
+            font-size: 15px;
+            line-height: 20px;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--text-primary);
         }
-        .grid2{
-            .input{
 
-            }
-            .button{
-                
-            }
-        }
-    }
-}
-
-
-.containerVat{
-    width: inherit;
-.boxContact{
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 18px;
-    margin-top: 14px;
-    .text{
-        font-size: 15px;
-        line-height: 20px;
-        margin-bottom: 8px;
-        display: block;
-    }
-    .grid2{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-    .input{
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        border-radius: 2px;
-        background: #fff;
-        padding: 2px;
-        border: 1px solid #fafafa;
-
-        label{
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        input{
-            width: 100%;
-            border:none;
-            outline:none;
-            background: transparent;
-        }
-            
-    }
-    .button{
-        button{
-            display: inline-flex;
-            height: 48px;
-            padding: 0px 16px;
-            gap: 8px;
-            border-radius: 4px;
-            width: auto;
+        .grid2 {
+            display: flex;
             align-items: center;
-            cursor: not-allowed;
-            justify-content: center;
-            outline-offset: 2px;
-            font-size: 16px;
-            font-weight: 500;
-            letter-spacing: 0px;
-            line-height: 24px;
-            border: none;
-            background: rgb(243, 243, 244);
-            color: rgb(181, 183, 189);
+            justify-content: space-between;
+            gap: 10px;
+
+            .input {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                border-radius: 2px;
+                background: #fff;
+                padding: 6px;
+                border: 1px solid #fafafa;
+
+                label {
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    font-weight: 600;
+                    color: #9c9c9c;
+                }
+
+                input {
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+                }
+
+            }
+
+            .button {
+                button {
+                    display: inline-flex;
+                    height: 48px;
+                    padding: 0px 16px;
+                    gap: 8px;
+                    border-radius: 4px;
+                    width: auto;
+                    align-items: center;
+                    cursor: not-allowed;
+                    justify-content: center;
+                    outline-offset: 2px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    letter-spacing: 0px;
+                    line-height: 24px;
+                    border: none;
+                    background: rgb(243, 243, 244);
+                    color: #000;
+                }
+            }
         }
     }
-    }
-}
 }
 
 
@@ -390,9 +457,9 @@
 
 @media only screen and (max-width: 600px) {
 
-    .containerBilling{
+    .containerBilling {
         width: 90vw;
         grid-template-columns: repeat(1, 1fr);
-        padding: 10px 0px;    
+        padding: 10px 0px;
     }
 }

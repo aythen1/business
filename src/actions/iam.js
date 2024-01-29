@@ -38,10 +38,6 @@ createAsyncThunk('iam/fetchUser', async (userId, { dispatch }) => {
   }
 });
 
-
-
-
-
 // Acción asincrónica
 export const fetchsBilling = 
 createAsyncThunk('iam/fetchsBilling', async ({token}, { dispatch }) => {
@@ -61,8 +57,6 @@ createAsyncThunk('iam/fetchsBilling', async ({token}, { dispatch }) => {
 });
 
 
-
-
 export const updateBilling = 
 createAsyncThunk('iam/updateBilling', async ({token, billing}, { dispatch }) => {
   try {
@@ -80,8 +74,6 @@ createAsyncThunk('iam/updateBilling', async ({token, billing}, { dispatch }) => 
     throw error.response.data.data.message
   }
 });
-
-
 
 
 export const login = 
