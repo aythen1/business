@@ -47,9 +47,9 @@ import {
 // import { useParams } from 'next/navigation'
 
 import {
-  loadDashboard,
-  addDashboard
-} from '@/actions/dashboard'
+  loadPivot,
+  addPivot
+} from '@/actions/pivot'
 
 
 import { useDispatch, useSelector } from 'react-redux'

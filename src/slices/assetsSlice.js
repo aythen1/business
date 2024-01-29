@@ -1,24 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 import {
-  getAssets,
+  // getAssets,
+  directoriesDB,
   getRootDirectories,
   getDirectoriesVersions,
+  deleteFolders,
   deleteFolder,
   deleteFile,
   createNewFolder,
   getFile,
   copyFile,
   uploadFile,
-  getIconsByFolder,
-  getIconByQuery
-} from '../actions/assets'
+  // getIconsByFolder,
+  // getIconByQuery
+} from '@/actions/assets'
 import * as types from './types'
 
 export const assetsSlice = createSlice({
   name: 'assets',
   initialState: {
-    assets: [],
+    // assets: [],
     directoriesData: [],
     directoriesTrash: [],
     fileToCopy: '',
@@ -27,20 +29,6 @@ export const assetsSlice = createSlice({
     cutOrCopy: '',
     currentFolder: '',
     searchFiles: '',
-    iconFolder: {
-      feather: [],
-      fontawesome: [],
-      IcoMoon: [],
-      materialIcons: [],
-      typicons: []
-    },
-    iconFolderData: {
-      feather: [],
-      fontawesome: [],
-      IcoMoon: [],
-      materialIcons: [],
-      typicons: []
-    },
     loading: {},
     error: {}
   },
@@ -90,24 +78,21 @@ export const assetsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAssets.pending, (state) => {
-        // state.loading = { ...state.loading, [types.GET_ALL_COMPONENTS]: true }
-        // state.error = { ...state.error, [types.GET_ALL_COMPONENTS]: '' }
-        state.assets = ['pendent']
+
+      .addCase(directoriesDB.fulfilled, (state, action) => {
+        const dbKeys = action.payload.map((dbFolder) => dbFolder.Key);
+        console.log('dbKeys', dbKeys)
+        // Filtrar el array de assets para excluir los elementos con las claves eliminadas
+        // state.directoriesData = state.directoriesData.filter((asset) => !dbKeys.includes(asset.Key));
       })
-      .addCase(getAssets.fulfilled, (state, action) => {
-        // state.loading = { ...state.loading, [types.CLONE_COMPONENT]: false }
-        state.assets = action.payload
-        state.assets = ['full']
+
+      .addCase(deleteFolders.fulfilled, (state, action) => {
+        const deletedKeys = action.payload.map((deletedFolder) => deletedFolder.Key);
+        // Filtrar el array de assets para excluir los elementos con las claves eliminadas
+        state.directoriesData = state.directoriesData.filter((asset) => !deletedKeys.includes(asset.Key));
       })
-      .addCase(getAssets.rejected, (state, action) => {
-        // state.loading = { ...state.loading, [types.GET_ALL_COMPONENTS]: false }
-        // state.error = {
-        //     ...state.error,
-        //     [types.GET_ALL_COMPONENTS]: action.payload
-        // }
-        state.assets = ['error']
-      })
+      
+
       .addCase(deleteFolder.pending, (state) => {
         state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: true }
         state.error = { ...state.error, [types.DELETE_DIRECTORY]: '' }
@@ -230,59 +215,8 @@ export const assetsSlice = createSlice({
           [types.UPLOAD_FILE]: action.payload
         }
       })
-      .addCase(getIconsByFolder.pending, (state) => {
-        state.loading = { ...state.loading, [types.SET_ICONS]: true }
-        state.error = { ...state.error, [types.SET_ICONS]: '' }
-      })
-      .addCase(getIconsByFolder.fulfilled, (state, action) => {
-        const { data, folder } = action.payload
-        state.loading = { ...state.loading, [types.SET_ICONS]: false }
-        const iconsObj = data.map((icon) => ({ name: icon, svg: '' }))
-        state.iconFolder[folder] = data
-        state.iconFolderData[folder] = iconsObj
-      })
-      .addCase(getIconsByFolder.rejected, (state, action) => {
-        state.loading = { ...state.loading, [types.SET_ICONS]: false }
-        state.error = {
-          ...state.error,
-          [types.SET_ICONS]: action.payload
-        }
-      })
-      .addCase(getIconByQuery.pending, (state) => {
-        state.loading = { ...state.loading, [types.SET_ICON]: true }
-        state.error = { ...state.error, [types.SET_ICON]: '' }
-      })
-      .addCase(getIconByQuery.fulfilled, (state, action) => {
-        const { data, folder, fileName } = action.payload
-        state.loading = { ...state.loading, [types.SET_ICON]: false }
 
-        // Verificar si el icono ya existe en el estado
-        const iconExists = state.iconFolderData[folder].some(
-          (icon) => icon.name === fileName && icon.svg !== ''
-        )
-        if (!iconExists) {
-          // Si el icono no existe, agregarlo al estado
-          state.iconFolderData = {
-            ...state.iconFolderData,
-            [folder]: state.iconFolderData[folder].map((icon) => {
-              if (icon.name === fileName) {
-                // Si encontramos el icono con el nombre especificado, actualizamos su propiedad svg
-                return { ...icon, svg: data }
-              }
-              // Si no es el icono que estamos buscando, mantenemos el objeto sin cambios
-              return icon
-            })
-          }
-        }
-      })
 
-      .addCase(getIconByQuery.rejected, (state, action) => {
-        state.loading = { ...state.loading, [types.SET_ICON]: false }
-        state.error = {
-          ...state.error,
-          [types.SET_ICON]: action.payload
-        }
-      })
   }
 })
 

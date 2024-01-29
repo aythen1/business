@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { addComponent } from '@/actions/component';
+import { addPivot } from '@/actions/pivot';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles  from './index.module.css';

@@ -1,0 +1,55 @@
+.search{
+    border: 1px solid red;
+    padding: 4px 12px;
+    border-radius: 8px;
+
+    input{
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+}
+
+
+.listComponent{
+    .component{
+        cursor: pointer;
+        img{
+            width: 100%
+        }
+    }
+}
+
+:global(.selectedComponent){
+    border: 2px solid #000fff;
+    cursor: pointer;
+    position: relative;
+}
+
+:global(.customButtons){
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    height: 30px;
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    background: #000fff;
+    border-radius: 8px 8px 0px 0px;
+    :global(button){
+        height: 22px;
+        width: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgb(68, 137, 255);
+        border-radius: 5px;
+        :global(img){
+            width: 16px;
+        }
+
+        &:hover {
+            background: red;
+        }
+    }
+}

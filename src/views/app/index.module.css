@@ -72,6 +72,19 @@ body{
 }
 
 
+.MenuRightComponent{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 270px;
+    padding: 5px;
+    height: 100vh;
+    background: #f8f8f8;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
 .ChatBot{
     position: fixed;
     bottom: 0px;
