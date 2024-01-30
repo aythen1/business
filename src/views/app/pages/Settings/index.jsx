@@ -13,7 +13,7 @@ import styles from './index.module.css'
 import Home from './home'
 import Billing from './billing'
 import Contract from './contract'
-import Support from './support'
+// import Support from './support'
 import Drive from './drive'
 
 
@@ -54,8 +54,13 @@ const Settings = ({ }) => {
   
     const selectTag = (value) => {
       setTag(value);
-      // Realiza la navegación según la tag seleccionada
-      navigate(`/${'es'}/app/settings/${value}`);
+
+      if(value == 'support'){
+        navigate(`/${'es'}/app/${value}`);
+      }else{
+        // Realiza la navegación según la tag seleccionada
+        navigate(`/${'es'}/app/settings/${value}`);
+      }
     };
 
 

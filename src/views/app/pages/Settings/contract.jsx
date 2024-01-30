@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import styles from './contract.module.css'
 
 import Table from './iam/table'
 
@@ -15,12 +16,12 @@ const Contract = ({ }) => {
     const [contracts, setContracts] = useState([{
         title: 'Data Processing Agreement',
         status: 200,
-        date: '09/2021',
+        date: new Date(2021, 0, 1),
         download: 'contract1.pdf'
     },{
         title: 'General Terms of Service',
         status: 200,
-        date: '09/2021',
+        date: new Date(2021, 0, 1),
         download: 'contract2.pdf'
     }])
 
@@ -50,8 +51,10 @@ const Contract = ({ }) => {
 
     return (
         <div>
-
-            <div>
+            <h2 className={styles.title}>
+                Organization: Aythen
+            </h2>
+            <div className={styles.box}>
                 <Table
                     fetchs={fetchsContract}
                     items={contracts}
@@ -66,17 +69,20 @@ const Contract = ({ }) => {
                     <item>
                         Status
                     </item>
-                    <item>
-                        Version
+                    <item filter="date" name="date">
+                        End At
                     </item>
                     <item>
                         Download
                     </item>
                 </Table>
             </div>
-            <div>
+            <div className={styles.footer}>
                 Learn more about
-                How to change the account language
+                <a>
+                    How to change the account language
+                    <svg viewBox="0 0 24 24" class="e1afnb7a2 css-1kixqs1 e1gt4cfo0"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
+                </a>
             </div>
         </div>
     )

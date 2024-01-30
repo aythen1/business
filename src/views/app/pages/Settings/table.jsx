@@ -8,8 +8,8 @@ import styles from './table.module.css'
 
 
 import {
-  renderModule
-} from './utils/table'
+  TableRender
+} from './utils/TableRender'
 
 
 import {
@@ -331,7 +331,7 @@ const Table = ({
           const data = {
             title: title,
             tag: tag,
-            render: renderModule(tag, items) // Asegúrate de haber definido la función renderModule
+            // render: renderModule(tag, items) // Asegúrate de haber definido la función renderModule
           };
 
           return data;

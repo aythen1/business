@@ -117,7 +117,7 @@
 
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 12px;
 }
 .gird2{
     display: grid;
@@ -177,6 +177,21 @@
     }
 }
 
+
+
+    
+.containerConsumption{
+
+    .boxConsumption{
+        border: 1px solid var(--border-color);
+        color: var(--text-color-secondary);
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+        padding: 16px;
+        margin-top: 12px;
+    }
+}
 
 
 
@@ -330,7 +345,7 @@
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 
-
+                
             }
             p{
                 font-size: 14px;
@@ -368,7 +383,7 @@
                 display: flex;
                 align-items: center;
                 gap: 8px;
-  
+                
                 svg{
                     vertical-align: middle;
                     fill: currentcolor;
@@ -385,6 +400,8 @@
             }
         }
     }
+
+
 
     .containerNews{
         display: grid;

@@ -50,7 +50,6 @@ routerIAM
 .post('/user/login', loginUser)
 .post('/user/register', registerUser)
 .post('/user/upgrade', upgradeUser)
-.get('/user/:id', avatarUser)
 .post('/user', updateUser)
 .post('/user/recover-password', recoverPasswordUser)
 .post('/user/password', updatePasswordUser)
@@ -58,6 +57,7 @@ routerIAM
 .post('/user/add-user', addUser)
 .post('/user/delete-user', deleteUser)
 .get('/user/all-user', fetchsUser)
+.get('/user/:id', avatarUser)
 
 .post('/application/add-application', addApplication)
 .post('/application/delete-application', deleteApplication)
