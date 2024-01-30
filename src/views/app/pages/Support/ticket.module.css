@@ -1,0 +1,61 @@
+.container{
+    .header{
+        .dot{
+
+        }
+        .title{
+            h2{
+
+            }
+            .subtitle{
+                label{
+
+                }
+            }
+        }
+        .buttonClose{
+
+        }
+    }
+
+    .writeMessage{
+        .input{
+            img{
+
+            }
+            textarea{
+
+            }
+        }
+        .buttons{
+            button{
+
+            }
+        }
+    }
+
+    .messages{
+        .date{
+            label{
+
+            }
+        }
+        .listMessage{
+            .message{
+                .avatar{
+                    img{
+
+                    }
+                }
+                .text{
+                    .boxText{
+                        
+                    }
+                    .boxDate{
+                    
+                    }
+                }
+            }
+        }
+    }
+}

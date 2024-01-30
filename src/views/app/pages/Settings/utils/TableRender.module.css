@@ -1,3 +1,7 @@
+@import url('./default.css');
+
+
+
 .instanceSettings {
     position: relative;
     display: flex;
@@ -72,4 +76,100 @@
   background: none;
   border: 1px solid rgb(181, 183, 189);
   fill: rgb(63, 66, 80);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* CELL */
+
+.table{
+  width: 100%;
+  .header{
+    padding: 2px;
+    th{
+      text-align: left;
+      padding: 2px 2px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0711a5;
+    }
+  }
+  .cell{
+    /* border: 1px solid red; */
+    position: relative;
+    z-index: 1;
+    td{
+      padding: 10px 4px;
+
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 0px;
+      width: 100%;
+      height: calc(100% - 10px);
+      border: 1px solid rgb(197, 197, 197);
+      border-radius: 6px;
+      margin-top: -2px;
+      z-index: -1;
+    }
+  }
+}
+
+
+
+
+
+.flex{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+
+
+
+/* RENDER USER */
+
+.renderUser{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .dot{
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+  }
+  .avatar{
+    .initial{
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: red;
+    }
+
+  }
+  .info{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    b{
+      line-height: 10px;
+    }
+  }
 }

@@ -12,8 +12,7 @@ const schemaApplications = {
               properties: {
                   key: { type: 'string' },
                   value: { type: 'string' },
-              },
-              required: ['key', 'value'],
+              }
           },
         },
         policies: {
@@ -23,8 +22,7 @@ const schemaApplications = {
               properties: {
                   key: { type: 'string' },
                   value: { type: 'string' },
-              },
-              required: ['key', 'value'],
+              }
           },
         },
         createdAt: { type: 'string', format: 'date-time' },

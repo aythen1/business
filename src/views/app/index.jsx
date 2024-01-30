@@ -23,9 +23,15 @@ import NotFound from '../pages/NotFound'
 
 
 import DashBoard from './pages/DashBoard'
-import Pivot from './pages/DashBoard/Pivot'
+// import Pivot from './pages/DashBoard/Pivot'
+
+import Support from './pages/Support'
+import Tickets from './pages/Support/tickets'
+import Ticket from './pages/Support/ticket'
+
 
 import Settings from './pages/Settings'
+
 import SettingsIAM from './pages/Settings/iam'
 // import SettingsBilling from './pages/Settings/billing'
 // import SettingsContract from './pages/Settings/contract'
@@ -209,6 +215,10 @@ export const App = ({ }) => {
                 <Route path="iam" element={<SettingsIAM />} />
 
                 <Route path="" element={<Settings />} />
+                <Route path="support" element={<Support />} />
+                <Route path="support/tickets" element={<Tickets />} />
+                <Route path="support/ticket/:ticketId" element={<Ticket />} />
+
                 <Route path="settings/:settingsTag/*" element={<Settings />} />
                 {/* <Route path="settings/:settingsTag" element={<Settings />} /> */}
                 {/* <Route path="billing" element={<SettingsBilling />} /> */}

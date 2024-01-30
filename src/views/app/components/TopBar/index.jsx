@@ -17,6 +17,7 @@ import IconBurger from './assets/IconBurger.svg'
 
 
 import Pricing from '@/views/web/pricing'
+import Report from '@/views/app/components/TopBar/Report'
 
 import {
   setModal
@@ -103,8 +104,14 @@ export const TopBar = ({
     setOpenChatBot(false)
     setOpenMenuLeft(false)
     // openModal()
-    navigate(`/${'es'}/app/home`);
-    navigate(`/${'es'}/app/dashboard`);
+    dispatch(setModal(
+      <div >
+          <Report/>
+      </div>
+    ))
+
+    // navigate(`/${'es'}/app/home`);
+
   }
   
   const handleClickDrive = () => {

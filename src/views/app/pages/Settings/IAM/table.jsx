@@ -8,8 +8,8 @@ import styles from './table.module.css'
 
 
 import {
-  renderModule
-} from '../utils/table'
+  TableRender
+} from '../utils/TableRender'
 
 
 
@@ -40,6 +40,7 @@ const Table = ({
   const dispatch = useDispatch()
   // --------------------------------------------------------------------------------------------------------------
   // const [editMode, setEditMode] = useState(false)
+  const [table, setTable] = useState(null)
   const [listItems, setListItems] = useState([])
 
   const [textToolTip, setTextToolTip] = useState(null)
@@ -127,21 +128,23 @@ const Table = ({
       const filteredItems = React.Children.toArray(children)
         .filter((child) => child.type === 'item')
         .map((item) => {
-          const title = item.props.children;
-          const tag = camelCase(title).toLowerCase();
-
-          const data = {
-            tag: tag, // Asegúrate de haber definido la función renderModule
-            render: renderModule({tag, items, setStateTable}) // Asegúrate de haber definido la función renderModule
+          // const tag = camelCase(title).toLowerCase();
+          const filterAttribute = item.props.filter; // Obtén el valor del atributo filter si existe
+          const nameAttribute = item.props.name; // Obtén el valor del atributo filter si existe
+          const title = item.props.children
+          const tag = filterAttribute || camelCase(title).toLowerCase(); // Usa el valor de filterAttribute si existe, de lo contrario, utiliza el título
+          const name = nameAttribute || item.props.children
+          
+          return {
+            tag,
+            title, 
+            name
           };
-
-          return data;
         });
 
-      setListItems(filteredItems)
+        setTable(<TableRender items={items} filteredItems={filteredItems} setStateTable={setStateTable} />)
     }
-
-    if (items) fetchItems()
+    if (items && items.length > 0) fetchItems()
 
   }, [items])
 
@@ -180,26 +183,11 @@ useEffect( () => {
 
   return (
     <div
-      className={styles.boxTable + ' ' + styles.mdNone}
+      className={styles.boxTable}
     >
-      {items.length !== 0 ? (
+      {table ? (
         <div >
-          <ul className={styles.listTable}>
-            {listItems.map((item, index) => {
-              if (typeof item.render === 'object') {
-                return (
-                  <li
-                    className={styles.containerTable}
-                    key={index}
-                  >
-                    {item.render}
-                  </li>
-                );
-              }
-
-              return null; // Si item.render no es un objeto, no renderizamos nada
-            })}
-          </ul>
+          {table}
           {isToolTipHovered && (
             <div
               className={styles.popupToolTip}
