@@ -20,7 +20,6 @@
     --text-color-secondary: #231D4F;
 
     --border-color: rgb(217, 218, 221);
-    --filter-img: brightness(0) invert(0) grayscale(0%) contrast(100%);
   
 }
 
@@ -49,5 +48,4 @@ body.dark-mode {
 
     --border-color: #212121;
 
-    --filter-img: brightness(0) invert(1) grayscale(100%) contrast(100%) --default: #fff;
 }
