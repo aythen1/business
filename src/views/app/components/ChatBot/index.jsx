@@ -49,7 +49,7 @@ import {
 
 // import SelectBot from './selectBot'
 // import Bot from './bot'
-// import Microphone from './component/microphone'
+import Microphone from './component/microphone'
 
 const ChatBot = ({
   setOpenChatBot
@@ -323,8 +323,13 @@ const ChatBot = ({
                 placeholder="Mensaje del bot @action"
                 onChange={handleChange}
                 onKeyDown={handleChange}
-              />
-            </div>
+                />
+                {/* Wrap Microphone component with the new microphoneWrapper class */}
+                <div className={styles["microphoneWrapper"]}>
+                  <Microphone loadRecordVector={loadRecordVector} />
+                </div>
+              </div>
+              
             <div className={styles["buttons"]}>
               <div className={styles["left"]}>
                 <button onClick={handleClickGPT}>GPT Store</button>
@@ -336,8 +341,10 @@ const ChatBot = ({
                 <button onClick={handleRemove}>Remove</button>
               </div>
             </div>
-            <div>
-              {/* <Microphone loadRecordVector={loadRecordVector}/> */}
+              <div>
+               
+                {/* <Microphone loadRecordVector={loadRecordVector}/> */}
+                {/* <Microphone loadRecordVector={loadRecordVector} /> */}
             </div>
           </div>
         </div>

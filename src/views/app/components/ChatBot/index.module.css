@@ -74,3 +74,18 @@
         cursor: pointer;
     }
 }
+
+.textarea {
+    position: relative;
+    color: var(--text-primary);
+    /* Agrega otros estilos según sea necesario */
+}
+
+.microphoneWrapper {
+    position: absolute;
+    bottom: 20px;
+    
+    /* Ajusta la posición vertical según sea necesario */
+    right: 20px;
+    /* Ajusta la posición horizontal según sea necesario */
+}

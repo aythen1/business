@@ -37,6 +37,8 @@ import {
 
 import { RecordViewer } from './component/record-viewer'
 
+
+
 const Bots = ({
   message,
   openVector
@@ -56,18 +58,23 @@ const Bots = ({
   // Function to scroll down in the chat container
   const chatContainerRef = useRef(null)
 
+  const handleAudioMessage = (audioUrl, volumeArray) => {
+    const newAudioMessage = {
+      type: 'audio',
+      url: audioUrl,
+      volumeArray: volumeArray,
+    };
+
+    // Agrega el nuevo mensaje de audio al estado
+    setInternalMessage((prevMessages) => [...prevMessages, newAudioMessage]);
+  };
+
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight - 200
     }
   }
-
-
-
-
-
-
 
   useEffect(() => {
     setInternalMessage(message)
