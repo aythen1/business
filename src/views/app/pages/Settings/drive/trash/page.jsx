@@ -14,7 +14,7 @@ import {
   getDirectoriesVersions,
   deleteFile
   // deleteFolder
-} from '@/store/redux/actions/assets'
+} from '@/actions/assets'
 // import FolderOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FolderOptions'
 // import FileTrashOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FileTrashOptions'
 

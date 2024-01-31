@@ -9,12 +9,12 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch } from 'react-redux';
 
 import {
-  addPivot
-} from '@/actions/pivot'
+  addDashboard
+} from '@/actions/dashboard'
 
 import {
-  initialComponent
-} from '@/slices/pivotSlice'
+  initialDashboard
+} from '@/slices/dashboardSlice'
 
 
 const DraggableGraph = ({ graphType, Component }) => {
@@ -36,7 +36,7 @@ const DraggableGraph = ({ graphType, Component }) => {
 
 
   const _addComponent = (graph) => {
-    dispatch(addPivot(graph));
+    dispatch(addDashboard(graph));
   };
 
   return (

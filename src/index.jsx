@@ -27,7 +27,7 @@ import RecoverPassword from './views/app/auth/recover-password';
 
 
 import App from './views/app'
-import Pivot from './views/app/pages/DashBoard'
+import Dashboard from './views/app/pages/DashBoard'
 // import Home from './views/app/pivot/components/DashBoard/home'
 import NotFound from './views/pages/NotFound'
 
@@ -60,7 +60,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
           }
           var res = await dispatch(verify(token))
 
-          if(res.error?.message == 500){
+          if (res.error?.message >= 500 && res.error?.message <= 599) {
             navigate('/es/login')
             setIsElement(null)
           }
@@ -135,8 +135,8 @@ const Layout = () => {
                 element={isAuth ? <App /> : <RecoverPassword />}
               />
               <Route
-                path="/:lng/pivot"
-                element={<Pivot />}
+                path="/:lng/dashboard"
+                element={<Dashboard />}
               />
               <Route
                 path="/:lng/app/*"

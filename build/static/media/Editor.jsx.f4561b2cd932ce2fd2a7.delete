@@ -1,0 +1,108 @@
+"use client";
+
+// import styles from "./index.module.css";
+
+// import "@tldraw/tldraw/tldraw.css";
+// import "@tldraw/tldraw/tldraw.css";
+// import { useEditor } from "@tldraw/tldraw";
+import { Tldraw } from "@tldraw/tldraw";
+
+// import { getSvgAsImage } from "@/lib/getSvgAsImage";
+// import { blobToBase64 } from "@/lib/blobToBase64";
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import PreviewModal from "./PreviewModal";
+
+
+
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result)
+      reader.readAsDataURL(blob)
+  })
+
+}
+
+
+// export const Editor = () => {
+//   // const [html, setHtml] = useState(null);
+
+//   // console.log('wdirji', htmlExample1)
+//   // const [html, setHtml] = useState(htmlExample1);
+
+//   //   useEffect(() => {
+//   //   const listener = (e) => {
+//   //     if (e.key === "Escape") {
+//   //       setHtml(null);
+//   //     }
+//   //   };
+//   //   window.addEventListener("keydown", listener);
+
+//   //   return () => {
+//   //     window.removeEventListener("keydown", listener);
+//   //   };
+//   // }, []); 
+
+//   // Utiliza Tldraw directamente aquí
+//   return (
+//     <div style={{height: '100vh'}}>
+//       {/* Resto del código */}
+//       {!html ? (
+//       <Tldraw persistenceKey="tldraw">
+//            <ExportButton setHtml={setHtml} />
+//       </Tldraw>
+//       ):(
+//           <div
+//             style={{ zIndex: 2000, backgroundColor: "rgba(0,0,0,0.5)" }}
+//             onClick={() => setHtml(null)}
+//           >
+//             <PreviewModal html={html} setHtml={setHtml} />
+//           </div>
+//         )
+//       }
+//     </div>
+//   );
+// };
+
+export const AddonEditor = () =>  {
+  const [html, setHtml] = useState(null);
+
+  useEffect(() => {
+    const listener = (e) => {
+      if (e.key === "Escape") {
+        setHtml(null);
+      }
+    };
+    window.addEventListener("keydown", listener);
+
+    return () => {
+      window.removeEventListener("keydown", listener);
+    };
+  }, []); 
+
+  return (
+    <>
+      <div className={`w-screen h-screen`}>
+        <Tldraw persistenceKey="tldraw">
+          <ExportButton setHtml={setHtml} />
+        </Tldraw>
+      </div>
+{html &&
+  ReactDOM.createPortal(
+    <div
+      className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center"
+      style={{ zIndex: 2000, backgroundColor: "rgba(0,0,0,0.5)" }}
+      onClick={() => setHtml(null)}
+    >
+      <PreviewModal html={html} setHtml={setHtml} />
+    </div>,
+    document.body
+  )}
+    </>
+  );
+}
+
+
+

@@ -23,7 +23,6 @@ import NotFound from '../pages/NotFound'
 
 
 import DashBoard from './pages/DashBoard'
-// import Pivot from './pages/DashBoard/Pivot'
 
 import Support from './pages/Support'
 import Tickets from './pages/Support/tickets'
@@ -141,9 +140,8 @@ export const App = ({ }) => {
 
 
   const {
-    component,
     components
-  } = useSelector((state) => state.pivot);
+  } = useSelector((state) => state.dashboard);
 
 
   const _selectedComponent = (index) => {
@@ -228,7 +226,6 @@ export const App = ({ }) => {
                 {/* <Route path="drive/:id" element={<Drive />} /> */}
                 <Route path="gpt" element={<GPTs />} />
                 <Route path="langchain" element={<LangChain />} />
-                {/* <Route path=":id" element={<Pivot />} /> */}
                 <Route path="*" element={<NotFound />} />
                 {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
               </Route>

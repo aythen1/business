@@ -24,8 +24,8 @@ import NoneInstance from './assets/NoneInstance.webp'
 // import { useParams } from 'next/navigation'
 
 import {
-  addPivot
-} from '@/actions/pivot'
+  addDashboard
+} from '@/actions/dashboard'
 
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -45,7 +45,7 @@ const Dashboard = ({
   const [positionToolTip, setPositionToolTip] = useState({ top: 0, left: 0 })
 
   // const instances = dispatch(getProjectInstance()
-  const dashboards = useSelector((state) => state.dashboard?.dashboards)
+  const { dashboards } = useSelector((state) => state.dashboard)
 
   const dataFetch = async () => {
     try{
@@ -63,18 +63,18 @@ const Dashboard = ({
 
 
   const handleAddDashboard = (uuid) => {
-    const newUUID = uuidv4()
-
+    // const newUUID = uuidv4()
     // setDashboardId(newUUID)
 
     const newDashboard = {
+      id: uuidv4(),
       name: 'new Dashboard'
     }
 
     dispatch(addDashboard(newDashboard))
 
     // // Actualizar la URL con el nuevo UUID
-    const newURL = `?dashboard=${encodeURIComponent(newUUID)}`
+    const newURL = `?dashboard=${encodeURIComponent(newDashboard.id)}`
     window.history.pushState(null, null, newURL)
   }
 

@@ -235,7 +235,7 @@ const ChatBot = ({
 
   // ------------------------------------------------------------------------------------------------------------
 
-  const createPivot = () => {
+  const createDashboard = () => {
     const workspaceId = uuidv4();
     const projectId = uuidv4();
 
@@ -282,7 +282,7 @@ const ChatBot = ({
     if (existingTokenVector) {
       setTokenVector(existingTokenVector)
     }else{
-      createPivot()
+      createDashboard()
     }
   }, []) // El array de dependencias vacío asegura que el efecto se ejecute solo al principio
 

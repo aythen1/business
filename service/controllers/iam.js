@@ -26,6 +26,7 @@ const news = require('../middlewares/default/news')
 
 
 const ID = 'test/test'
+const secretKey = 'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf';
 
 
 const encodeVector = (id) => {
@@ -33,11 +34,6 @@ const encodeVector = (id) => {
   const base64Str = btoa(str)
   return base64Str
 }
-
-
-
-const secretKey = 'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf';
-
 
 
 function generateToken(payload) {

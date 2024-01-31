@@ -2,20 +2,22 @@
 import React, {useState, useEffect} from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { addPivot } from '@/actions/pivot';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styles  from './index.module.css';
 import Component  from './component';
+
+import { 
+  addDashboard 
+} from '@/actions/dashboard';
+
+
 
 
 const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
   const [isDropping, setIsDropping] = useState (false)
   const dispatch = useDispatch();
 
-  
-
-  
 
   const [{ isDragging }, drag] = useDrag({
     type: 'DRAGGABLE_ITEM',
@@ -94,10 +96,10 @@ const DropTarget = ({ children }) => {
   return <div ref={drop}>{children}</div>;
 };
 
-const Pivot = ({ }) => {
+const Dashboard = ({ }) => {
 
   const [items, setItems] = useState([]);
-  const { components } = useSelector((state) => state.component)
+  const { components } = useSelector((state) => state.dashboard)
 
 
   useEffect(() => {
@@ -165,4 +167,4 @@ const Pivot = ({ }) => {
   );
 };
 
-export default Pivot;
+export default Dashboard;
