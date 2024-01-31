@@ -1,8 +1,4 @@
-
-
-.title{
-    margin-top: 20px;
-    font-size: 35px;
+.title {
     margin-top: 10px;
     font-size: 28px;
     font-weight: 400;
@@ -16,8 +12,9 @@
     color: var(--text-primary);
 }
 
+.box {}
 
-.box{
+.box {
     border: 1px solid lightgrey;
     border-radius: 8px;
     padding: 10px 20px;
@@ -26,9 +23,8 @@
     color: var(--text-primary);
 }
 
-.footer{
-    color: var(--text-primary);
-    a{
+.footer {
+    a {
         background-color: transparent;
         border: none;
         padding: 0px;
@@ -47,7 +43,8 @@
         letter-spacing: 0px;
         line-height: 24px;
         margin-left: 10px;
-        svg{
+
+        svg {
             width: 14px;
             height: 14px;
             fill: rgb(0, 93, 163);
