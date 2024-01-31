@@ -56,7 +56,7 @@ export const TableRender = ({ items = [], filteredItems = [], setStateTable }) =
                 {items.map((item, index) => (
                     <tr key={index} className={styles.cell}>
                         {filteredItems.map((filter) => (
-                            <td key={filter.tag}>{renderCell(item, filter)}</td>
+                            <td key={filter.tag} width={filter.size}>{renderCell(item, filter)}</td>
                         ))}
                     </tr>
                 ))}

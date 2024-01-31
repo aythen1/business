@@ -19,6 +19,8 @@
         color: var(--text-color-secondary);
       }
       a {
+        display: flex;
+        align-items: center;
         gap: 2px;
         color: #5661ff;
         margin-left: 2px;
@@ -282,12 +284,18 @@
   }
   
   /**/
-  .noneInstance {
+  .noneDashboard {
     padding: 10px 20px;
     h2 {
       color: var(--text-color);
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0px;
+      line-height: 32px;
+      text-transform: none;
+      text-decoration: none;  
     }
-    .boxNoneInstance {
+    .boxNoneDashboard {
       margin-top: 10px;
       border: 1px solid var(--border-color);
       border-radius: 5px;

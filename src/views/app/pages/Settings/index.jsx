@@ -20,7 +20,7 @@ import Drive from './drive'
 
 
 
-const SettingsPath = () => {
+const SettingsPath = ({}) => {
   const { settingsTag } = useParams();
 
   console.log('edwdw', settingsTag)
@@ -44,7 +44,7 @@ const SettingsPath = () => {
 
 
 
-const Settings = ({ }) => {
+const Settings = ({  }) => {
     const { settingsTag } = useParams();
 
 
@@ -101,7 +101,7 @@ const Settings = ({ }) => {
             <div>
                 <Routes>
                   {/* <Route path="hello" element={<Drive />} /> */}
-                  <Route path="*" element={<SettingsPath />} />
+                  <Route path="*" element={<SettingsPath  />} />
                   {/* <Route path="" element={<SettingsPath />} /> */}
                 </Routes>
             </div>
