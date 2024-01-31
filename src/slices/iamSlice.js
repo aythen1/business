@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
+  setOpenMenuLeft,
+  setOpenMenuRight,
+  setOpenChatBot,
+
   fetchsDefault, 
 
   fetchsBilling,
@@ -50,8 +54,12 @@ const iamSlice = createSlice({
     status: 'idle', // Puede ser 'idle', 'pending', 'fulfilled', 'rejected'
     error: null,
 
+
     modal: null,
     openModal: false,
+    openMenuLeft: false,
+    openMenuRight: false,
+    openChatBot: false,
 
 
     users: [],
@@ -71,12 +79,25 @@ const iamSlice = createSlice({
         }else{
           state.openModal = false;
         }
-    }
+    },
+
     // otras acciones...
   },
   extraReducers: (builder) => {
     // Manejar las acciones generadas por createAsyncThunk
     builder
+      .addCase(setOpenMenuLeft.fulfilled, (state, action) => {
+        state.openMenuLeft = action.payload
+      })
+      .addCase(setOpenMenuRight.fulfilled, (state, action) => {
+        state.openMenuRight = action.payload
+      })
+      .addCase(setOpenChatBot.fulfilled, (state, action) => {
+        state.openChatBot = action.payload
+      })
+
+
+
       .addCase(fetchsDefault.fulfilled, (state, action) => {
         state.changelogs = action.payload.changelogs
         state.news = action.payload.news

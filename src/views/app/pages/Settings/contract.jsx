@@ -72,7 +72,7 @@ const Contract = ({ }) => {
                     <item filter="date" name="date">
                         End At
                     </item>
-                    <item>
+                    <item size="100">
                         Download
                     </item>
                 </Table>

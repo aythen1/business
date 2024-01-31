@@ -1,14 +1,14 @@
 // store.js
 import { configureStore } from '@reduxjs/toolkit';
 
-import pivotReducer from '@/slices/pivotSlice';
+import dashboardReducer from '@/slices/dashboardSlice';
 import addonReducer from '@/slices/addonSlice';
 import iamReducer from '@/slices/iamSlice';
 import assetsReducer from '@/slices/assetsSlice';
 
 const store = configureStore({
   reducer: {
-    pivot: pivotReducer,
+    dashboard: dashboardReducer,
     assets: assetsReducer,
     addon: addonReducer,
     iam: iamReducer,

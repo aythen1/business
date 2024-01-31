@@ -115,8 +115,6 @@ const addRelationsToData = (data, relations) => {
 
 
 async function addVector(id, name, vector = [0, 0], data, relations) {
-    // const schema = (allSchemas[name])
-
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
 
@@ -124,6 +122,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
     if (!schemaExists) {
         return "El esquema no existe";
     }
+
 
     const schema = addRelationsToSchema(allSchemas[name])
 

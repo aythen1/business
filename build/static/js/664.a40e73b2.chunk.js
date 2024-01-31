@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgroup1171276705=self.webpackChunkgroup1171276705||[]).push([[664],{2664:(e,r,s)=>{s.r(r),s.d(r,{default:()=>d});s(2791);var u=s(184);const d=e=>{let{}=e;return(0,u.jsxs)("div",{children:[(0,u.jsx)("div",{children:"storagebar"}),(0,u.jsx)("div",{})]})}}}]);
+//# sourceMappingURL=664.a40e73b2.chunk.js.map

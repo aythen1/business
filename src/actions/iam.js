@@ -4,6 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 
 
+
 const ID = 'test/test'
 
 
@@ -22,6 +23,47 @@ const fetchUserFromApi = async (userId) => {
   const data = await response.json();
   return data;
 };
+
+// / / / / / / / / / / / / / / / / / / / / / / / 
+
+
+// Acción asincrónica
+export const setOpenMenuLeft = 
+createAsyncThunk('iam/setOpenMenuLeft', async (value, { dispatch }) => {
+  try {
+    return value;
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const setOpenMenuRight = 
+createAsyncThunk('iam/setOpenMenuRight', async (value, { dispatch }) => {
+  try {
+    return value;
+  } catch (error) {
+    throw error;
+  }
+});
+
+export const setOpenChatBot = 
+createAsyncThunk('iam/setOpenChatBot', async (value, { dispatch }) => {
+  try {
+    return value;
+  } catch (error) {
+    throw error;
+  }
+});
+
+
+
+
+
+
+
+
+// / / / / / / / / / / / / / / / / / / / / / / / 
+
 
 // Acción asincrónica
 export const fetchUser = 
