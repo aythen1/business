@@ -164,7 +164,7 @@ const Support = () => {
             </div>
             <div className={styles.containerTrid}>
                 <div className={styles.boxStatus}>
-                    <h2 className={styles.title}>
+                    <h2 className={styles.titleHead}>
                         Status
                     </h2>
                     <div className={styles.box}>
@@ -193,7 +193,7 @@ const Support = () => {
                     </div>
                 </div>
                 <div className={styles.boxContact}>
-                    <h2 className={styles.title}>
+                    <h2 className={styles.titleHead}>
                         Contact us
                     </h2>
                     <div className={styles.box}>
@@ -222,7 +222,7 @@ const Support = () => {
                     </div>
                 </div>
                 <div className={styles.boxGoing}>
-                    <h2 className={styles.title}>
+                    <h2 className={styles.titleHead}>
                         Going further
                     </h2>
                     <div className={styles.box}>

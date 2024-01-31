@@ -14,6 +14,8 @@ const Microphone = ({ loadRecordVector }) => {
   const [mediaRecorder, setMediaRecorder] = useState(null)
   const [audioChunks, setAudioChunks] = useState([])
   const [volumeArray, setVolumeArray] = useState([])
+  const [micActive, setMicActive] = useState(false);
+
   //   const [isRecording, setIsRecording] = useState(false)
 
   const [recordPlay, setRecordPlay] = useState(false)
@@ -29,6 +31,7 @@ const Microphone = ({ loadRecordVector }) => {
   
   useEffect(() => {
     const initializeAudio = async () => {
+     
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       const audioContext = new (window.AudioContext ||
         window.webkitAudioContext)()
@@ -173,6 +176,13 @@ const Microphone = ({ loadRecordVector }) => {
       mediaRecorder.stop()
       setRecord(false)
       setTotalTime(0)
+
+
+      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // Llama a la función de callback con el URL del audio y el array de volumen
+      loadRecordVector(audioUrl, volumeArray);
 
     //   const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
 
