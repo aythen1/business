@@ -25,7 +25,7 @@ import {
   NewPage, //
   NewComponent, //
   NewPlugin, //
-  PluginTranslate, 
+  PluginTranslate,
   PluginModel,
   EditColor,
   EditText,
@@ -84,32 +84,32 @@ const Bots = ({
 
   const renderViewer = (message) => {
 
-    
-  const allowDrop = [
-    'video/vnd.dlna.mpeg-tts',
-    'text/javascript',
-    'text/css',
-    'text/html',
-    'video/mp4',
-    'application/x-zip-compressed',
-    'application/pdf',
-    'text/plain',
-    'audio/mpeg',
-    'application/json',
-    'application/postscript',
-    'text/jsx',
-    'text/md'
-  ]
 
-  const target = allowDrop.includes(message.type)
+    const allowDrop = [
+      'video/vnd.dlna.mpeg-tts',
+      'text/javascript',
+      'text/css',
+      'text/html',
+      'video/mp4',
+      'application/x-zip-compressed',
+      'application/pdf',
+      'text/plain',
+      'audio/mpeg',
+      'application/json',
+      'application/postscript',
+      'text/jsx',
+      'text/md'
+    ]
 
-  if (target) return <FileViewer file={message} click={openVector} />
+    const target = allowDrop.includes(message.type)
 
-    
+    if (target) return <FileViewer file={message} click={openVector} />
+
+
     console.log('(message.type', message.type)
     switch (message.type) {
       case 'record':
-        return <RecordViewer file={message}/>
+        return <RecordViewer file={message} />
       case 'image/jpeg':
       case 'image/png':
         return <ImageViewer file={message} />

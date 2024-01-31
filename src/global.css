@@ -11,17 +11,17 @@
     --background-button-selected-topbar: #ffffff;
 
     --background-banner: rgb(241, 238, 252);
-    
+
     --background-modal: #ffffff;
     --overlay: rgb(231 231 231 / 90%);
-    
+
     --text-primary: #000000;
     --text-color: #060510;
     --text-color-secondary: #231D4F;
-    
-    --border-color: rgb(217, 218, 221);
 
-    --default: #fff;
+    --border-color: rgb(217, 218, 221);
+    --filter-img: brightness(0) invert(0) grayscale(0%) contrast(100%);
+  
 }
 
 /* Estilo para dark-mode */
@@ -35,18 +35,19 @@ body.dark-mode {
     --background-chatbot: #0e0e0ef7;
     --background-button-topbar: #161515;
     --background-button-selected-topbar: #000;
-    
+
     --background-banner: #1b1b1b;
-    
-    
+
+
     --background-modal: #000;
     --overlay: #010101b3;
-    
-    
+
+
     --text-primary: #fff3f3;
     --text-color: #fff;
     --text-color-secondary: #c3c3c3;
 
     --border-color: #212121;
-  }
 
+    --filter-img: brightness(0) invert(1) grayscale(100%) contrast(100%) --default: #fff;
+}

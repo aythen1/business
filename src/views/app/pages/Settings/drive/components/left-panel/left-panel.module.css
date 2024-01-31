@@ -107,6 +107,8 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    color: var(--text-primary);
+    margin-top: 15px;
 }
 
 .drive_option {
@@ -124,6 +126,7 @@
 
     &:hover {
         background-color: #e5e5e5;
+        color: #000;
     }
 }
 
