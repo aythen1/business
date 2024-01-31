@@ -135,10 +135,6 @@ const Layout = () => {
                 element={isAuth ? <App /> : <RecoverPassword />}
               />
               <Route
-                path="/:lng/dashboard"
-                element={<Dashboard />}
-              />
-              <Route
                 path="/:lng/app/*"
                 element={<ProtectedRoute element={<App />} setIsAuth={setIsAuth}  />}
               />

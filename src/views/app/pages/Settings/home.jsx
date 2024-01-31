@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './home.module.css'
 
-import Table from './table'
+import DashBoard from '../DashBoard'
 
 import BackgroundBanner from './assets/backgroundBanner.svg'
 import IconDNS from './assets/IconDNS.svg'
@@ -26,14 +26,16 @@ import {
 
 
 
-const Home = ({ }) => {
+const Home = ({ 
+     
+}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const { 
+    const {
         dashboards,
-        changelogs, 
-        news 
+        changelogs,
+        news
     } = useSelector((state) => state.iam)
 
     const [stateTable, setStateTable] = useState('')
@@ -46,14 +48,14 @@ const Home = ({ }) => {
         //   const index = users.findIndex(user => user.id === id);
         //   const user = users[index]
         //   console.log('user', user)
-  
+
         //   dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
         // }else if(stateTable.startsWith('delete-item:')){
         //   const id = stateTable.split(':')[1]
         //   const token = localStorage.getItem('token')
         //   dispatch(deleteUser({token, id}))
         // }
-      }, [stateTable])
+    }, [stateTable])
 
 
 
@@ -292,37 +294,8 @@ const Home = ({ }) => {
                     </div>
                 </div>
             </div>
-            <div>
-                <Table 
-                    fetchs={fetchsDashboard}
-                    items={dashboards}
-                    setStateTable={setStateTable}
-                >
-                    <header>
-                        Dashboard
-                    </header>
-                    <item>
-                        Ticket ID
-                    </item>
-                    <item>
-                        Ticket Name
-                    </item>
-                    <item>
-                        Product
-                    </item>
-                    <item>
-                        Ticket creator
-                    </item>
-                    <item>
-                        Created
-                    </item>
-                    <item>
-                        Last update
-                    </item>
-                    <item>
-                        Awaiting Customer
-                    </item>
-                </Table>
+            <div className={styles["box"]}>
+                <DashBoard />
             </div>
             <div className={styles["containerTrid"]}>
                 <div className={styles["containerChangelog"]}>

@@ -1,6 +1,7 @@
 import styles from "./index.module.css";
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -51,10 +52,18 @@ import {
 // import Bot from './bot'
 // import Microphone from './component/microphone'
 
-const ChatBot = ({
+import { 
   setOpenChatBot
+ } from "@/actions/iam";
+// import { useDispatch } from "react-redux";
+
+
+const ChatBot = ({
+
 }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const [workspaceId] = useState(null)
   // const [workspaceId, setWorkspaceId] = useState(null)
   // const [projectId, setProjectId] = useState(null)
@@ -289,7 +298,7 @@ const ChatBot = ({
 
 
   const handleClickGPT = () => {
-    setOpenChatBot(false)
+    dispatch(setOpenChatBot(false))
 
     navigate(`/${'es'}/app/gpt`)
   }

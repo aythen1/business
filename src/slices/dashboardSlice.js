@@ -39,6 +39,8 @@ const dashboardSlice = createSlice({
     status: 'pending',
     loading: false,
 
+    status: null,
+
     dashboard: null,
     dashboards: [],
 
@@ -49,7 +51,13 @@ const dashboardSlice = createSlice({
   reducers: {
     setDashboard: (state, action) => {
       // lógica para manejar la acción 'setUser'
+      state.dashboard = action.payload
     },
+    addComponent: (state, action) => {
+      console.log('add com', action.payload)
+      state.components.push(action.payload)
+      state.status = 'save'
+    }
     // otras acciones...
   },
   extraReducers: (builder) => {
@@ -126,5 +134,8 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { setDashboard } = dashboardSlice.actions;
+export const { 
+  setDashboard,
+  addComponent
+} = dashboardSlice.actions;
 export default dashboardSlice.reducer;

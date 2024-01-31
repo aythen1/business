@@ -20,9 +20,7 @@ const {
 
 
 const changelogs = require('../middlewares/default/changelogs')
-
 const news = require('../middlewares/default/news')
-
 
 
 const ID = 'test/test'
@@ -39,7 +37,7 @@ const encodeVector = (id) => {
 function generateToken(payload) {
   // Firma el token con la clave secreta y establece un tiempo de expiración (por ejemplo, 1 hora)
   const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
-
+  
   return token;
 }
 
@@ -56,10 +54,29 @@ function decodeToken(token) {
   }
 }
 
+const isAuth = async (token) => {
+  const data = await decodeToken(token)
+  const path = encodeVector(ID)
+
+  const options = [
+    { field: 'id', operator: '==', value: data.id },
+    { field: 'user', operator: '==', value: data.user },
+    { field: 'isverified', operator: '==', value: true }
+  ];
+
+  const resp = await getVector(path, 'users', [0, 0], options)
+
+  if (resp.length > 0) return resp[0]
+  return false
+}
+
+
+
+// ------------------------------------------------------
 
 const fetchsDefault = async (req, res, next) => {
   const { token } = req.body
-  const payload = await decodeToken(token)
+  const payload = await isAuth(token)
   const path = encodeVector(ID)
 
 
@@ -97,7 +114,7 @@ const fetchsBilling = async (req, res, next) => {
   const { token } = req.body
   console.log('billliiingg', token)
   const path = encodeVector(ID)
-  const payload = await decodeToken(token)
+  const payload = await isAuth(token)
 
 
 
@@ -140,7 +157,7 @@ const fetchsBilling = async (req, res, next) => {
 const updateBilling = async (req, res, next) => {
   const { token, billing } = req.body
   const path = encodeVector(ID)
-  const payload = await decodeToken(token)
+  const payload = await isAuth(token)
 
   // console.log('billliiingg', payload)
 
@@ -172,7 +189,7 @@ const updateBilling = async (req, res, next) => {
 
 const verifyUser = async (req, res, next) => {
   const { token } = req.body
-  const payload = await decodeToken(token)
+  const payload = await isAuth(token)
 
   // console.log('uuuuu', payload)
   if (!payload) {
@@ -248,7 +265,7 @@ const avatarUser = async (req, res) => {
 const updateUser = async (req, res, next) => {
   const { token, user } = req.body
 
-  const payload = await decodeToken(token)
+  const payload = await isAuth(token)
 
   if (!payload) {
     return res.status(501).send('Not access granted')
@@ -457,7 +474,7 @@ const updatePasswordUser = async (req, res, next) => {
   const { token, password } = req.body
   console.log('update password', token, password)
 
-  const _token = decodeToken(token)
+  const _token = isAuth(token)
 
   let user = _token.user
   user.password = password
@@ -483,21 +500,6 @@ const updatePasswordUser = async (req, res, next) => {
 
 // --------------------------------------
 
-const isAuth = async (token) => {
-  const data = await decodeToken(token)
-  const path = encodeVector(ID)
-
-  const options = [
-    { field: 'id', operator: '==', value: data.id },
-    { field: 'user', operator: '==', value: data.user },
-    { field: 'isverified', operator: '==', value: true }
-  ];
-
-  const resp = await getVector(path, 'users', [0, 0], options)
-
-  if (resp.length > 0) return resp[0]
-  return false
-}
 
 const addUser = async (req, res) => {
   const { token, user, tags, group } = req.body

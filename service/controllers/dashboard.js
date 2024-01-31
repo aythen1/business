@@ -3,6 +3,13 @@
 const { catchedAsync, response } = require('../utils/err')
 const jwt = require('jsonwebtoken')
 
+const {
+  addVector,
+  updateVector,
+  getVector,
+  deleteVector,
+  removeVector,
+} = require('../services/lancedb')
 
 
 const ID = 'test/test'
@@ -28,10 +35,26 @@ function decodeToken(token) {
 }
 
 
+const isAuth = async (token) => {
+  const data = await decodeToken(token)
+  const path = encodeVector(ID)
+
+  const options = [
+    { field: 'id', operator: '==', value: data.id },
+    { field: 'user', operator: '==', value: data.user },
+    { field: 'isverified', operator: '==', value: true }
+  ];
+
+  const resp = await getVector(path, 'users', [0, 0], options)
+
+  if (resp.length > 0) return resp[0]
+  return false
+}
 
 
 
 
+// ------------------------------------------------------
 
 
 
@@ -39,13 +62,15 @@ const fetchsDashboard = async (req, res) => {
   try{
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-
-    const result = await isAuth(token)
+    
+    console.log('1234 - dashboard', token)
+    
     const path = encodeVector(ID)
-
+    const result = await isAuth(token)
 
     if (result) {
       const data = await getVector(path, 'dashboards')
+      console.log('fetchsDashboard', data)
       if (Array.isArray(data)) {
         return res.status(200).send(data)
       }
@@ -107,14 +132,12 @@ const updateDashboard = async (req, res) => {
   try{
     const { token, dashboard } = req.body
     const path = encodeVector(ID)
-    const payload = await decodeToken(token)
+    const result = await isAuth(token)
+
     
-    console.log('toke', token, payload)
-    if (payload) {
-      const resp = await addVector(path, 'dashboards', [0, 0], dashboard, { users: payload })
-  
-      console.log('resp', resp)
-    
+    if (result) {
+      const resp = await addVector(path, 'dashboards', [0, 0], dashboard, { users: result })
+      
       return res.status(200).send(resp)
     }else{
       return res.status(501).send('Not verify user')

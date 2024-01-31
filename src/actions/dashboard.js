@@ -9,8 +9,11 @@ import {
 // Acción asincrónica
 export const fetchsDashboard =
   createAsyncThunk('dashboard/fetchsDashboard',
-    async ({}, { dispatch }) => {
+    async (item, { dispatch }) => {
       try {
+        console.log('oewinfujhri')
+        const token = localStorage.getItem('token')
+
         const res = await apiBackend.get(
           `/dashboard`, 
           {
@@ -62,16 +65,12 @@ export const addDashboard =
   createAsyncThunk('dashboard/addDashboard',
     async (dashboard, { dispatch }) => {
       try {
-        console.log( 'dashboard', dashboard)
-
         const token = localStorage.getItem('token')
-
+        console.log('token', dashboard)
         const res = await apiBackend.post('/dashboard', {
           token,
           dashboard
         })
-
-        console.log('add dashboard', res)
 
         return res;
       } catch (error) {
@@ -105,3 +104,8 @@ export const deleteDashboard =
       }
     }
   );
+
+
+
+// -------------------------------------------------------
+

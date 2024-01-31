@@ -2,15 +2,22 @@ import styles from "./index.module.css";
 
 import Graph from './Graph'
 
+
+import {
+  setOpenMenuRight,
+} from '@/actions/iam'
+
+
+
 export const MenuRightGraph = ({ 
-  setOpenMenuRight
+  
 }) => {
   return (
     <div>
       <div>
         Añadir archivos
         <button 
-          onClick={() => setOpenMenuRight('file')}>
+          onClick={() => setOpenMenuRight('data')}>
           Ficheros
         </button>
       </div>

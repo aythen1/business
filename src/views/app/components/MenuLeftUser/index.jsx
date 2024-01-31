@@ -16,9 +16,10 @@ import {
 
 
 export const MenuLeftUser = ({
-  setOpenMenuLeft
+  
 }) => {
 
+  // const { setOpenMenuLeft } = useSelector((state) => state.iam)
 
   // Estados para almacenar los colores generados
 

@@ -76,6 +76,7 @@
   background: none;
   border: 1px solid rgb(181, 183, 189);
   fill: rgb(63, 66, 80);
+  
 }
 
 
@@ -92,7 +93,7 @@
 /* CELL */
 
 .table{
-  width: 100%;
+  margin: 0 auto;
   .header{
     padding: 2px;
     th{
@@ -105,6 +106,7 @@
   }
   .cell{
     /* border: 1px solid red; */
+    cursor: pointer;
     position: relative;
     z-index: 1;
     td{
@@ -120,8 +122,14 @@
       height: calc(100% - 10px);
       border: 1px solid rgb(197, 197, 197);
       border-radius: 6px;
-      margin-top: -2px;
+      margin-top: 0px;
+      margin-left: -14px;
       z-index: -1;
+    }
+    &:hover{
+      &:after{
+        background: #fafafa;
+      }
     }
   }
 }

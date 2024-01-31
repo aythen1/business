@@ -13,7 +13,7 @@ import {
 } from '@/actions/dashboard'
 
 import {
-  initialDashboard
+  initialComponent
 } from '@/slices/dashboardSlice'
 
 

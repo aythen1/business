@@ -46,6 +46,12 @@ import LangChain from './pages/LangChain'
 // import Home from './pivot/components/DashBoard/home'
 
 
+import {
+  setOpenMenuLeft,
+  setOpenMenuRight,
+  setOpenChatBot,
+} from '@/actions/iam'
+
 
 
 export const App = ({ }) => {
@@ -70,11 +76,13 @@ export const App = ({ }) => {
 
   const dispatch = useDispatch();
   const [selectedComponent, setSelectedComponent] = useState(null)
-  const [openMenuRight, setOpenMenuRight] = useState(null)
-  const [openChatBot, setOpenChatBot] = useState(null)
-  const [openMenuLeft, setOpenMenuLeft] = useState(null)
+  // const [openMenuRight, setOpenMenuRight] = useState(null)
+  // const [openChatBot, setOpenChatBot] = useState(null)
+  // const [openMenuLeft, setOpenMenuLeft] = useState(null)
 
-  const [dashboardId, setDashboardId] = useState(null)
+
+  const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
+
 
   // Estado para controlar el modo oscuro o claro
   const [themeMode, setThemeMode] = useState(() => {
@@ -115,13 +123,15 @@ export const App = ({ }) => {
 
   // Efecto secundario para establecer el modo inicial al cargar la aplicación
   useEffect(() => {
+    console.log('1902e2ijedi')
     // Obtener la URL actual
     const urlParams = new URLSearchParams(window.location.search);
     // Obtener el valor del parámetro 'dashboard'
     const dashboardParam = urlParams.get('dashboard');
 
     if (dashboardParam) {
-      setDashboardId(dashboardParam)
+      console.log('dashboardParam', dashboardParam)
+      // setDashboard(dashboardParam)
     }
 
   }, []);
@@ -139,22 +149,19 @@ export const App = ({ }) => {
   }, [dispatch]);
 
 
-  const {
-    components
-  } = useSelector((state) => state.dashboard);
 
 
   const _selectedComponent = (index) => {
     setSelectedComponent(index)
     if (index) {
-      setOpenMenuLeft('data')
+      dispatch(setOpenMenuLeft('data'))
       scrollToComponent(index)
     } else {
-      setOpenMenuLeft(null)
+      dispatch(setOpenMenuLeft(null))
     }
 
-    setOpenMenuRight(null)
-    setOpenChatBot(null)
+    dispatch(setOpenMenuRight(null))
+    dispatch(setOpenChatBot(null))
 
   }
 
@@ -184,45 +191,41 @@ export const App = ({ }) => {
 
 
   return (
-    <div >
+    <div 
+      onClick={() => {
+        // setOpenChatBot(null)
+        // setOpenMenuRight(null)
+        // _selectedComponent(null)
+      }}
+    >
       <Modal />
       <div className={styles["TopBar"]}>
         <TopBar
           themeMode={themeMode}
           setThemeMode={setThemeMode}
-          setOpenMenuLeft={setOpenMenuLeft}
-          setOpenChatBot={setOpenChatBot}
         />
       </div>
       <div className={styles["Container"]}>
-        <div
-          onClick={() => {
-            setOpenChatBot(null)
-            setOpenMenuRight(null)
-            _selectedComponent(null)
-          }
-          }
+        <div 
+          className={styles["Board"]}
+          onClick={() => _selectedComponent(null)}
         >
-
-
-          <div>
             <Routes>
-              <Route path="home" element={<DashBoard />} />
+              <Route path="board" element={<DashBoard  />} />
               <Route path="/*" element={<Outlet />}>
                 {/* Ruta dinámica que carga el componente correspondiente según el path */}
                 <Route path="iam" element={<SettingsIAM />} />
 
                 <Route path="" element={<Settings />} />
+                <Route path="settings/:settingsTag/*" element={<Settings />} />
+
                 <Route path="support" element={<Support />} />
                 <Route path="support/tickets" element={<Tickets />} />
                 <Route path="support/ticket/:ticketId" element={<Ticket />} />
 
-                <Route path="settings/:settingsTag/*" element={<Settings />} />
-                {/* <Route path="settings/:settingsTag" element={<Settings />} /> */}
-                {/* <Route path="billing" element={<SettingsBilling />} /> */}
                 {/* <Route path="contract" element={<SettingsContract />} /> */}
-                <Route path="addon/*" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot} />} />
-                <Route path="addon" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot}/>} />
+                <Route path="addon/*" element={<Addon  />} />
+                <Route path="addon" element={<Addon />} />
                 {/* <Route path="drive/:id" element={<Drive />} /> */}
                 <Route path="gpt" element={<GPTs />} />
                 <Route path="langchain" element={<LangChain />} />
@@ -230,9 +233,6 @@ export const App = ({ }) => {
                 {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
               </Route>
             </Routes>
-          </div>
-
-
         </div>
         {openMenuLeft && (
           <div
@@ -240,41 +240,32 @@ export const App = ({ }) => {
             style={{ display: 'block' }}
           >
             {openMenuLeft == 'user' ? (
-              <MenuLeftUser
-                setOpenMenuLeft={setOpenMenuLeft}
-              />
+              <MenuLeftUser />
             ) : (
-              <MenuLeftData
-                components={components}
-                setRef={setRef}
-              />
+              <MenuLeftData />
             )}
             {/* <MenuLeftUser /> */}
           </div>
         )}
+        |
+        {openMenuRight}|openMenuRight
         {openMenuRight && (
           <div>
             {openMenuRight == 'graph' ? (
               <div className={styles["MenuRightGraph"]}
                 style={{ display: 'block' }}
               >
-                <MenuRightGraph
-                  setOpenMenuRight={setOpenMenuRight}
-                />
+                <MenuRightGraph />
               </div>
             ) : openMenuRight == 'data' ? (
               <div className={styles["MenuRightData"]}
                 style={{ display: 'block' }}
               >
-                <MenuRightData
-                  setOpenMenuRight={setOpenMenuRight}
-                  />
+                <MenuRightData />
               </div>
             ): openMenuRight == 'component' && (
               <div className={styles["MenuRightComponent"]}>
-                <MenuRightComponent 
-                  setOpenMenuRight={setOpenMenuRight}
-                />
+                <MenuRightComponent />
               </div>
             )}
           </div>
@@ -282,7 +273,7 @@ export const App = ({ }) => {
       </div>
       {openChatBot && (
         <div className={styles["ChatBot"]}>
-          <ChatBot setOpenChatBot={setOpenChatBot} />
+          <ChatBot />
         </div>
       )}
     </div>
