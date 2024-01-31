@@ -3,7 +3,7 @@ import styles from './billing.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 
 
-import Table from '@/views/app/pages/Settings/table'
+import Table from '@/views/app/pages/Settings/iam/table'
 
 
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'

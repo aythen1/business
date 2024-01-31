@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styles from './home.module.css'
 
-import Table from './table'
+import DashBoard from '../DashBoard'
 
 import BackgroundBanner from './assets/backgroundBanner.svg'
 import IconDNS from './assets/IconDNS.svg'
@@ -19,82 +19,47 @@ import {
     fetchsDefault
 } from '@/actions/iam'
 
+import {
+    fetchsDashboard
+} from '@/actions/dashboard'
 
 
-const News = ({ items }) => {
-    const navigate = useNavigate()
 
-    const onClickSupport = () => {
-        navigate('/es/app/settings/support')
-    }
 
-    return (
-        <div>
-            {items.map((item, index) => (
-                <div
-                    key={index}
-                    className={styles["items"]}
-                >
-                    <div className={styles["info"]}>
-                        <span className={styles["date"]}>
-                            {item?.date || 'Thu Dec 21 2023'}
-                        </span>
-                        <b>
-                            {item?.title || 'Quantization, a game-changer for cloud-based machine learning efficiency - Part 1'}
-                        </b>
-                        <p>
-                            {item?.description || `What is quantization? And how can it make such a big difference to machine
-                    learning efficiency? Find out in part 1 of our series`}
-                        </p>
-                    </div>
-                    <button
-                        onClick={() => onClickSupport()}
-                        className={styles["button"]}
-                    >
-                        <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
-                    </button>
-                </div>
-            ))}
-        </div>
-    )
-}
-const Changelog = ({ item }) => {
-    return (
-        <div>
-            <img src={ChangelogKubernetes} className={styles["image"]} />
-            <div className={styles["labelContainer"]}>
-                <label>
-                    {item?.type || 'Kubernetes'}
-                </label>
-            </div>
-            <div className={styles["info"]}>
-                <b>
-                    {item?.title || 'Proxy Registry is now available!'}
-                </b>
-                <p>
-                    {item?.description || `🚀 Kubernetes Kapsule now benefits from a proxy registry in all regions,
-                                caching required system images for new clusters and new nodes. This addition
-                                eliminates rate limiting from the official container registries used to pull
-                                system`}
-                </p>
-            </div>
-            <div className={styles["share"]}>
-                <a>
-                    <svg viewBox="0 0 24 24"><path d="M15 5l-1.41 1.41L18.17 11H2v2h16.17l-4.59 4.59L15 19l7-7-7-7z"></path></svg>
-                    {item?.next || 'View changes'}
-                </a>
-                <div>
-                    {item?.count || '1/5'}
-                </div>
-            </div>
-        </div>
-    )
-}
-const Home = ({ }) => {
+const Home = ({ 
+     
+}) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
-    const { changelogs, news } = useSelector((state) => state.iam)
+    const {
+        dashboards,
+        changelogs,
+        news
+    } = useSelector((state) => state.iam)
+
+    const [stateTable, setStateTable] = useState('')
+
+
+    useEffect(() => {
+        console.log('click dashboard', stateTable)
+        // if(stateTable.startsWith('edit-item:')){
+        //   const id = stateTable.split(':')[1]
+        //   const index = users.findIndex(user => user.id === id);
+        //   const user = users[index]
+        //   console.log('user', user)
+
+        //   dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
+        // }else if(stateTable.startsWith('delete-item:')){
+        //   const id = stateTable.split(':')[1]
+        //   const token = localStorage.getItem('token')
+        //   dispatch(deleteUser({token, id}))
+        // }
+    }, [stateTable])
+
+
+
+
 
     const [organization, setOrganization] = useState({
         title: 'Tu interfaz de ojos para tu tienda',
@@ -329,33 +294,8 @@ const Home = ({ }) => {
                     </div>
                 </div>
             </div>
-            <div>
-                <Table >
-                    <header>
-                        Avisos
-                    </header>
-                    <item>
-                        Ticket ID
-                    </item>
-                    <item>
-                        Ticket Name
-                    </item>
-                    <item>
-                        Product
-                    </item>
-                    <item>
-                        Ticket creator
-                    </item>
-                    <item>
-                        Created
-                    </item>
-                    <item>
-                        Last update
-                    </item>
-                    <item>
-                        Awaiting Customer
-                    </item>
-                </Table>
+            <div className={styles["box"]}>
+                <DashBoard />
             </div>
             <div className={styles["containerTrid"]}>
                 <div className={styles["containerChangelog"]}>
@@ -431,3 +371,85 @@ const Home = ({ }) => {
 }
 
 export default Home
+
+
+
+
+
+
+
+
+
+
+
+
+
+const News = ({ items }) => {
+    const navigate = useNavigate()
+
+    const onClickSupport = () => {
+        navigate('/es/app/settings/support')
+    }
+
+    return (
+        <div>
+            {items.map((item, index) => (
+                <div
+                    key={index}
+                    className={styles["items"]}
+                >
+                    <div className={styles["info"]}>
+                        <span className={styles["date"]}>
+                            {item?.date || 'Thu Dec 21 2023'}
+                        </span>
+                        <b>
+                            {item?.title || 'Quantization, a game-changer for cloud-based machine learning efficiency - Part 1'}
+                        </b>
+                        <p>
+                            {item?.description || `What is quantization? And how can it make such a big difference to machine
+                    learning efficiency? Find out in part 1 of our series`}
+                        </p>
+                    </div>
+                    <button
+                        onClick={() => onClickSupport()}
+                        className={styles["button"]}
+                    >
+                        <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
+                    </button>
+                </div>
+            ))}
+        </div>
+    )
+}
+const Changelog = ({ item }) => {
+    return (
+        <div>
+            <img src={ChangelogKubernetes} className={styles["image"]} />
+            <div className={styles["labelContainer"]}>
+                <label>
+                    {item?.type || 'Kubernetes'}
+                </label>
+            </div>
+            <div className={styles["info"]}>
+                <b>
+                    {item?.title || 'Proxy Registry is now available!'}
+                </b>
+                <p>
+                    {item?.description || `🚀 Kubernetes Kapsule now benefits from a proxy registry in all regions,
+                                caching required system images for new clusters and new nodes. This addition
+                                eliminates rate limiting from the official container registries used to pull
+                                system`}
+                </p>
+            </div>
+            <div className={styles["share"]}>
+                <a>
+                    <svg viewBox="0 0 24 24"><path d="M15 5l-1.41 1.41L18.17 11H2v2h16.17l-4.59 4.59L15 19l7-7-7-7z"></path></svg>
+                    {item?.next || 'View changes'}
+                </a>
+                <div>
+                    {item?.count || '1/5'}
+                </div>
+            </div>
+        </div>
+    )
+}

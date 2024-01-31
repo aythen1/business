@@ -13,14 +13,14 @@ import styles from './index.module.css'
 import Home from './home'
 import Billing from './billing'
 import Contract from './contract'
-import Support from './support'
+// import Support from './support'
 import Drive from './drive'
 
 
 
 
 
-const SettingsPath = () => {
+const SettingsPath = ({}) => {
   const { settingsTag } = useParams();
 
   console.log('edwdw', settingsTag)
@@ -44,7 +44,7 @@ const SettingsPath = () => {
 
 
 
-const Settings = ({ }) => {
+const Settings = ({  }) => {
     const { settingsTag } = useParams();
 
 
@@ -54,8 +54,13 @@ const Settings = ({ }) => {
   
     const selectTag = (value) => {
       setTag(value);
-      // Realiza la navegación según la tag seleccionada
-      navigate(`/${'es'}/app/settings/${value}`);
+
+      if(value == 'support'){
+        navigate(`/${'es'}/app/${value}`);
+      }else{
+        // Realiza la navegación según la tag seleccionada
+        navigate(`/${'es'}/app/settings/${value}`);
+      }
     };
 
 
@@ -96,7 +101,7 @@ const Settings = ({ }) => {
             <div>
                 <Routes>
                   {/* <Route path="hello" element={<Drive />} /> */}
-                  <Route path="*" element={<SettingsPath />} />
+                  <Route path="*" element={<SettingsPath  />} />
                   {/* <Route path="" element={<SettingsPath />} /> */}
                 </Routes>
             </div>

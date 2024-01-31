@@ -20,8 +20,8 @@ const schemaBillings =  {
             // },
         },
         upgradedat: { type: 'string', format: 'date-time' },
-        vector: { type: 'array', items: { type: 'number' } },
         createdat: { type: 'string', format: 'date-time' }
+        // vector: { type: 'array', items: { type: 'number' } },
         // relations: { type: 'object' }
         // data: { type: "object" }
     },

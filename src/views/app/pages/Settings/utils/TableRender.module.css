@@ -1,0 +1,183 @@
+@import url('./default.css');
+
+
+
+.instanceSettings {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      color: #000fff;
+      border-radius: 4px;
+      height: 30px;
+      width: 30px;
+      font-weight: 600;
+      border: none;
+      svg {
+        width: 20px;
+        fill: #8b8b8b;
+      }
+      &:hover {
+        background: #fafafa;
+      }
+    }
+  
+    .popupSettings {
+      width: 100px;
+      list-style: none;
+      background: var(--background);
+      position: absolute;
+      overflow:hidden;
+      top: 10px;
+      left: -5px;
+      z-index: 99;
+      box-shadow: 0px 0px 6px -3px black;
+      border-radius: 4px;
+      li{
+        padding: 6px 8px;
+        font-size: 10px;
+        &:hover{
+          background: #f8f8f8;
+        }
+      }
+      li.hr {
+        border-bottom: 1px solid #f2f2f2;
+      }
+    }
+  }
+
+
+
+.buttonDownload{
+  display: flex;
+  height: 30px;
+  padding: 5px;
+  flex-direction: row;
+  gap: 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 30px;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+  outline-offset: 2px;
+  white-space: nowrap;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 20px;
+  background: none;
+  border: 1px solid rgb(181, 183, 189);
+  fill: rgb(63, 66, 80);
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* CELL */
+
+.table{
+  margin: 0 auto;
+  .header{
+    padding: 2px;
+    th{
+      text-align: left;
+      padding: 2px 2px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #0711a5;
+    }
+  }
+  .cell{
+    /* border: 1px solid red; */
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    td{
+      padding: 10px 4px;
+
+    }
+    &:after{
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 0px;
+      width: 100%;
+      height: calc(100% - 10px);
+      border: 1px solid rgb(197, 197, 197);
+      border-radius: 6px;
+      margin-top: 0px;
+      margin-left: -14px;
+      z-index: -1;
+    }
+    &:hover{
+      &:after{
+        background: #fafafa;
+      }
+    }
+  }
+}
+
+
+
+
+
+.flex{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+
+
+
+
+/* RENDER USER */
+
+.renderUser{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .dot{
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+  }
+  .avatar{
+    .initial{
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: red;
+    }
+
+  }
+  .info{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    b{
+      line-height: 10px;
+    }
+  }
+}

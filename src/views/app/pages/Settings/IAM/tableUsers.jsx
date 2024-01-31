@@ -80,22 +80,19 @@ const TableUsers = ({
                     <header>
                         Users
                     </header>
-                    <item>
+                    <item filter="user-email">
                         User
-                    </item>
-                    <item>
-                        Email
                     </item>
                     <item>
                         Is Verified
                     </item>
-                    <item>
+                    <item filter="date" name="upgradedat">
                         Last Login
                     </item>
-                    <item>
+                    <item  filter="date" name="upgradedat">
                         Joined On
                     </item>
-                    <item>
+                    <item filter="options">
                         Options
                     </item>
                 </Table>

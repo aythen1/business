@@ -21,6 +21,10 @@ body{
     overflow-y: scroll;
     overflow-x: hidden;
     height: calc(100vh - 55px);
+    .Board{
+        /* background: red; */
+        min-height: 100vh;
+    }
 }
 
 .Container::-webkit-scrollbar {
@@ -57,6 +61,7 @@ body{
     overflow-y: scroll;
     overflow-x: hidden;
     z-index: 2;
+    
 }
 
 .MenuRightData{

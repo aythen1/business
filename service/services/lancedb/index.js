@@ -3,11 +3,11 @@ const err = require('../../utils/err')
 const fs = require('fs').promises
 const { v4: uuidv4 } = require('uuid');
 
-const { 
+const {
     setValueByPath,
     generateSearchString,
     generateGraphSql
- } = require('./sql')
+} = require('./sql')
 
 
 const allSchemas = require('./schema')
@@ -77,10 +77,10 @@ const decodeVector = (base64Str) => {
 // }
 
 
-const addRelationsToSchema  = (schema) => {
-    schema.properties.vector = { 
-        type: 'array', 
-        items: { type: 'number' } 
+const addRelationsToSchema = (schema) => {
+    schema.properties.vector = {
+        type: 'array',
+        items: { type: 'number' }
     }
 
     schema.properties.relations = {
@@ -95,46 +95,45 @@ const addRelationsToSchema  = (schema) => {
 // Función para agregar identificadores al objeto relations en data
 const addRelationsToData = (data, relations) => {
     if (relations) {
-      data = {};
-      Object.keys(relations).forEach((tableName) => {
-        // Convertir el nombre a singular y agregar _id al final
-        const key = `${tableName}_id`;
-  
-        // Verificar si el objeto en el relations tiene la propiedad 'id'
-        const idValue = relations[tableName].id || null;
-  
-        if (idValue) {
-          data[key] = idValue;
-        }
-      });
+        data = {};
+        Object.keys(relations).forEach((tableName) => {
+            // Convertir el nombre a singular y agregar _id al final
+            const key = `${tableName}_id`;
+
+            // Verificar si el objeto en el relations tiene la propiedad 'id'
+            const idValue = relations[tableName].id || null;
+
+            if (idValue) {
+                data[key] = idValue;
+            }
+        });
     }
     return data;
-  };
+};
 
 
 
 
 async function addVector(id, name, vector = [0, 0], data, relations) {
-    // const schema = (allSchemas[name])
-    
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
-    
+
     const schemaExists = allSchemas.hasOwnProperty(name);
     if (!schemaExists) {
         return "El esquema no existe";
     }
-    
+
+
     const schema = addRelationsToSchema(allSchemas[name])
-    
-    try{
+
+    try {
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
-    }catch(err){
+    } catch (err) {
         const db = await lancedb.connect(uri);
         // const emptyData = data.length ? data[0] : data
         // emptyData.limit = 1001
-        
+
         const emptyData = generateEmptyObjectFromSchema(schema)
         emptyData.vector = vector
         emptyData.id = uuidv4()
@@ -142,6 +141,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
         console.log('schema emptyData', emptyData)
 
         const validObj = validateAgainstSchema(emptyData, schema);
+
         if (!validObj.isValid) {
             return {
                 message: 'El objeto no cumple con el esquema',
@@ -150,26 +150,22 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
             };
         }
 
-        
+
         await db.createTable(name, [emptyData], {
             schema: schema,
             writeMode: 'overwrite'
         });
-        
+
         const tbl = await db.openTable(name)
         await tbl.delete(`id = '${emptyData.id}'`)
     }
-    
+
 
     const db = await lancedb.connect(uri);
     const tbl = await db.openTable(name)
 
     const processSingleData = async (singleData) => {
-        
-    
         console.log('d', singleData)
-
-    
         const validObj = validateAgainstSchema(singleData, schema);
         if (!validObj.isValid) {
             return {
@@ -192,26 +188,24 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
     const results = []
 
     const arr = Array.isArray(data) ? data : [data];
-    
 
-        // Si data es un array, procesa cada elemento individualmente
-        for (const singleData of arr) {
-            
-            
-            const data = generateEmptyObjectFromSchema(schema, singleData)
-            if (!data.id) data.id = uuidv4();
-            data.vector = vector
+    // Si data es un array, procesa cada elemento individualmente
+    for (const singleData of arr) {
+        const data = generateEmptyObjectFromSchema(schema, singleData)
+        if (!data.id) data.id = uuidv4();
+        data.vector = vector
 
-            if(relations){
-                data.relations = {}
-                data.relations = JSON.stringify(addRelationsToData(data.relations, relations))
-            }
+        if (relations) {
+            data.relations = {}
+            data.relations = JSON.stringify(addRelationsToData(data.relations, relations))
 
-
-            const result = await processSingleData(data);
-            results.push(result);
+            console.log('data.relations', data.relations)
         }
-    
+
+        const result = await processSingleData(data);
+        results.push(result);
+    }
+
 
     // Desconecta después de que el bucle haya terminado
     // await db.disconnect();
@@ -239,7 +233,7 @@ async function updateVector(id, name, vector = [0, 0], data) {
             return "El objeto 'data' no cumple con el esquema";
         }
 
-        
+
         if (!data.id) {
             return "Debe existir el ID";
         }
@@ -247,9 +241,9 @@ async function updateVector(id, name, vector = [0, 0], data) {
         const conditions = [
             { field: 'id', operator: '==', value: data.id }
         ];
-        
+
         const searchString = generateSearchString(conditions);
-        
+
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
 
@@ -312,25 +306,19 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
                         obj[prop] = generateEmptyObjectFromSchema({ properties: propSchema.properties });
                         break;
                     case 'array':
-                        if (prop === 'vector') {
-                            obj[prop] = [0, 0];
+                        if (propSchema.items && propSchema.items.type === 'object') {
+                            // Aplicar JSON.stringify a arrays de objetos
+                            obj[prop] = JSON.stringify([generateEmptyObjectFromSchema(propSchema.items)]);
                         } else {
-                            obj[prop] = [];
+                            obj[prop] = JSON.stringify([]);
                         }
                         break;
                 }
             }
         }
 
-        // Si la propiedad es un objeto, aplicar JSON.stringify
         if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
             obj[prop] = JSON.stringify(obj[prop]);
-        }
-    };
-
-    const processObjectProperties = (properties, obj) => {
-        for (const prop in properties) {
-            processProperty(prop, properties[prop], obj);
         }
     };
 
@@ -346,7 +334,39 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
 const validateAgainstSchema = (obj, schema) => {
     const Validator = require('jsonschema').Validator;
     const v = new Validator();
-    const result = v.validate(obj, schema);
+
+    const parseObject = (value) => {
+        try {
+            return JSON.parse(value);
+        } catch (error) {
+            // Si no se puede analizar, simplemente devuelve el valor original
+            return value;
+        }
+    };
+
+    const parseProperties = (properties) => {
+        const result = {};
+        for (const prop in properties) {
+            if (properties[prop].type === 'array' && properties[prop].items.type === 'object') {
+                // Tratar el caso especial de arrays de objetos
+                const arrayValue = obj[prop];
+                result[prop] = Array.isArray(arrayValue)
+                    ? arrayValue.map(item => parseObject(item))
+                    : parseObject(arrayValue);
+            } else if (properties[prop].type === 'object') {
+                // Tratar el caso de propiedades de tipo 'object'
+                result[prop] = parseObject(obj[prop]);
+            } else {
+                result[prop] = obj[prop];
+            }
+        }
+        return result;
+    };
+
+    // Parsear propiedades del objeto según el esquema
+    const parsedObj = parseProperties(schema.properties);
+
+    const result = v.validate(parsedObj, schema);
 
     return {
         isValid: result.valid,
@@ -428,7 +448,7 @@ const validateAgainstSchema = (obj, schema) => {
 const getGraphVector = async (uri, conditions, _vector) => {
     const dbs = generateGraphSql(conditions)
 
-    
+
 
     // console.log('result', dbs)
 
@@ -437,52 +457,52 @@ const getGraphVector = async (uri, conditions, _vector) => {
     let data = {}
 
     let filter = null
-    
-    for(var i = 0;i<dbs.length;i++){
+
+    for (var i = 0; i < dbs.length; i++) {
 
         try {
 
-        const db = await lancedb.connect(uri)
-        const name = dbs[i].table
-        const variable = dbs[i].variable
-        
-        filter = dbs[i].filter ? dbs[i].filter : filter 
-        
-        current.push(name)
+            const db = await lancedb.connect(uri)
+            const name = dbs[i].table
+            const variable = dbs[i].variable
 
-        const tbl = await db.openTable(name)
+            filter = dbs[i].filter ? dbs[i].filter : filter
 
-        const query = await tbl
-                .search([0,0])
+            current.push(name)
+
+            const tbl = await db.openTable(name)
+
+            const query = await tbl
+                .search([0, 0])
                 .where(filter)
                 .execute()
-                
-        const resp = variable.reduce((obj, key) => ({ ...obj, [key]: query[0][key] }), {});
-    
-        vector = query[0].vector
-        filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`
 
-        if(Object.keys(data).length === 0){
-            // console.log('query', resp)
-            // when not exist
-            data = resp
-        }else{
-            //when exist
+            const resp = variable.reduce((obj, key) => ({ ...obj, [key]: query[0][key] }), {});
 
-            path = current.slice(1).join('.');
+            vector = query[0].vector
+            filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`
+
+            if (Object.keys(data).length === 0) {
+                // console.log('query', resp)
+                // when not exist
+                data = resp
+            } else {
+                //when exist
+
+                path = current.slice(1).join('.');
 
 
-            console.log('path', data, path, resp)
+                console.log('path', data, path, resp)
 
-            eval(`data.${path} = resp`);
+                eval(`data.${path} = resp`);
 
-            // data[path][name] = resp
-            // console.log('query', resp)
+                // data[path][name] = resp
+                // console.log('query', resp)
+            }
+
+        } catch (err) {
+            console.log('er', err)
         }
-
-    }catch(err){
-        console.log('er', err)
-    }
 
     }
 
@@ -496,9 +516,10 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
 
+
     // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
     const regex = /query\s*{\s*([\s\S]*?)\s*}/;
-    if(regex.test(name)){
+    if (regex.test(name)) {
         console.log('=================', name)
         const resp = await getGraphVector(uri, name, vector)
         return resp
@@ -513,10 +534,10 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
 
         console.log('searchQuery', searchQuery)
 
-        if(searchQuery.error){
+        if (searchQuery.error) {
             return searchQuery
         }
-        
+
 
         const query = await tbl
             .search(vector)
