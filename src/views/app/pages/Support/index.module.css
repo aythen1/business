@@ -1,7 +1,8 @@
-.container{
+.container {
     max-width: 900px;
     margin: 10px auto;
-    .containerQuery{
+
+    .containerQuery {
         display: flex;
         gap: 16px;
         flex-flow: column;
@@ -10,10 +11,12 @@
         background: linear-gradient(151deg, #5d65ed 0%, #161fb1 28.91%, rgb(21, 26, 45) 75.01%);
         border-radius: 4px;
         padding: 32px;
-        .containerBoxQuery{
+
+        .containerBoxQuery {
             width: 100%;
             position: relative;
-            .boxQuery{
+
+            .boxQuery {
                 width: 100%;
                 background: #fff;
                 box-shadow: rgba(217, 218, 221, 0.4) 0px 4px 24px 6px;
@@ -22,28 +25,32 @@
                 display: flex;
                 flex-direction: column;
                 gap: 6px;
-                div{
+
+                div {
                     border-bottom: 1px solid #dbdbdb;
                     padding: 10px 2px;
                     cursor: pointer;
                     display: flex;
                     flex-direction: column;
                     gap: 2px;
-                    span{
+
+                    span {
                         font-size: 10px;
                     }
-                    b{
+
+                    b {
                         font-size: 14px;
                     }
 
                 }
-                &:hover{
+
+                &:hover {
                     background: #fafafa;
                 }
             }
         }
 
-        .title{
+        .title {
             font-size: 35px;
             font-weight: 400;
             letter-spacing: 0px;
@@ -53,28 +60,30 @@
             text-align: center;
             color: rgb(255, 255, 255);
         }
-        .input{
-                input{
-                    transition: border-color 0.2s ease 0s, box-shadow 0.2s ease 0s;
-                    appearance: none;
-                    background-color: rgb(255, 255, 255);
-                    background-image: none;
-                    border: 1px solid var(--border-color);
-                    border-radius: 4px;
-                    color: rgb(63, 66, 80);
-                    display: block;
-                    max-width: 100%;
-                    outline: none;
-                    position: relative;
-                    width: 100%;
-                    font-size: 16px;
-                    line-height: 24px;
-                    height: 48px;
-                    padding: 8px;
-                }
+
+        .input {
+            input {
+                transition: border-color 0.2s ease 0s, box-shadow 0.2s ease 0s;
+                appearance: none;
+                background-color: rgb(255, 255, 255);
+                background-image: none;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                color: rgb(63, 66, 80);
+                display: block;
+                max-width: 100%;
+                outline: none;
+                position: relative;
+                width: 100%;
+                font-size: 16px;
+                line-height: 24px;
+                height: 48px;
+                padding: 8px;
+            }
         }
     }
-    .title{
+
+    .title {
         font-size: 14px;
         font-weight: 600;
         letter-spacing: 0px;
@@ -83,15 +92,19 @@
         text-transform: none;
         text-decoration: none;
     }
-    .containerPopular{
+
+    .containerPopular {
         margin-top: 14px;
-        .boxPopular{
+        color: var(--text-primary);
+
+        .boxPopular {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             align-items: normal;
             justify-content: normal;
-            .box{
+
+            .box {
                 display: flex;
                 gap: 16px;
                 flex-flow: row;
@@ -103,10 +116,18 @@
                 color: rgb(63, 66, 80);
                 text-decoration: none;
                 border: 1px solid var(--border-color);
+
                 border-radius: 4px;
                 background: rgb(255, 255, 255);
                 overflow-wrap: break-word;
-                &>div{
+                color: rgb(63, 66, 80);
+                background: var(--background);
+
+                &:hover {
+                    background: #fafafa;
+                }
+
+                &>div {
                     display: flex;
                     gap: 16px;
                     flex-flow: row;
@@ -114,32 +135,41 @@
                     justify-content: normal;
                     height: fit-content;
                 }
-                
-                svg{
+
+                svg {
                     width: 20px;
                 }
-                button{
+
+                button {
                     display: flex;
                     width: fit-content;
-                    background: rgb(249, 249, 250);
                     padding: 8px;
                     border-radius: 4px;
                     height: 40px;
                     border: none;
                     margin-left: auto;
+                    background: rgb(175, 175, 177);
+
                 }
             }
         }
     }
-    .containerTrid{
+
+    .containerTrid {
+
         margin-top: 14px;
         display: grid;
         grid-template-columns: 32% 31% 31%;
         gap: 24px;
         align-items: normal;
         justify-content: normal;
-        .boxStatus{
-            .box{
+
+        .boxStatus {
+            .titleHead {
+                color: var(--text-primary);
+            }
+
+            .box {
                 display: flex;
                 gap: 0px;
                 flex-flow: column;
@@ -149,57 +179,73 @@
                 border: 1px solid var(--border-color);
                 background: rgb(255, 255, 255);
                 min-width: 0px;
-                .item{
+
+                .item {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
                     gap: 10px;
                     border-bottom: 1px solid gainsboro;
+                    color: rgb(63, 66, 80);
+                    background: var(--background);
                     padding: 10px;
                     cursor: pointer;
-                    &:hover{
+
+                    &:hover {
                         background: #fafafa;
                     }
-                    &:last-child{
+
+                    &:last-child {
                         border-bottom: 0px;
                     }
-                    span{
+
+                    span {
                         font-size: 12px;
                     }
-                    .title{
+
+                    .title {
                         display: flex;
                         align-items: center;
                         gap: 4px;
-                        .dot{
+
+                        .dot {
                             min-width: 10px;
                             width: 10px;
                             height: 10px;
                             background: orange;
                             border-radius: 50%;
                         }
-                        b{
+
+                        b {
                             font-size: 12px;
                             width: 150px;
-                            white-space: nowrap;    
-                            overflow: hidden;        
-                            text-overflow: ellipsis; 
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     }
-                    button{
+
+                    button {
                         display: inline-flex;
-                        background: rgb(249, 249, 250);
+                        background: rgb(175, 175, 177);
                         padding: 8px;
                         border-radius: 4px;
                     }
                 }
             }
         }
-        .boxContact{
-            .box{
+
+        .boxContact {
+            .titleHead {
+                color: var(--text-primary);
+            }
+
+            .box {
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
-                .item{
+
+                .item {
                     padding: 10px;
                     display: flex;
                     flex-direction: column;
@@ -208,15 +254,15 @@
                     color: rgb(63, 66, 80);
                     border: 1px solid var(--border-color);
                     border-radius: 4px;
-                    background: rgb(255, 255, 255);
+                    background: var(--background);
                     overflow-wrap: break-word;
                     cursor: pointer;
 
-                    &:hover{
+                    &:hover {
                         background: #fafafa;
                     }
 
-                    b{
+                    b {
                         display: flex;
                         align-items: center;
                         gap: 6px;
@@ -225,7 +271,8 @@
                         font-weight: 500;
                         letter-spacing: 0px;
                         line-height: 24px;
-                        label{
+
+                        label {
                             font-weight: 500;
                             letter-spacing: 0px;
                             line-height: 24px;
@@ -240,12 +287,13 @@
                             height: 16px;
                             text-transform: uppercase;
                             font-size: 10px;
-                            color: rgb(255, 255, 255);
-                            background: rgb(229, 25, 99);
-                            border: 1px solid rgb(229, 25, 99);
+                            color: #000;
+                            background: rgb(175, 175, 177);
+
                         }
                     }
-                    span{
+
+                    span {
                         color: rgb(63, 66, 80);
                         font-size: 12px;
                         font-weight: 400;
@@ -255,12 +303,14 @@
                 }
             }
         }
-        .boxGoing{
-            .box{
+
+        .boxGoing {
+            .box {
                 display: flex;
                 flex-direction: column;
-                gap: 12px;                
-                .item{
+                gap: 12px;
+
+                .item {
                     display: flex;
                     align-items: center;
                     text-align: left;
@@ -272,19 +322,26 @@
                     overflow-wrap: break-word;
                     padding: 10px;
                     gap: 4px;
-                    div{
+
+                    &:hover {
+                        background: #fafafa;
+                    }
+
+                    div {
                         display: flex;
                         flex-direction: column;
                         gap: 4px;
                     }
-                    b{
+
+                    b {
                         font-size: 14px;
                         color: rgb(63, 66, 80);
                         font-weight: 500;
                         letter-spacing: 0px;
                         line-height: 24px;
                     }
-                    span{
+
+                    span {
                         color: rgb(63, 66, 80);
                         font-size: 12px;
                         font-weight: 400;
@@ -292,9 +349,13 @@
                         line-height: 20px;
                     }
 
-                    button{
+                    button {
                         display: inline-flex;
-                        background: rgb(249, 249, 250);
+                        font-size: 10px;
+                        border-radius: 16px;
+                        color: rgb(255, 255, 255);
+                        background: rgb(175, 175, 177);
+
                         padding: 8px;
                         border-radius: 4px;
                     }
@@ -305,9 +366,10 @@
 }
 
 
-.footer{
+.footer {
     margin: 40px 0px 20px;
-    .footerUl{
+
+    .footerUl {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
@@ -315,7 +377,8 @@
         list-style-type: none;
         padding: 0px;
         margin: 0px;
-        li{
+
+        li {
             background-color: transparent;
             border: none;
             padding: 0px;
@@ -333,7 +396,8 @@
             font-weight: 500;
             letter-spacing: 0px;
             line-height: 24px;
-            svg{
+
+            svg {
                 vertical-align: middle;
                 fill: currentcolor;
                 height: 14px;

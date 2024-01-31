@@ -25,7 +25,7 @@ import {
   NewPage, //
   NewComponent, //
   NewPlugin, //
-  PluginTranslate, 
+  PluginTranslate,
   PluginModel,
   EditColor,
   EditText,
@@ -36,6 +36,8 @@ import {
 // import { valuesIn } from 'lodash'
 
 import { RecordViewer } from './component/record-viewer'
+
+
 
 const Bots = ({
   message,
@@ -56,18 +58,23 @@ const Bots = ({
   // Function to scroll down in the chat container
   const chatContainerRef = useRef(null)
 
+  const handleAudioMessage = (audioUrl, volumeArray) => {
+    const newAudioMessage = {
+      type: 'audio',
+      url: audioUrl,
+      volumeArray: volumeArray,
+    };
+
+    // Agrega el nuevo mensaje de audio al estado
+    setInternalMessage((prevMessages) => [...prevMessages, newAudioMessage]);
+  };
+
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight - 200
     }
   }
-
-
-
-
-
-
 
   useEffect(() => {
     setInternalMessage(message)
@@ -84,32 +91,32 @@ const Bots = ({
 
   const renderViewer = (message) => {
 
-    
-  const allowDrop = [
-    'video/vnd.dlna.mpeg-tts',
-    'text/javascript',
-    'text/css',
-    'text/html',
-    'video/mp4',
-    'application/x-zip-compressed',
-    'application/pdf',
-    'text/plain',
-    'audio/mpeg',
-    'application/json',
-    'application/postscript',
-    'text/jsx',
-    'text/md'
-  ]
 
-  const target = allowDrop.includes(message.type)
+    const allowDrop = [
+      'video/vnd.dlna.mpeg-tts',
+      'text/javascript',
+      'text/css',
+      'text/html',
+      'video/mp4',
+      'application/x-zip-compressed',
+      'application/pdf',
+      'text/plain',
+      'audio/mpeg',
+      'application/json',
+      'application/postscript',
+      'text/jsx',
+      'text/md'
+    ]
 
-  if (target) return <FileViewer file={message} click={openVector} />
+    const target = allowDrop.includes(message.type)
 
-    
+    if (target) return <FileViewer file={message} click={openVector} />
+
+
     console.log('(message.type', message.type)
     switch (message.type) {
       case 'record':
-        return <RecordViewer file={message}/>
+        return <RecordViewer file={message} />
       case 'image/jpeg':
       case 'image/png':
         return <ImageViewer file={message} />

@@ -20,7 +20,7 @@
 }
 
 .drive_header_left_title {
-  color: var(--textContent);
+  color: var(--text-primary);
   font-size: 22px;
   font-style: normal;
   font-weight: 400;
@@ -30,6 +30,7 @@
 
 .drive_header_right {
   display: flex;
+  color: var(--text-primary);
   gap: 7px;
 }
 
@@ -43,16 +44,19 @@
   gap: 12px;
   border-radius: 4px;
   border: 1px solid #d9d9d9;
+  
   background: var(--background-menu-left);
 }
 
 .drive_header_right_filter_text {
-  color: var(--textContent);
+  color: var(--text-primary);
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 }
+
+
 
 .drive_suggested_main {
   display: flex;
@@ -64,13 +68,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  color: var(--text-primary);
 
   button {
-    text-transform: uppercase;
+   
     font-weight: 600;
     font-size: 12px;
   }
 }
+
 
 .drive_suggested_title {
   color: #3c4043;
@@ -109,6 +115,7 @@
       /* margin-top: 90%; */
       img {
         width: 45px;
+       
       }
       svg {
         width: 60px;
@@ -187,6 +194,7 @@
   padding: 5px 0px;
   display: inline-flex;
   gap: 9px;
+  color: var(--text-primary);
 }
 
 .drive_folders_title {
@@ -205,12 +213,14 @@
 
   &:hover {
     background-color: #e3e3e3;
+    color: #000;
   }
 }
 
 .drive_folders_container {
   display: flex;
   flex-direction: column;
+  color: var(--text-primary);
 }
 
 .drive_folders_filters_container {
@@ -369,6 +379,7 @@
     letter-spacing: 0px;
     line-height: 20px;
     background: none;
+
 
     &.buttonDB {
       fill: #000fff;
