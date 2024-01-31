@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 // import { useMemo } from 'react';
 
 import styles from "./Graph.module.css";
-import * as Graphs from '@/views/graphs';  // Importar todos los componentes desde el archivo index.js
+import * as Graphs from '@/views/graphs/render';  // Importar todos los componentes desde el archivo index.js
 import { useDrag } from 'react-dnd';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -21,16 +21,17 @@ const DraggableGraph = ({ graphType, Component }) => {
   const dispatch = useDispatch();
 
 
-  const initialComponentIndex = {
+  const component = {
     ...initialComponent,
+    type: graphType,
     index: 0,
   };
 
   const [{ isDragging }, drag] = useDrag({
     type: 'DRAGGABLE_ITEM',  // Especifica el tipo de elemento
-    item: initialComponentIndex,
+    item: component,
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: !!monitor.isDragging()
     }),
   });
 
@@ -60,21 +61,38 @@ const DraggableGraph = ({ graphType, Component }) => {
 
 const Graph = () => {
   const componentGraph = [
-    "BarChartBorderRadius",
-    "BubbleChart",
-    "ComboBarLine",
-    "DoughnutChart",
-    "FloatingBarChart",
-    "HorizontalBarChart",
-    "LineChart",
-    "LineStyling",
-    "MultiSeriesPie",
-    "PieChart",
-    "PolarArea",
-    "Radar",
-    "ScatterChart",
-    "StackedBarChart",
-    "SteppedLineChart"
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    'BarChart',
+    
+
+    // "BarChartBorderRadius",
+    // "BubbleChart",
+    // "ComboBarLine",
+    // "DoughnutChart",
+    // "FloatingBarChart",
+    // "HorizontalBarChart",
+    // "LineChart",
+    // "LineStyling",
+    // "MultiSeriesPie",
+    // "PieChart",
+    // "PolarArea",
+    // "Radar",
+    // "ScatterChart",
+    // "StackedBarChart",
+    // "SteppedLineChart"
   ];
 
 

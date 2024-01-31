@@ -15,6 +15,8 @@ const schemaDashboards = {
             type: 'object',
             properties: {
                 id: { type: 'string' },
+                available: { type: 'string' },
+                type: { type: 'string' },
                 position: { type: 'string' },
                 title: { type: 'string' },
                 description: { type: 'string' },
@@ -22,7 +24,6 @@ const schemaDashboards = {
                 style: { type: 'string' },
                 vector: { type: 'string' },
                 filter: { type: 'string' },
-                available: { type: 'string' }
             }
         },
 

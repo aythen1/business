@@ -9,28 +9,17 @@ import {
   deleteDashboard
 } from '@/actions/dashboard'
 
-export const initialComponent = {
+export const initialComponent = {     
   id: '',
-  version: '',  
-
-  public: true,
+  available: '',
+  type: '',
+  position: '',  
   title: '',
   description: '',
-
-  styles: {
-    columnSize: 6
-  },
-
+  columnSize: '',
+  style: '',
+  vector: '',
   filter: '',
-  filterSQL: '',
-  filterGraph: '',
-
-  promptId: '',
-  sharedId: '',
-  dataId: '',
-
-  updatedAt: '',
-  createdAt: ''
 }
 
 const dashboardSlice = createSlice({

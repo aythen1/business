@@ -22,10 +22,12 @@ import {
 
 
 
-const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
+const DraggableItem = ({ component, index, moveItem }) => {
   const [isDropping, setIsDropping] = useState(false)
   const dispatch = useDispatch();
 
+  console.log('eded', component)
+  const id = component.id
 
   const [{ isDragging }, drag] = useDrag({
     type: 'DRAGGABLE_ITEM',
@@ -39,7 +41,7 @@ const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
     accept: 'DRAGGABLE_ITEM',
     hover: (item, monitor) => {
       // console.log('itt', item, isDragging)
-      
+    
       if (!isDropping) {
         console.log('e')
         setIsDropping(true)
@@ -78,7 +80,7 @@ const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
       item.index = hoverIndex;
     },
     drop: (item, monitor) => {
-      console.log('12p24j9rj', item)
+      // console.log('12p24j9rj', item)
       dispatch(addComponent(item))
     }
   });
@@ -87,7 +89,7 @@ const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
     <div
       ref={(node) => drag(drop(node))}
       style={{
-        flex: columnSize ? `0 0 ${columnSize / 12 * 100}%` : undefined,
+        flex: component.columnSize ? `0 0 ${component.columnSize / 12 * 100}%` : undefined,
         opacity: isDragging ? 0.5 : 1,
         cursor: 'move',
         border: '1px solid black',
@@ -95,7 +97,7 @@ const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
         margin: '8px',
       }}
     >
-      {children}
+      |{JSON.stringify(component)}|
     </div>
   );
 };
@@ -238,18 +240,14 @@ const Board = ({
       <DropTarget >
         <div className="components-grids"  style={{ position: 'relative' }}>
           {components.map((component, index) => (
-            <DraggableItem
-              key={component.id}
-              id={component.id}
-              index={index}
-              moveItem={moveItem}
-              columnSize={component.columnSize}
-            >
-              <div onContextMenu={(event) => handleContextMenu(event, component)}>
-                
-                {component.content}
-              </div>
-            </DraggableItem>
+            <div onContextMenu={(event) => handleContextMenu(event, component)}>
+              <DraggableItem
+                key={component.id}
+                component={component}
+                index={index}
+                moveItem={moveItem}
+              />
+            </div>
           ))}
           <div onClick={(e) => handleClickGraph(e)}>
             Crear un nuevo componente

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 // import 'chartist/dist/index.css';
-import BarChart from './BarChart'
+import BarChart from '@/views/graphs/render/BarChart'
 
 
 

@@ -13,3 +13,9 @@
 .ct-series-d .ct-slice-donut {
   stroke: #9999ff;
 }
+
+
+.box-chart{
+  padding: 10px;  height: 400px;
+  background: red;
+}
