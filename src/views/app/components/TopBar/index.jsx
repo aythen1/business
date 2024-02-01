@@ -34,7 +34,7 @@ import {
 } from '@/actions/iam'
 
 import { 
-  addDashboard 
+  updateDashboard, 
 } from '@/actions/dashboard';
 
 
@@ -50,12 +50,12 @@ export const TopBar = ({
 
 
   const { user } = useSelector((state) => state.iam)
+  const { dashboard, status } = useSelector((state) => state.dashboard)
 
   const [openMenuMobile, setOpenMenuMobile] = useState(false)
   const [isUpgrade, setIsUpgrade] = useState(false)
   const [stateUpgrade, setStateUpgrade] = useState(false)
 
-  const { status } = useSelector((state) => state.dashboard)
 
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export const TopBar = ({
 
 
   const handleClickSave = () => {
-    dispatch(updateDashboard())
+    dispatch(updateDashboard(dashboard))
   }
 
   const handleClickUpgrade = () => {

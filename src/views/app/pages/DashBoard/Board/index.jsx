@@ -22,91 +22,6 @@ import {
 
 
 
-const DraggableItem = ({ id, index, moveItem, children, columnSize }) => {
-  const [isDropping, setIsDropping] = useState(false)
-  const dispatch = useDispatch();
-
-
-  const [{ isDragging }, drag] = useDrag({
-    type: 'DRAGGABLE_ITEM',
-    item: { id, index },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
-  const [, drop] = useDrop({
-    accept: 'DRAGGABLE_ITEM',
-    hover: (item, monitor) => {
-      // console.log('itt', item, isDragging)
-      
-      if (!isDropping) {
-        console.log('e')
-        setIsDropping(true)
-      }
-      
-      // if(!item.index && !isDropping){
-        //   const _item = {
-          //     ...item,
-          //     index: 999
-          //   }
-          
-          //   return;
-          // }
-          
-          const draggedIndex = item.index;
-          const hoverIndex = index;
-          
-          if (draggedIndex === hoverIndex) {
-            return;
-          }
-          
-          const hoverBoundingRect = monitor.getClientOffset();
-          const hoverMiddleY = hoverBoundingRect.y + (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-          const clientOffset = monitor.getClientOffset();
-          const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-          
-          if (draggedIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-            return;
-      }
-      
-      if (draggedIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-      
-      moveItem(draggedIndex, hoverIndex);
-      item.index = hoverIndex;
-    },
-    drop: (item, monitor) => {
-      console.log('12p24j9rj', item)
-      dispatch(addComponent(item))
-    }
-  });
-
-  return (
-    <div
-      ref={(node) => drag(drop(node))}
-      style={{
-        flex: columnSize ? `0 0 ${columnSize / 12 * 100}%` : undefined,
-        opacity: isDragging ? 0.5 : 1,
-        cursor: 'move',
-        border: '1px solid black',
-        padding: '8px',
-        margin: '8px',
-      }}
-    >
-      {children}
-    </div>
-  );
-};
-
-const DropTarget = ({ children }) => {
-  const [, drop] = useDrop({
-    accept: 'DRAGGABLE_ITEM',
-  });
-
-  return <div ref={drop}>{children}</div>;
-};
 
 
 
@@ -121,14 +36,15 @@ const Board = ({
   const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
   const { components } = useSelector((state) => state.dashboard)
 
+  console.log('components', components)
 
   const _selectedComponent = (index) => {
+    // alert(1)
     dispatch(setOpenMenuLeft('graph'))
   }
 
 
   useEffect(() => {
-    console.log('components', components)
     // Cuando components cambia, actualiza el estado items
     const newComponents = components.map((component, index) => {
       return {
@@ -143,7 +59,7 @@ const Board = ({
             }}
           >
             <Component>
-              {JSON.stringify(component)}
+             dsdx {JSON.stringify(component)}
             </Component>
           </div>
         ),
@@ -237,19 +153,15 @@ const Board = ({
     <div >
       <DropTarget >
         <div className="components-grids"  style={{ position: 'relative' }}>
-          {components.map((component, index) => (
-            <DraggableItem
-              key={component.id}
-              id={component.id}
-              index={index}
-              moveItem={moveItem}
-              columnSize={component.columnSize}
-            >
-              <div onContextMenu={(event) => handleContextMenu(event, component)}>
-                
-                {component.content}
-              </div>
-            </DraggableItem>
+          {listComponents.map((component, index) => (
+            <div onContextMenu={(event) => handleContextMenu(event, component)}>
+              <DraggableItem
+                key={component.id}
+                component={component}
+                index={index}
+                moveItem={moveItem}
+              />
+            </div>
           ))}
           <div onClick={(e) => handleClickGraph(e)}>
             Crear un nuevo componente
@@ -303,3 +215,92 @@ const ContextMenu = ({ x, y, onClose, onItemClick }) => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const DraggableItem = ({ component, index, moveItem }) => {
+  const [isDropping, setIsDropping] = useState(false)
+  const dispatch = useDispatch();
+
+  const id = component.id
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'DRAGGABLE_ITEM',
+    item: { id, index },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
+  const [, drop] = useDrop({
+    accept: 'DRAGGABLE_ITEM',
+    hover: (item, monitor) => {
+      if (!isDropping) {
+        console.log('e')
+        setIsDropping(true)
+      }
+ 
+          const draggedIndex = item.index;
+          const hoverIndex = index;
+          
+          if (draggedIndex === hoverIndex) {
+            return;
+          }
+          
+          const hoverBoundingRect = monitor.getClientOffset();
+          const hoverMiddleY = hoverBoundingRect.y + (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+          const clientOffset = monitor.getClientOffset();
+          const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+          
+          if (draggedIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+            return;
+      }
+      
+      if (draggedIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      
+      moveItem(draggedIndex, hoverIndex);
+      item.index = hoverIndex;
+    },
+    drop: (item, monitor) => {
+      // console.log('12p24j9rj', item)
+      dispatch(addComponent(item))
+    }
+  });
+
+  return (
+    <div
+      ref={(node) => drag(drop(node))}
+      style={{
+        flex: component.columnSize ? `0 0 ${component.columnSize / 12 * 100}%` : undefined,
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'move',
+        border: '1px solid black',
+        padding: '8px',
+        margin: '8px',
+      }}
+    >
+      {component.content}
+    </div>
+  );
+};
+
+const DropTarget = ({ children }) => {
+  const [, drop] = useDrop({
+    accept: 'DRAGGABLE_ITEM',
+  });
+
+  return <div ref={drop}>{children}</div>;
+};

@@ -55,6 +55,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
         var token = localStorage.getItem('token')
           if(!token) {
             navigate('/es/login')
+            setIsAuth(false)
             setIsElement(null)
             return false
           }
@@ -62,6 +63,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
           if (res.error?.message >= 500 && res.error?.message <= 599) {
             navigate('/es/login')
+            setIsAuth(false)
             setIsElement(null)
           }
         

@@ -12,6 +12,7 @@ import {
 
   fetchUser,
   login,
+  confirm,
   verify,
   register,
   upgrade,
@@ -151,6 +152,20 @@ const iamSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
+
+
+      .addCase(confirm.fulfilled, (state, action) => {
+        localStorage.setItem('token', action.payload.token)
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+      })
+      .addCase(confirm.rejected, (state, action) => {
+        if(action.error.message == 501){
+          state.token = null
+          state.user = null
+        }
         state.error = action.error.message;
       })
       .addCase(verify.fulfilled, (state, action) => {

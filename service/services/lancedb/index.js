@@ -26,55 +26,6 @@ const decodeVector = (base64Str) => {
 
 
 
-// async function addVector(id, name, vector = [0, 0], data, overwrite = false) {
-//     const { path0, path1 } = decodeVector(id)
-//     const uri = 'data/vector/' + path0 + '/' + path1
-
-//     if (!data.id) data.id = uuidv4()
-//     data.vector = vector
-
-//     const schemaExists = allSchemas.hasOwnProperty(name);
-//     if (!schemaExists) {
-//         return "El esquema no existe";
-//     }
-
-
-//     // console.log('rr', allSchemas[name])
-//     const validObj = validateAgainstSchema(data, allSchemas[name]);
-
-//     if (!validObj.isValid) {
-//         //     data = { ...validObj.data, vector: vector };
-//         // } else {
-//         // Manejar el caso donde el objeto no es válido según el esquema
-//         return {
-//             message: 'El objeto no cumple con el esquema',
-//             data: data,
-//             error: validObj.errors[0]
-//         }
-//     }
-
-//     try {
-//         const db = await lancedb.connect(uri)
-//         const tbl = await db.openTable(name);
-
-//         const rs = await tbl.add([data])
-//         return data
-//     } catch (error) {
-//         const db = await lancedb.connect(uri)
-
-//         if (!overwrite) {
-//             await db.createTable(name, [data], { writeMode: 'overwrite' })
-//             // await db.createTable(name, [data], { schema: tableSchemaUser })
-//         } else {
-//             await db.createTable(name, [data], {
-//                 schema: tableSchemaUser,
-//                 writeMode: 'overwrite'
-//             })
-//         }
-
-//         return data
-//     }
-// }
 
 
 const addRelationsToSchema = (schema) => {
@@ -123,7 +74,6 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
         return "El esquema no existe";
     }
 
-
     const schema = addRelationsToSchema(allSchemas[name])
 
     try {
@@ -131,14 +81,10 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
         const tbl = await db.openTable(name);
     } catch (err) {
         const db = await lancedb.connect(uri);
-        // const emptyData = data.length ? data[0] : data
-        // emptyData.limit = 1001
 
         const emptyData = generateEmptyObjectFromSchema(schema)
         emptyData.vector = vector
         emptyData.id = uuidv4()
-
-        console.log('schema emptyData', emptyData)
 
         const validObj = validateAgainstSchema(emptyData, schema);
 
@@ -165,7 +111,6 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
     const tbl = await db.openTable(name)
 
     const processSingleData = async (singleData) => {
-        console.log('d', singleData)
         const validObj = validateAgainstSchema(singleData, schema);
         if (!validObj.isValid) {
             return {
@@ -219,7 +164,6 @@ async function updateVector(id, name, vector = [0, 0], data) {
     const { path0, path1 } = decodeVector(id);
     const uri = 'data/vector/' + path0 + '/' + path1;
 
-    console.log('update vector', data)
 
     try {
         const schemaExists = allSchemas.hasOwnProperty(name);
@@ -229,6 +173,8 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
         // Valida el objeto 'data' contra el esquema correspondiente
         const validObj = validateAgainstSchema(data, allSchemas[name]);
+
+        // console.log('calid', validObj, data)
         if (!validObj) {
             return "El objeto 'data' no cumple con el esquema";
         }
@@ -256,23 +202,27 @@ async function updateVector(id, name, vector = [0, 0], data) {
         if (query.length > 0) {
             // query[0].isverified = true
             query[0].vector = vector
-            delete query[0]._distance;
-
-            const updatedRecord = { ...query[0], ...data };
-
+            
+            let updatedRecord = { ...query[0], ...data };
+            // if(updatedRecord._distance) delete query[0]._distance;
+            if ('_distance' in updatedRecord) delete updatedRecord._distance;
+            
+            updatedRecord = generateEmptyObjectFromSchema(allSchemas[name], updatedRecord)
+            console.log('updated', updatedRecord)
             await tbl.update({ where: searchString, values: updatedRecord })
-
+            
             const updatedQuery = await tbl
-                .search(vector)
-                .where(searchString)
-                .execute();
-
+            .search(vector)
+            .where(searchString)
+            .execute();
+            
             return updatedQuery[0];
         } else {
             // No se encontró ningún usuario para actualizar
             return "Usuario no encontrado";
         }
     } catch (error) {
+        console.log('ERROR', error)
         return error;
     }
 }
@@ -283,6 +233,7 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
     const emptyObject = {};
 
     const processProperty = (prop, propSchema, obj) => {
+        console.log('prop', prop, propSchema.type)
         if (data.hasOwnProperty(prop)) {
             obj[prop] = data[prop];
         } else if (propSchema.hasOwnProperty('default')) {
@@ -291,6 +242,7 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
             if (propSchema.enum) {
                 obj[prop] = propSchema.enum[0];
             } else {
+                console.log('arrrray', propSchema.type)
                 switch (propSchema.type) {
                     case 'string':
                         if (propSchema.format === 'date-time') {
@@ -317,7 +269,8 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
             }
         }
 
-        if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
+        // if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
+        if (typeof obj[prop] === 'object' || typeof obj[prop] === 'array') {
             obj[prop] = JSON.stringify(obj[prop]);
         }
     };

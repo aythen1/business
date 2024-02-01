@@ -1,3 +1,10 @@
 .container{
     background: yellow;
 }
+
+
+
+.header-input{
+    display: flex;
+    align-items: center;
+}
