@@ -124,7 +124,6 @@ const PopupModalApp = ({ styles }) => {
 
 
   const handleAddApplication = () => {
-    const token = localStorage.getItem('token')
     const data = {
       name: state.name,
       description: state.description,
@@ -134,7 +133,7 @@ const PopupModalApp = ({ styles }) => {
       // polices: state.polices,
     }
 
-    dispatch(addApplication({token, application: data}))
+    dispatch(addApplication({application: data}))
     dispatch(setModal(null))
   }
 

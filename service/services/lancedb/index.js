@@ -63,9 +63,19 @@ const addRelationsToData = (data, relations) => {
 };
 
 
+// id 
+
+// name
+
+// vector 
+
+// data [{}, {}, {}], {}
+
+// relations
 
 
 async function addVector(id, name, vector = [0, 0], data, relations) {
+    // id base64
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
 
@@ -233,7 +243,7 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
     const emptyObject = {};
 
     const processProperty = (prop, propSchema, obj) => {
-        console.log('prop', prop, propSchema.type)
+        // console.log('prop', prop, propSchema.type)
         if (data.hasOwnProperty(prop)) {
             obj[prop] = data[prop];
         } else if (propSchema.hasOwnProperty('default')) {
@@ -242,10 +252,10 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
             if (propSchema.enum) {
                 obj[prop] = propSchema.enum[0];
             } else {
-                console.log('arrrray', propSchema.type)
+                // console.log('arrrray', propSchema.type)
                 switch (propSchema.type) {
                     case 'string':
-                        if (propSchema.format === 'date-time') {
+                        if (propSchema.format === 'date-time' || propSchema.format === 'date') {
                             obj[prop] = new Date().toISOString();
                         } else {
                             obj[prop] = '';

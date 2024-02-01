@@ -76,7 +76,7 @@ const RenderDownload = ({ item, filter, setStateTable }) => {
     return (
         <div
             className={styles.buttonDownload}
-            onClick={() => setStateTable(`download-file:${item.download}`)}
+            onClick={() => setStateTable(`download-file:${item.id}`)}
         >
             <svg viewBox="0 0 24 24" ><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path></svg>
         </div>
@@ -141,7 +141,7 @@ const RenderDate = ({ item, filter, setStateTable }) => {
 const RenderIsVerified = ({ item, filter, setStateTable }) => {
     return (
         <div className={styles.flex}>
-            <svg viewBox="0 0 24 24" class="css-i33jq2 e1gt4cfo0"><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12C4,13.85 4.63,15.55 5.68,16.91L16.91,5.68C15.55,4.63 13.85,4 12,4M12,20A8,8 0 0,0 20,12C20,10.15 19.37,8.45 18.32,7.09L7.09,18.32C8.45,19.37 10.15,20 12,20Z"></path></svg>
+            <svg viewBox="0 0 24 24" ><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12C4,13.85 4.63,15.55 5.68,16.91L16.91,5.68C15.55,4.63 13.85,4 12,4M12,20A8,8 0 0,0 20,12C20,10.15 19.37,8.45 18.32,7.09L7.09,18.32C8.45,19.37 10.15,20 12,20Z"></path></svg>
             Disabled
         </div>
     )

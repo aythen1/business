@@ -1,19 +1,20 @@
-import React, {useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './billing.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 
 
 import Table from '@/views/app/pages/Settings/iam/table'
-
-
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'
-
+import Invoice from './Invoice/index'
 
 import stylesModal from '../Settings/iam/modal.module.css'
 
 import {
     fetchsBilling,
-    updateBilling
+    updateBilling,
+
+    addInvoice,
+    fetchsInvoice,
 } from '@/actions/iam'
 
 
@@ -27,14 +28,13 @@ const Billing = ({ }) => {
 
     const [isActive, setIsActive] = useState(false)
     const [editContact, setEditContact] = useState(false)
+    const [stateTable, setStateTable] = useState('')
+
+    const { invoices } = useSelector((state) => state.iam)
 
 
     // ---
     const [state, setState] = useState({
-        email: [],
-        tags: [],
-        group: '',
-
         corporate: false,
         name: '',
         address1: '',
@@ -43,37 +43,41 @@ const Billing = ({ }) => {
         city: '',
         country: '',
         region: '',
-      });
 
-      
+        limit: 0,
+        email: '',
+        vat: '',
+        paymentmethod: ''
+    });
 
-      
-      const handleInputChange = (e, property) => {
+
+    const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
-          value = e.target.value;
+            value = e.target.value;
         }
-      
+
         if (property === 'email') {
-          // Dividir los correos electrónicos por comas y quitar los espacios en blanco
-          const emailArray = value.split(',').map(email => email.trim());
-      
-          // Verificar si al menos hay un correo electrónico válido
-          const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-      
-          setIsActive(isValidEmail);
-      
-          setState((prevState) => ({
-            ...prevState,
-            [property]: isValidEmail ? emailArray : [value],
-          }));
+            // Dividir los correos electrónicos por comas y quitar los espacios en blanco
+            const emailArray = value.split(',').map(email => email.trim());
+
+            // Verificar si al menos hay un correo electrónico válido
+            const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+
+            setIsActive(isValidEmail);
+
+            setState((prevState) => ({
+                ...prevState,
+                [property]: isValidEmail ? emailArray : [value],
+            }));
         } else {
-          setState((prevState) => ({
-            ...prevState,
-            [property]: value,
-          }));
+
+            setState((prevState) => ({
+                ...prevState,
+                [property]: value,
+            }));
         }
-      };
+    };
 
 
 
@@ -97,14 +101,13 @@ const Billing = ({ }) => {
 
 
     const handleClickEdit = () => {
-        dispatch(setModal(<ModalPopupContact styles={stylesModal} state={state} setEditContact={setEditContact} handleInputChange={handleInputChange}  />))
+        dispatch(setModal(<ModalPopupContact styles={stylesModal} state={state} setState={setState} setEditContact={setEditContact} />))
     }
 
 
     useEffect(() => {
         const fetchsItems = async () => {
-            const token = localStorage.getItem('token')
-            dispatch(fetchsBilling({token}))
+            dispatch(fetchsBilling())
         }
 
         fetchsItems()
@@ -112,37 +115,69 @@ const Billing = ({ }) => {
 
 
     useEffect(() => {
-        if(editContact){
-            const token = localStorage.getItem('token')
-
+        if (editContact) {
             const data = {
-                limit: 0,
-                email: '',
-                vat: '',
-                paymentmethod: 'credit',
+                name: state.name || '',
+                limit: state.limit || 0,
+                email: state.email || '',
+                vat: state.vat || '',
+                paymentmethod: state.paymentmethod || '',
                 // test: '12345'
                 address: {
-                    name: 'eeeeaaa',
-                    steetaddress1: 'aaaa',
-                    // steetaddress2: '',
-                    // zip: '',
-                    // city: '',
-                    // country: '',
-                    // region: '',
-                }                  
+                    steetaddress1: state.address1 || '',
+                    steetaddress2: state.address2 || '',
+                    zip: state.zip || '',
+                    city: state.city || '',
+                    country: state.country || '',
+                    region: state.region || '',
+                }
             }
 
             console.log('data', data)
 
-            dispatch(updateBilling({token, billing: data}))
+            dispatch(updateBilling({billing: data }))
         }
     }, [editContact])
+
+
+
+
+
+
+    // -------------------------------------------------
+    const handleAddInvoice = () => {
+        // alert(1)
+        const item = {
+            invoiceDate: new Date()
+        }
+
+        dispatch(addInvoice(item))
+    }
+
+
+    useEffect(() => {
+      console.log('stateTable', stateTable)
+
+      if(stateTable.startsWith('download-file:')){
+        const id = stateTable.split(':')[1].trim()
+        console.log('id', id)
+        alert(id)
+      }
+    }, [stateTable])
     
+
+
+
 
 
 
     return (
         <div className={styles.containerBilling}>
+            {false && (
+            <div style={{gridColumn: 'span 2'}}>
+               <Invoice />
+            </div>
+            )}
             <div className={styles.containerInformation}>
                 <h2 className={styles.title}>
                     Información de Cuenta
@@ -166,7 +201,7 @@ const Billing = ({ }) => {
                             </div>
                         </div>
                     </div>
-                    <button 
+                    <button
                         onClick={() => handleClickEdit()}
                         className={styles.button}
                     >
@@ -185,7 +220,7 @@ const Billing = ({ }) => {
             </div>
 
 
-            
+
 
 
             <div className={styles.containerContact}>
@@ -201,7 +236,12 @@ const Billing = ({ }) => {
                             <label>
                                 Billing email
                             </label>
-                            <input type={'info@aythen.com'} />
+                            <input 
+                                type='text' 
+                                placeholder={'placeholder@demo.com'} 
+                                value={state.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
                         </div>
                         <div className={styles.button}>
                             <button >
@@ -225,7 +265,7 @@ const Billing = ({ }) => {
                             related to your usage before.
                         </div>
                         <p className={styles.text}>
-                          
+
                         </p>
                     </div>
                     <div className={styles.inputContainer}>
@@ -236,15 +276,19 @@ const Billing = ({ }) => {
                             <label className={styles.label}>
                                 Monthly Billing
                             </label>
-                            <div class={styles.grid2}>
+                            <div className={styles.grid2}>
                                 <div className={styles.value}>
-                                    <input value={'1000'} />
+                                    <input 
+                                     placeholder={'1000'} 
+                                     value={state.limit}
+                                     onChange={(e) => handleInputChange(e, 'limit')}
+                                    />
                                 </div>
                                 <div className={styles.current}>
                                     <input value={'€'} />
                                 </div>
                             </div>
-                            
+
 
                         </div>
                     </div>
@@ -276,17 +320,26 @@ const Billing = ({ }) => {
                         </p>
                         <div className={styles.input}>
                             <div className={styles.credit}>
-                                <input type="radio" />
+                                <input 
+                                    type="radio" 
+                                    checked={state.paymentmethod === 'card'}
+                                    onChange={(e) => handleInputChange('card', 'paymentmethod')}
+                                />
                                 Credit card
                             </div>
                             <div className={styles.sepa}>
-                                <input type="radio" />
+                                <input 
+                                    type="radio" 
+                                    checked={state.paymentmethod === 'sepa'}
+                                    onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
+                                />
                                 SEPA Direct Debt
                             </div>
                         </div>
                     </div>
                     <div className={styles.table}>
-                        <Table />
+                        falta tabla
+                        {/* <Table /> */}
                     </div>
                 </div>
             </div>
@@ -306,7 +359,12 @@ const Billing = ({ }) => {
                             <label>
                                 VAT
                             </label>
-                            <input type={'ESB61077863VAT'} />
+                            <input 
+                                type='text' 
+                                placeholder={'ESB61077863VAT'} 
+                                value={state.vat}
+                                onChange={(e) => handleInputChange(e, 'vat')}
+                            />
                         </div>
                         <div className={styles.button}>
                             <button >
@@ -327,7 +385,37 @@ const Billing = ({ }) => {
                         Your invoices are listed below. Read the billing FAQ
                     </p>
                     <div className={styles.table}>
-                        <Table />
+                        <Table
+                            fetchs={fetchsInvoice}
+                            items={invoices}
+                            setStateTable={setStateTable}
+                            handleAdd={handleAddInvoice}
+                        >
+                            <header>
+                                Facturas enviadas
+                            </header>
+                            <item>
+                                Month
+                            </item>
+                            <item>
+                                Year
+                            </item>
+                            <item>
+                                Number
+                            </item>
+                            <item>
+                                Payment method
+                            </item>
+                            <item>
+                                Status
+                            </item>
+                            <item>
+                                Total (Vat incl.)
+                            </item>
+                            <item>
+                                Download
+                            </item>
+                        </Table>
                     </div>
                 </div>
             </div>
@@ -344,115 +432,135 @@ export default Billing
 
 
 
-const ModalPopupContact = ({styles, setEditContact, state, handleInputChange}) => {
+const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
+
+    const [input, setInput] = useState(state)
 
     const handleClickAccept = () => {
+        setState(input)
         setEditContact(true)
     }
-             return(
-            <div className={styles.modal}>
-                <h2 className={styles.title}>
-                    Editar el nombre de la cuenta 
-                </h2>
-                <div className={styles.container}>
-                    <div className={styles.items}>
-                        <input 
-                            type="checkbox" 
-                            value={state.corporate || false}
-                            onChange={(e) => handleInputChange(e, 'corporate')}
-                        />
-                        <b>
-                            This is a corporate account
-                        </b>
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Company name
-                        </label>
-                        <input
-                            required
-                            placeholder={'Company Name'}
-                            value={state.name}
-                            onChange={(e) => handleInputChange(e, 'name')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Street Address
-                        </label>
-                        <input
-                            required
-                            placeholder={'Street Address'}
-                            value={state.address1}
-                            onChange={(e) => handleInputChange(e, 'address1')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Street Address 2
-                        </label>
-                        <input
-                            required
-                            placeholder={'Street Address 2'}
-                            value={state.address2}
-                            onChange={(e) => handleInputChange(e, 'address2')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Postal Code
-                        </label>
-                        <input
-                            required
-                            placeholder={'Postal Code'}
-                            value={state.zip}
-                            onChange={(e) => handleInputChange(e, 'zip')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            City
-                        </label>
-                        <input
-                            required
-                            placeholder={'City'}
-                            value={state.city}
-                            onChange={(e) => handleInputChange(e, 'city')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Country
-                        </label>
-                        <input
-                            required
-                            placeholder={'Country'}
-                            value={state.country}
-                            onChange={(e) => handleInputChange(e, 'country')}
-                        />
-                    </div>
-                    <div className={styles.input}>
-                        <label>
-                            Region
-                        </label>
-                        <input
-                            required
-                            placeholder={'Region'}
-                            value={state.region}
-                            onChange={(e) => handleInputChange(e, 'region')}
-                        />
-                    </div>
-                    
-                    
-                    <div 
-                        onClick={() => handleClickAccept()}
-                        className={styles.button}
-                    >
-                        <button>
-                            Confirm changes
-                        </button>
-                    </div>
+
+
+    const handleInputChange = (e, property) => {
+        let value = e;
+        if (e.target) {
+            value = e.target.value;
+        }
+
+        setInput((prevState) => ({
+            ...prevState,
+            [property]: value,
+        }));
+
+    };
+
+
+
+    return (
+        <div className={styles.modal}>
+            <h2 className={styles.title}>
+                Editar el nombre de la cuenta
+            </h2>
+            <div className={styles.container}>
+                <div className={styles.items}>
+                    <input
+                        type="checkbox"
+                        value={input.corporate || false}
+                        onChange={(e) => handleInputChange(e, 'corporate')}
+                    />
+                    <b>
+                        This is a corporate account
+                    </b>
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Company name
+                    </label>
+                    <input
+                        required
+                        placeholder={'Company Name'}
+                        value={input.name}
+                        onChange={(e) => handleInputChange(e, 'name')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Street Address
+                    </label>
+                    <input
+                        required
+                        placeholder={'Street Address'}
+                        value={input.address1}
+                        onChange={(e) => handleInputChange(e, 'address1')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Street Address 2
+                    </label>
+                    <input
+                        required
+                        placeholder={'Street Address 2'}
+                        value={input.address2}
+                        onChange={(e) => handleInputChange(e, 'address2')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Postal Code
+                    </label>
+                    <input
+                        required
+                        placeholder={'Postal Code'}
+                        value={input.zip}
+                        onChange={(e) => handleInputChange(e, 'zip')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        City
+                    </label>
+                    <input
+                        required
+                        placeholder={'City'}
+                        value={input.city}
+                        onChange={(e) => handleInputChange(e, 'city')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Country
+                    </label>
+                    <input
+                        required
+                        placeholder={'Country'}
+                        value={input.country}
+                        onChange={(e) => handleInputChange(e, 'country')}
+                    />
+                </div>
+                <div className={styles.input}>
+                    <label>
+                        Region
+                    </label>
+                    <input
+                        required
+                        placeholder={'Region'}
+                        value={input.region}
+                        onChange={(e) => handleInputChange(e, 'region')}
+                    />
+                </div>
+
+
+                <div
+                    onClick={() => handleClickAccept()}
+                    className={styles.button}
+                >
+                    <button>
+                        Confirm changes
+                    </button>
                 </div>
             </div>
-            )
+        </div>
+    )
 }

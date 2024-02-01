@@ -127,7 +127,6 @@ const PopupModalRules = ({ styles }) => {
 
 
   const handleAddPolice = () => {
-    const token = localStorage.getItem('token')
     const data = {
       name: state.name,
       description: state.description,
@@ -137,7 +136,7 @@ const PopupModalRules = ({ styles }) => {
       // polices: state.polices,
     }
 
-    dispatch(addPolice({token, police: data}))
+    dispatch(addPolice({police: data}))
     dispatch(setModal(null))
   }
 

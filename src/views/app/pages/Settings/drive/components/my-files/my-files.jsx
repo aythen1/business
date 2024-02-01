@@ -388,7 +388,7 @@ export default function Page({ params, setIsNew }) {
           <div className={style.icon}>
             <div className={style.file}>
               <div className={style.vector}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z" class="fill"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z" class="fillStrong"></path></g></g></svg>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z" ></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z" ></path></g></g></svg>
               </div>
             </div>
           </div>
@@ -534,7 +534,7 @@ export default function Page({ params, setIsNew }) {
               onClick={handleDB}
               className={style.buttonDB}
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599" ><g ><g ><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z" class="fill"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z" class="fillStrong"></path></g></g></svg>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599" ><g ><g ><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z" ></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z" ></path></g></g></svg>
             </button>
             <button
               onClick={handleDelete}

@@ -10,6 +10,9 @@ import {
   fetchsBilling,
   updateBilling,
 
+  fetchsInvoice,
+  addInvoice, 
+
   fetchUser,
   login,
   confirm,
@@ -63,6 +66,8 @@ const iamSlice = createSlice({
     openChatBot: false,
 
 
+    invoices: [],
+    
     users: [],
     applications: [],
     polices: [],
@@ -110,6 +115,18 @@ const iamSlice = createSlice({
       .addCase(updateBilling.fulfilled, (state, action) => {
         state.billing = action.payload
       })
+
+
+      .addCase(fetchsInvoice.fulfilled, (state, action) => {
+        // state.billing = action.payload
+        state.invoices = action.payload
+      })
+      .addCase(addInvoice.fulfilled, (state, action) => {
+        // state.billing = action.payload
+        state.invoices = state.invoices.push(action.payload)
+      })
+
+      
 
       .addCase(fetchUser.pending, (state) => {
         state.status = 'pending';

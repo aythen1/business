@@ -24,11 +24,6 @@ import { v4 as uuidv4 } from 'uuid';
 // console.log({ response })
 
 
-
-
-
-
-
 import Bot from './bot'
 
 // import { openDB } from 'idb'
@@ -268,12 +263,10 @@ const ChatBot = ({
   }
 
   useEffect(() => {
-    console.log('wfinruefnurwnurf', tokenVector)
     const loadFromIndexedDB = async () => {
       try {
         const dataValues = await getVector(tokenVector, 'bot')
         console.log('val', dataValues)
-
 
         setHistory(dataValues || [])
         setMessage(dataValues || [])
@@ -329,7 +322,6 @@ const ChatBot = ({
             className="dark:bg-dark-900 dark:text-white"
           >
             <div className={styles["ChatBotRight"]}>
-              
               <Bot message={message} openVector={openVector} />
             </div>
               <div className={styles["botFooter"]}>
@@ -397,14 +389,6 @@ const ChatBot = ({
         </div>
       )}
 
-      {/* {
-        <div>
-          <SelectBot
-            workspaceId={workspaceId}
-            changeTokenVector={changeTokenVector}
-          />
-        </div>
-      } */}
     </div>
   )
 }

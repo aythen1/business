@@ -34,7 +34,8 @@ const Table = ({
   fetchs,
   children,
   items,
-  setStateTable
+  setStateTable,
+  handleAdd
 }) => {
   // --------------------------------------------------------------------------------------------------------------
   const dispatch = useDispatch()
@@ -86,21 +87,21 @@ const Table = ({
 
 
 
-  const handleAddDashboard = (uuid) => {
-    const newUUID = uuidv4()
+  // const handleAddDashboard = (uuid) => {
+  //   const newUUID = uuidv4()
 
-    // setDashboardId(newUUID)
+  //   // setDashboardId(newUUID)
 
-    const newDashboard = {
-      name: 'new Dashboard'
-    }
+  //   const newDashboard = {
+  //     name: 'new Dashboard'
+  //   }
 
-    dispatch(addDashboard(newDashboard))
+  //   dispatch(addDashboard(newDashboard))
 
-    // // Actualizar la URL con el nuevo UUID
-    const newURL = `?dashboard=${encodeURIComponent(newUUID)}`
-    window.history.pushState(null, null, newURL)
-  }
+  //   // // Actualizar la URL con el nuevo UUID
+  //   const newURL = `?dashboard=${encodeURIComponent(newUUID)}`
+  //   window.history.pushState(null, null, newURL)
+  // }
 
 
   const handleToolTipMouseEnter = (e) => {
@@ -164,12 +165,10 @@ const Table = ({
 useEffect( () => {
   // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
   // const dataTable = JSON.parse(tokenRoomTable)
-
   const fetchData = async () => {
     try {
-      const token = localStorage.getItem('token')
-
-      await dispatch(fetchs({token}))
+      console.log('1234')
+      await dispatch(fetchs({}))
 
     } catch (err) {
       console.log(err);
@@ -206,7 +205,7 @@ useEffect( () => {
             <p>
               Un texto más sencillos
             </p>
-            <button onClick={handleAddDashboard}>
+            <button onClick={handleAdd}>
               <svg viewBox="0 0 24 24">
                 <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
               </svg>

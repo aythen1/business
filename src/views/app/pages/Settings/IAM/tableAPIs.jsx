@@ -126,7 +126,6 @@ const PopupModalApis = ({styles}) => {
 
 
   const handleAddApi = () => {
-    const token = localStorage.getItem('token')
     const data = {
       name: state.name,
       description: state.description,
@@ -139,7 +138,7 @@ const PopupModalApis = ({styles}) => {
       // polices: state.polices,
     }
 
-    dispatch(addApi({token, api: data}))
+    dispatch(addApi({api: data}))
     dispatch(setModal(null))
   }
 

@@ -5,6 +5,8 @@ const { ClientError } = require('../utils/err/errors')
 // const crypto = require('crypto');
 // const sendmail = require('sendmail')();
 
+// API SOAP
+
 const {
   addVector,
   updateVector,
@@ -183,6 +185,132 @@ const updateBilling = async (req, res, next) => {
 
   return res.status(200).send(resp)
 }
+
+
+
+
+
+
+
+const fetchsInvoice = async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  const result = await isAuth(token)
+  const path = encodeVector(ID)
+
+
+  if (result) {
+    const data = await getVector(path, 'invoices')
+    return res.status(200).send(data)
+  } else {
+    return res.status(500).send(data)
+  }
+
+}
+
+
+
+const fetchInvoice = async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  const result = await isAuth(token)
+  const path = encodeVector(ID)
+
+
+  if (result) {
+    const data = await getVector(path, 'invoices')
+    return res.status(200).send(data)
+  } else {
+    return res.status(500).send(data)
+  }
+
+}
+
+
+
+
+
+
+const deleteInvoice = async (req, res) => {
+  const { token, id } = req.body
+
+  const result = await isAuth(token)
+  const path = encodeVector(ID)
+
+  if (!result) {
+    return res.status(501).send(arr)
+  } else {
+    // console.log('ed9iew2udh', id)
+    const resp = await deleteVector(path, 'invoices', id)
+
+    console.log('resp', resp)
+  }
+
+  return res.status(200).send(id)
+}
+
+
+
+
+const addInvoice = async (req, res) => {
+  try{
+    const { token, invoice } = req.body
+  
+    const result = await isAuth(token)
+    const path = encodeVector(ID)
+  
+    if (!result) {
+      return res.status(501).send(arr)
+    } else {
+  
+      console.log('apps', result, invoice)
+      const resp = await addVector(path, 'invoices', [0, 0], invoice, {users: result})
+      // console.log('re', resp)
+      return res.status(200).send(resp[0])
+  
+    }
+  }catch(err){
+    console.log('Error ', err)
+  }
+
+}
+
+
+
+
+
+const updateInvoice= async (req, res, next) => {
+  const { token, invoice } = req.body
+
+  const payload = await isAuth(token)
+
+  if (!payload) {
+    return res.status(501).send('Not access granted')
+  }
+
+  // user.id = payload.id
+  // const user = await models.UserModel.findOne({ where: { email } })
+  // id, name, vector = [1.3, 1.4], data, overwrite = false
+  const path = encodeVector(ID)
+
+  const resp = await updateVector(path, 'invoices', [0, 0], invoice, false)
+
+  const _token = await generateToken(resp)
+
+  if (resp.isverified) {
+    response(res, 200, { invoice: resp, token: _token })
+  } else {
+    response(res, 201, { message: 500 })
+  }
+}
+
+
+
+
+
+
 
 
 
@@ -880,6 +1008,12 @@ module.exports = {
 
   fetchsBilling: catchedAsync(fetchsBilling),
   updateBilling: catchedAsync(updateBilling),
+  
+  fetchsInvoice: catchedAsync(fetchsInvoice),
+  fetchInvoice: catchedAsync(fetchInvoice),
+  deleteInvoice: catchedAsync(deleteInvoice),
+  addInvoice: catchedAsync(addInvoice),
+  updateInvoice: catchedAsync(updateInvoice),
 
   confirmUser: catchedAsync(confirmUser),
   verifyUser: catchedAsync(verifyUser),

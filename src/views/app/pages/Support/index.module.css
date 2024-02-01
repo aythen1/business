@@ -136,20 +136,27 @@
                     height: fit-content;
                 }
 
+                .icon{
+                    width: 30px;
+                }
+
                 svg {
                     width: 20px;
                 }
 
                 button {
                     display: flex;
+                    width: -moz-fit-content;
                     width: fit-content;
+                    justify-content: center;
+                    align-items: center;
                     padding: 8px;
                     border-radius: 4px;
                     height: 40px;
+                    width: 40px;
                     border: none;
                     margin-left: auto;
-                    background: rgb(175, 175, 177);
-
+                    background: #f3f3f3;
                 }
             }
         }
@@ -227,7 +234,7 @@
 
                     button {
                         display: inline-flex;
-                        background: rgb(175, 175, 177);
+                        background: #f3f3f3;
                         padding: 8px;
                         border-radius: 4px;
                     }
@@ -288,7 +295,7 @@
                             text-transform: uppercase;
                             font-size: 10px;
                             color: #000;
-                            background: rgb(175, 175, 177);
+                            background: #f3f3f3;
 
                         }
                     }
@@ -354,7 +361,7 @@
                         font-size: 10px;
                         border-radius: 16px;
                         color: rgb(255, 255, 255);
-                        background: rgb(175, 175, 177);
+                        background: #f3f3f3;
 
                         padding: 8px;
                         border-radius: 4px;
