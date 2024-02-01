@@ -121,22 +121,6 @@ export const App = ({ }) => {
 
 
 
-  // Efecto secundario para establecer el modo inicial al cargar la aplicación
-  useEffect(() => {
-    console.log('1902e2ijedi')
-    // Obtener la URL actual
-    const urlParams = new URLSearchParams(window.location.search);
-    // Obtener el valor del parámetro 'dashboard'
-    const dashboardParam = urlParams.get('dashboard');
-
-    if (dashboardParam) {
-      console.log('dashboardParam', dashboardParam)
-      // setDashboard(dashboardParam)
-    }
-
-  }, []);
-
-
 
 
   useEffect(() => {
@@ -242,7 +226,7 @@ export const App = ({ }) => {
             {openMenuLeft == 'user' ? (
               <MenuLeftUser />
             ) : (
-              <MenuLeftData />
+              <MenuLeftData setRef={setRef} />
             )}
             {/* <MenuLeftUser /> */}
           </div>

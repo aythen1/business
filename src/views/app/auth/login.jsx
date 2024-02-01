@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import useDarkMode from 'use-dark-mode';
 
 
-import { verify, login } from '@/actions/iam'
+import { confirm, login } from '@/actions/iam'
 // import { verifyUser } from '../../../../service/controllers/iam';
 
 
@@ -68,7 +68,7 @@ const Login = ({ onLogin }) => {
     
     if (urlToken) {
       // Si el token existe, puedes enviarlo a la lógica de verificación
-      dispatch(verify(urlToken));
+      dispatch(confirm(urlToken));
     } 
   }, [urlToken])
 
