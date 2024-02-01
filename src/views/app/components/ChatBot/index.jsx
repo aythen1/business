@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -51,7 +51,7 @@ import {
   setOpenChatBot
  } from "@/actions/iam";
 // import { useDispatch } from "react-redux";
-
+import Picker from 'emoji-picker-react';
 
 const ChatBot = ({
 
@@ -85,7 +85,14 @@ const ChatBot = ({
   // ------------------------------------------------------------------------------------------------------------
   // ------------------------------------------------------------------------------------------------------------
   
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [showPicker, setShowPicker] = useState(false);
+  const pickerRef = useRef(null);
+
+  const onEmojiClick = (event, emojiObject) => {
+    setInput((prevInput) => prevInput + emojiObject.emoji);
   
+  };
   
     const changeTokenVector = (token) => {
       setTokenVector(token)
@@ -317,15 +324,46 @@ const ChatBot = ({
             <div className={styles["ChatBotRight"]}>
               <Bot message={message} openVector={openVector} />
             </div>
-
-            <div className={styles["textarea"]}>
-              <textarea
-                value={input}
-                placeholder="Mensaje del bot @action"
-                onChange={handleChange}
-                onKeyDown={handleChange}
-                />
-                {/* Wrap Microphone component with the new microphoneWrapper class */}
+              <div className={styles["botFooter"]}>
+                <button onClick={() => setShowPicker((val) => !val)}>😊</button>
+                {showPicker && (
+                  <div
+                    ref={pickerRef}
+                    className={styles["emojiPicker"]}
+                    style={{
+                      position: 'absolute',
+                      bottom: '80px',
+                      left: '45px',
+                      zIndex: '2',
+                    }}
+                  >
+                    <Picker onEmojiClick={onEmojiClick} />
+                  </div>
+                )}
+                <button id="dropdown-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+                <div className={styles["textarea"]}>
+                  <textarea
+                    value={input}
+                    placeholder="Mensaje del bot @action"
+                    onChange={handleChange}
+                    onKeyDown={handleChange}
+                  />
+                </div>
                 <div className={styles["microphoneWrapper"]}>
                   <Microphone loadRecordVector={loadRecordVector} />
                 </div>
