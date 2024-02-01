@@ -58,6 +58,8 @@ const isAuth = async (token) => {
   const data = await decodeToken(token)
   const path = encodeVector(ID)
 
+  console.log('ddd', data)
+
   const options = [
     { field: 'id', operator: '==', value: data.id },
     { field: 'user', operator: '==', value: data.user },
@@ -184,13 +186,13 @@ const updateBilling = async (req, res, next) => {
 
 
 
-
-
-
-const verifyUser = async (req, res, next) => {
+const confirmUser = async (req, res, next) => {
   const { token } = req.body
-  const payload = await isAuth(token)
 
+  const payload = await decodeToken(token)
+  const path = encodeVector(ID)
+
+  console.log('veririfri', payload)
   // console.log('uuuuu', payload)
   if (!payload) {
     return res.status(501).send('Not verify user')
@@ -203,7 +205,7 @@ const verifyUser = async (req, res, next) => {
 
   // const user = await models.UserModel.findOne({ where: { email } })
   // id, name, vector = [1.3, 1.4], data, overwrite = false
-  const path = encodeVector(ID)
+  // const path = encodeVector(ID)
   // console.log('data', data)
 
   const resp = await updateVector(path, 'users', [0, 0], data, false)
@@ -212,6 +214,29 @@ const verifyUser = async (req, res, next) => {
   // console.log('rok', _token)
   if (resp.isverified) {
     response(res, 200, { user: resp, token: _token })
+  } else {
+    response(res, 201, { message: 500 })
+  }
+}
+
+
+
+
+
+const verifyUser = async (req, res, next) => {
+  const { token } = req.body
+  const user = await isAuth(token)
+
+  // console.log('uuuuu', payload)
+  if (!user) {
+    return res.status(501).send('Not verify user')
+  }
+
+
+
+  // console.log('rok', _token)
+  if (user.isverified) {
+    response(res, 200, { user, token })
   } else {
     response(res, 201, { message: 500 })
   }
@@ -856,6 +881,7 @@ module.exports = {
   fetchsBilling: catchedAsync(fetchsBilling),
   updateBilling: catchedAsync(updateBilling),
 
+  confirmUser: catchedAsync(confirmUser),
   verifyUser: catchedAsync(verifyUser),
   decoderUser: catchedAsync(decoderUser),
   loginUser: catchedAsync(loginUser),

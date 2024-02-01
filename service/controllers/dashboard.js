@@ -128,7 +128,7 @@ const deleteDashboard = async (req, res) => {
 
 
 
-const updateDashboard = async (req, res) => {
+const addDashboard = async (req, res) => {
   try{
     const { token, dashboard } = req.body
     const path = encodeVector(ID)
@@ -149,11 +149,36 @@ const updateDashboard = async (req, res) => {
 
 
 
+const updateDashboard = async (req, res) => {
+  try{
+    const { token, dashboard } = req.body
+    const path = encodeVector(ID)
+    const result = await isAuth(token)
+
+    console.log('wuijduwjiduwjeji')
+    
+    if (result) {
+      const resp = await updateVector(path, 'dashboards', [0, 0], dashboard)
+
+      console.log('rres', resp)
+      
+      return res.status(200).send(resp)
+    }else{
+      return res.status(501).send('Not verify user')
+    }
+  }catch(err){
+    return res.status(500).send('Not verify user')
+  }
+}
+
+
+
 
 
 module.exports = {
   fetchsDashboard: catchedAsync(fetchsDashboard),
   fetchDashboard: catchedAsync(fetchDashboard),
   deleteDashboard: catchedAsync(deleteDashboard),
+  addDashboard: catchedAsync(addDashboard),
   updateDashboard: catchedAsync(updateDashboard)
 }

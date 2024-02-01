@@ -64,10 +64,31 @@ const Dashboard = ({}) => {
    } = useSelector((state) => state.dashboard)
 
 
+
+
+
   // ---------------------------------------------------------------------
   
   useEffect(() => {
 
+    // Obtener la URL actual
+    const urlParams = new URLSearchParams(window.location.search);
+    // Obtener el valor del parámetro 'dashboard'
+    const dashboardParam = urlParams.get('dashboard');
+
+    if (dashboardParam) {
+      console.log('dashboardParam', dashboardParam);
+
+      // Encontrar el dashboard en dashboards que coincida con el ID
+      const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
+
+      if (selectedDashboard) {
+        // Establecer el dashboard utilizando dispatch
+        dispatch(setDashboard(selectedDashboard));
+      }
+    }
+
+    
     setListDashboards(dashboards)
   }, [dashboards])
 

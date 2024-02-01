@@ -12,18 +12,21 @@ const schemaDashboards = {
         filter: { type: 'string' },
         
         components: {
-            type: 'object',
-            properties: {
-                id: { type: 'string' },
-                available: { type: 'string' },
-                type: { type: 'string' },
-                position: { type: 'string' },
-                title: { type: 'string' },
-                description: { type: 'string' },
-                columnSize: { type: 'string' },
-                style: { type: 'string' },
-                vector: { type: 'string' },
-                filter: { type: 'string' },
+            type: 'array',
+            items: {
+                type: "object",
+                properties: {
+                  id: { "type": "string" },
+                  available: { "type": "string" },
+                  type: { "type": "string" },
+                  position: { "type": "string" },
+                  title: { "type": "string" },
+                  description: { "type": "string" },
+                  columnSize: { "type": "string" },
+                  style: { "type": "string" },
+                  vector: { "type": "string" },
+                  filter: { "type": "string" }
+                },
             }
         },
 

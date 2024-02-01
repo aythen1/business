@@ -8,6 +8,7 @@ import {
   updateDashboard,
   deleteDashboard
 } from '@/actions/dashboard'
+// import dashboard from '../../service/controllers/dashboard';
 
 export const initialComponent = {     
   id: '',
@@ -41,10 +42,15 @@ const dashboardSlice = createSlice({
     setDashboard: (state, action) => {
       // lógica para manejar la acción 'setUser'
       state.dashboard = action.payload
+      state.components = JSON.parse(state.dashboard.components)
+    },
+    updateComponents: (state, action) => {
+      state.components = action.payload;
     },
     addComponent: (state, action) => {
       console.log('add com', action.payload)
       state.components.push(action.payload)
+      state.dashboard.components = state.components
       state.status = 'save'
     }
     // otras acciones...
@@ -87,10 +93,9 @@ const dashboardSlice = createSlice({
       .addCase(addDashboard.fulfilled, (state, action) => {
         state.status = 'fulfilled';
         state.dashboards = [...state.dashboards, action.payload];
-        
       })
       .addCase(addDashboard.rejected, (state, action) => {
-        state.status = 'rejected';
+        state.save = 'rejected';
         state.error = action.error.message;
       })
 
@@ -99,8 +104,8 @@ const dashboardSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(updateDashboard.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
-        state.dashboards = action.payload;
+        state.status = 'save';
+        // state.dashboards = action.payload;
       })
       .addCase(updateDashboard.rejected, (state, action) => {
         state.status = 'rejected';
@@ -125,6 +130,7 @@ const dashboardSlice = createSlice({
 
 export const { 
   setDashboard,
+  updateComponents,
   addComponent
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

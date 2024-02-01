@@ -292,6 +292,32 @@ createAsyncThunk('iam/updatePasswordUser', async ({token, password}, { dispatch 
 
 
 
+export const confirm = 
+createAsyncThunk('iam/confirm', async (token, { dispatch }) => {
+  try {
+    const response = await apiBackend.post(
+      '/iam/user/confirm',
+      {
+        token
+      }
+      )
+
+    return {
+      user: response.data.data.user,
+      token: response.data.data.token
+    }
+  } catch (error) {
+    if(error.response.status == 400){
+      throw 'Ya existe el usuario'
+    }else if(error.response && error.response.status >= 500 && error.response.status < 600){
+      // localStorage.removeItem('token')
+      throw 500
+    }
+  }
+})
+
+
+
 
 
 export const verify = 

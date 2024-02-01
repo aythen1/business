@@ -81,11 +81,16 @@ export const addDashboard =
 
 export const updateDashboard =
   createAsyncThunk('dashboard/updateDashboard',
-    async (dashboardId, { dispatch }) => {
+    async (dashboard, { dispatch }) => {
       try {
-        console.log('edwed')
+        const token = localStorage.getItem('token')
+        console.log('token', dashboard)
+        const res = await apiBackend.put('/dashboard', {
+          token,
+          dashboard
+        })
 
-        return user;
+        return res;
       } catch (error) {
         throw error;
       }

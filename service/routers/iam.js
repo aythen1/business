@@ -7,6 +7,7 @@ const {
   fetchsBilling, 
   updateBilling, 
 
+  confirmUser,
   verifyUser,
   decoderUser,
   loginUser,
@@ -45,6 +46,7 @@ routerIAM
 .post('/billing/fetchs', fetchsBilling)
 .post('/billing/update', updateBilling)
 
+.post('/user/confirm', confirmUser)
 .post('/user/verify', verifyUser)
 .post('/user/decode', decoderUser)
 .post('/user/login', loginUser)
