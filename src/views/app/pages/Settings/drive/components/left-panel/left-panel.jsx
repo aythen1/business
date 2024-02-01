@@ -171,12 +171,16 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           </div>
         </div>
       </div>
+
+      
       <div
         onClick={() => setNewPopup(!newPopup)}
         className={style.drive_create_new_container}
       >
         <p className={style.drive_create_new}>+ Crear nuevo</p>
       </div>
+
+
       <div className={style.drive_options_container}>
         <div className={style.drive_option}>
           <img src={Info} />
