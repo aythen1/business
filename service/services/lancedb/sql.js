@@ -15,6 +15,21 @@
 // ];
 
 
+// Graphsql lo simula para usarlo en lancedb
+
+// {
+//   query{
+//     users(id:){
+//       title
+//       books(limit:4){
+//         title,
+//         author
+//       }
+//     }
+//   }
+// }
+
+
 function generateGraphSql (options) {
  
     const regex = /query\s*{\s*([\s\S]*?)\s*}/;
@@ -78,8 +93,16 @@ function generateGraphSql (options) {
     return tables;
   }
 
+
   
 
+// [conditions]
+
+// [{
+//   table: 'users', conition: 'and', filter: '',
+//   table: 'title', conition: 'and', filter: '',
+// }]
+// => sql
 
 
 function generateSearchString(conditionsData) {

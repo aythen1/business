@@ -62,7 +62,7 @@ const dispatch = useDispatch()
 
 console.log('uu', user)
 
-const [selectedAvatar, setSelectedAvatar] = useState(`http://localhost:3001/service/v1/iam/user/${user.id}`);
+const [selectedAvatar, setSelectedAvatar] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`);
 const [inputValues, setInputValues] = useState({
   avatar: user.avatar || '',
   createdat: user.createdat || '',
@@ -146,7 +146,6 @@ const resizeAndConvertToBase64 = (file) => {
 };
 
 const handleSaveUser = () => {
-  const token = localStorage.getItem('token')
   console.log('inputValues', inputValues)
 
   const data = {
@@ -166,7 +165,6 @@ const handleSaveUser = () => {
 
 
   dispatch(updateUser({
-    token,
     user: data
   }))
 }

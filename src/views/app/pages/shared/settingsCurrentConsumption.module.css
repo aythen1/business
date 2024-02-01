@@ -8,13 +8,14 @@
 .grid2{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    align-items: center;
+    /* align-items: center; */
     gap: 20px;
 }
 
 
 .bar{
     position: relative;
+    height: 160px;
 
     .box{
         position: absolute;

@@ -42,8 +42,7 @@ const TableUsers = ({
         dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
       }else if(stateTable.startsWith('delete-item:')){
         const id = stateTable.split(':')[1]
-        const token = localStorage.getItem('token')
-        dispatch(deleteUser({token, id}))
+        dispatch(deleteUser({id}))
       }
     }, [stateTable])
 
@@ -155,7 +154,6 @@ const PopupModalAddUser = ({ styles }) => {
 
 
      const handleAddUser = () => {
-        const token = localStorage.getItem('token')
         const data = {
             token: token,
             user: state.email,
@@ -219,8 +217,7 @@ const PopupModalUser = ({ styles, user }) => {
 
     const handleClickRemoveUser = () => {
         const id = user.id
-        const token = localStorage.getItem('token')
-        dispatch(deleteUser({token, id}))   
+        dispatch(deleteUser({id}))   
         dispatch(setModal(null))
     }
 

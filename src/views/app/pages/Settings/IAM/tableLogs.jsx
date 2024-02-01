@@ -84,7 +84,6 @@ const TableLogs = ({
   
   
     const handleAddLog = () => {
-      const token = localStorage.getItem('token')
       const data = {
         name: state.name,
         action: 'created',
@@ -95,7 +94,7 @@ const TableLogs = ({
         // polices: state.polices,
       }
   
-      dispatch(addLog({token, log: data}))
+      dispatch(addLog({log: data}))
       dispatch(setModal(null))
     }
 

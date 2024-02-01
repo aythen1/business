@@ -1,4 +1,10 @@
 module.exports = {
+  rules: [
+    {
+      test: /\.(png|svg|jpg|gif)$/,
+      use: ['file-loader'],
+    },
+  ],
   // ... otras configuraciones ...
   resolve: {
     extensions: ['.js', '.jsx'],

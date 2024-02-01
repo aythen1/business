@@ -43,6 +43,7 @@
         "sendmail": "^1.6.1",
         "signia": "^0.1.5",
         "signia-react": "^0.1.5",
+        "styled-components": "^6.1.8",
         "use-dark-mode": "^2.3.1",
         "util": "^0.12.5",
         "vectordb": "^0.4.3",

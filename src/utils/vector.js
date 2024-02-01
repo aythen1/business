@@ -136,8 +136,6 @@ export const loadVector = async (vectorId, name, file) => {
 }
 
 
-
-
 export const addVector = async (obj, overwrite = false) => {
   try {
     const res = await apiBackend.post(
@@ -188,8 +186,6 @@ export const deleteVector = async (vectorId, name) => {
   }
 }
 
-
-
 export const removeAllVector = async (pathName) => {
   try {
     console.log('wfiri', pathName)
@@ -207,8 +203,6 @@ export const removeAllVector = async (pathName) => {
 }
 
 
-
-
 export const getVector = async (vectorId, name) => {
   try {
     const res = await apiBackend.get(
@@ -223,13 +217,17 @@ export const getVector = async (vectorId, name) => {
 
 export const getAllVector = async () => {
   try {
-    const res = await apiBackend.get('http://localhost:4000/api/v1/gpt/vector/')
+    const res = await apiBackend.get('/vector')
     // console.log('dd', res.data.data.data)
     return res.data.data.data.slice(0, 4)
   } catch (error) {
     console.error('Error:', error)
   }
 }
+
+
+// ----------------------------------------
+
 
 export const detectDrop = (file) => {
   if (file.type.startsWith('video/vnd.dlna.mpeg-tts')) {
@@ -289,9 +287,6 @@ export const detectDrop = (file) => {
     }
   }
 }
-
-
-
 
 export const detectBot = async (value, type) => {
   let response

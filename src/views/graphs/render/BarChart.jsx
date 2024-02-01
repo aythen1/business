@@ -43,9 +43,9 @@ const BarCharts = ( ) =>  {
     }, [])
       
   return (
-    <div style={{position:'relative'}}>
+    // <div style={{position:'relative'}}>
       <div id={`chart-${id}`} className={'box-chart'}/>
-    </div>
+    // </div>
   );
 }
 

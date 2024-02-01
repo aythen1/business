@@ -7,6 +7,12 @@ const {
   fetchsBilling, 
   updateBilling, 
 
+  fetchsInvoice, 
+  fetchInvoice, 
+  deleteInvoice, 
+  addInvoice, 
+  updateInvoice,
+
   confirmUser,
   verifyUser,
   decoderUser,
@@ -40,11 +46,19 @@ const {
   fetchsLog,
 } = require('../controllers/iam')
 
+
+
 routerIAM
 .post('/load/default', fetchsDefault)
 
 .post('/billing/fetchs', fetchsBilling)
 .post('/billing/update', updateBilling)
+
+.get('/billing/invoices', fetchsInvoice)
+.get('/billing/invoice/:id', fetchInvoice)
+.delete('/billing/invoice', deleteInvoice)
+.post('/billing/invoice', addInvoice)
+.put('/billing/invoice', updateInvoice)
 
 .post('/user/confirm', confirmUser)
 .post('/user/verify', verifyUser)

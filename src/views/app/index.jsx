@@ -224,9 +224,13 @@ export const App = ({ }) => {
             style={{ display: 'block' }}
           >
             {openMenuLeft == 'user' ? (
-              <MenuLeftUser />
+              <div className={styles["MenuLeftUser"]}>
+                <MenuLeftUser />
+              </div>
             ) : (
-              <MenuLeftData setRef={setRef} />
+              <div className={styles["MenuLeftData"]}>
+                <MenuLeftData setRef={setRef} />
+              </div>
             )}
             {/* <MenuLeftUser /> */}
           </div>

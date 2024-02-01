@@ -55,6 +55,15 @@
   width: 35px;
   height: 35px;
   position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  .initial{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+    font-size: 22px;
+  }
 }
 .welcome-john-doe {
   color: #898989;

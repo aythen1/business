@@ -13,6 +13,14 @@ const store = configureStore({
     addon: addonReducer,
     iam: iamReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          'iam/setModal',
+        ], // Ignorar la comprobación de serialización para esta acción
+      },
+    }),
 });
 
 export default store;

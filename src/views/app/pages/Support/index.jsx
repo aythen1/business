@@ -19,7 +19,7 @@ const Support = () => {
 
 
     const initialTopics = [{
-        icon: require('./assets/icon-get-started.svg'),
+        icon: require('./assets/icon-get-started.svg').default,
         title: 'Get started',
         href: '/es/app/support/tickets'
     }, {
@@ -152,7 +152,7 @@ const Support = () => {
                     {listTopics.map((topic, index) => (
                         <div key={index} className={styles.box}>
                             <div>
-                                <img src={topic.icon} />
+                                <img src={topic.icon} className={styles.icon} />
                                 {topic.title}
                             </div>
                             <button onClick={() => navigate(topic.href)}>
