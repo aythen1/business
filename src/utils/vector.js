@@ -44,7 +44,7 @@ export const iniVector = (obj) => {
 export const openVector = async (pathName) => {
   try {
     const res = await apiBackend.post(
-      '/pivot/file',
+      '/vector/file',
       {
         path: pathName
       }
@@ -83,7 +83,7 @@ export const openFile = async (data) => {
 
   try {
     const res = await apiBackend.post(
-      '/pivot/file',
+      '/vector/file',
       {
         path: data.uri,
         vector: data.vector
@@ -118,7 +118,7 @@ export const loadVector = async (vectorId, name, file) => {
   try {
     console.log('loadVector', vectorId, name, file)
     const res = await apiBackend.post(
-      `/pivot/load/${vectorId}/${name}`,
+      `/vector/load/${vectorId}/${name}`,
       {
         file,
         vector: [2, 2]
@@ -139,7 +139,7 @@ export const loadVector = async (vectorId, name, file) => {
 export const addVector = async (obj, overwrite = false) => {
   try {
     const res = await apiBackend.post(
-      '/pivot/',
+      '/vector/',
       {
         overwrite,
         vectorId: encodeVector({
@@ -160,14 +160,11 @@ export const addVector = async (obj, overwrite = false) => {
 export const updateVector = async (vectorId, name, data) => {
   try {
     const res = await apiBackend.post(
-      `/pivot/update/${vectorId}/${name}`,
+      `/vector/update/${vectorId}/${name}`,
       {
         data
       }
     )
-
-    console.log('paraiso', res)
-
     return res.data.data.data
   } catch (error) {
     console.error('Error:', error)
@@ -177,7 +174,7 @@ export const updateVector = async (vectorId, name, data) => {
 export const deleteVector = async (vectorId, name) => {
   try {
     const res = await apiBackend.delete(
-      `http://localhost:4000/api/v1/gpt/vector/${vectorId}/${name}`
+      `/vector/${vectorId}/${name}`
     )
     console.log('dd', res)
     return res.data.data.slice(0, 4)
@@ -190,7 +187,7 @@ export const removeAllVector = async (pathName) => {
   try {
     console.log('wfiri', pathName)
     const res = await apiBackend.post(
-      `/pivot/remove/all`,
+      `/vector/remove/all`,
       {
         path: pathName
       }
@@ -206,9 +203,10 @@ export const removeAllVector = async (pathName) => {
 export const getVector = async (vectorId, name) => {
   try {
     const res = await apiBackend.get(
-      `/pivot/${vectorId}/${name}`
+      `/vector/${vectorId}/${name}`
     )
 
+    console.log('rrr', res)
     return res.data.data.data
   } catch (error) {
     console.error('Error:', error)
@@ -224,6 +222,77 @@ export const getAllVector = async () => {
     console.error('Error:', error)
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ----------------------------------------
@@ -349,90 +418,6 @@ export const detectBot = async (value, type) => {
       // Switch basado en el camel-case
       const camelCase = match[1]
       switch (camelCase) {
-        case 'new-workspace':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'new/workspace'
-          }
-          break
-        case 'new-project':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'new/project'
-          }
-          break
-        case 'new-space':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'new/space'
-          }
-          break
-        case 'new-page':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'new/page'
-          }
-          break
-        case 'new-component':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'new/component'
-          }
-          break
-        case 'workspace':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'workspace/viewer'
-          }
-          break
-        case 'project':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'project/viewer'
-          }
-          break
-        case 'space':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'space/viewer'
-          }
-          break
-        case 'page':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'page/viewer'
-          }
-          break
-        case 'component':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'component/viewer'
-          }
-          break
-        case 'plugin':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'plugin/model'
-          }
-          break
-        case 'translate':
-          response = {
-            currentDate: new Date(),
-            message: value,
-            type: 'plugin/translate'
-          }
-          break
         case 'bot':
         case 'help':
           response = { currentDate: new Date(), message: value, type: 'bot' }

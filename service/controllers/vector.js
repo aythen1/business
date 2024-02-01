@@ -4,6 +4,22 @@ const { catchedAsync, response } = require('../utils/err')
 const lancedb = require('vectordb')
 const fs = require('fs')
 const path = require('path')
+
+
+
+
+
+const {
+  addVector,
+  updateVector,
+  getVector,
+  deleteVector,
+  removeVector,
+} = require('../services/lancedb')
+
+
+
+
 // const fs = require('fs')
 // const path = require('path')
 // const archiver = require('archiver')
@@ -29,93 +45,110 @@ const decodeVector = (base64Str) => {
   return { workspaceId, projectId }
 }
 
-async function addVector(req, res) {
-  const { vectorId, name, overwrite, data } = req.body
-  const { workspaceId, projectId } = decodeVector(vectorId)
-  const dataName = 'data/vector/' + workspaceId + '/' + projectId
-  const _vector = [1.3, 1.4]
-
-  const tableSchema = {
-    type: 'object',
-    properties: {
-      currentDate: { type: 'string' },
-      message: { type: 'string' },
-      type: { type: 'string' },
-      data: { type: 'string' }
-      // ... otras propiedades según tus necesidades
-    },
-    required: ['currentDate', 'message', 'type']
-  }
-
-  const _data = data.map((obj) => {
-    const { vector, _distance, ...rest } = obj
-
-    if (!rest.data) rest.data = JSON.stringify({})
-
-    return { ...rest, vector: _vector }
-  })
-
-  console.log('d', _data)
-
-  try {
-    const db = await lancedb.connect(dataName)
-
-    console.log('xwdiwediie')
-
-    if (!overwrite) {
-      await db.createTable(name, _data, { schema: tableSchema })
-    } else {
-      await db.createTable(name, _data, {
-        schema: tableSchema,
-        writeMode: 'overwrite'
-      })
-    }
-
-    response(res, 200, { data: vectorId })
-  } catch (error) {
-    console.error('Error translating text:', error)
-    response(res, 200, { data: vectorId })
-    // throw error
-  }
-}
-
-async function updateVector(req, res) {
-  // await tbl.add([
-  //   { vector: [1.3, 1.4], item: 'fizz', price: 100.0 },
-  //   { vector: [9.5, 56.2], item: 'buzz', price: 200.0 }
-  // ])
-  const { id, name } = req.params
-
+async function _addVector(req, res) {
+  const { id, name, data } = req.body
   const { workspaceId, projectId } = decodeVector(id)
+  // const uri = 'data/vector/' + workspaceId + '/' + projectId
 
-  const { data } = req.body
-  const dataName = 'data/vector/' + workspaceId + '/' + projectId
+  console.log('wcenic!!!!!!!!!!!!!!', name)
+  const resp = await addVector(id, name, vector = [0, 0], data)
 
-  let _vector = [1.3, 1.4]
+  response(res, 200, { data: id })
 
-  try {
-    const db = await lancedb.connect(dataName)
-    // console.log('create', data)
+  // const { vectorId, name, overwrite, data } = req.body
+  // const { workspaceId, projectId } = decodeVector(vectorId)
+  // const dataName = 'data/vector/' + workspaceId + '/' + projectId
+  // const _vector = [1.3, 1.4]
 
-    // if(data.length > 0 && data[0].vector ){
-    //     _vector = data[0].vector
-    // }
+  // const tableSchema = {
+  //   type: 'object',
+  //   properties: {
+  //     currentDate: { type: 'string' },
+  //     message: { type: 'string' },
+  //     type: { type: 'string' },
+  //     data: { type: 'string' }
+  //     // ... otras propiedades según tus necesidades
+  //   },
+  //   required: ['currentDate', 'message', 'type']
+  // }
 
-    const _data = data.map((obj) => {
-      const { vector, _distance, ...rest } = obj
-      return { ...rest, vector: _vector }
-    })
+  // const _data = data.map((obj) => {
+  //   const { vector, _distance, ...rest } = obj
 
-    await db.createTable(name, _data, { writeMode: 'overwrite' })
-    response(res, 200, { data: id })
-  } catch (error) {
-    console.error('Error translating text:', error)
-    response(res, 202, { data: id })
-    // throw error
-  }
+  //   if (!rest.data) rest.data = JSON.stringify({})
+
+  //   return { ...rest, vector: _vector }
+  // })
+
+  // console.log('d', _data)
+
+  // try {
+  //   const db = await lancedb.connect(dataName)
+
+  //   console.log('xwdiwediie')
+
+  //   if (!overwrite) {
+  //     await db.createTable(name, _data, { schema: tableSchema })
+  //   } else {
+  //     await db.createTable(name, _data, {
+  //       schema: tableSchema,
+  //       writeMode: 'overwrite'
+  //     })
+  //   }
+
+  //   response(res, 200, { data: vectorId })
+  // } catch (error) {
+  //   console.error('Error translating text:', error)
+  //   response(res, 200, { data: vectorId })
+  //   // throw error
+  // }
 }
 
-function eliminarDirectorioSync(directorio) {
+async function _updateVector(req, res) {
+  const { id, name } = req.params
+  const { data } = req.body
+  // const { workspaceId, projectId } = decodeVector(id)
+  // const uri = 'data/vector/' + workspaceId + '/' + projectId
+  
+  
+  console.log('===================================', name, data)
+  
+  const resp = await addVector(id, name, vector = [0, 0], {message: data})
+  
+  console.log('===================================', name, resp)
+  response(res, 200, { data: id })
+
+  // // await tbl.add([
+  // //   { vector: [1.3, 1.4], item: 'fizz', price: 100.0 },
+  // //   { vector: [9.5, 56.2], item: 'buzz', price: 200.0 }
+  // // ])
+  // const { id, name } = req.params
+
+  // const { workspaceId, projectId } = decodeVector(id)
+
+  // const { data } = req.body
+  // const dataName = 'data/vector/' + workspaceId + '/' + projectId
+
+  // let _vector = [1.3, 1.4]
+
+  // try {
+  //   const db = await lancedb.connect(dataName)
+
+  //   const _data = data.map((obj) => {
+  //     const { vector, _distance, ...rest } = obj
+  //     return { ...rest, vector: _vector }
+  //   })
+
+  //   await db.createTable(name, _data, { writeMode: 'overwrite' })
+  //   response(res, 200, { data: id })
+  // } catch (error) {
+  //   console.error('Error translating text:', error)
+  //   response(res, 202, { data: id })
+  //   // throw error
+  // }
+}
+
+function _deleteDirSync(directorio) {
   try {
     const archivos = fs.readdirSync(directorio)
 
@@ -137,24 +170,14 @@ function eliminarDirectorioSync(directorio) {
   }
 }
 
-async function deleteVector(req, res) {
+async function _deleteVector(req, res) {
   const { id, name } = req.params
-
   const { workspaceId, projectId } = decodeVector(id)
 
-  const uri =
-    'data/vector/' + workspaceId + '/' + projectId + '/' + name + '.lance/'
-
-  //   const tablePath = path.join(uri, `${name}.ldb`)
+  const uri = 'data/vector/' + workspaceId + '/' + projectId + '/' + name + '.lance/'
 
   try {
-    // Verificar si la tabla existe antes de intentar eliminarla
-    // await fs.access(uri)
-
-    // Eliminar la tabla
-    // await fs.removeSync(uri)
-
-    await eliminarDirectorioSync(uri)
+    await deleteDirSync(uri)
 
     console.log(`La tabla ${name} ha sido eliminada.`)
   } catch (error) {
@@ -164,122 +187,133 @@ async function deleteVector(req, res) {
   response(res, 200, { data: 200 })
 }
 
-async function removeVector(req, res) {
-  //   const tbl = await db.openTable(id)
+async function _removeVector(req, res) {
 
-  //   await tbl.delete()
-  // await tbl.delete('item = "fizz"')
-
-  // const con = await lancedb.connect('./.lancedb')
-  // const data = [
-  //   { id: 1, vector: [1, 2] },
-  //   { id: 2, vector: [3, 4] },
-  //   { id: 3, vector: [5, 6] }
-  // ]
-  // const tbl = await con.createTable('my_table', data)
-  // await tbl.delete('id = 2')
-  // await tbl.countRows() // Returns 2
-
-  // const to_remove = [1, 5]
-  // await tbl.delete(`id IN (${to_remove.join(',')})`)7
   response(res, 200, { data: 'hello world como estás' })
 }
 
-async function openVector(req, res) {
+async function _openVector(req, res) {
   const { path } = req.body
 
   // Split the path into an array of segments
   const pathSegments = path.split('/')
-  const uri =
-    pathSegments[0] +
-    '/' +
-    pathSegments[1] +
-    '/' +
-    pathSegments[2] +
-    '/' +
-    pathSegments[3]
+  // const uri = pathSegments[0] + '/' + pathSegments[1] + '/' + pathSegments[2] + '/' + pathSegments[3]
+  const uri = btoa('data/vector/' + pathSegments[2] + '/' + pathSegments[3])
   const name = pathSegments[4]
   const fileName = pathSegments[5]
 
-  console.log('name', fileName)
+  const conditions = [{
+    field: 'message', operator: '==', value: fileName
+  }]
 
+  const query = await getVector(uri, name, [0, 0], conditions)
+  
+  response(res, 200, { data: query })
+
+  // try {
+  //   const db = await lancedb.connect(uri)
+  //   const tbl = await db.openTable(name)
+
+  //   const query = await tbl
+  //     .search([2, 2.1])
+  //     .where(
+  //       `(
+  //       message = '${fileName}'
+  //     )`
+  //     )
+  //     .execute()
+  //   response(res, 200, { data: query })
+  // } catch (error) {
+  //   response(res, 200, { error })
+  // }
+}
+
+async function _getVector(req, res) {
+  try{
+    const { id, name } = req.params
+    const { workspaceId, projectId } = decodeVector(id)
+    
+    // const uri = 'data/vector/' + workspaceId + '/' + projectId
+    
+    // const db = await lancedb.connect(uri)
+    // const tbl = await db.openTable(name)
+
+    console.log('idd', id, name, workspaceId, projectId)
+    
+    // const query = await tbl.search([100, 100]).limit(99).execute()
+    const query = await getVector(id, name, [0, 0])
+    // console.log('qq', query)
+    // console.log('wcjwncunwucuewncue', query)
+    if(!query.length){
+      response(res, 200, { data: [] })
+    }
+  
+    response(res, 200, { data: query })
+  }catch(err){
+    response(res, 200, { data: [] })
+  }
+
+
+}
+
+
+async function _loadVector(req, res){
+  const { id, name } = req.params
+  const { workspaceId, projectId } = decodeVector(id)
+  
+  const uri = 'data/vector/' + workspaceId + '/' + projectId
+  const file = req.file
+  const path = uri + '/' + name + '/' + file.originalname
+  
   try {
+    let type
+    if (name === 'records') {
+      type = 'record'
+    } else {
+      type = file.mimetype
+    }
+
     const db = await lancedb.connect(uri)
     const tbl = await db.openTable(name)
+ 
+    const message = [
+      {
+        currentDate: new Date().toISOString(),
+        message: file.originalname,
+        type,
+        data: JSON.stringify(file),
+        vector: [0, 0]
+      }
+    ]
 
-    const query = await tbl
-      .search([2, 2.1])
-      // .select(['message'])
-      // .search('.pdf')
-      .where(
-        `(
-        message = '${fileName}'
-      )`
-      )
-      // .limit(1zz)
-      .execute()
+    // // not exist table
+    // if (tbl === 404) {
+    //   await db.createTable(name, message)
+    // } else {
+    //   await tbl.add(message)
+    // }
+    addVector(id, name, message)
 
-      console.log('mess', query)
 
-    response(res, 200, { data: query })
+    response(res, 200, { data: path })
   } catch (error) {
+    console.error(`Errors al upload la tabla ${name}: ${error.message}`)
     response(res, 200, { error })
   }
 }
 
-async function getVector(req, res) {
-  console.log('get vector')
 
-  const { id, name } = req.params
 
-  const { workspaceId, projectId } = decodeVector(id)
 
-  const uri = 'data/vector/' + workspaceId + '/' + projectId
 
-  const db = await lancedb.connect(uri)
-  const tbl = await db.openTable(name)
 
-  const query = await tbl.search([100, 100]).limit(99).execute()
+// ----------------------------------------------------------------------------------------------
 
-  //   console.log('tbl', tbl)
-  //   const query = await tbl
-  //     .search(Array(1536).fill(1.2))
-  //     .metricType('cosine')
-  //     .limit(10)
-  //     .execute()
-
-  response(res, 200, { data: query })
-
-  // const results_2 = await tbl
-  //   .search(Array(1536).fill(1.2))
-  //   .metricType('cosine')
-  //   .limit(10)
-  //   .execute()
-
-  //   tbl.search([100, 102])
-  //  .where(`(
-  //       (label IN [10, 20])
-  //       AND
-  //       (note.email IS NOT NULL)
-  //   ) OR NOT note.created
-  //  `)
-
-  // const results_2 = await table
-  //   .search(Array(1536).fill(1.2))
-  //   .where("id != '1141'")
-  //   .execute()
-
-  // const results_3 = await table
-  // .search(Array(1536).fill(1.2))
-  // .select(["id"])
-  // .execute()
-}
-
-async function getAllVector(req, res) {
+async function _getAllVector(req, res) {
   const db = await lancedb.connect('data/vector')
 
   const tables = await db.tableNames()
-  console.log('t', tables)
+
 
   const tableInfoArray = await Promise.all(
     tables.map(async (table) => {
@@ -297,193 +331,22 @@ async function getAllVector(req, res) {
   response(res, 200, { data: tableInfoArray })
 }
 
-async function indexVector(req, res) {
-  // const vectordb = require('vectordb')
-  // const db = await vectordb.connect('data/sample-lancedb')
-
-  // let data = []
-  // for (let i = 0; i < 10_000; i++) {
-  //   data.push({
-  //     vector: Array(1536).fill(i),
-  //     id: `${i}`,
-  //     content: '',
-  //     longId: `${i}`
-  //   })
-  // }
-  // const table = await db.createTable('my_vectors', data)
-  // await table.createIndex({
-  //   type: 'ivf_pq',
-  //   column: 'vector',
-  //   num_partitions: 256,
-  //   num_sub_vectors: 96
-  // })
+async function _indexVector(req, res) {
 
   response(res, 200, { data: 200 })
 }
 
-const loadVector = async (req, res) => {
-  const { id, name } = req.params
-  const { workspaceId, projectId } = decodeVector(id)
 
-  const file = req.file
 
-  const uri = 'data/vector/' + workspaceId + '/' + projectId
-
-  try {
-    let type
-    if (name === 'record') {
-      type = 'record'
-    } else {
-      type = file.mimetype
-    }
-
-    const db = await lancedb.connect(uri)
-    const tbl = await db.openTable(name)
-    // .catch( (error) => {
-    //   return 404
-    // })
-
-    console.log('type', type, file)
-
-    const message = [
-      {
-        currentDate: new Date().toISOString(),
-        message: file.originalname,
-        type,
-        data: JSON.stringify(file),
-        vector: [1.3, 1.4]
-      }
-    ]
-    console.log('m', message)
-
-    // not exist table
-    if (tbl === 404) {
-      await db.createTable(name, message)
-    } else {
-      await tbl.add(message)
-    }
-
-    const path = uri + '/' + name + '/' + file.originalname
-
-    response(res, 200, { data: path })
-  } catch (error) {
-    console.error(`Errors al upload la tabla ${name}: ${error.message}`)
-    response(res, 200, { error })
-  }
-}
-
-// const loadVector = async (req, res) => {
-//   const { id, name } = req.params
-//   const file = req.file
-//   const fileBuffer = file.buffer
-
-//   console.log('f9le', file)
-
-//   function chunkText(text, chunkSize) {
-//     const chunks = []
-//     for (let i = 0; i < text.length; i += chunkSize) {
-//       chunks.push(text.slice(i, i + chunkSize))
-//     }
-//     return chunks
-//   }
-
-//   const chunkSize = 4000 // Tamaño del chunk, puedes ajustarlo según tus necesidades
-
-//   const pdfText = await pdf(fileBuffer)
-//     .then((data) => {
-//       return data.text
-//     })
-//     .catch((error) => {
-//       console.error('Error al cargar el PDF:', error)
-//     })
-
-//   try {
-//     let allGeneratedTokens = ''
-
-//     const chunks = chunkText(pdfText, chunkSize)
-//     // Procesa cada chunk de forma secuencial
-//     for (const chunk of chunks) {
-//       const response = await fetch('https://api.openai.com/v1/completions', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: `Bearer ${KEY_OPENAI}`
-//         },
-//         body: JSON.stringify({
-//           model: 'text-davinci-002',
-//           prompt: chunk,
-//           max_tokens: 50
-//         })
-//       })
-
-//       if (!response.ok) {
-//         throw new Error(`Error de HTTP! Estado: ${response.status}`)
-//       }
-
-//       const responseData = await response.json()
-//       console.log('resp', responseData)
-//       const generatedTokens = responseData.choices[0].text
-//       // Acumula los tokens generados
-//       allGeneratedTokens += generatedTokens
-//     }
-
-//     console.log('dddd')
-
-//     const { workspaceId, projectId } = decodeVector(id)
-
-//     const uri = 'data/vector/' + workspaceId + '/' + projectId
-
-//     const db = await lancedb.connect(uri)
-//     // const tbl = await db.openTable(name)
-
-//     const tableSchema = {
-//       type: 'object',
-//       properties: {
-//         currentDate: { type: 'string' },
-//         message: { type: 'string' },
-//         type: { type: 'string' },
-//         data: { type: 'string' }
-//       },
-//       required: ['currentDate', 'message', 'type']
-//     }
-
-//     const tbl = await db.openTable(name, { schema: tableSchema })
-
-//     const message = [
-//       {
-//         currentDate: new Date().toISOString(),
-//         message: file.originalname,
-//         type: 'application/pdf',
-//         data: JSON.stringify({
-//           pdfText,
-//           allGeneratedTokens
-//         }),
-//         vector: [1.3, 1.4]
-//         // _distance: 19463.6484375
-//       }
-//     ]
-//     console.log('aaaa', message)
-
-//     await tbl.add(message)
-
-//     // console.log('d', document)
-
-//     response(res, 200, { data: message })
-//   } catch (error) {
-//     console.error(`Errors al eliminar la tabla ${name}: ${error.message}`)
-
-//     response(res, 200, { error })
-//   }
-// }
 
 module.exports = {
-  loadVector: catchedAsync(loadVector),
-  addVector: catchedAsync(addVector),
-  deleteVector: catchedAsync(deleteVector),
-  removeVector: catchedAsync(removeVector),
-  openVector: catchedAsync(openVector),
-  getVector: catchedAsync(getVector),
-  getAllVector: catchedAsync(getAllVector),
-  indexVector: catchedAsync(indexVector),
-  updateVector: catchedAsync(updateVector)
+  loadVector: catchedAsync(_loadVector),
+  addVector: catchedAsync(_addVector),
+  deleteVector: catchedAsync(_deleteVector),
+  removeVector: catchedAsync(_removeVector),
+  openVector: catchedAsync(_openVector),
+  getVector: catchedAsync(_getVector),
+  getAllVector: catchedAsync(_getAllVector),
+  indexVector: catchedAsync(_indexVector),
+  updateVector: catchedAsync(_updateVector)
 }

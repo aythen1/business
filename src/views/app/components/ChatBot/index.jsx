@@ -158,7 +158,7 @@ const ChatBot = ({
           base64Content
         }
 
-        const { vector, uri} = await loadVector(tokenVector, 'file', file )
+        const { vector, uri} = await loadVector(tokenVector, 'files', file )
   
         
         const dropMessage = {
@@ -177,7 +177,7 @@ const ChatBot = ({
   
   
     const loadRecordVector = async (formData, volumeArray) => {
-      const uri = await loadVector(tokenVector, 'record', formData)
+      const uri = await loadVector(tokenVector, 'records', formData)
       console.log('uri', uri)
       const recordMessage = {
         volumeArray,
@@ -185,7 +185,7 @@ const ChatBot = ({
       }
   
       console.log('uri-record', recordMessage)
-      handleAddMessage(recordMessage, 'record')
+      handleAddMessage(recordMessage, 'records')
     }
   
     const handleChange = (event) => {
@@ -206,7 +206,7 @@ const ChatBot = ({
       setHistory([...history, newMessage])
       setMessage((prevMessages) => [...prevMessages, newMessage])
   
-      updateVector(tokenVector, 'bot', [...history, newMessage])
+      updateVector(tokenVector, 'bots', [...history, newMessage])
     }
   
     /* */
@@ -218,7 +218,7 @@ const ChatBot = ({
       setHistory([...history])
       setMessage([...history])
   
-      updateVector(tokenVector, 'bot', history)
+      updateVector(tokenVector, 'bots', history)
     }
   
     // Función para borrar todo y dejar el input en blanco
@@ -226,7 +226,7 @@ const ChatBot = ({
       setHistory([])
       setMessage([])
   
-      deleteVector(tokenVector, 'bot')
+      deleteVector(tokenVector, 'bots')
       setTokenVector(null)
     }
   
@@ -265,7 +265,8 @@ const ChatBot = ({
   useEffect(() => {
     const loadFromIndexedDB = async () => {
       try {
-        const dataValues = await getVector(tokenVector, 'bot')
+        const dataValues1 = await getVector(tokenVector, 'bots')
+        const dataValues = JSON.parse(dataValues1[0].message)
         console.log('val', dataValues)
 
         setHistory(dataValues || [])
@@ -365,7 +366,7 @@ const ChatBot = ({
                   />
                 </div>
                 <div className={styles["microphoneWrapper"]}>
-                  <Microphone loadRecordVector={loadRecordVector} />
+                  {/* <Microphone loadRecordVector={loadRecordVector} /> */}
                 </div>
               </div>
               
