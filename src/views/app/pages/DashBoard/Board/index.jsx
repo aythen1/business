@@ -4,11 +4,17 @@ import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import styles from './index.module.css';
 import Component from './component';
 
+
+
+
 import {
-  addComponent 
+  addComponent,
+  deleteComponent
 } from '@/slices/dashboardSlice';
 
 
@@ -36,6 +42,83 @@ const Board = ({
   const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
   const { components } = useSelector((state) => state.dashboard)
 
+
+  const [contextMenu, setContextMenu] = useState(null);
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(null);
+  };
+
+  const handleContextMenu = (event, item) => {
+    setSelectedComponent(item);
+
+    event.preventDefault();
+    setContextMenu({ x: event.pageX, y: event.pageY });
+  };
+
+
+  
+  const handleItemClick = async (e, action) => {
+    e.stopPropagation()
+    // Aquí puedes manejar las acciones específicas para cada botón
+    console.log('SelectedComponent', action)
+    switch(action){
+      case 'new':
+        dispatch(setOpenMenuRight('graph'))
+        break;
+      case 'delete':
+        dispatch(deleteComponent([selectedComponent]))
+        break;
+      case 'copy':
+        const selectedItemsJson = JSON.stringify(selectedComponent);
+        navigator.clipboard.writeText(selectedItemsJson);
+        break;
+      case 'paste':
+        const clipboardData = await navigator.clipboard.readText();
+        const parsedData = JSON.parse(clipboardData);
+        parsedData.id = uuidv4()
+
+        dispatch(addComponent(parsedData))
+        break;
+      case 'duplicate':
+        dispatch(addComponent([selectedComponent]))
+        break;
+      case 'support':
+        dispatch(setOpenMenuLeft(false))
+        dispatch(setOpenMenuRight(false))
+        dispatch(setOpenChatBot(true))
+        break;
+    }
+    setContextMenu(null);
+  };
+
+
+  
+
+
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Cierra el menú contextual si se hace clic fuera de él
+      if (contextMenu && !event.target.closest('.context-menu')) {
+        handleCloseContextMenu();
+      }
+    };
+
+    // Agrega el manejador de eventos click al documento
+    document.addEventListener('click', handleClickOutside);
+
+    // Limpia el manejador de eventos al desmontar el componente
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [contextMenu]);
+
+
+  // --------------------------------------------------------------------
+
+
+
   console.log('components', components)
 
   const _selectedComponent = (index) => {
@@ -53,14 +136,13 @@ const Board = ({
         content: (
           <div
             key={index}
+            onContextMenu={(event) => handleContextMenu(event, component)}
             onClick={(e) => {
               e.stopPropagation();
               _selectedComponent(index);
             }}
           >
-            <Component>
-             dsdx {JSON.stringify(component)}
-            </Component>
+            <Component component={component} />
           </div>
         ),
       };
@@ -89,64 +171,7 @@ const Board = ({
   };
 
 
-  // ---------------------------------------------------------------------
-  const [contextMenu, setContextMenu] = useState(null);
-
-  const handleContextMenu = (event, item) => {
-    setSelectedComponent(item);
-
-    event.preventDefault();
-    setContextMenu({ x: event.pageX, y: event.pageY });
-  };
-
-  const handleItemClick = (action) => {
-    // Aquí puedes manejar las acciones específicas para cada botón
-    switch(action){
-      case 'new':
-        
-        break;
-      case 'delete':
-        
-        break;
-      case 'copy':
-        
-        break;
-      case 'cut':
-        
-        break;
-      case 'duplicate':
-        
-        break;
-      case 'support':
-        
-        break;
-    }
-
-
-    setContextMenu(null);
-  };
-
-  const handleCloseContextMenu = () => {
-    setContextMenu(null);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Cierra el menú contextual si se hace clic fuera de él
-      if (contextMenu && !event.target.closest('.context-menu')) {
-        handleCloseContextMenu();
-      }
-    };
-
-    // Agrega el manejador de eventos click al documento
-    document.addEventListener('click', handleClickOutside);
-
-    // Limpia el manejador de eventos al desmontar el componente
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [contextMenu]);
-
+  
 
 
   return (
@@ -154,12 +179,19 @@ const Board = ({
       <DropTarget >
         <div className="components-grids"  style={{ position: 'relative' }}>
           {listComponents.map((component, index) => (
-            <div onContextMenu={(event) => handleContextMenu(event, component)}>
+            <div 
+              key={index}
+              
+            >
               <DraggableItem
                 key={component.id}
                 component={component}
                 index={index}
                 moveItem={moveItem}
+                contextMenu={contextMenu}
+                setContextMenu={setContextMenu}
+                handleItemClick={handleItemClick}
+                handleCloseContextMenu={handleCloseContextMenu}
               />
             </div>
           ))}
@@ -191,45 +223,9 @@ export default Board;
 
 
 
-const ContextMenu = ({ x, y, onClose, onItemClick }) => {
-  const handleItemClick = (action) => {
-    onItemClick(action);
-    onClose();
-  };
-
-  return (
-    <div
-      className={styles.contextMenu}
-      style={{
-        left: x,
-        top: y,
-      }}
-    >
-      <button onClick={() => handleItemClick('new')}>Crear Nuevo</button>
-      <button onClick={() => handleItemClick('delete')}>Eliminar</button>
-      <button onClick={() => handleItemClick('copy')}>Copiar</button>
-      <button onClick={() => handleItemClick('cut')}>Cortar</button>
-      <button onClick={() => handleItemClick('duplicate')}>Duplicar</button>
-      <button onClick={() => handleItemClick('support')}>Analizar AI</button>
-    </div>
-  );
-};
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-const DraggableItem = ({ component, index, moveItem }) => {
+const DraggableItem = ({ component, index, moveItem}) => {
   const [isDropping, setIsDropping] = useState(false)
   const dispatch = useDispatch();
 
@@ -280,6 +276,8 @@ const DraggableItem = ({ component, index, moveItem }) => {
     }
   });
 
+
+
   return (
     <div
       ref={(node) => drag(drop(node))}
@@ -297,10 +295,42 @@ const DraggableItem = ({ component, index, moveItem }) => {
   );
 };
 
+
+
+
+
+
 const DropTarget = ({ children }) => {
   const [, drop] = useDrop({
     accept: 'DRAGGABLE_ITEM',
   });
 
   return <div ref={drop}>{children}</div>;
+};
+
+
+
+
+const ContextMenu = ({ x, y, onClose, onItemClick }) => {
+  const handleItemClick = (e, action) => {
+    onItemClick(e, action);
+    onClose();
+  };
+
+  return (
+    <div
+      className={styles.contextMenu}
+      style={{
+        left: x,
+        top: y,
+      }}
+    >
+      <button onClick={(e) => handleItemClick(e, 'new')}>Crear Nuevo</button>
+      <button onClick={(e) => handleItemClick(e, 'delete')}>Eliminar</button>
+      <button onClick={(e) => handleItemClick(e, 'copy')}>Copiar</button>
+      <button onClick={(e) => handleItemClick(e, 'paste')}>Pegar</button>
+      <button onClick={(e) => handleItemClick(e, 'duplicate')}>Duplicar</button>
+      <button onClick={(e) => handleItemClick(e, 'support')}>Analizar AI</button>
+    </div>
+  );
 };

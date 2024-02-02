@@ -96,6 +96,7 @@ export const TopBar = ({
 
 
   const handleClickSave = () => {
+    console.log('dash', dashboard)
     dispatch(updateDashboard(dashboard))
   }
 

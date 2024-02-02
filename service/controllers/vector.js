@@ -5,8 +5,7 @@ const lancedb = require('vectordb')
 const fs = require('fs')
 const path = require('path')
 
-
-
+const jwt = require('jsonwebtoken')
 
 
 const {
@@ -19,25 +18,52 @@ const {
 
 
 
+const ID = 'test/test'
+const secretKey = 'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf';
 
-// const fs = require('fs')
-// const path = require('path')
-// const archiver = require('archiver')
-// const KEY_OPENAI = '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'
 
-// Codificar el objeto a Base64
-// const encodeVector = (obj) => {
-//     const str = `${obj.userId}-${obj.workspaceId}-${obj.projectId}`
-//     const base64Str = btoa(str)
-//     return base64Str
-//   }
+const encodeVector = (id) => {
+  const str = `${id}`
+  const base64Str = btoa(str)
+  return base64Str
+}
 
-// const pdf = require('pdf-parse')
-// const pdf = require('pdf-parse')
+function decodeToken(token) {
+  try {
+    // Decodifica el token utilizando la clave secreta
+    const decoded = jwt.verify(token, secretKey);
+    return decoded;
+  } catch (error) {
+    // Maneja errores de decodificación, por ejemplo, token no válido o expirado
+    console.error('Error al decodificar el token:', error.message);
+    return null;
+  }
+}
 
-// const KEY_OPENAI = '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'
 
-// Decodificar la cadena Base64 a objeto
+
+const isAuth = async (token) => {
+  const data = await decodeToken(token)
+  const path = encodeVector(ID)
+
+  console.log('ddd', data)
+
+  const options = [
+    { field: 'id', operator: '==', value: data.id },
+    { field: 'user', operator: '==', value: data.user },
+    { field: 'isverified', operator: '==', value: true }
+  ];
+
+  const resp = await getVector(path, 'users', [0, 0], options)
+
+  if (resp.length > 0) return resp[0]
+  return false
+}
+
+
+
+
+
 const decodeVector = (base64Str) => {
   const str = atob(base64Str)
 
@@ -47,68 +73,27 @@ const decodeVector = (base64Str) => {
 
 async function _addVector(req, res) {
   const { id, name, data } = req.body
-  const { workspaceId, projectId } = decodeVector(id)
+  // const { workspaceId, projectId } = decodeVector(id)
   // const uri = 'data/vector/' + workspaceId + '/' + projectId
 
-  console.log('wcenic!!!!!!!!!!!!!!', name)
+  console.log('_addVector_addVector', id, name, data)
   const resp = await addVector(id, name, vector = [0, 0], data)
 
+  console.log('resp', resp)
   response(res, 200, { data: id })
-
-  // const { vectorId, name, overwrite, data } = req.body
-  // const { workspaceId, projectId } = decodeVector(vectorId)
-  // const dataName = 'data/vector/' + workspaceId + '/' + projectId
-  // const _vector = [1.3, 1.4]
-
-  // const tableSchema = {
-  //   type: 'object',
-  //   properties: {
-  //     currentDate: { type: 'string' },
-  //     message: { type: 'string' },
-  //     type: { type: 'string' },
-  //     data: { type: 'string' }
-  //     // ... otras propiedades según tus necesidades
-  //   },
-  //   required: ['currentDate', 'message', 'type']
-  // }
-
-  // const _data = data.map((obj) => {
-  //   const { vector, _distance, ...rest } = obj
-
-  //   if (!rest.data) rest.data = JSON.stringify({})
-
-  //   return { ...rest, vector: _vector }
-  // })
-
-  // console.log('d', _data)
-
-  // try {
-  //   const db = await lancedb.connect(dataName)
-
-  //   console.log('xwdiwediie')
-
-  //   if (!overwrite) {
-  //     await db.createTable(name, _data, { schema: tableSchema })
-  //   } else {
-  //     await db.createTable(name, _data, {
-  //       schema: tableSchema,
-  //       writeMode: 'overwrite'
-  //     })
-  //   }
-
-  //   response(res, 200, { data: vectorId })
-  // } catch (error) {
-  //   console.error('Error translating text:', error)
-  //   response(res, 200, { data: vectorId })
-  //   // throw error
-  // }
 }
 
 async function _updateVector(req, res) {
+  const { token, data } = req.body
+  const payload = await isAuth(token)
+
+  if (!payload) {
+    return res.status(501).send('Not verify user')
+  }
+
   const { id, name } = req.params
-  const { data } = req.body
-  // const { workspaceId, projectId } = decodeVector(id)
-  // const uri = 'data/vector/' + workspaceId + '/' + projectId
+  const { workspaceId, projectId } = decodeVector(id)
+  const uri = 'data/vector/' + workspaceId + '/' + projectId
   
   
   console.log('===================================', name, data)
@@ -117,35 +102,6 @@ async function _updateVector(req, res) {
   
   console.log('===================================', name, resp)
   response(res, 200, { data: id })
-
-  // // await tbl.add([
-  // //   { vector: [1.3, 1.4], item: 'fizz', price: 100.0 },
-  // //   { vector: [9.5, 56.2], item: 'buzz', price: 200.0 }
-  // // ])
-  // const { id, name } = req.params
-
-  // const { workspaceId, projectId } = decodeVector(id)
-
-  // const { data } = req.body
-  // const dataName = 'data/vector/' + workspaceId + '/' + projectId
-
-  // let _vector = [1.3, 1.4]
-
-  // try {
-  //   const db = await lancedb.connect(dataName)
-
-  //   const _data = data.map((obj) => {
-  //     const { vector, _distance, ...rest } = obj
-  //     return { ...rest, vector: _vector }
-  //   })
-
-  //   await db.createTable(name, _data, { writeMode: 'overwrite' })
-  //   response(res, 200, { data: id })
-  // } catch (error) {
-  //   console.error('Error translating text:', error)
-  //   response(res, 202, { data: id })
-  //   // throw error
-  // }
 }
 
 function _deleteDirSync(directorio) {
@@ -171,6 +127,15 @@ function _deleteDirSync(directorio) {
 }
 
 async function _deleteVector(req, res) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  const payload = await isAuth(token)
+
+  if (!payload) {
+    return res.status(501).send('Not verify user')
+  }
+
+
   const { id, name } = req.params
   const { workspaceId, projectId } = decodeVector(id)
 
@@ -194,10 +159,7 @@ async function _removeVector(req, res) {
 
 async function _openVector(req, res) {
   const { path } = req.body
-
-  // Split the path into an array of segments
   const pathSegments = path.split('/')
-  // const uri = pathSegments[0] + '/' + pathSegments[1] + '/' + pathSegments[2] + '/' + pathSegments[3]
   const uri = btoa('data/vector/' + pathSegments[2] + '/' + pathSegments[3])
   const name = pathSegments[4]
   const fileName = pathSegments[5]
@@ -210,47 +172,40 @@ async function _openVector(req, res) {
   
   response(res, 200, { data: query })
 
-  // try {
-  //   const db = await lancedb.connect(uri)
-  //   const tbl = await db.openTable(name)
-
-  //   const query = await tbl
-  //     .search([2, 2.1])
-  //     .where(
-  //       `(
-  //       message = '${fileName}'
-  //     )`
-  //     )
-  //     .execute()
-  //   response(res, 200, { data: query })
-  // } catch (error) {
-  //   response(res, 200, { error })
-  // }
 }
 
 async function _getVector(req, res) {
-  try{
-    const { id, name } = req.params
-    const { workspaceId, projectId } = decodeVector(id)
-    
-    // const uri = 'data/vector/' + workspaceId + '/' + projectId
-    
-    // const db = await lancedb.connect(uri)
-    // const tbl = await db.openTable(name)
+  const { id, name } = req.params
+  const { token, search } = req.body
+  // const authHeader = req.headers['authorization'];
+  // const token = authHeader && authHeader.split(' ')[1];
+  const payload = await isAuth(token)
 
-    console.log('idd', id, name, workspaceId, projectId)
+  if (!payload) {
+    return res.status(501).send('Not verify user')
+  }
+
+  try{
+
+    const options = [
+      { field: 'title', operator: 'LIKE', value: `%${search}%` }
+    ];
     
-    // const query = await tbl.search([100, 100]).limit(99).execute()
-    const query = await getVector(id, name, [0, 0])
-    // console.log('qq', query)
-    // console.log('wcjwncunwucuewncue', query)
+    const query = await getVector(id, name, [0, 0], options)
+
+    console.log('query', query)
+
     if(!query.length){
-      response(res, 200, { data: [] })
+      // response(res, 200, { data: [] })
+      return res.status(200).send([])
     }
-  
-    response(res, 200, { data: query })
+    
+    // response(res, 200, { data: query })
+    return res.status(200).send(query)
+    
   }catch(err){
-    response(res, 200, { data: [] })
+    // response(res, 200, { data: [] })
+    return res.status(200).send([])
   }
 
 
@@ -331,11 +286,6 @@ async function _getAllVector(req, res) {
   response(res, 200, { data: tableInfoArray })
 }
 
-async function _indexVector(req, res) {
-
-  response(res, 200, { data: 200 })
-}
-
 
 
 
@@ -347,6 +297,5 @@ module.exports = {
   openVector: catchedAsync(_openVector),
   getVector: catchedAsync(_getVector),
   getAllVector: catchedAsync(_getAllVector),
-  indexVector: catchedAsync(_indexVector),
   updateVector: catchedAsync(_updateVector)
 }

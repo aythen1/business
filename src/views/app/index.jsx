@@ -236,7 +236,6 @@ export const App = ({ }) => {
           </div>
         )}
         |
-        {openMenuRight}|openMenuRight
         {openMenuRight && (
           <div>
             {openMenuRight == 'graph' ? (

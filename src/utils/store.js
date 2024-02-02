@@ -9,9 +9,9 @@ import assetsReducer from '@/slices/assetsSlice';
 const store = configureStore({
   reducer: {
     dashboard: dashboardReducer,
-    assets: assetsReducer,
     addon: addonReducer,
     iam: iamReducer,
+    assets: assetsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

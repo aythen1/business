@@ -1,12 +1,27 @@
 import React from 'react'
 
 
-const Component = ({children}) => {
-    return(
+import * as Graphs from '@/views/graphs/render'
+
+
+const Component = ({ component }) => {
+
+    const Component = Graphs[component.type];
+
+    if (!Component) {
+        console.error(`Component type "${component.type}" not found or not exported.`);
+        return <div>Error: Component not found</div>;
+    }
+
+
+
+    return (
         <div>
-            {children}
+            {JSON.stringify(component)}
+            <Component />
         </div>
     )
 }
 
 export default Component
+

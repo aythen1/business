@@ -34,6 +34,7 @@ const dashboardSlice = createSlice({
     dashboard: null,
     dashboards: [],
 
+    component: {},
     components: [
       initialComponent
     ]
@@ -44,8 +45,20 @@ const dashboardSlice = createSlice({
       state.dashboard = action.payload
       state.components = JSON.parse(state.dashboard.components)
     },
-    updateComponents: (state, action) => {
+    deleteComponent: (state, action) => {
+      console.log('deleteComponent', action.payload)
+      const deleteIds = action.payload.map(item => item.id);
+      state.components = state.components.filter(component => !deleteIds.includes(component.id));
+      state.status = 'save'
+
+      state.dashboard.components = state.components;
+    },
+    setComponent: (state, action) => {
+      state.component = action.payload;
+    },
+    setComponents: (state, action) => {
       state.components = action.payload;
+      state.dashboard.components = action.payload;
     },
     addComponent: (state, action) => {
       console.log('add com', action.payload)
@@ -130,7 +143,9 @@ const dashboardSlice = createSlice({
 
 export const { 
   setDashboard,
-  updateComponents,
-  addComponent
+  addComponent,
+  deleteComponent,
+  setComponent,
+  setComponents,
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

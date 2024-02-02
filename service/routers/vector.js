@@ -19,7 +19,7 @@ routerVector
   .post('/update/:id/:name', updateVector)
   .delete('/update/:id/:name', deleteVector)
   .post('/remove/all', removeVector)
-  .get('/:id/:name', getVector)
+  .post('/:id/:name', getVector)
   .get('/', getAllVector)
   
 
