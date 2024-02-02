@@ -51,6 +51,9 @@ const iamSlice = createSlice({
     user: null,
     billing: null,
     token:  null,
+    
+    vector: {},
+    vectors: [],
 
     changelogs: [],
     news: [],
@@ -86,6 +89,12 @@ const iamSlice = createSlice({
           state.openModal = false;
         }
     },
+    setVector: (state, action) => {
+      state.vector = action.payload
+    },
+    setVectors: (state, action) => {
+      state.vectors = action.payload
+    }
 
     // otras acciones...
   },
@@ -295,6 +304,8 @@ const iamSlice = createSlice({
 export const { 
   setUser,
   setModal,
+  setVector,
+  setVectors,
 } = iamSlice.actions;
 
 

@@ -43,9 +43,11 @@ export const iniVector = (obj) => {
 
 export const openVector = async (pathName) => {
   try {
+    const token = localStorage.getItem('token')
     const res = await apiBackend.post(
       '/vector/file',
       {
+        token,
         path: pathName
       }
     )
@@ -80,11 +82,12 @@ export const openVector = async (pathName) => {
 }
 
 export const openFile = async (data) => {
-
   try {
+    const token = localStorage.getItem('token')
     const res = await apiBackend.post(
       '/vector/file',
       {
+        token,
         path: data.uri,
         vector: data.vector
       }
@@ -116,10 +119,12 @@ export const openFile = async (data) => {
 
 export const loadVector = async (vectorId, name, file) => {
   try {
-    console.log('loadVector', vectorId, name, file)
+    const token = localStorage.getItem('token')
+    // console.log('loadVector', vectorId, name, file)
     const res = await apiBackend.post(
       `/vector/load/${vectorId}/${name}`,
       {
+        token,
         file,
         vector: [2, 2]
       }
@@ -136,18 +141,16 @@ export const loadVector = async (vectorId, name, file) => {
 }
 
 
-export const addVector = async (obj, overwrite = false) => {
+export const addVector = async (id, name, data) => {
   try {
+    const token = localStorage.getItem('token')
     const res = await apiBackend.post(
       '/vector/',
       {
-        overwrite,
-        vectorId: encodeVector({
-          workspaceId: obj.workspaceId,
-          projectId: obj.projectId
-        }),
-        name: obj.name,
-        data: obj.data
+        token,
+        id,
+        name,
+        data
       }
     )
     console.log('add vector', res)
@@ -159,9 +162,11 @@ export const addVector = async (obj, overwrite = false) => {
 
 export const updateVector = async (vectorId, name, data) => {
   try {
+    const token = localStorage.getItem('token')
     const res = await apiBackend.post(
       `/vector/update/${vectorId}/${name}`,
       {
+        token,
         data
       }
     )
@@ -173,8 +178,13 @@ export const updateVector = async (vectorId, name, data) => {
 
 export const deleteVector = async (vectorId, name) => {
   try {
+    const token = localStorage.getItem('token')
     const res = await apiBackend.delete(
-      `/vector/${vectorId}/${name}`
+      `/vector/${vectorId}/${name}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
     )
     console.log('dd', res)
     return res.data.data.slice(0, 4)
@@ -186,9 +196,11 @@ export const deleteVector = async (vectorId, name) => {
 export const removeAllVector = async (pathName) => {
   try {
     console.log('wfiri', pathName)
+    const token = localStorage.getItem('token')
     const res = await apiBackend.post(
       `/vector/remove/all`,
       {
+        token,
         path: pathName
       }
     )
@@ -200,14 +212,28 @@ export const removeAllVector = async (pathName) => {
 }
 
 
-export const getVector = async (vectorId, name) => {
+export const getVector = async (vectorId, name, search = false) => {
   try {
-    const res = await apiBackend.get(
-      `/vector/${vectorId}/${name}`
+    const token = localStorage.getItem('token')
+
+    // console.log('eeeee', `/vector/${vectorId}/${name}`)
+    // const res = await apiBackend.get(
+    //   `/vector/${vectorId}/${name}`,{
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     }
+    //   }
+    // )
+
+     const res = await apiBackend.post(
+      `/vector/${vectorId}/${name}`,{
+        token,
+        search
+      }
     )
 
     console.log('rrr', res)
-    return res.data.data.data
+    return res.data
   } catch (error) {
     console.error('Error:', error)
   }
@@ -215,7 +241,12 @@ export const getVector = async (vectorId, name) => {
 
 export const getAllVector = async () => {
   try {
-    const res = await apiBackend.get('/vector')
+    const token = localStorage.getItem('token')
+    const res = await apiBackend.get('/vector', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+    })
     // console.log('dd', res.data.data.data)
     return res.data.data.data.slice(0, 4)
   } catch (error) {

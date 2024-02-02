@@ -348,3 +348,5 @@ export const setFileDragging = (src) => (dispatch) => {
     console.error('Ha ocurrido un error al crear la carpeta:', error)
   }
 }
+
+

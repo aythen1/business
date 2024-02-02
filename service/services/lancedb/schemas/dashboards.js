@@ -11,6 +11,7 @@ const schemaDashboards = {
 
         filter: { type: 'string' },
         
+        // datas
         components: {
             type: 'array',
             items: {
