@@ -63,14 +63,14 @@ const fetchsDashboard = async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     
-    console.log('1234 - dashboard', token)
+    // console.log('1234 - dashboard', token)
     
     const path = encodeVector(ID)
     const result = await isAuth(token)
 
     if (result) {
       const data = await getVector(path, 'dashboards')
-      console.log('fetchsDashboard', data)
+      // console.log('fetchsDashboard', data)
       if (Array.isArray(data)) {
         return res.status(200).send(data)
       }
