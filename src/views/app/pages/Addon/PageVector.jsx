@@ -221,18 +221,21 @@ export const ModalVectorVersion = ({ }) => {
                     // Si la versión principal no está en el array, agrégala con la subversión
                     organizedVersions.push({
                         version: majorVersion,
-                        subVersions: [{ title, version, createdAt, code }],
+                        versions: [{ title, version, createdAt, code }],
                     });
                 } else {
                     // Si la versión principal ya está en el array, añade la subversión
-                    organizedVersions[majorVersionIndex].subVersions.push({ title, version, createdAt, code });
+                    organizedVersions[majorVersionIndex].versions.push({ title, version, createdAt, code });
                 }
             } else {
                 // Si es una versión principal sin subversión, agrégala directamente al array
                 organizedVersions.push({
                     version: majorVersion,
-                    main: [{ title, version, createdAt, code }],
-                    subVersions: [],
+                    title,
+                    version,
+                    createdAt,
+                    code,
+                    versions: [],
                 });
             }
         });
@@ -315,7 +318,7 @@ export const ModalVectorVersion = ({ }) => {
                                 <input
                                     type="checkbox"
                                 />
-                                Jussi's Seaside Hotel
+                                {item.title}
                             </div>
                             {false && (
                                 <div className={styles.filter}>
