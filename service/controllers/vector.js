@@ -46,7 +46,7 @@ const isAuth = async (token) => {
   const data = await decodeToken(token)
   const path = encodeVector(ID)
 
-  console.log('ddd', data)
+  // console.log('ddd', data)
 
   const options = [
     { field: 'id', operator: '==', value: data.id },

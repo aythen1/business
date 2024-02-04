@@ -96,6 +96,10 @@ body{
     background: #f8f8f8;
     overflow-y: scroll;
     overflow-x: hidden;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
 }
 
 

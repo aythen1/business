@@ -1,26 +1,24 @@
 "use client";
 
+//views\app\components\MenuRightComponent\listComponent.module.css
+
 import React, { useEffect, useState, useRef } from "react";
-import ReactDOM from 'react-dom';
+
+import { useDispatch, useSelector } from 'react-redux'
 
 
-import html2canvas from 'html2canvas';
-
-
-
-import Editor from "@monaco-editor/react";
-import { useEditor } from "@tldraw/tldraw";
-import { Tldraw } from "@tldraw/tldraw";
 import { getSvgAsImage } from "@/lib/getSvgAsImage";
 import { blobToBase64 } from "@/lib/blobToBase64";
 
 
-import IconCopy from './assets/copy.png'
-import IconDelete from './assets/delete.png'
-import IconMove from './assets/move.png'
-import IconCode from './assets/code.png'
-import IconView from './assets/view.png'
-import IconGPT from './assets/gpt.png'
+import PageVector from './PageVector'
+
+
+import {
+  setModal
+} from '@/slices/iamSlice'
+
+
 
 
 // import DOMPurify from 'dompurify';
@@ -41,6 +39,8 @@ function obtainContent(texto, type = 'html') {
     return null;
   }
 }
+
+
 
 const ExportButton = ({ setHtml }) => {
   // const editor = useEditor();
@@ -118,326 +118,87 @@ const ExportButton = ({ setHtml }) => {
 
 
 export const AddonEditor = ({
-  setOpenMenuRight,
-  setOpenChatBot
+
 }) => {
-  const [html, setHtml] = useState(htmlExample1);
-
-  const [activeTab, setActiveTab] = useState("preview");
+  const dispatch = useDispatch()
 
 
-
-  const handleEditorChange = (value, event) => {
-    // Este handler se activará cuando cambie el contenido del editor
-    setHtml(value);
-  };
-
-  useEffect(() => {
-    // Puedes agregar aquí cualquier lógica adicional que necesites al actualizar el HTML
-  }, [html, activeTab]);
+  const addon = [{
+    data: [],
+    rpa: [],
+    version: 0,
+    description: ''
+  }]
 
 
+  const config = [{
+    routes: [{
+      query: 'path',
+      body: 'asset'
+    }]
 
-  if (!html) {
-    return null;
-  }
+  }]
 
-  // handle -------------------------------------------------------
+  const value = [{
 
-  const handleComponentCopy = () => {
-    if (hoveredElement) {
-      const el = hoveredElement;
-      const outerHtml = el.outerHTML;
-
-      // Crear un elemento de texto temporal para copiar al portapapeles
-      const tempElement = document.createElement('textarea');
-      tempElement.value = outerHtml;
-      document.body.appendChild(tempElement);
-
-      // Seleccionar y copiar al portapapeles
-      tempElement.select();
-      document.execCommand('copy');
-
-      // Eliminar el elemento temporal
-      document.body.removeChild(tempElement);
-    }
-  }
-
-  const handleComponentDelete = () => {
-    if (hoveredElement) {
-      hoveredElement.remove();
-    }
-  }
-
-  const handleComponentGPT = () => {
-    setOpenChatBot(true)
-  }
-
-  const handleComponentMove = () => {
-    alert(1)
-  }
-
-  const handleComponentCode = () => {
-
-  }
-
-  const handleComponentView = async () => {
-    if (hoveredElement) {
-      alert(1)
-      const canvas = await html2canvas(hoveredElement);
-
-      // Convertir el canvas a una imagen
-      const image = canvas.toDataURL('image/png');
-
-      // Crear un enlace para descargar la imagen
-      const downloadLink = document.createElement('a');
-      downloadLink.href = image;
-      downloadLink.download = 'captura.png'; // Puedes cambiar el nombre del archivo según tus necesidades
-
-      // Simular un clic en el enlace para iniciar la descarga
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    }
-  }
-  // html -----------------------------------------------------------
-  const [isHovered, setIsHovered] = useState(false);
-  const [hoveredElement, setHoveredElement] = useState(null);
-  const [hoveredSelector, setHoveredSelector] = useState('');
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef(null);
-
-  const handleMouseOver = (event) => {
-    if (isAltKeyPressed()) {
-      setIsHovered(true);
-      // Obtener el selector del elemento actual
-      const newHoveredElement = document.elementFromPoint(event.clientX, event.clientY);
-
-      if (newHoveredElement) {
-        setHoveredElement(newHoveredElement);
-        setHoveredSelector(getSelector(newHoveredElement));
-
-        // Obtener la posición del cursor
-        setPosition({ x: event.clientX, y: event.clientY });
-
-        // Agregar className al elemento más profundo
-        newHoveredElement.classList.add('selectedComponent'); // Reemplaza 'tuClassName' con el nombre que desees
-
-        // Agregar div con botones al elemento más profundo
-        addButtonsToElement(newHoveredElement);
-      }
-    }
-  };
-
-  const handleMouseOut = (event) => {
-    setIsHovered(false);
-    setHoveredSelector('');
-
-    const isLeavingToButtons = (
-      event.relatedTarget &&
-      event.relatedTarget.classList.contains('customButtons')
-    );
-
-    // Restablecer className y quitar div con botones solo si no estás saliendo hacia los botones
-    if (hoveredElement && !isLeavingToButtons) {
-      hoveredElement.classList.remove('selectedComponent');
-      removeButtonsFromElement(hoveredElement);
-    }
-
-    // Limpiar la referencia al elemento
-    setHoveredElement(null);
-  };
-
-  const isAltKeyPressed = () => {
-    return window.event ? window.event.altKey : false;
-  };
-
-  const getSelector = (element) => {
-    const selectors = [];
-    let targetElement = element;
-
-    const collectSelectors = (el) => {
-      const id = el.id;
-      if (id) {
-        selectors.push(`#${id}`);
-      }
-
-      const classNames = Array.from(el.classList).join('.');
-      if (classNames) {
-        selectors.push(`.${classNames}`);
-      }
-    };
-
-    collectSelectors(element);
-
-    const selector = selectors.join(' ');
-
-    return selector;
-  };
-
-  const addButtonsToElement = (element) => {
-
-    // Definir el componente CustomButtons localmente
-    const CustomButtons = () => {
-      return (
-        <div className="customButtons">
-          <button onClick={() => handleComponentCopy()}>
-            <img src={IconCopy} />
-          </button>
-          <button onClick={() => handleComponentDelete()}>
-            <img src={IconDelete} />
-          </button>
-          <button onClick={() => handleComponentGPT()}>
-            <img src={IconGPT} />
-          </button>
-          <button onClick={() => handleComponentMove()}>
-            <img src={IconMove} />
-          </button>
-          <button onClick={() => handleComponentCode()}>
-            <img src={IconCode} />
-          </button>
-          <button onClick={() => handleComponentView()}>
-            <img src={IconView} />
-          </button>
-        </div>
-      );
-    };
-
-    // Crear el div con botones
-    const buttonsDiv = document.createElement('div');
-
-    // Montar el componente CustomButtons en el div
-    ReactDOM.render(<CustomButtons />, buttonsDiv);
-
-    // Añadir el div al elemento más profundo
-    element.appendChild(buttonsDiv);
-  };
-
-
-
-
-  const removeButtonsFromElement = (element) => {
-    // Eliminar el div con botones si existe
-    const buttonsDiv = element.querySelector('.customButtons');
-    if (buttonsDiv) {
-      buttonsDiv.remove();
-    }
-  };
-
-
-
+  }]
+  
 
   return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-      className=""
-      style={{
-        width: "calc(100% - 64px)",
-        height: "calc(100% - 64px)",
-      }}
-    >
-      <div className="">
-        <div className="">
-          <TabButton
-            active={activeTab === "new"}
-            onClick={() => {
-              setOpenMenuRight('component')
-            }}
-          >
-            Menu Right
-          </TabButton>
-          <TabButton
-            active={activeTab === "preview"}
-            onClick={() => {
-              setActiveTab("preview");
-            }}
-          >
-            Preview
-          </TabButton>
-          <TabButton
-            active={activeTab === "editor"}
-            onClick={() => {
-              setActiveTab("editor");
-            }}
-          >
-            Editor
-          </TabButton>
-          <TabButton
-            active={activeTab === "code"}
-            onClick={() => {
-              setActiveTab("code");
-            }}
-          >
-            Code
-          </TabButton>
-        </div>
-
-        <button
-          className=""
-          onClick={() => {
-            setHtml(null);
-          }}
-        >
-          {/* ... El botón de cerrar */}
-        </button>
+    <div>
+      <div>
+        Accesos al bot <br />
+        <ul>
+          <li >
+            <button onClick={() => dispatch(setModal(<PageVector />))}>
+              More info
+            </button>
+          </li>
+          <li>
+            <button>
+              Nueva page
+            </button>
+          </li>
+          <li>
+            <button>
+              Eliminar page
+            </button>
+          </li>
+          <li>
+            <button>
+              Crear componente
+            </button>
+          </li>
+        </ul>
       </div>
-      {/* <iframe
-        title="Preview"
-        style={{ width: "100%", height: "100vh" }}
-        srcDoc={html}
-      /> */}
-
-      {activeTab === "preview" ? (
-        <div>
-          <div
-            ref={containerRef}
-            className={`hoverable ${isHovered ? 'hovered' : ''}`}
-            onMouseOver={handleMouseOver}
-            onMouseOut={handleMouseOut}
-            dangerouslySetInnerHTML={{ __html: html }}
+      
+      {addon.map((vector, index) => {
+        return (
+          <ay
+            vector={vector}
+          // data={data}
+          // rpa={rpa}
+          // version={version}
+          // description={description}
           >
-            {/* {isHovered && <div>Hovered Selector: {hoveredSelector}</div>} */}
-          </div>
-          {isHovered && hoveredSelector && (
-            <div>
-              Hovered Selector: {hoveredSelector}
-            </div>
-          )}
-        </div>
-      ) : activeTab === "editor" ? (
-        <div style={{ width: '100%', height: '100vh' }}>
-          <Tldraw
-            persistenceKey="tldraw">
-            <ExportButton setHtml={setHtml} />
-          </Tldraw>
-        </div>
-      ) : (
-        <Editor
-          height="100vh"
-          language="html"
-          theme="vs-dark"
-          value={html}
-          onChange={handleEditorChange}
-          options={{
-            readOnly: false,
-            minimap: { enabled: false },
-          }}
-        />
-      )}
+      // si tiene esto lo elimina literalmente
+            /* esto tambien lo pueda quitar*/
+            Quiero crear un programa de que me permita crear la estructura
+          </ay>
+        )
+      })}
+
+
+      La idea es que puedas combinarlo
+
+
+
     </div>
-  );
+  )
+
 };
 
 
 
 
 
-
-function TabButton({ active, ...buttonProps }) {
-  const className = active
-    ? "px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-t-md focus:outline-none focus:ring"
-    : "px-4 py-2 text-sm font-medium text-blue-500 bg-transparent hover:bg-blue-100 focus:bg-blue-100 rounded-t-md focus:outline-none focus:ring";
-  return <button className={className} {...buttonProps}></button>;
-}

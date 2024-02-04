@@ -30,9 +30,10 @@ svg{
 
   .gird2{
     display: flex;
-    /* align-items: center; */
+    align-items: center;
     gap: 4px;
-    /* justify-content: space-between; */
+    justify-content: space-between;
+    width: 100%;
   }
 
 
@@ -104,7 +105,7 @@ svg{
     display: block;
     outline: none;
     width: 100%;
-    font-size: 12px;
+    font-size: 15px;
     line-height: 24px;
     padding: 8px calc(32px) 8px 8px;
     height: 55px;
@@ -180,8 +181,8 @@ svg{
     box-shadow: none;
     box-sizing: border-box;
     color: rgb(63, 66, 80);
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 400;
     line-height: 24px;
     outline: 0px !important;
     padding: 6px;
@@ -289,6 +290,9 @@ svg{
   .button{
     margin-top: 14px;
     width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     button{
       width: 100%;
       display: inline-flex;
@@ -403,4 +407,63 @@ svg{
       border-radius: 2px;
     }
   }
+}
+
+
+
+
+/**/
+.logo{
+  width: 112px;
+  min-width: 112px;
+  height: 112px;
+  margin-top: 4px;
+  border-radius: 12px;
+  background: #f2f2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  .initial{
+    font-size: 50px;
+    font-weight: 600;
+    color: #d2d2d2;
+    margin-top: -6px;
+  }
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  &:hover{
+    background: #e4e3e3;
+    .initial{
+      color: #c8c8c8;
+    }
+  }
+}
+
+
+
+.dropPhoto{
+  width: 100%;
+  min-height: 100px;
+  border: 2px solid #e6e6e6;
+  border-style: dashed;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover{
+    background: #fafafa;
+  }
+  label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #b4b4b4;
+  }
+
 }

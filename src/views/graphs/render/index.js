@@ -1,5 +1,6 @@
 export { default as BarChart } from './BarChart';
 
+export { default as LineScatter } from './LineScatter';
 export { default as SimpleLineChart } from './SimpleLineChart';
 export { default as SimpleLineStraightChart } from './SimpleLineStraightChart';
 export { default as AreaLineChart } from './AreaLineChart';

@@ -6,8 +6,9 @@ import { Route, Routes, Outlet, useParams } from 'react-router-dom';
 // import NotFound from '../pages/404'
 
 
-import { loadComponent, AddonComponent } from '@addon/utils'
+import { loadComponent } from '@addon/utils'
 import { AddonEditor } from '@addon/Editor'
+import { AddonCard } from '@addon/Card'
 
 import Users from './users';
 
@@ -25,20 +26,20 @@ const Addon = ({
     path: 'user',
     element: loadComponent('./users')
   }]
- 
+
   return (
     <div >
-        <Routes>
-              <Route path="h" element={<AddonComponent  />} />
-              <Route path="editor" element={<AddonEditor setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot}/>} />
-              <Route path="/*" element={<utlet />}>
-                {initialRoute.map((item, index) => (
+      <Routes>
+        <Route path="/*" element={<Outlet />}>
+          <Route path="card" element={<AddonCard />} />
+          <Route path="editor" element={<AddonEditor setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot} />} />
+          {initialRoute.map((item, index) => (
 
-                <Route key={index} path={item.path + '/*'} element={item.element} />
-                ))}
-               
-              </Route>
-            </Routes>
+            <Route key={index} path={item.path + '/*'} element={item.element} />
+          ))}
+
+        </Route>
+      </Routes>
     </div>
   )
 }
