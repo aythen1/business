@@ -18,8 +18,8 @@ const allSchemas = require('./schema')
 const decodeVector = (base64Str) => {
     const str = atob(base64Str)
 
-    const [path0, path1] = str.split('/')
-    return { path0, path1 }
+    const [path0, path1, path2] = str.split('/')
+    return { path0, path1, path2 }
 }
 
 
@@ -79,19 +79,26 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
 
-    const schemaExists = allSchemas.hasOwnProperty(name);
-    if (!schemaExists) {
-        return "El esquema no existe";
+    let schema
+
+    if(path0 == 'addon' || path0 == 'ticket') {
+        schema = addRelationsToSchema(allSchemas['vectors'])
+    }else{
+        const schemaExists = allSchemas.hasOwnProperty(name);
+        if (!schemaExists) {
+            return "El esquema no existe";
+        }
+    
+        schema = addRelationsToSchema(allSchemas[name])
     }
 
-    const schema = addRelationsToSchema(allSchemas[name])
 
     try {
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
     } catch (err) {
         const db = await lancedb.connect(uri);
-
+        
         const emptyData = generateEmptyObjectFromSchema(schema)
         emptyData.vector = vector
         emptyData.id = uuidv4()
@@ -189,6 +196,8 @@ async function updateVector(id, name, vector = [0, 0], data) {
             return "El objeto 'data' no cumple con el esquema";
         }
 
+        console.log('valid', name, data)
+
 
         if (!data.id) {
             return "Debe existir el ID";
@@ -200,6 +209,8 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
         const searchString = generateSearchString(conditions);
 
+        console.log('search', searchString)
+
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
 
@@ -209,27 +220,31 @@ async function updateVector(id, name, vector = [0, 0], data) {
             .where(searchString)
             .execute();
 
+        console.log('query', query)
+
         if (query.length > 0) {
             // query[0].isverified = true
-            query[0].vector = vector
             
             let updatedRecord = { ...query[0], ...data };
             // if(updatedRecord._distance) delete query[0]._distance;
             if ('_distance' in updatedRecord) delete updatedRecord._distance;
-            
             updatedRecord = generateEmptyObjectFromSchema(allSchemas[name], updatedRecord)
-            console.log('updated', updatedRecord)
+            updatedRecord.vector = vector
+            
             await tbl.update({ where: searchString, values: updatedRecord })
+            console.log('updated', updatedRecord)
             
-            const updatedQuery = await tbl
-            .search(vector)
-            .where(searchString)
-            .execute();
+            // const updatedQuery = await tbl
+            // .search(vector)
+            // .where(searchString)
+            // .execute();
+
+            // console.log('updatedQuery', updatedQuery)
             
-            return updatedQuery[0];
+            return updatedRecord;
         } else {
             // No se encontró ningún usuario para actualizar
-            return "Usuario no encontrado";
+            return 400;
         }
     } catch (error) {
         console.log('ERROR', error)
@@ -478,7 +493,8 @@ const getGraphVector = async (uri, conditions, _vector) => {
 async function getVector(id, name, vector = [0, 0], conditions = []) {
     const { path0, path1 } = decodeVector(id)
     const uri = 'data/vector/' + path0 + '/' + path1
-
+    
+    
 
     // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
     const regex = /query\s*{\s*([\s\S]*?)\s*}/;
@@ -487,8 +503,8 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
         const resp = await getGraphVector(uri, name, vector)
         return resp
     }
-
-
+    
+    console.log('uri', uri)
     try {
         const db = await lancedb.connect(uri)
         const tbl = await db.openTable(name)

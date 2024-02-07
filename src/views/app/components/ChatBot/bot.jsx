@@ -40,10 +40,14 @@ import { RecordViewer } from './component/record-viewer'
 
 
 const Bots = ({
+  gpt: _gpt,
+  gpts,
   message,
   openVector
 }) => {
   //   const [internalHistory, setInternalHistory] = useState(history)
+  const [gpt, setGpt] = useState(_gpt)
+  const [listGpts, setListGpts] = useState(gpts)
   const [internalMessage, setInternalMessage] = useState(message)
 
   //   const [internalType, setInternalType] = useState(type)
@@ -91,10 +95,8 @@ const Bots = ({
 
 
 
-  
+
   const renderViewer = (message) => {
-
-
     const allowDrop = [
       'video/vnd.dlna.mpeg-tts',
       'text/javascript',
@@ -173,6 +175,28 @@ const Bots = ({
     }
   }
 
+
+
+  const handleClickFav = (value, id) => {
+    const data = {
+      id,
+      fav: value
+    }
+
+    dispatch(updateDefault({
+      table: 'gpts',
+      data
+    }))
+  }
+
+
+  const selectedBot = (item) => {
+    setListGpts([])
+    setGpt(item)
+  }
+
+
+
   return (
     <div
       ref={chatContainerRef}
@@ -184,10 +208,126 @@ const Bots = ({
         </div>
       ))}
 
-      {internalMessage.length === 0 && (
-        // <InfoAythen />
+      {gpt ? (
+        <div className={styles["grid-gpt"]}>
+          <div
+            className={styles["grid"]}
+          >
+            <div className={styles["container"]}>
+              <div className={styles["header"]} >
+                <img src={gpt.image} className={styles["image"]} />
+                <div className={styles["info"]}>
+                  <b className={styles["title"]}>
+                    <div className={styles["buttonFav"]}>
+                      {gpt.fav ? (
+                        <button
+                          className={styles["active"]}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleClickFav(false, gpt.id)
+                          }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M7.8 2c-.5 0-1 .2-1.3.6A2 2 0 0 0 6 3.9V21a1 1 0 0 0 1.6.8l4.4-3.5 4.4 3.5A1 1 0 0 0 18 21V3.9c0-.5-.2-1-.5-1.3-.4-.4-.8-.6-1.3-.6H7.8Z" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <button
+                          className={styles["desactive"]}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleClickFav(true, gpt.id)
+                          }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m17 21-5-4-5 4V3.9c0-.2 0-.5.2-.6l.6-.3h8.4c.2 0 .4 0 .6.3l.2.6V21Z" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    {gpt.title}
+                  </b>
+                  <div className={styles["label"]}>
+                    <span className={styles["author"]}>
+                      By khanack.org
+                    </span>
+                    <span className={styles["downlaod"]}>
+                      50.5K
+                    </span>
+                  </div>
+                </div>
+              </div>
+            <p className={styles["description"]}>
+              {gpt.description}
+            </p>
+            </div>
+          </div>
+        </div>
+      ) : listGpts.length > 0 ? (
+        <div className={styles["grid-gpts"]}>
+          {listGpts.map((item, index) => (
+            <div
+              key={index}
+              onClick={() => selectedBot(item)}
+              className={styles["grid"]}
+            >
+              <div className={styles["left"]}>
+                <img src={item.image} className={styles["image"]} />
+              </div>
+              <div className={styles["container"]}>
+                <b className={styles["title"]}>
+                  <div className={styles["buttonFav"]}>
+                    {item.fav ? (
+                      <button
+                        className={styles["active"]}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleClickFav(false, item.id)
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M7.8 2c-.5 0-1 .2-1.3.6A2 2 0 0 0 6 3.9V21a1 1 0 0 0 1.6.8l4.4-3.5 4.4 3.5A1 1 0 0 0 18 21V3.9c0-.5-.2-1-.5-1.3-.4-.4-.8-.6-1.3-.6H7.8Z" />
+                        </svg>
+                      </button>
+                    ) : (
+                      <button
+                        className={styles["desactive"]}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleClickFav(true, item.id)
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m17 21-5-4-5 4V3.9c0-.2 0-.5.2-.6l.6-.3h8.4c.2 0 .4 0 .6.3l.2.6V21Z" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  {item.title}
+                </b>
+                <p className={styles["description"]}>
+                  {item.description}
+                </p>
+                <div className={styles["label"]}>
+                  <span className={styles["author"]}>
+                    By khanack.org
+                  </span>
+                  <span className={styles["downlaod"]}>
+                    50.5K
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
         <div>
-          No existe nada que sea el sistema de pago ¿?
+          {internalMessage.length === 0 && (
+            // <InfoAythen />
+            <div>
+              No existe nada que sea el sistema de pago ¿?
+            </div>
+          )}
         </div>
       )}
       {/* <ImageViewer /> */}

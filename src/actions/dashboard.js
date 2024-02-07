@@ -11,7 +11,6 @@ export const fetchsDashboard =
   createAsyncThunk('dashboard/fetchsDashboard',
     async (item, { dispatch }) => {
       try {
-        console.log('oewinfujhri')
         const token = localStorage.getItem('token')
 
         const res = await apiBackend.get(
@@ -20,11 +19,8 @@ export const fetchsDashboard =
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
         });
-    
-        console.log('res', res)
-    
+  
         return res.data
       } catch (error) {
         console.log('err', error)
@@ -66,10 +62,13 @@ export const addDashboard =
     async (dashboard, { dispatch }) => {
       try {
         const token = localStorage.getItem('token')
-        console.log('token', dashboard)
+
         const res = await apiBackend.post('/dashboard', {
-          token,
           dashboard
+        },{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
         })
 
         return res;
@@ -84,10 +83,12 @@ export const updateDashboard =
     async (dashboard, { dispatch }) => {
       try {
         const token = localStorage.getItem('token')
-        console.log('token', dashboard)
         const res = await apiBackend.put('/dashboard', {
-          token,
           dashboard
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
         })
 
         return res;

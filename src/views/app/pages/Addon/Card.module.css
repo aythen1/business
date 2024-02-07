@@ -88,7 +88,7 @@
 
 
 .template {
-  z-index: -1;
+  /* z-index: -1; */
   width: 100%;
   height: 100vh;
   /* background-color: red; */
@@ -237,10 +237,8 @@
       .card {
           .li {
             background: #fff;
-            /* box-shadow: 0px 0px 0px 1000px #fff; */
             border: none;
-            /* transform: rotatey(0deg); */
-            animation: myBoxshadow 1s ease-in-out forwards;
+            animation: myBoxshadow 2s ease-in-out forwards;
             .credit {
               animation: drift 10s linear infinite;
               position: relative;
@@ -317,18 +315,18 @@
 @keyframes drift {
   0% {
     transform: rotatex(0deg) rotatey(20deg) rotatez(0deg);
-    box-shadow: 15px 20px 16px 27px #f6f6f6
+    box-shadow: -15px 20px 16px 27px #f6f6f6
   }
 
   50%{
     transform: rotatex(-180deg) rotatey(0deg) rotatez(10deg);
-    box-shadow: 15px -20px 16px 27px #f6f6f6
+    box-shadow: -15px -20px 16px 27px #f6f6f6
   }
   
   100% {   
     /* top: 200px; */
     transform: rotatex(-360deg) rotatey(20deg) rotatez(0deg);
-    box-shadow: 15px 20px 16px 27px #f6f6f6
+    box-shadow: -15px 20px 16px 27px #f6f6f6
   }
 }
 

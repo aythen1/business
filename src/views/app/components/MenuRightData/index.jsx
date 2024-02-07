@@ -104,7 +104,6 @@ const MenuRightData = ({ }) => {
       };
   
       const resp = await addVector(tokenVector, 'datas', result);
-      console.log('edwfrf resp', resp);
     };
   
     reader.readAsArrayBuffer(file);

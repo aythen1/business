@@ -14,7 +14,6 @@ import useDarkMode from 'use-dark-mode';
 
 
 import { confirm, login } from '@/actions/iam'
-// import { verifyUser } from '../../../../service/controllers/iam';
 
 
 const Login = ({ onLogin }) => {
@@ -68,7 +67,7 @@ const Login = ({ onLogin }) => {
     
     if (urlToken) {
       // Si el token existe, puedes enviarlo a la lógica de verificación
-      dispatch(confirm(urlToken));
+      dispatch(confirm({token: urlToken}));
     } 
   }, [urlToken])
 
@@ -101,16 +100,19 @@ const Login = ({ onLogin }) => {
   };
 
   const handleLogin = async () => {
-
     if (!username || !password) {
       setErrorMessage("Invalid credentials");
       return;
     }
-
     // Realizar redirección a la ruta /app
     dispatch(login({ user: username, password }))
-    
   };
+
+  useEffect(() => {
+    if(error){
+      setErrorMessage(error)
+    }
+  }, [error])
 
 
   const handleSignUp = () => {
@@ -138,7 +140,8 @@ const Login = ({ onLogin }) => {
           Y accede a tu espacio personal 
         </p>
       </div>
-      <div className={styles["frame-1547755085"]}>
+      {false && (
+        <div className={styles["frame-1547755085"]}>
         <div className={styles["frame-1547755077"]}>
           <div className={styles["rectangle-42020"]}></div>
           <svg
@@ -218,6 +221,8 @@ const Login = ({ onLogin }) => {
           </svg>
         </div>
       </div>
+      )}
+      
       <div className={styles["frame-1547755084"]}>
         <div className={styles["line-107"]}></div>
         <div className={styles["or"]}>OR </div>

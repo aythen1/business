@@ -21,8 +21,6 @@ export const fetchsAddon =
           }
         );
 
-        console.log('resp', resp)
-
         return resp.data;
       } catch (error) {
         throw error;
@@ -35,9 +33,17 @@ export const fetchAddon =
   createAsyncThunk('addon/fetchAddon',
     async (addonId, { dispatch }) => {
       try {
-        console.log('edwed')
+        const token = localStorage.getItem('token')
+        const resp = await apiBackend.get(
+          `/addon/${addonId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+          }
+        );
 
-        return user;
+        return resp.data;
       } catch (error) {
         throw error;
       }
@@ -59,13 +65,42 @@ export const addAddon =
           }
         );
 
-        console.log('resp', resp)
+        console.log('respeeeee', resp)
         return 'eee';
       } catch (error) {
         throw error;
       }
     }
   );
+
+
+
+export const addVectorAddon =
+  createAsyncThunk('addon/addVectorAddon',
+    async ({ addon, vector }, { dispatch }) => {
+      try {
+        const token = localStorage.getItem('token')
+        const resp = await apiBackend.post(
+          '/addon/vector',
+          { addon, vector },
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+          }
+        );
+
+        console.log('rrr', resp)
+
+        return resp.data[0];
+      } catch (error) {
+        throw error;
+      }
+    }
+  );
+
+
+
 
 export const updateAddon =
   createAsyncThunk('addon/updateAddon',
@@ -82,8 +117,6 @@ export const updateAddon =
           }
         );
 
-
-        console.log('resp', resp)
         return 'user';
       } catch (error) {
         throw error;
@@ -137,9 +170,6 @@ export const visionAddon =
           }
         );
 
-
-        console.log('resp', resp)
-
         return 'edew';
       } catch (error) {
         throw error;
@@ -151,13 +181,13 @@ export const visionAddon =
 
 export const codeAddon =
   createAsyncThunk('addon/codeAddon',
-    async (code, { dispatch }) => {
+    async ({code = null, user}, { dispatch }) => {
       try {
         console.log('edwed')
         const token = localStorage.getItem('token')
         const resp = await apiBackend.post(
           '/addon/code',
-          { code },
+          { code, user },
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -165,8 +195,6 @@ export const codeAddon =
           }
         );
 
-
-        console.log('resp', resp)
         return resp.data;
       } catch (error) {
         throw error;
@@ -191,9 +219,6 @@ export const rpaAddon =
             },
           }
         );
-
-
-        console.log('resp', resp)
 
         return 'edew';
       } catch (error) {

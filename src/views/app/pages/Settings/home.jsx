@@ -59,7 +59,7 @@ const Home = ({
 
 
     useEffect(() => {
-        console.log('click dashboard', stateTable)
+        // console.log('click dashboard', stateTable)
         // if(stateTable.startsWith('edit-item:')){
         //   const id = stateTable.split(':')[1]
         //   const index = users.findIndex(user => user.id === id);
@@ -119,8 +119,8 @@ const Home = ({
     const [listNotes, setListNotes] = useState([])
 
     useEffect(() => {
-        if (changelogs.length == 0) {
-            dispatch(fetchsDefault())
+        if (changelogs.length == 0 || news.length == 0) {
+            dispatch(fetchsDefault({}))
         }
     }, [])
 
@@ -582,7 +582,7 @@ const ModalAddAddon = ({ styles, addon }) => {
 
 
     const handleEditAddon = () => {
-        navigate(`/${'es'}/app/addon/editor`)
+        navigate(`/${'es'}/app/addon/${state.id}`)
         dispatch(setModal(null))
     }
 
@@ -590,7 +590,6 @@ const ModalAddAddon = ({ styles, addon }) => {
 
     // -------------------------------------z
     const imgRef = useRef(null);
-    // const imgErrorRef = useRef(null);
 
     const [imageError, setImageError] = useState(false);
 
@@ -679,7 +678,6 @@ const ModalAddAddon = ({ styles, addon }) => {
                         <img
                             ref={imgRef}
                             src={`http://localhost:3001/service/v1/addon/logo/${state.id}`}
-                        // onError={handleImageError}
                         />
                     )}
                     <input

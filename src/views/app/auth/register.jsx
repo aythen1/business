@@ -129,7 +129,8 @@ const Register = ({ onLogin }) => {
           Y accede a tu espacio personal
         </p>
       </div>
-      <div className={styles["frame-1547755085"]}>
+      {false && (
+        <div className={styles["frame-1547755085"]}>
         <div className={styles["frame-1547755077"]}>
           <div className={styles["rectangle-42020"]}></div>
           <svg
@@ -209,6 +210,8 @@ const Register = ({ onLogin }) => {
           </svg>
         </div>
       </div>
+      )}
+      
       <div className={styles["frame-1547755084"]}>
         <div className={styles["line-107"]}></div>
         <div className={styles["or"]}>OR </div>

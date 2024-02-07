@@ -25,6 +25,12 @@ import IconSettings from '../../DashBoard/assets/IconSettings'
 
 export const TableRender = ({ items = [], filteredItems = [], setStateTable }) => {
     const renderCell = (item, filter) => {
+
+        if (filter.component) {
+            const Component = filter.component
+            console.log('item', item)
+            return <Component item={item} setStateTable={setStateTable} />
+        }
         switch (filter.tag) {
             // Puedes agregar más casos según tus necesidades
             case 'options':
@@ -160,14 +166,14 @@ const RenderUser = ({ item, filter, setStateTable }) => {
             className={styles.renderUser}
             onClick={() => setStateTable(`edit-item:${item.id}`)}
         >
-            <div className={styles.dot}></div>
+            <div className={`${styles.dot} ${item.isverified && styles.active}`} />
             <div className={styles.avatar}>
                 {imageError ? (
                     <div className={styles.initial}>
                         {item.user.charAt(0)}
                     </div>
                 ) : (
-                    <img src={`/service/v1/user/avatar${item.id}`} onError={handleImageError} />
+                    <img src={`http://localhost:3001/service/v1/iam/user/${item.id}`} onError={handleImageError} />
                 )}
             </div>
             <div className={styles.info}>
@@ -183,55 +189,41 @@ const RenderUser = ({ item, filter, setStateTable }) => {
 };
 
 
-const RenderOptions = ({ name, items, setStateTable }) => {
+const RenderOptions = ({ name, item, setStateTable }) => {
 
-    const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
+    const [visiblePopupSettings, setVisiblePopupSettings] = useState(false);
 
-    const togglePopupSettings = (instanceIndex) => {
-        setVisiblePopupSettings((prevVisiblePopups) => ({
-            ...prevVisiblePopups,
-            [instanceIndex]: !prevVisiblePopups[instanceIndex]
-        }))
-    }
+  const togglePopupSettings = () => {
+    setVisiblePopupSettings((prevVisiblePopup) => !prevVisiblePopup);
+  };
 
-    const closePopup = (instanceIndex) => {
-        setVisiblePopupSettings((prevVisiblePopups) => ({
-            ...prevVisiblePopups,
-            [instanceIndex]: false
-        }))
-    }
+  const closePopup = () => {
+    setVisiblePopupSettings(false);
+  };
 
     return (
-        <div>
-            <div>
-                &nbsp;
-            </div>
-            {items && items.map((item, index) => (
-                <div key={index}>
-                    <div className={styles.instanceSettings}>
-                        <button
-                            className={styles.button}
-                            // onClick={handlePopupSettings}
-                            onClick={() => togglePopupSettings(index)}
-                        >
-                            <IconSettings width={'30'} height={'30'} />
-                        </button>
-                        {visiblePopupSettings[index] && (
-                            <ul
-                                className={styles.popupSettings}
-                                onMouseLeave={() => closePopup(index)}
-                            >
-                                <li onClick={() => setStateTable(`edit-item:${item.id}`)}>
-                                    Edit Item
-                                </li>
-                                <li onClick={() => setStateTable(`delete-item:${item.id}`)}>
-                                    Delete Item
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                </div>
-            ))}
+
+        <div className={styles.instanceSettings}>
+            <button
+                className={styles.button}
+                // onClick={handlePopupSettings}
+                onClick={() => togglePopupSettings()}
+            >
+                <IconSettings width={'30'} height={'30'} />
+            </button>
+            {visiblePopupSettings && (
+                <ul
+                    className={styles.popupSettings}
+                    onMouseLeave={() => closePopup()}
+                >
+                    <li onClick={() => setStateTable(`edit-item:${item.id}`)}>
+                        Edit Item
+                    </li>
+                    <li onClick={() => setStateTable(`delete-item:${item.id}`)}>
+                        Delete Item
+                    </li>
+                </ul>
+            )}
         </div>
     );
 };

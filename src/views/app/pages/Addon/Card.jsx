@@ -137,10 +137,14 @@ export const AddonCard = () => {
             }
 
             [class^="TopBar"] {
+              z-index: 1;
+              position: fixed;
+              width: 100%;
               background-color: transparent;
             }
 
             [class^="Container"] {
+              height: 100vh;
               overflow-y: hidden;
               background-color: transparent;
             }

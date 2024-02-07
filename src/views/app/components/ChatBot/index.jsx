@@ -60,31 +60,20 @@ const ChatBot = ({
   const navigate = useNavigate()
 
   const [workspaceId] = useState(null)
-  // const [workspaceId, setWorkspaceId] = useState(null)
-  // const [projectId, setProjectId] = useState(null)
-  // const [space] = useState(null)
-  // const [page] = useState(null)
-  // const [component] = useState(null)
+
+
+  const { gpts } = useSelector((state) => state.iam) 
+
+  const [ listGpts, setListGpts ] = useState([])
+
   const [file, setFile] = useState(null)
-  // const [file, setFile] = useState(null)
-
-
-  // ------------------------------------------------------------------------------------------------------------
-  
   const [tokenVector, setTokenVector] = useState('' || null)
-  
-  
     const [input, setInput] = useState('')
     const [message, setMessage] = useState([])
-  
-    //
     const [dragging, setDragging] = useState(false)
-    // const [dragging, setDragging] = useState(false)
     const [history, setHistory] = useState([])
   // ------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------
-  // ------------------------------------------------------------------------------------------------------------
-  
+
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
   const pickerRef = useRef(null);
@@ -149,7 +138,6 @@ const ChatBot = ({
         // const blob = new Blob([fileContent], { type })
         // formData.append('image', base64Content, droppedFile.name)
   
-        // console.log('eeeeeeeeeeeeeeeeee', formData)
         // hay que guardar y obtener un id al azar
 
         const file = {
@@ -165,8 +153,7 @@ const ChatBot = ({
           vector,
           uri
         }
-        console.log('dropMessage', dropMessage)
-  
+
         // console.log('wdediijdejiedj load')
         handleAddMessage(dropMessage, type)
         // console.log('onload Filecontent', fileContent)
@@ -192,7 +179,11 @@ const ChatBot = ({
       const newValue = event.target.value
   
       setInput(newValue)
-      if (event.key === 'Enter') {
+
+      if(input.startsWith('/')){
+        console.log('gpts', gpts)
+        setListGpts(gpts)
+      }else if (event.key === 'Enter') {
         handleAddMessage(newValue)
         setInput('')
       }
@@ -323,7 +314,7 @@ const ChatBot = ({
             className="dark:bg-dark-900 dark:text-white"
           >
             <div className={styles["ChatBotRight"]}>
-              <Bot message={message} openVector={openVector} />
+              <Bot message={message} gpts={gpts} openVector={openVector}  />
             </div>
               <div className={styles["botFooter"]}>
                 <button onClick={() => setShowPicker((val) => !val)}>😊</button>

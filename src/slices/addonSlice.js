@@ -8,6 +8,8 @@ import {
   updateAddon,
   deleteAddon,
 
+  addVectorAddon,
+
   visionAddon,
   codeAddon,
   rpaAddon,
@@ -37,10 +39,8 @@ const addonSlice = createSlice({
     addon: {},
     addons: [],
 
-    component: {},
-    components: [
-      initialComponent
-    ]
+    vector: {},
+    vectors: []
   },
   reducers: {
     setAddon: (state, action) => {
@@ -72,7 +72,8 @@ const addonSlice = createSlice({
 
       .addCase(fetchAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.addon = action.payload.addon;
+        state.vectors = action.payload.vectors;
       })
       .addCase(fetchAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -102,6 +103,11 @@ const addonSlice = createSlice({
 
       .addCase(deleteAddon.fulfilled, (state, action) => {
         state.addons = state.addons.filter(addon => addon.id !== action.payload.id);
+      })
+
+
+      .addCase(addVectorAddon.fulfilled, (state, action) => {
+        state.vectors.push(action.payload)
       })
 
 

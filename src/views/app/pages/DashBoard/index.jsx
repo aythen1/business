@@ -69,28 +69,27 @@ const Dashboard = ({}) => {
 
   // ---------------------------------------------------------------------
   
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const dashboardParam = urlParams.get('dashboard');
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const dashboardParam = urlParams.get('dashboard');
 
-    if (dashboardParam) {
-      const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
+  //   if (dashboardParam) {
+  //     const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
 
-      if (selectedDashboard) {
-        // Establecer el dashboard utilizando dispatch
-        dispatch(setDashboard(selectedDashboard));
-      }
-    }
+  //     if (selectedDashboard) {
+  //       // Establecer el dashboard utilizando dispatch
+  //       dispatch(setDashboard(selectedDashboard));
+  //     }
+  //   }
 
     
-    setListDashboards(dashboards)
-  }, [dashboards])
+  //   setListDashboards(dashboards)
+  // }, [dashboards])
 
 
   useEffect(() => {
     const fetchsItems = async () => {
       try{
-        console.log('eeeee')
         await dispatch(fetchsDashboard())
       }catch(err){
         console.log('Err', err)
@@ -99,6 +98,7 @@ const Dashboard = ({}) => {
     
     if(dashboards.length == 0) fetchsItems()
   }, [])
+
   
   
   
@@ -209,7 +209,7 @@ const Dashboard = ({}) => {
     <div>
       {!dashboard ? (
         <div className={styles.boxInstances + ' ' + styles.mdNone}>
-          {listDashboards.length !== 0 ? (
+          {dashboards.length !== 0 ? (
             <div>
               <div className={styles.alertInstance}>
                 <div className={styles.alertInstanceIcon}>
@@ -258,7 +258,7 @@ const Dashboard = ({}) => {
                   styles.listInstances
                 }
               >
-                {listDashboards.map((dashboard, index) => (
+                {dashboards.map((dashboard, index) => (
                   <div key={index} className={styles.instancesList}>
                     <div className={styles.instanceCheckBox}>
                       <input

@@ -19,16 +19,18 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const TableLogs = ({
-
+  logs
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { logs } = useSelector((state) => state.iam)
+  const { user } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
 
@@ -62,30 +64,11 @@ const TableLogs = ({
   
   
   
-    const handleInputChange = (e, property) => {
-      let value = e;
-      if (e.target) {
-        value = e.target.value;
-      }
-  
-      if (property === 'name') {
-        const isValidValue = value.trim() !== '';
-  
-        // Establecer el estado y activar según si el valor no está vacío
-        setIsActive(isValidValue);
-      }
-  
-  
-      setState((prevState) => ({
-        ...prevState,
-        [property]: value,
-      }));
-    };
   
   
     const handleAddLog = () => {
       const data = {
-        name: state.name,
+        name: state.name || `Access to {${user?.name}}`,
         action: 'created',
         description: state.description,
         status: 'active',
@@ -94,17 +77,21 @@ const TableLogs = ({
         // polices: state.polices,
       }
   
+      log({title: 'Insert title'})
       dispatch(addLog({log: data}))
       dispatch(setModal(null))
     }
 
+    const handleClickSupport = () => {
+      navigate(`/${'es'}/app/support`)
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.grid2}>
         <p className={styles.text}>
           Below is the list of your IAM resource logs. IAM resources can be IAM users, applications, groups, API keys and policies. You can get more details about each of them.
-          <a>
+          <a onClick={() => handleClickSupport()}>
             How to understand my logs?
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
@@ -166,12 +153,26 @@ const TableLogs = ({
           fetchs={fetchsLog}
           items={logs}
           setStateTable={setStateTable}
+          handleAdd={() => dispatch(setModal(<PopupModalLogs styles={stylesModal} />))}
+
         >
           <header>
             Logs
           </header>
           <item>
+            Name
+          </item>
+          <item>
             Action
+          </item>
+          <item>
+            Description
+          </item>
+          <item>
+            Status
+          </item>
+          <item>
+            createdAt
           </item>
         </Table>
       </div>

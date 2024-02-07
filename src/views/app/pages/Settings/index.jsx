@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-router-dom';
 
 // import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -8,6 +9,9 @@ import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-route
 
 import styles from './index.module.css'
 
+import {
+  setDashboard
+} from '@/slices/dashboardSlice'
 
 
 import Home from './home'
@@ -15,7 +19,7 @@ import Billing from './billing'
 import Contract from './contract'
 // import Support from './support'
 import Drive from './drive'
-
+import Dashboard from '../DashBoard'
 
 
 
@@ -23,19 +27,20 @@ import Drive from './drive'
 const SettingsPath = ({}) => {
   const { settingsTag } = useParams();
 
-  console.log('edwdw', settingsTag)
   let content;
 
   if (settingsTag === 'billing') {
     content = <Billing />;
   } else if (settingsTag === 'contracts') {
     content = <Contract />;
+  } else if (settingsTag === 'board') {
+    content = <Dashboard />;
   } else if (settingsTag === 'support') {
     content = <Support />;
-  } else if (settingsTag === 'drive') {
-    content = <Drive />;
-  } else {
+  } else if (settingsTag === 'home') {
     content = <Home />;
+  } else {
+    content = <Drive />;
   }
 
   return content
@@ -45,11 +50,12 @@ const SettingsPath = ({}) => {
 
 
 const Settings = ({  }) => {
+    const dispatch = useDispatch()
     const { settingsTag } = useParams();
 
 
     const navigate = useNavigate();
-    const [tag, setTag] = useState(settingsTag || 'home');
+    const [tag, setTag] = useState(settingsTag || 'drive');
 
   
     const selectTag = (value) => {
@@ -57,6 +63,9 @@ const Settings = ({  }) => {
 
       if(value == 'support'){
         navigate(`/${'es'}/app/${value}`);
+      }else if(value == 'board'){
+        dispatch(setDashboard(null))
+        navigate(`/${'es'}/app/settings/${value}`);
       }else{
         // Realiza la navegación según la tag seleccionada
         navigate(`/${'es'}/app/settings/${value}`);
@@ -78,6 +87,12 @@ const Settings = ({  }) => {
                     onClick={() => selectTag('drive')}
                 >
                     Drive
+                </button>
+                <button 
+                    className={tag === 'board' ? styles.selected : ''}
+                    onClick={() => selectTag('board')}
+                >
+                    Dashboards
                 </button>
                 <button 
                     className={tag === 'billing' ? styles.selected : ''}

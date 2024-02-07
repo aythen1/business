@@ -12,7 +12,7 @@ const response = require('../../utils/err/response')
 
 const getDirectoriesVersions = async (req, res) => {
   const { userId, Prefix, index } = req.query
-  console.log('query', { index })
+  console.log('query111', { index })
 
   const bucket = await checkBucketExistence(userId)
   if (!bucket) await addBucket(userId)

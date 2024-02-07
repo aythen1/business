@@ -43,7 +43,7 @@ const dashboardSlice = createSlice({
     setDashboard: (state, action) => {
       // lógica para manejar la acción 'setUser'
       state.dashboard = action.payload
-      state.components = JSON.parse(state.dashboard.components)
+      // state.components = JSON.parse(state.dashboard.components)
     },
     deleteComponent: (state, action) => {
       console.log('deleteComponent', action.payload)
@@ -91,7 +91,7 @@ const dashboardSlice = createSlice({
         state.status = 'pending';
       })
       .addCase(fetchDashboard.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
+        console.log('ee', action.payload)
         state.component = action.payload;
       })
       .addCase(fetchDashboard.rejected, (state, action) => {
@@ -105,7 +105,8 @@ const dashboardSlice = createSlice({
       })
       .addCase(addDashboard.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.dashboards = [...state.dashboards, action.payload];
+        state.dashboard = action.payload
+        state.dashboards.push(action.payload);
       })
       .addCase(addDashboard.rejected, (state, action) => {
         state.save = 'rejected';

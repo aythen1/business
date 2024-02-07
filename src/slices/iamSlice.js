@@ -6,6 +6,7 @@ import {
   setOpenChatBot,
 
   fetchsDefault, 
+  updateDefault, 
 
   fetchsBilling,
   updateBilling,
@@ -55,6 +56,9 @@ const iamSlice = createSlice({
     vector: {},
     vectors: [],
 
+    // default
+    addons: [],
+    gpts: [],
     changelogs: [],
     news: [],
 
@@ -114,9 +118,29 @@ const iamSlice = createSlice({
 
 
       .addCase(fetchsDefault.fulfilled, (state, action) => {
+        state.addons = action.payload.addons
+        state.gpts = action.payload.gpts
         state.changelogs = action.payload.changelogs
         state.news = action.payload.news
       })
+
+
+      .addCase(updateDefault.fulfilled, (state, action) => {
+        console.log('dddd', action.payload)
+        const { table, data } = action.payload;
+
+        // Obtener el índice del elemento que queremos actualizar
+        const arrayIndex = state[table].findIndex((item) => item.id === data.id);
+      
+        console.log('arrayindex', arrayIndex)
+        // Si encontramos el índice, realizar la actualización
+        if (arrayIndex !== -1) {
+          state[table][arrayIndex] = data;
+        }
+      })
+
+
+
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {
         // state.billing = action.payload
@@ -200,7 +224,7 @@ const iamSlice = createSlice({
         state.token = action.payload.token;
       })
       .addCase(verify.rejected, (state, action) => {
-        if(action.error.message == 501){
+        if(action.error.message && action.error.message >= 500 && action.error.message < 600){
           state.token = null
           state.user = null
         }
