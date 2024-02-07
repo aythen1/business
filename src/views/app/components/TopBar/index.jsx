@@ -64,8 +64,12 @@ export const TopBar = ({
     const urlParams = new URLSearchParams(window.location.search);
     const dashboardParam = urlParams.get('dashboard');
 
+<<<<<<< HEAD
     console.log('ddd', dashboardParam)
     if (dashboardParam) {
+=======
+    if(dashboardParam){
+>>>>>>> a403771b0cc6752b6083fab0ffa3c9942f1114b2
       setIsShowDashBoard(true)
     } else {
       setIsShowDashBoard(false)
@@ -173,7 +177,7 @@ export const TopBar = ({
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
-    navigate(`/${'es'}/app/board`);
+    navigate(`/${'es'}/app/settings/drive/dashboard`);
   }
 
   const handleClickHome = () => {
@@ -182,7 +186,7 @@ export const TopBar = ({
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
-    navigate(`/${'es'}/app`);
+    navigate(`/${'es'}/app/settings/home`);
   }
 
   const handleClickBilling = () => {

@@ -22,14 +22,16 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
+import { useNavigate } from 'react-router-dom';
 // import { fetchsApplication } from '../../../../../../service/controllers/iam';
 
 const TableApplications = ({
-
+  applications
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const { applications } = useSelector((state) => state.iam)
+  // const { applications } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
 
@@ -44,12 +46,17 @@ const TableApplications = ({
     createdAt: new Date()
   }
 
+
+  const handleClickSupport = () => {
+    navigate(`/${'es'}/app/support`)
+}
+
   return (
     <div className={styles.container}>
       <div className={styles.grid2}>
         <p className={styles.text}>
           Below is a list of applications in this Organization. You can view more information about each application.
-          <a>
+          <a onClick={() => handleClickSupport()}>
             What are applications?
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
@@ -67,6 +74,8 @@ const TableApplications = ({
           fetchs={fetchsApplication}
           items={applications}
           setStateTable={setStateTable}
+          handleAdd={() => dispatch(setModal(<PopupModalApp styles={stylesModal} />))}
+
         >
           <header>
             Applications
@@ -149,7 +158,7 @@ const PopupModalApp = ({ styles }) => {
             1
           </label>
         </div>
-        <div>
+        <div style={{width: '100%'}}>
           <h2 className={styles.title}>
             Enter a name and optional description
           </h2>
@@ -158,7 +167,8 @@ const PopupModalApp = ({ styles }) => {
               Name
             </label>
             <input
-              value={state.name || 'applications-pricelesss-beaver'}
+              placeholder='applications-pricelesss-beaver'
+              value={state.name}
               onChange={(e) => handleInputChange(e, 'name')}
             />
             <div className={styles.button}>
@@ -189,7 +199,7 @@ const PopupModalApp = ({ styles }) => {
             2
           </label>
         </div>
-        <div>
+        <div style={{width: '100%'}}>
           <h2 className={styles.title}>
             Enter key value tags (optional)
           </h2>
@@ -207,7 +217,7 @@ const PopupModalApp = ({ styles }) => {
             3
           </label>
         </div>
-        <div>
+        <div style={{width: '100%'}}>
           <h2 className={styles.title}>
             Enter key value tags (optional)
           </h2>

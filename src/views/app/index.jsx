@@ -19,7 +19,7 @@ import NotFound from '../pages/NotFound'
 
 // import Pivot from './pivot'
 // import Home from './views/web/home'
-// import Dashboard from './pivot/components/DashBoard'
+// import Dashboard from './pivot/DashBoard'
 
 
 import DashBoard from './pages/DashBoard'
@@ -123,14 +123,14 @@ export const App = ({ }) => {
 
 
 
-  useEffect(() => {
-    // Ejemplo de cómo dispatch una acción al montar el componente
-    const user = { id: 1, name: 'John Doe' };
-    // dispatch(setUser(user));
+  // useEffect(() => {
+  //   // Ejemplo de cómo dispatch una acción al montar el componente
+  //   const user = { id: 1, name: 'John Doe' };
+  //   // dispatch(setUser(user));
 
-    // También puedes realizar acciones asíncronas utilizando Thunk, Saga, etc.
-    // dispatch(fetchUserData());
-  }, [dispatch]);
+  //   // También puedes realizar acciones asíncronas utilizando Thunk, Saga, etc.
+  //   // dispatch(fetchUserData());
+  // }, [dispatch]);
 
 
 
@@ -195,7 +195,7 @@ export const App = ({ }) => {
           onClick={() => _selectedComponent(null)}
         >
             <Routes>
-              <Route path="board" element={<DashBoard  />} />
+              <Route path="board/*" element={<DashBoard  />} />
               <Route path="/*" element={<Outlet />}>
                 {/* Ruta dinámica que carga el componente correspondiente según el path */}
                 <Route path="iam" element={<SettingsIAM />} />
@@ -235,7 +235,6 @@ export const App = ({ }) => {
             {/* <MenuLeftUser /> */}
           </div>
         )}
-        |
         {openMenuRight && (
           <div>
             {openMenuRight == 'graph' ? (

@@ -14,7 +14,8 @@ const AddTag = ({handleInputChange}) => {
 
    
     // ---------- 
-    const [tags, setTags] = useState([{ key: '', value: '' }]);
+    // const [tags, setTags] = useState([{ key: '', value: '' }]);
+    const [tags, setTags] = useState([]);
 
     const handleAddTag = () => {
         setTags([...tags, { key: '', value: '' }]);

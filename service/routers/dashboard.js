@@ -1,6 +1,8 @@
 const { Router } = require('express')
 const routesRouter = Router()
 
+const { authenticateToken } = require('../middlewares/auth/auth');
+
 
 const {
     fetchsDashboard,
@@ -11,11 +13,11 @@ const {
 } = require('../controllers/dashboard')
 
 
-routesRouter.get('/', fetchsDashboard)
-routesRouter.get('/:id', fetchDashboard)
+routesRouter.get('/', authenticateToken, fetchsDashboard)
+routesRouter.get('/:id', authenticateToken, fetchDashboard)
 
-routesRouter.delete('/', deleteDashboard)
-routesRouter.put('/', updateDashboard)
-routesRouter.post('/', addDashboard)
+routesRouter.delete('/', authenticateToken, deleteDashboard)
+routesRouter.put('/', authenticateToken, updateDashboard)
+routesRouter.post('/', authenticateToken, addDashboard)
 
 module.exports = routesRouter

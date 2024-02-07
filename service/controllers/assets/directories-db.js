@@ -15,7 +15,7 @@ const {
 const directoriesDB = async (req, res) => {
   try {
     const { id, folders } = req.body
-    console.log('query', id, folders)
+    console.log('query11', id, folders)
 
     // Array para almacenar los datos de los archivos en formato base64
     const fileDataArray = [];

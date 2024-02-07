@@ -10,35 +10,35 @@ import styles from './SelectFlags.module.css'
 
 
 const languagesData = [
-    {
-      iso: 'es',
-      name: 'Español',
-      flag: FlagES,
-      extension: '+34',
-    },
-    {
-        iso: 'en',
-        name: 'English',
-        flag: FlagEN,
-        extension: '+44',
-    },
-    {
-        iso: 'fr',
-        name: 'Français',
-        flag: FlagFR,
-        extension: '+33',
-    },
-    {
-        iso: 'fr',
-        name: 'Deutsch',
-        flag: FlagDE,
-        extension: '+49',
-    },
-  ];
+  {
+    iso: 'es',
+    name: 'Español',
+    flag: FlagES,
+    extension: '+34',
+  },
+  {
+    iso: 'en',
+    name: 'English',
+    flag: FlagEN,
+    extension: '+44',
+  },
+  {
+    iso: 'fr',
+    name: 'Français',
+    flag: FlagFR,
+    extension: '+33',
+  },
+  {
+    iso: 'fr',
+    name: 'Deutsch',
+    flag: FlagDE,
+    extension: '+49',
+  },
+];
 
 
-const LanguageSelector = ({ isExtension = false, onSelectLanguage }) => {
-  const [isActive, setIsActive] = useState(false) 
+const LanguageSelector = ({ isLeft = false, isExtension = false, onSelectLanguage }) => {
+  const [isActive, setIsActive] = useState(false)
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredLanguages, setFilteredLanguages] = useState(languagesData);
@@ -58,49 +58,58 @@ const LanguageSelector = ({ isExtension = false, onSelectLanguage }) => {
   }
 
 
-  
+
   const handleSelectLanguage = (language) => {
     setSearchTerm('')
     setIsActive(false)
-    
+
     setSelectedLanguage(language);
     onSelectLanguage(language);
   }
 
+  const handleClickOut = () => {
+    setIsActive(false)
+  }
+
   return (
     <div >
-    {isActive ? (
-        <div className={styles.input}>
-        <input
-            className={styles.search}
-            type="text"
-            placeholder="Buscar..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <ul className={styles.list}> 
-            {filteredLanguages.map((language) => (
-            <li key={language.iso} onClick={() => handleSelectLanguage(language) }>
-                <img src={language.flag} alt={language.name} />
-                {language.name}
-            </li>
-            ))}
-        </ul>
-        
+      {isActive ? (
+        <div>
+          <div
+            className={styles.overlay}
+            onClick={() => handleClickOut()}
+          />
+          <div className={`${styles.input} ${isLeft && styles.left}`}>
+            <input
+              className={styles.search}
+              type="text"
+              placeholder="Buscar..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <ul className={styles.list}>
+              {filteredLanguages.map((language) => (
+                <li key={language.iso} onClick={() => handleSelectLanguage(language)}>
+                  <img src={language.flag} alt={language.name} />
+                  {language.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-    ):(
-        <div 
+      ) : (
+        <div
           onClick={() => handleClickSelect()}
           className={styles.selected}
         >
           <img src={selectedLanguage.flag} alt={selectedLanguage.name} />
           {isExtension && (
             <span>
-                {selectedLanguage.extension}
+              {selectedLanguage.extension}
             </span>
           )}
         </div>
-    )}
+      )}
 
     </div>
   );

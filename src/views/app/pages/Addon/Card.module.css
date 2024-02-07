@@ -1,0 +1,333 @@
+
+
+
+
+.ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  perspective: 1000px;
+  position: relative;
+  
+}
+
+.li {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 130px;
+  left: 0;
+  border-radius: 18px;
+  transition-duration: calc(10s);
+  transition-property: transform;
+  /* transform: rotateZ(90deg);
+  perspective: 1000px; */
+}
+
+
+.credit {
+  transform: rotateZ(90deg);
+  perspective: 1000px;
+  box-shadow: 0px 0px 0px 0px #fff;
+  transition-duration: calc(10s);
+  width: 350px;
+  height: 210px;
+  background-color: #1e5799;
+  background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #207cca 51%, #7db9e8 100%);
+  border-radius: 18px;
+  padding: 22px;
+  .bank {
+    font-family: "Biryani", sans-serif;
+    color: #EEE;
+    text-align: right;
+    /* margin: 0;
+    padding: 0; */
+  }
+  .chip {
+    display: block;
+    background-color: #EEE;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #666;
+    border-right-color: white;
+    border-bottom-color: white;
+  }
+  * {
+    font-family: "Share Tech Mono", monospace;
+    color: #EEE;
+    width: 100%;
+    margin-top: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  }
+  .number {
+    text-align: center;
+    font-size: 26px;
+  }
+  .date {
+    text-align: right;
+    font-size: 18px;
+  }
+  .name {
+      font-size: 22px;
+      margin-top: -32px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+/****************************/
+
+
+.template {
+  /* z-index: -1; */
+  width: 100%;
+  height: 100vh;
+  /* background-color: red; */
+  overflow-y: scroll;
+  position: absolute;
+  top: 0px;
+  top: 0;
+  padding-top: 100px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  .templateA {
+    z-index: 1;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    height: calc(100% + 1px);
+    /* transition: opacity 2s ease-in-out 4s, visibility 2s ease-in-out 4s; */
+    /* transition: all 1s ease-in-out 0s; */
+
+    .title {
+      position: relative;
+
+      top: 0px;
+
+      transition: all 1.2s ease-in-out; 
+
+      h2 {
+        position: relative;
+        font-size: 68px;
+        text-transform: uppercase;
+        font-weight: 800;
+        line-height: 60px;
+        top: 0px;
+      }
+    }
+
+    .grid2 {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      .info {
+        z-index: 1;
+        position: relative;
+        top: 0px;
+        transition: all 1.2s ease-in-out; 
+        span {
+          display: block;
+          margin-top: 28px;
+          font-size: 18px;
+          font-weight: 600;
+          color: black;
+          background: #312f2f26;
+          width: fit-content;
+          padding: 2px 14px;
+        }
+        p {
+          font-size: 24px;
+          font-weight: 400;
+          color: #353434;
+        }
+        button {
+          margin-top: 12px;
+          font-size: 16px;
+          border-radius: 50px;
+          padding: 8px 22px;
+          background: black;
+          color: #fff;
+        }
+      }
+    }
+
+    .card {
+        position: relative;
+        z-index: 0;
+  
+    }
+  }
+
+  .templateB {
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    top: 200px;
+    position: absolute;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    /* transition: all 2s ease-in-out; */
+    div {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      h2 {
+        font-size: 48px;
+        font-weight: 800;
+        line-height: 60px;
+        text-transform: uppercase;
+      }
+      p {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      span {
+        font-size: 12px;
+      }
+      button {
+        margin-top: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        background: #000;
+        color: #fff;
+        border-radius: 20px;
+        padding: 8px 20px;
+      }
+    }
+  }
+
+  .cardMove {
+    opacity: 0;
+      visibility: hidden;
+      transition: all 1s ease-in-out 1s;
+  }
+
+  &.active {
+    .templateA {
+      .title {
+        /* animation: myTop 1.2s ease-in-out forwards; */
+        top: -500px;
+      }
+      .grid2 {
+        .info {
+          /* animation: myTop 1.2s ease-in-out forwards; */
+          top: -500px;
+        }
+      }
+
+      .card {
+          .li {
+            background: #fff;
+            border: none;
+            animation: myBoxshadow 2s ease-in-out forwards;
+            .credit {
+              animation: drift 10s linear infinite;
+              position: relative;
+              transition-timing-function: ease-out;
+              transition-delay: 2s;
+              }
+            
+        }
+      }
+    }
+    .templateB {
+      animation: myTop1 1.2s ease-in-out forwards 0.3s;
+
+    }
+    .cardMove{
+        opacity: 1;
+      visibility: visible;
+        position: absolute;
+        top: 338px;
+        left: 383px;
+        width: 100px;
+        height: 100px;
+        z-index: 1;
+    }
+  }
+}
+
+@keyframes myTop {
+  /* Definición de la animación */
+  0% {
+    top: -2px;
+  }
+  100% {
+    top: -500px;
+  }
+}
+
+@keyframes myTop1 {
+  /* Definición de la animación */
+  0% {
+    top: 300px;
+  }
+  100% {
+    top: 140px;
+    opacity: 1;
+      visibility: visible;
+      position: absolute;
+  }
+}
+
+@keyframes myBoxshadow {
+  /* Definición de la animación */
+  0% {
+    transform: rotateX(0deg);
+    box-shadow: 0px 0px 0px 0px #fff;
+  }
+  75% {
+    transform: rotateZ(-120deg);
+    top: 100px;
+  }
+  100% {
+    transform: rotateZ(-90deg);
+    margin-left: -180px;
+    margin-top: 290px;
+    box-shadow: 0px 0px 0px 10000px #fff;
+    top: 2dvi;
+  }
+
+}
+
+
+
+
+@keyframes drift {
+  0% {
+    transform: rotatex(0deg) rotatey(20deg) rotatez(0deg);
+    box-shadow: -15px 20px 16px 27px #f6f6f6
+  }
+
+  50%{
+    transform: rotatex(-180deg) rotatey(0deg) rotatez(10deg);
+    box-shadow: -15px -20px 16px 27px #f6f6f6
+  }
+  
+  100% {   
+    /* top: 200px; */
+    transform: rotatex(-360deg) rotatey(20deg) rotatez(0deg);
+    box-shadow: -15px 20px 16px 27px #f6f6f6
+  }
+}
+
+

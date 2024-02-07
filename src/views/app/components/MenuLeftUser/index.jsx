@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import styles from "./index.module.css";
 
@@ -8,81 +8,51 @@ import { publish } from '../eventHandler';
 import tinycolor from 'tinycolor2';
 
 import {
+  setOpenMenuLeft,
   updateUser,
-  verify
 } from '@/actions/iam'
 
 export const MenuLeftUser = ({
 
 }) => {
-  const { setOpenMenuLeft } = useSelector((state) => state.iam)
-  // Estados para almacenar los colores generados
 
-  // const [randomColor1, setRandomColor1] = useState('#ff0000'); // Colores de ejemplo
-  // const [randomColor2, setRandomColor2] = useState('#00ff00');
-  // const [randomColor3, setRandomColor3] = useState('#0000ff');
-
-  // Función para generar un color aleatorio
-  // const generarColorAleatorio = () => {
-  //   return '#' + Math.floor(Math.random() * 16777215).toString(16);
-  // };
-
-  // Función para cambiar el color del cuadro clicado y el fondo de la página
-  // const cambiarColor = (setColor, randomColor) => {
-  //   // Generar un nuevo color aleatorio
-  //   const nuevoColor = generarColorAleatorio();
-  //   // Cambiar el color del cuadro clicado
-  //   setColor(nuevoColor);
-
-  //   // Cambiar la variable CSS del fondo de la página
-  //   document.documentElement.style.setProperty('--background-container', randomColor);
-  // };
-
-  // const handleClickWhite = () => {
-  //   // Cambiar a color blanco
-  //   document.documentElement.style.setProperty('--background-container', '#ffffff');
-  // };
-  // // Llamadas a la función para cada caso
-
-  // const handleClick1 = () => cambiarColor(setRandomColor1, randomColor1);
-  // const handleClick2 = () => cambiarColor(setRandomColor2, randomColor2);
-  // const handleClick3 = () => cambiarColor(setRandomColor3, randomColor3);
 
   const { user } = useSelector((state) => state.iam);
   const dispatch = useDispatch()
 
-  console.log('uu', user)
 
-  const [selectedAvatar, setSelectedAvatar] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`);
-  const [inputValues, setInputValues] = useState({
-    avatar: user.avatar || '',
-    createdat: user.createdat || '',
-    language: user.language || '',
-    name: user.name || '',
-    email: user.email || '',
-    address: user.address || '',
-    city: user.address || '',
-    country: user.country || '',
-  });
 
+  // const [selectedAvatar, setSelectedAvatar] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`);
+  const [inputValues, setInputValues] = useState();
 
   // address ---------------------
 
   useEffect(() => {
-
-
-
-
-    // Verifica si user.address es una cadena JSON válida
     try {
       const parsedAddress = JSON.parse(user.address || '{}');
-      // Actualiza los valores en inputValues si las propiedades existen
+      const parsedPhone = JSON.parse(user.phone || '{}');
+
       setInputValues((prevValues) => ({
         ...prevValues,
+        avatar: user.avatar || '',
+        language: user.language || 'es',
+        email: user.email || '',
+
+        name: user.name || '',
+        user: user.user || '',
+
         address: parsedAddress.address || '',
         city: parsedAddress.city || '',
         country: parsedAddress.country || '',
+
+        extension: parsedAddress.extension || '',
+        phone: parsedAddress.phone || '',
+
+        createdat: user.createdat || '',
+
       }));
+
+
     } catch (error) {
       // Maneja el error si user.address no es una cadena JSON válida
       console.error('Error al analizar la dirección JSON:', error);
@@ -97,90 +67,62 @@ export const MenuLeftUser = ({
     }));
   };
 
-  const handleAvatarChange = (e) => {
-    console.log('2i4i')
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      resizeAndConvertToBase64(file);
-    }
-  };
 
-  const resizeAndConvertToBase64 = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
 
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
 
-        // Resize la imagen a 500px
-        const MAX_WIDTH = 100;
-        const scaleSize = MAX_WIDTH / img.width;
-        canvas.width = MAX_WIDTH;
-        canvas.height = img.height * scaleSize;
 
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        // Convierte la imagen a base64
-        const base64 = canvas.toDataURL('image/jpeg');
-        setInputValues((prevValues) => ({
-          ...prevValues,
-          avatar: base64,
-        }));
-        setSelectedAvatar(base64);
-      };
-    };
-  };
 
   const handleSaveUser = () => {
-    console.log('inputValues', inputValues)
-
     const data = {
-      avatar: inputValues.avatar || '',
-      createdat: inputValues.createdat || '',
-      language: inputValues.language || '',
-      name: inputValues.name || '',
-      email: inputValues.email || '',
+      avatar: inputValues?.avatar || '',
+      createdat: inputValues?.createdat || '',
+      language: inputValues?.language || '',
+      user: inputValues?.user || '',
+      name: inputValues?.name || '',
+      email: inputValues?.email || '',
       address: {
-        address: inputValues.address || '',
-        city: inputValues.city || '',
-        country: inputValues.country || '',
+        address: inputValues?.address || '',
+        city: inputValues?.city || '',
+        country: inputValues?.country || '',
+      },
+      phone: {
+        extension: inputValues?.extension || '',
+        phone: inputValues?.phone || '',
       }
     }
 
     data.address = JSON.stringify(data.address)
+    data.phone = JSON.stringify(data.phone)
 
-
+    console.log('data', data)
     dispatch(updateUser({
       user: data
     }))
   }
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token')
-  //   dispatch(verify(token))
-  // }, [])
 
-  // useEffect(() => {
-  //   if (user) {
+  const handleCloseUser = () => {
+    dispatch(setOpenMenuLeft(null))
+  }
 
-  //     setInputValues((prevValues) => ({
-  //       ...prevValues,
-  //       user,
-  //     }));
-  //   }
-  // }, [user])
+
 
 
   // language ----------------------------------
   const handleSelectLanguage = (language) => {
-    // Haz algo con el idioma seleccionado, por ejemplo, cambiar el idioma de la aplicación
-    console.log('Idioma seleccionado:', language);
+    handleInputChange({
+      target: {
+        name: 'language',
+        value: language.name,
+      },
+    });
+
   };
+
+
+
+
+  // ----------------------------------------------------
 
   const generarColorAleatorio = () => {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -218,23 +160,107 @@ export const MenuLeftUser = ({
   ]));
 
 
+
+
+  // 
+  // -------------------------------------z
+  const imgRef = useRef(null);
+  const [imageError, setImageError] = useState(false);
+  // const [imageLoadAttempted, setImageLoadAttempted] = useState(false);
+  const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`)
+
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+
+  const handleSaveImage = () => {
+    const fileInput = document.getElementById('fileInput');
+    fileInput.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
+
+      img.onload = () => {
+        // setImageError(false);
+        // if (imgRef.current) {
+
+        // Escala la imagen a 400 píxeles
+        const scaleFactor = 400 / Math.max(img.width, img.height);
+        const scaledWidth = img.width * scaleFactor;
+        const scaledHeight = img.height * scaleFactor;
+
+        // Crea un canvas para renderizar la imagen escalada
+        const canvas = document.createElement('canvas');
+        canvas.width = scaledWidth;
+        canvas.height = scaledHeight;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+
+        // Obtiene el contenido base64 del canvas
+        const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+        // console.log('base62', base64Image)
+        setImageSrc(base64Image)
+        setImageError(false)
+
+        handleInputChange({
+          target: {
+            name: 'avatar',
+            value: base64Image,
+          },
+        });
+      };
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+
   return (
     <div className={styles["frame-1171276727"]}>
       <div
         className={styles["frame-2087328701"]}
-        onDrop={handleAvatarChange}
+        onClick={handleSaveImage}
+        onDrop={handleSaveImage}
         onDragOver={(e) => e.preventDefault()}
       >
-        <img
-          className={styles["image"]}
-          src={selectedAvatar}
+        {imageError ? (
+          <div
+            className={styles.initial}
+          >
+            <p>
+              {user?.user.charAt(0) || 'A'}
+            </p>
+          </div>
+        ) : (
+          <img
+            ref={imgRef}
+            src={imageSrc}
+            className={styles.image}
+            onError={handleImageError}
+          />
+        )}
+        <input
+          type="file"
+          id="fileInput"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+          accept="image/*"
         />
       </div>
       <div className={styles["frame-2087328700"]}>
         <div className={styles["button-container"]}>
           <div className={styles["component-4"]}>
             <div
-              onClick={() => handleSaveUser()}
+              onClick={() => handleCloseUser()}
               className={styles["label"]}
             >
               Cancel
@@ -260,7 +286,8 @@ export const MenuLeftUser = ({
                   <input
                     className={styles["placehoder"]}
                     name="createdat"
-                    value={inputValues.createdat}
+                    spellCheck={'false'}
+                    value={inputValues?.createdat}
                     onChange={handleInputChange}
                     disabled
                   />
@@ -273,14 +300,15 @@ export const MenuLeftUser = ({
                     <input
                       className={styles["placehoder"]}
                       name="language"
-                      value={inputValues.language}
+                      spellCheck={'false'}
+                      value={inputValues?.language}
                       onChange={handleInputChange}
                     />
                   </div>
                 </div>
                 <div className={styles["input-content2"]}>
                   <div className={styles["frame-4"]}>
-                    <SelectFlags onSelectLanguage={handleSelectLanguage} />
+                    <SelectFlags isLeft="true" onSelectLanguage={handleSelectLanguage} />
                     {/* <img className={styles["ng-1"]} src="ng-10.png" /> */}
                   </div>
                   <div className={styles["iconly-light-arrow-down-2"]}>
@@ -307,12 +335,26 @@ export const MenuLeftUser = ({
               </div>
               <div className={styles["input"]}>
                 <div className={styles["input-content"]}>
+                  <div className={styles["label3"]}>User </div>
+                  <input
+                    className={styles["placehoder"]}
+                    placeholder={'User'}
+                    name="user"
+                    spellCheck={'false'}
+                    value={inputValues?.user}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className={styles["input"]}>
+                <div className={styles["input-content"]}>
                   <div className={styles["label3"]}>Name </div>
                   <input
                     className={styles["placehoder"]}
                     placeholder={'Name'}
                     name="name"
-                    value={inputValues.name}
+                    spellCheck={'false'}
+                    value={inputValues?.name}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -324,7 +366,8 @@ export const MenuLeftUser = ({
                     className={styles["placehoder"]}
                     placeholder={'Email'}
                     name="email"
-                    value={inputValues.email}
+                    spellCheck={'false'}
+                    value={inputValues?.email}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -336,7 +379,8 @@ export const MenuLeftUser = ({
                     className={styles["placehoder"]}
                     placeholder={'Dirección'}
                     name="address"
-                    value={inputValues.address}
+                    spellCheck={'false'}
+                    value={inputValues?.address}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -348,7 +392,8 @@ export const MenuLeftUser = ({
                     className={styles["placehoder"]}
                     placeholder={'Ciudad'}
                     name="city"
-                    value={inputValues.city}
+                    spellCheck={'false'}
+                    value={inputValues?.city}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -360,7 +405,8 @@ export const MenuLeftUser = ({
                     className={styles["placehoder"]}
                     placeholder={'Country'}
                     name="country"
-                    value={inputValues.country}
+                    spellCheck={'false'}
+                    value={inputValues?.country}
                     onChange={handleInputChange}
                   />
                 </div>
@@ -402,7 +448,16 @@ export const MenuLeftUser = ({
                 <div className={styles["input-content4"]}>
                   <div className={styles["input-content"]}>
                     <div className={styles["phone-number"]}>Phone Number </div>
-                    <div className={styles["_8023456789"]}>8023456789 </div>
+                    <div className={styles["_8023456789"]}>
+                      <input
+                        className={styles["placehoder"]}
+                        placeholder={'1234 1234 1234'}
+                        name="phone"
+                        spellCheck={'false'}
+                        value={inputValues?.phone}
+                        onChange={handleInputChange}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

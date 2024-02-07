@@ -6,7 +6,7 @@
 .frame-1342{
     color: var(--text-color);
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -167,6 +167,12 @@
   height: 0px;
   position: relative;
 }
+.frame-1547755145{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .frame-1547755111 {
   display: flex;
   flex-direction: column;
@@ -326,15 +332,15 @@
   position: relative;
 }
 .sign-up {
-  color: #f0f0ff;
+  color: #000fff;
   text-align: left;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   position: relative;
   cursor: pointer;
 }
 
 .sign-up:hover{
   color: #5f5fe2;
-  text-shadow: 2px 2px 4px #333333;
+  text-shadow: 1px 1px 2px #2150fa;
 }

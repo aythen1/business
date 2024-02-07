@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // import { useHistory } from 'react-router-dom';
 
+import AddTag from './iam/AddTag'
+
+import stylesModal from './iam/modal.module.css'
 import styles from './home.module.css'
 
 import DashBoard from '../DashBoard'
@@ -11,6 +14,7 @@ import BackgroundBanner from './assets/backgroundBanner.svg'
 import IconDNS from './assets/IconDNS.svg'
 import IconInstance from './assets/IconInstance.png'
 import ChangelogKubernetes from './assets/changelogKubernetes.webp'
+import IconPlus from './assets/IconPlus.svg'
 
 
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'
@@ -20,14 +24,32 @@ import {
 } from '@/actions/iam'
 
 import {
-    fetchsDashboard
-} from '@/actions/dashboard'
+    setModal
+} from '@/slices/iamSlice'
+
+import {
+    fetchsAddon,
+    addAddon,
+    deleteAddon,
+} from '@/actions/addon'
+
+
+// import {
+//     fetchsDashboard
+// } from '@/actions/dashboard'
 
 import { subscribe } from '../../components/eventHandler';
 
 
 const Home = ({
 
+<<<<<<< HEAD
+=======
+
+
+const Home = ({
+
+>>>>>>> a403771b0cc6752b6083fab0ffa3c9942f1114b2
 }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
@@ -42,7 +64,7 @@ const Home = ({
 
 
     useEffect(() => {
-        console.log('click dashboard', stateTable)
+        // console.log('click dashboard', stateTable)
         // if(stateTable.startsWith('edit-item:')){
         //   const id = stateTable.split(':')[1]
         //   const index = users.findIndex(user => user.id === id);
@@ -67,118 +89,52 @@ const Home = ({
         updatedAt: ''
     })
 
-    const initial = [
-        {
-            image: IconInstance,
-            title: 'user',
-            structure: {
-                id: {},
-                name: '',
-                email: '',
-                address: {
-                    street: '',
-                    city: '',
-                    zipCode: ''
-                },
-                phone: '',
-                availableAt: '',
-                lastAccessAt: '',
-                createAt: ''
-            }
-        },
-        {
-            image: IconInstance,
-            title: 'shop',
-            structure: {
-                id: {},
-                name: '',
-                email: '',
-                address: {
-                    street: '',
-                    city: '',
-                    zipCode: ''
-                },
-                pin: '',
-                phone: '',
-                availableAt: '',
-                lastAccess: '',
-                createAt: ''
-            }
-        },
-        {
-            image: IconInstance,
-            title: 'employeer',
-            structure: {
-                id: {},
-                name: '',
-                email: '',
-                address: {
-                    street: '',
-                    city: '',
-                    zipCode: ''
-                },
-                phone: '',
-                availableAt: '',
-                lastAccessAT: '',
-                createAt: ''
-            }
-        },
-        {
-            image: IconInstance,
-            title: 'product',
-            structure: {
-                id: {},
-                name: '',
-                description: '',
-                price: 0,
-                availableAt: ''
-                // Otros campos específicos para productos
-            }
-        },
-        {
-            image: IconInstance,
-            title: 'invoice',
-            structure: {
-                id: {},
-                customer: '',
-                products: [],
-                totalAmount: 0,
-                // Otros campos específicos para facturas
-                address: {},
-                tax: {},
-                title: {}
-            }
-        }
-    ];
-
+    const initial = [];
     const [listAddons, setListAddons] = useState(initial)
+    const { addons } = useSelector((state) => state.addon)
+
+
+    const handleClickAddon = (item) => {
+        console.log('handleClickAddon', item)
+        navigate(`/${'es'}/app/addon/${item.href}`)
+    }
+
     useEffect(() => {
-        setListAddons(initial)
+        const fetchsItem = async () => {
+            await dispatch(fetchsAddon())
+        }
+
+        fetchsItem()
     }, [])
 
+    useEffect(() => {
+        setListAddons(addons)
+    }, [addons])
+
+
+    // ------------------------------------------
 
     const [indexChangelog, setIndexChangelog] = useState(0)
     const [itemChangelog, setItemChangelog] = useState([])
     const [listChangelogs, setListChangelogs] = useState([])
+    const [listNotes, setListNotes] = useState([])
+
+    useEffect(() => {
+        if (changelogs.length == 0 || news.length == 0) {
+            dispatch(fetchsDefault({}))
+        }
+    }, [])
 
     useEffect(() => {
         setListChangelogs(changelogs)
         setItemChangelog(changelogs[indexChangelog])
     }, [changelogs])
 
-    const [listNotes, setListNotes] = useState([])
     useEffect(() => {
         if (news.length > 0) {
             setListNotes(news)
         }
     }, [news])
-
-
-    useEffect(() => {
-        if (changelogs.length == 0) {
-            dispatch(fetchsDefault())
-        }
-    }, [])
 
 
     const onPrevChangelogs = () => {
@@ -194,6 +150,10 @@ const Home = ({
             setIndexChangelog(indexChangelog + 1);
         }
     };
+
+
+
+
     // --------------------------------
 
     const handleClickBilling = () => {
@@ -216,11 +176,15 @@ const Home = ({
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a403771b0cc6752b6083fab0ffa3c9942f1114b2
     const handleClickSupport = () => {
-        navigate('/es/app/support')
+        navigate(`/${'es'}/app/support`)
     }
 
+<<<<<<< HEAD
     const [selectedColor, setSelectedColor] = useState('#0000ff');
 
     useEffect(() => {
@@ -232,6 +196,17 @@ const Home = ({
             subscription(); // Cleanup subscription on component unmount
         };
     }, []);
+=======
+    const handleModalAddAddon = (addon) => {
+        dispatch(setModal(<ModalAddAddon styles={stylesModal} addon={addon} />))
+    }
+
+    const handleClickPremium = () => {
+        navigate(`/${'es'}/app/addon/card`)
+    }
+
+
+>>>>>>> a403771b0cc6752b6083fab0ffa3c9942f1114b2
 
 
     return (
@@ -275,6 +250,7 @@ const Home = ({
                 </div>
             </div>
             <div className={styles["gird2"]}>
+<<<<<<< HEAD
                 <div className={styles["ul2"]}>
                     <h2 className={styles["title"]}>
                         + Add-ons
@@ -295,8 +271,92 @@ const Home = ({
                             <b>
                                 1
                             </b>
+=======
+                <div >
+                    <div className={styles["ul2"]} style={{ marginBottom: 12 }}>
+                        <h2 className={styles["title"]}>
+                            + Add-ons
+                            <label>
+                                Pro
+                            </label>
+                        </h2>
+                        <div className={styles["buttonsPrev"]}>
+                            <button onClick={() => onPrevChangelogs()}>
+                                <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
+                            </button>
+                            <button onClick={() => onNextChangelogs()}>
+                                <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M10.7071 7.29289C11.0976 7.68342 11.0976 8.31658 10.7071 8.70711L6.70711 12.7071C6.31658 13.0976 5.68342 13.0976 5.29289 12.7071C4.90237 12.3166 4.90237 11.6834 5.29289 11.2929L8.58579 8L5.29289 4.70711C4.90237 4.31658 4.90237 3.68342 5.29289 3.29289C5.68342 2.90237 6.31658 2.90237 6.70711 3.29289L10.7071 7.29289Z"></path></svg>
+                            </button>
+>>>>>>> a403771b0cc6752b6083fab0ffa3c9942f1114b2
                         </div>
-                    ))}
+                    </div>
+                    {listAddons.length > 0 && (
+                        <div className={styles["ul2"]} style={{ gridColumn: 'span 2' }}>
+                            <div>
+                                <div
+                                    className={styles["li2"]}
+                                    onClick={() => handleModalAddAddon()}
+                                >
+                                    <div>
+                                        <div className={styles["IconPlus"]}>
+                                            <img src={IconPlus} />
+                                        </div>
+                                        Añadir nuevo
+                                    </div>
+                                    <b className={styles["LabelNew"]}>
+                                        New
+                                    </b>
+                                </div>
+                            </div>
+                            <div>
+                                {listAddons.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className={styles["li2"]}
+                                        onClick={() => handleClickAddon(item)}
+                                    >
+                                        <div>
+
+                                            <img src={IconInstance} />
+                                            {item.title}
+                                        </div>
+                                        <b onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleModalAddAddon(item)
+                                        }}>
+                                            sets
+                                        </b>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+
+                    {listAddons.length == 0 && (
+                        <div className={styles["noneAddon"]}>
+                            <p>
+                                Crea tus Addons para crear componentes vectoriales en los
+                                cuales representar
+                            </p>
+                            <label>
+                                No existe ningun addon quieres crearlo
+                            </label>
+                            <div className={styles["buttons"]}>
+                                <button
+                                    onClick={() => handleModalAddAddon()}
+                                >
+                                    New Addon
+                                </button>
+                                <button
+                                    className={styles["buttonPremium"]}
+                                    onClick={() => handleClickPremium()}
+                                >
+                                    Premium Addon
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className={styles["containerConsumption"]}>
                     <h2 className={styles["title"]}>
@@ -324,7 +384,14 @@ const Home = ({
                         </a>
                     </div>
                     <div className={styles["boxChangelog"]}>
-                        <div className={styles["buttons"]}>
+                        <div
+                            className={styles["buttonsPrev"]}
+                            style={{
+                                position: 'absolute',
+                                top: 16,
+                                right: 10
+                            }}
+                        >
                             <button onClick={() => onPrevChangelogs()}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
                             </button>
@@ -434,6 +501,10 @@ const News = ({ items }) => {
         </div>
     )
 }
+
+
+
+
 const Changelog = ({ item }) => {
     return (
         <div>
@@ -463,6 +534,300 @@ const Changelog = ({ item }) => {
                     {item?.count || '1/5'}
                 </div>
             </div>
+        </div>
+    )
+}
+
+
+
+
+const ModalAddAddon = ({ styles, addon }) => {
+
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+
+    const [isNewAddon, setIsNewAddon] = useState(addon?.id ? true : false);
+    const [isActive, setIsActive] = useState(false)
+
+
+    // ---
+    const [state, setState] = useState({
+        id: addon?.id || '',
+
+        tag: addon?.tag || [],
+        createdAt: addon?.createdAt || '',
+
+        image: addon?.image || '',
+        title: addon?.title || '',
+        href: addon?.href || '',
+        description: addon?.description || '',
+
+        components: addon?.components || [],
+
+        available: addon?.available || false,
+        public: addon?.public || false
+    });
+
+
+
+
+    const handleInputChange = (e, property) => {
+        let value = e;
+        if (e.target) {
+            value = e.target.value;
+        }
+
+        if (property === 'title') {
+            // Verificar si el texto tiene una longitud mayor a cero
+            const isValidText = value.trim().length > 0;
+
+            setIsActive(isValidText);
+
+            setState((prevState) => ({
+                ...prevState,
+                [property]: isValidText ? [value.trim()] : [],  // Asegura que el valor sea un array
+            }));
+        } else {
+            setState((prevState) => ({
+                ...prevState,
+                [property]: value,
+            }));
+        }
+    };
+
+
+
+
+    const handleAddAddon = () => {
+        const data = {
+            // owner: user?.id || '3r3',
+            available: true,
+            public: true,
+
+            title: 'hello',
+            href: 'hello',
+            description: '33r',
+            tags: state.tags || [],
+
+            updatedAt: new Date(),
+            createdAt: new Date(),
+        }
+
+        dispatch(addAddon(data))
+        dispatch(setModal(null))
+    }
+
+
+    const handleDeleteAddon = () => {
+        dispatch(deleteAddon(state.id))
+    }
+
+
+    const handleEditAddon = () => {
+        navigate(`/${'es'}/app/addon/${state.id}`)
+        dispatch(setModal(null))
+    }
+
+
+
+    // -------------------------------------z
+    const imgRef = useRef(null);
+
+    const [imageError, setImageError] = useState(false);
+
+    const handleSaveImage = () => {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+
+            img.onload = () => {
+                setImageError(false);
+
+                if (imgRef.current) {
+                    const imgElement = imgRef.current;
+
+                    // Escala la imagen a 400 píxeles
+                    const scaleFactor = 400 / Math.max(img.width, img.height);
+                    const scaledWidth = img.width * scaleFactor;
+                    const scaledHeight = img.height * scaleFactor;
+
+                    // Crea un canvas para renderizar la imagen escalada
+                    const canvas = document.createElement('canvas');
+                    canvas.width = scaledWidth;
+                    canvas.height = scaledHeight;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+
+                    // Obtiene el contenido base64 del canvas
+                    const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+
+                    // Actualiza el src y el estilo de la imagen principal
+                    imgElement.src = base64Image;
+                    imgElement.width = scaledWidth;
+                    imgElement.height = scaledHeight;
+                }
+
+
+            };
+        };
+
+        reader.readAsDataURL(file);
+    };
+
+
+    return (
+        <div className={styles.modal}>
+            {state.id ? (
+                <div className={styles.gird2}>
+                    <h2 className={styles.title} style={{ marginTop: -10 }}>
+                        Moficiar Addon {state.title}
+                    </h2>
+                    <div>
+                        <button onClick={() => handleEditAddon()}>
+                            edit
+                        </button>
+                        creado hace 2s - user12345
+                    </div>
+                </div>
+            ) : (
+                <div>
+                    <h2 className={styles.title} style={{ marginTop: -10 }}>
+                        Nuevo Addon
+                    </h2>
+                </div>
+            )}
+            <div className={styles.gird2} style={{ gap: 20 }}>
+                <div
+                    onClick={handleSaveImage}
+                    className={styles.logo}
+                >
+                    {imageError ? (
+                        <div
+                            className={styles.initial}
+                        >
+                            {state?.title.charAt(0) || 'A'}
+                        </div>
+                    ) : (
+                        <img
+                            ref={imgRef}
+                            src={`http://localhost:3001/service/v1/addon/logo/${state.id}`}
+                        />
+                    )}
+                    <input
+                        type="file"
+                        id="fileInput"
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                    />
+                </div>
+                <div style={{ width: '100%' }}>
+                    <p className={styles.textBold}>
+                        Enter the title for addon.
+                    </p>
+                    <div className={styles.input}>
+                        <input
+                            type="text"
+                            spellCheck="false"
+                            value={state.title}
+                            placeholder={'Select title of addon'}
+                            onChange={(e) => handleInputChange(e, 'title')}
+                        />
+                    </div>
+                    <p className={styles.textBold} style={{ marginTop: 8 }}>
+                        Enter the href for addon.
+                    </p>
+                    <div className={styles.input}>
+                        <input
+                            type="text"
+                            spellCheck="false"
+                            value={state.href}
+                            placeholder={'Select href of addon'}
+                            onChange={(e) => handleInputChange(e, 'href')}
+                        />
+                    </div>
+                </div>
+            </div>
+            <p className={styles.textBold}>
+                Add to an existing group (optional)
+            </p>
+            <textarea
+                placeholder={'Description Addon..'}
+                spellCheck="false"
+                value={state.description}
+                className={styles.textarea}
+                onChange={(e) => handleInputChange(e, 'description')}
+            />
+            <div className={`${styles.textBold} ${styles.gird2}`}>
+                Select type public or available addons.
+                <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
+            </div>
+            <div>
+                <div className={styles.checkbox}>
+                    <input
+                        type="checkbox"
+                        name="available"
+                        checked={state.available}
+                        onChange={(e) => handleInputChange(e.target.name, 'available')}
+                    />
+                    Available addon for applications.
+                </div>
+                <div className={styles.checkbox}>
+                    <input
+                        type="checkbox"
+                        name="public"
+                        checked={state.public}
+                        onChange={(e) => handleInputChange(e.target.name, 'public')}
+                    />
+                    Public addon for applications.
+                </div>
+            </div>
+            <h2 className={styles.title}>
+                Enter key value tags
+            </h2>
+            <p className={styles.text1}>
+                Key value tags helps you organize your users. You can assign up to 10 tags per addons.
+            </p>
+            <div>
+                <AddTag
+                    handleInputChange={handleInputChange}
+                />
+            </div>
+            {isNewAddon ? (
+                <div className={styles.button}>
+                    <button
+                        onClick={() => handleAddAddon()}
+                        className={styles.active}
+                    >
+                        Save Addon
+                    </button>
+                    <button
+                        onClick={() => handleDeleteAddon()}
+                        className={styles.delete}
+                    >
+                        Delete Addon
+                    </button>
+                </div>
+            ) : (
+                <div className={styles.button}>
+                    <button
+                        onClick={() => handleAddAddon()}
+                        className={`${styles.desactive} ${isActive ? styles.active : ''}`}
+                    >
+                        Create a New Addon
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

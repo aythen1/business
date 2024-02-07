@@ -310,10 +310,16 @@ const CustomData = ({ component, state, setState, regexOptions }) => {
   // -------------------------------------------------------------------
 
   const openLanceDB = () => {
-    setIsActiveData(true)
+    if(isActiveData){
+      dispatch(setComponent(null))
+      dispatch(setOpenMenuRight(null))
 
-    dispatch(setComponent(component))
-    dispatch(setOpenMenuRight('data'))
+    }else{
+      dispatch(setComponent(component))
+      dispatch(setOpenMenuRight('data'))
+    }
+
+    setIsActiveData(!isActiveData)
   }
 
 

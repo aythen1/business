@@ -133,7 +133,6 @@
         line-height: 32px;
         text-transform: none;
         text-decoration: none;
-        grid-column: span 2; 
         label{
             font-size: 12px;
             font-weight: 600;
@@ -173,6 +172,26 @@
         img{
             width: 28px;
             height: 28px;
+        }
+        .IconPlus{
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background-color: #eeeeff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+                width: 12px;
+            }
+        }
+        .LabelNew{
+            background: #dee0ff;
+            color: #000fff;
+            text-transform: uppercase;
+            font-size: 8px;
+            padding: 4px 6px;
+            border-radius: 4px
         }
     }
 }
@@ -268,41 +287,7 @@
         .image{
             width: 70px;
         }
-        .buttons{
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            z-index: 10;
-            display: flex;
-            gap: 8px;
-            flex-flow: row;
-            align-items: normal;
-            justify-content: normal;
-            button{
-                display: inline-flex;
-                height: 26px;
-                padding: 0px 8px;
-                flex-direction: row;
-                gap: 8px;
-                border-radius: 4px;
-                box-sizing: border-box;
-                width: 26px;
-                align-items: center;
-                cursor: pointer;
-                justify-content: center;
-                outline-offset: 2px;
-                white-space: nowrap;
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 20px;
-                background: rgb(233, 234, 235);
-                border: none;
-                color: rgb(34, 38, 56);
-                svg{
-                    
-                }
-            }
-        }
+        
         .labelContainer{
             label{
                 font-weight: 500;
@@ -636,6 +621,87 @@
 
 
 
+.buttonsPrev{
+    /* position: absolute; */
+    /* top: 16px; */
+    /* right: 16px; */
+    /* z-index: 10; */
+    display: flex;
+    gap: 8px;
+    flex-flow: row;
+    align-items: normal;
+    justify-content: flex-end;
+    button{
+        display: inline-flex;
+        height: 26px;
+        padding: 0px 8px;
+        flex-direction: row;
+        gap: 8px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        width: 26px;
+        align-items: center;
+        cursor: pointer;
+        justify-content: center;
+        outline-offset: 2px;
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        background: rgb(233, 234, 235);
+        border: none;
+        color: rgb(34, 38, 56);
+        svg{
+            
+        }
+    }
+}
+
+
+
 .box{
     margin: 20px 0px;
+}
+
+
+
+
+.noneAddon{
+    border: 1px solid var(--border-color);
+    color: var(--text-color-secondary);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    padding: 16px 22px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 265px;
+    p{
+        font-size: 18px;
+    }
+    label{
+        font-size: 12px;
+    }
+    .buttons{
+        font-size: 14px;
+        margin-top: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        button{
+            padding: 6px 12px;
+            border: 1px solid #000fff;
+            color: #000fff;
+            border-radius: 4px;
+            outline: none;
+            &.buttonPremium{
+                background-color: #000fff;
+                color: #fff;
+            }
+        }
+    }
 }

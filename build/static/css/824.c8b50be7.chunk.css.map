@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/824.c8b50be7.chunk.css","mappings":"AAAA,wBACI,YAAa,CACb,cACJ","sources":["views/app/pages/DashBoard/Pivot/index.module.css"],"sourcesContent":[".components-grids{\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}"],"names":[],"sourceRoot":""}

@@ -13,6 +13,7 @@ import Component from './component';
 
 
 import {
+  setDashboard,
   addComponent,
   deleteComponent
 } from '@/slices/dashboardSlice';
@@ -35,15 +36,40 @@ const Board = ({
 }) => {
 
   const dispatch = useDispatch()
+
+
+  
   
   const [selectedComponent, setSelectedComponent] = useState(-1)
   const [listComponents, setListComponents] = useState([]);
+  const [contextMenu, setContextMenu] = useState(null);
   
   const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
-  const { components } = useSelector((state) => state.dashboard)
+  const { dashboards, components } = useSelector((state) => state.dashboard)
 
 
-  const [contextMenu, setContextMenu] = useState(null);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const dashboardParam = urlParams.get('dashboard');
+
+    if (dashboardParam) {
+      const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
+      console.log('d', selectedDashboard, dashboards)
+
+      if (selectedDashboard) {
+        // Establecer el dashboard utilizando dispatch
+        dispatch(setDashboard(selectedDashboard));
+      }
+    }
+
+    
+    // setListDashboards(dashboards)
+  }, [dashboards])
+
+
+
+
 
   const handleCloseContextMenu = () => {
     setContextMenu(null);

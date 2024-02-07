@@ -64,6 +64,7 @@ const DraggableGraph = ({ graphType, Component }) => {
 
 const MenuRightGraph = () => {
   const componentGraph = [
+    'LineScatter',
     'SimpleLineChart',
     'SimpleLineStraightChart',
     'AreaLineChart',

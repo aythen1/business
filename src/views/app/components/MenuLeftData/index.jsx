@@ -174,13 +174,16 @@ const MenuLeftData = ({ setRef }) => {
         </div>
       )}
       {components.map((component, index) => (
-        <DraggableData
-          key={index}
-          index={index}
-          component={component}
-          moveComponent={moveComponent}
-          handleSelectedChange={handleSelectedChange}
-        />
+        <div>
+          {JSON.stringify(component)}
+          <DraggableData
+            key={index}
+            index={index}
+            component={component}
+            moveComponent={moveComponent}
+            handleSelectedChange={handleSelectedChange}
+          />
+        </div>
       ))}
     </div>
   );
