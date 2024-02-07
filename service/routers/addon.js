@@ -12,6 +12,8 @@ const {
     addAddon,
     updateAddon,
 
+    addVectorAddon,
+
     visionAddon,
     codeAddon,
     rpaAddon
@@ -26,6 +28,8 @@ routesRouter.get('/:id', authenticateToken, fetchAddon)
 routesRouter.delete('/', authenticateToken, deleteAddon)
 routesRouter.post('/', authenticateToken, addAddon)
 routesRouter.put('/', authenticateToken, updateAddon)
+
+routesRouter.post('/vector', authenticateToken, addVectorAddon)
 
 routesRouter.post('/vision', authenticateToken, visionAddon)
 routesRouter.post('/code', authenticateToken, codeAddon)

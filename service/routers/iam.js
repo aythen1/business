@@ -1,8 +1,12 @@
 const { Router } = require('express')
 const routerIAM = Router()
 
+const { authenticateToken } = require('../middlewares/auth/auth');
+
+
 const {
   fetchsDefault, 
+  updateDefault,
 
   fetchsBilling, 
   updateBilling, 
@@ -49,47 +53,48 @@ const {
 
 
 routerIAM
-.post('/load/default', fetchsDefault)
+.post('/load/default', authenticateToken, fetchsDefault)
+.put('/load/default', authenticateToken, updateDefault)
 
-.post('/billing/fetchs', fetchsBilling)
-.post('/billing/update', updateBilling)
+.post('/billing/fetchs', authenticateToken, fetchsBilling)
+.post('/billing/update', authenticateToken, updateBilling)
 
-.get('/billing/invoices', fetchsInvoice)
-.get('/billing/invoice/:id', fetchInvoice)
-.delete('/billing/invoice', deleteInvoice)
-.post('/billing/invoice', addInvoice)
-.put('/billing/invoice', updateInvoice)
+.get('/billing/invoices', authenticateToken, fetchsInvoice)
+.get('/billing/invoice/:id', authenticateToken, fetchInvoice)
+.delete('/billing/invoice', authenticateToken, deleteInvoice)
+.post('/billing/invoice', authenticateToken, addInvoice)
+.put('/billing/invoice', authenticateToken, updateInvoice)
 
 .post('/user/confirm', confirmUser)
-.post('/user/verify', verifyUser)
-.post('/user/decode', decoderUser)
+.post('/user/verify', authenticateToken, verifyUser)
+.post('/user/decode', authenticateToken, decoderUser)
 .post('/user/login', loginUser)
 .post('/user/register', registerUser)
-.post('/user/upgrade', upgradeUser)
-.post('/user', updateUser)
+.post('/user/upgrade', authenticateToken, upgradeUser)
+.post('/user', authenticateToken, updateUser)
 .post('/user/recover-password', recoverPasswordUser)
-.post('/user/password', updatePasswordUser)
+.post('/user/password', authenticateToken, updatePasswordUser)
 
-.post('/user/add-user', addUser)
-.post('/user/delete-user', deleteUser)
-.get('/user/all-user', fetchsUser)
+.post('/user/add-user', authenticateToken, addUser)
+.post('/user/delete-user', authenticateToken, deleteUser)
+.get('/user/all-user', authenticateToken, fetchsUser)
 .get('/user/:id', avatarUser)
 
-.post('/application/add-application', addApplication)
-.post('/application/delete-application', deleteApplication)
-.get('/application/all-application', fetchsApplication)
+.post('/application/add-application', authenticateToken, addApplication)
+.post('/application/delete-application', authenticateToken, deleteApplication)
+.get('/application/all-application', authenticateToken, fetchsApplication)
   
-.post('/police/add-police', addPolice)
-.post('/police/delete-police', deletePolice)
-.get('/police/all-police', fetchsPolice)
+.post('/police/add-police', authenticateToken, addPolice)
+.post('/police/delete-police', authenticateToken, deletePolice)
+.get('/police/all-police', authenticateToken, fetchsPolice)
 
-.post('/api/add-api', addApi)
-.post('/api/delete-api', deleteApi)
-.get('/api/all-api', fetchsApi)
+.post('/api/add-api', authenticateToken, addApi)
+.post('/api/delete-api', authenticateToken, deleteApi)
+.get('/api/all-api', authenticateToken, fetchsApi)
 
 
-.post('/log/add-log', addLog)
-.post('/log/delete-log', deleteLog)
-.get('/log/all-log', fetchsLog)
+.post('/log/add-log', authenticateToken, addLog)
+.post('/log/delete-log', authenticateToken, deleteLog)
+.get('/log/all-log', authenticateToken, fetchsLog)
   
 module.exports = routerIAM

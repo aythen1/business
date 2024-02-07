@@ -42,7 +42,9 @@ const Table = ({
   // --------------------------------------------------------------------------------------------------------------
   // const [editMode, setEditMode] = useState(false)
   const [table, setTable] = useState(null)
-  const [listItems, setListItems] = useState([])
+  const [tableInfo, setTableInfo] = useState({
+    name: 'default'
+  })
 
   const [textToolTip, setTextToolTip] = useState(null)
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
@@ -82,28 +84,6 @@ const Table = ({
   // --------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
-
-  // const handleAddDashboard = (uuid) => {
-  //   const newUUID = uuidv4()
-
-  //   // setDashboardId(newUUID)
-
-  //   const newDashboard = {
-  //     name: 'new Dashboard'
-  //   }
-
-  //   dispatch(addDashboard(newDashboard))
-
-  //   // // Actualizar la URL con el nuevo UUID
-  //   const newURL = `?dashboard=${encodeURIComponent(newUUID)}`
-  //   window.history.pushState(null, null, newURL)
-  // }
-
-
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
@@ -136,12 +116,14 @@ const Table = ({
           const tag = filterAttribute || camelCase(title).toLowerCase(); // Usa el valor de filterAttribute si existe, de lo contrario, utiliza el título
           const name = nameAttribute || item.props.children
           const size = item.props.size || 200
+          const component = item.props.component || null
           
           return {
             tag,
             title, 
             name,
-            size
+            size,
+            component
           };
         });
 
@@ -209,7 +191,7 @@ useEffect( () => {
               <svg viewBox="0 0 24 24">
                 <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
               </svg>
-              Create Dashboard
+              Create {title}
             </button>
             <a >
               Instance Quickstart Documentation

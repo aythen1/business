@@ -3,6 +3,19 @@
   color: var(--text-color);
   max-width: 800px;
   margin: 10px auto;
+  .back{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #000fff;
+    fill: #000fff;
+    cursor: pointer;
+    font-weight: 600;
+    svg{
+      width: 12px;
+    }
+  }
   .title{
     letter-spacing: 0px;
     font-size: 20px;

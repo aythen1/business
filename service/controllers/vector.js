@@ -193,7 +193,7 @@ async function _getVector(req, res) {
     
     const query = await getVector(id, name, [0, 0], options)
 
-    console.log('query', query)
+    console.log('query1', query)
 
     if(!query.length){
       // response(res, 200, { data: [] })

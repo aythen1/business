@@ -1,7 +1,8 @@
 // const fetch = require('node-fetch');
 const axios = require('axios');
 
-var token = "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"
+// var token = "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"
+var token = "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"
 
 
 // const systemPromptjsx = `You are an expert in creating JSX code for web 
@@ -26,7 +27,7 @@ If it does not detect any element to create an html, it returns an element not f
 
 
 
-const codeGPT = async (code) => {
+const codeGPT = async (code, user) => {
     const systemPromptTailwind = `
     You are a skilled Tailwind CSS developer. 
     Users will provide you with low-fidelity wireframes of applications, 
@@ -63,14 +64,21 @@ const codeGPT = async (code) => {
 
     const assistantResponses = [];
 
-
-    const conversation = [
-        {
-            role: 'user',
-            content: systemPromptTailwind + '\n\nMake code that represents:\n' + textMessage
-            // content: [textMessage, systemPromptTailwind],
-        }
-    ];
+    const conversation = []
+    
+    if(code){
+        conversation.push({
+                role: 'user',
+                content: systemPromptTailwind + '\n\nWith this code:\n' + code + '\n\nMake this change\n\n' + user
+                // content: [textMessage, systemPromptTailwind],
+            });
+    }else{
+        conversation.push({
+                role: 'user',
+                content: systemPromptTailwind + '\n\nMake code that represents:\n' + user
+                // content: [textMessage, systemPromptTailwind],
+            });
+    }
 
 
     try {
@@ -96,12 +104,12 @@ const codeGPT = async (code) => {
 
             const result = await response.json();
 
-            
+            console.log('result', result)
             // const html = result.body.source
             // return res.status(200).send(html)
             if (result && result.choices && result.choices.length > 0) {
                 const assistantResponse = result.choices[0].message.content;
-                
+                console.log('assistantResponse', assistantResponse)
                 // Push the assistant response into the corresponding array
                 const html = await extractCodeBlocks(assistantResponse)
                 assistantResponses[index] = html[1]
@@ -345,6 +353,8 @@ async function formatDate() {
 }
 
 
+
+
 async function extractCodeBlocks(fullCode) {
     // console.log('extract');
     const regex = /```(\w+)[\s\S]+?```/g;
@@ -358,12 +368,11 @@ async function extractCodeBlocks(fullCode) {
         const cleanedCodeBlock = codeBlock.replace(/```(\w+)/, '').replace(/```$/, '').trim();
 
         return [codeType, cleanedCodeBlock];
+    } else {
+        // Si no se encuentra un bloque de código, tratar el texto completo como código
+        return ["plaintext", fullCode.trim()];
     }
-
-    // Si no se encuentra ningún bloque de código, puedes manejarlo de acuerdo a tus necesidades
-    return ["element not found", "<p>No code block found</p>"];
 }
-
 
 
 

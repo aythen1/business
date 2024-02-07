@@ -155,10 +155,14 @@
   align-items: center;
   gap: 8px;
   .dot{
+    min-width: 10px;
     width: 10px;
     height: 10px;
     background-color: red;
     border-radius: 50%;
+    &.active{
+      background-color: #000fff;
+    }
   }
   .avatar{
     .initial{
@@ -171,6 +175,13 @@
       background: red;
     }
 
+    img{
+      min-width: 30px;
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
   }
   .info{
     display: flex;

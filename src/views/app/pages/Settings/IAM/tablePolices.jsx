@@ -21,17 +21,23 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
+import { useNavigate } from 'react-router-dom';
 
 
 
 const TablePolices = ({
-
+  polices
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { polices } = useSelector((state) => state.iam)
+  // const { polices } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
+
+  const handleClickSupport = () => {
+    navigate(`/${'es'}/app/support`)
+}
 
 
   const initialValue = {
@@ -54,7 +60,7 @@ const TablePolices = ({
       <div className={styles.grid2}>
         <p className={styles.text}>
           This is a list of the policies in this Organization. You can view more information about each policy.
-          <a>
+          <a onClick={() => handleClickSupport()}>
             What are policies?
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
@@ -72,6 +78,8 @@ const TablePolices = ({
           fetchs={fetchsPolice}
           items={polices}
           setStateTable={setStateTable}
+          handleAdd={() => dispatch(setModal(<PopupModalRules styles={stylesModal} />))}
+
         >
           <header>
             Polices

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // import Image from 'next/image'
 import Chevron from '../../assets/Vector 161 (Stroke).svg'
 import ArrowDropDown from '../../assets/arrow-drop-down.svg'
-import ArrowUpWard from '../../assets/arrow-upward.svg'
+// import ArrowUpWard from '../../assets/arrow-upward.svg'
 import Folder from '../../assets/FolderFigma.svg'
 import Imagen from '../../assets/imagen.svg'
 import file1 from '../../assets/File (1).svg'
@@ -34,30 +34,45 @@ import FolderOptions from '../FolderOptions'
 import FileOptions from '../FileOptions'
 
 
-import { useParams } from 'react-router-dom';
-
 
 export default function Page({ params, setIsNew }) {
   const dispatch = useDispatch()
   // const { driveId } = useParams();
+  const { user } = useSelector((state) => state.iam)
   const driveId = '1234'
+
+  console.log('driveId', driveId)
 
   const [showTypeDrive, setShowTypeDrive] = useState('cloud')
 
   const { directoriesData, loading, empty, fileToCopy, searchFiles } =
     useSelector((state) => state.assets)
+
   const [currentPath, setCurrentPath] = useState(driveId + '/')
   const [filteredFolders, setFilteredFolders] = useState([])
   const [folderOptions, setFolderOptions] = useState({})
   const [isDragginFile, setIsDragginFile] = useState(false)
   const [recentFiles, setRecentFiles] = useState([])
-  const filtersData = [
-    { name: 'Filter by:', option: 'All files' },
-    // { name: 'From:', option: 'All projects' },
-    { name: 'Sort by:', option: 'Last viewed' },
-    { name: 'By status:', option: 'All status' }
-  ]
+  const [filters, setFilters] = useState({})
+  const [filtersData, setFiltersData] = useState([
+    { name: 'Filter by:', option: 'All files', view: false },
+    { name: 'Sort by:', option: 'Last viewed', view: false }
+  ])
 
+
+  // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
+
+  const handleClickFilter = (name) => {
+    setFiltersData((prevFilters) => {
+      return prevFilters.map((filter) => {
+        if (filter.name === name) {
+          // Toggle the 'view' property
+          return { ...filter, view: !filter.view };
+        }
+        return filter;
+      });
+    });
+  };
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
@@ -230,7 +245,10 @@ export default function Page({ params, setIsNew }) {
           file: directory
         })
       )
-      dispatch(getFile({ fileName: directory.Key }))
+      dispatch(
+        getFile({
+          fileName: directory.Key
+        }))
       dispatch(
         getElementTag({
           type: 'image',
@@ -246,16 +264,56 @@ export default function Page({ params, setIsNew }) {
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true
   const renderFolders = (folders) => {
     // console.log('fgooold', isGettingFolder,folders, empty)
-    if (folders.length === 0 && empty === true) {
-      return <p className={style.emptyFolderMessage}>Esta carpeta está vacía</p>
-    }
+
     if (isGettingFolder && folders.length === 0 && empty !== true) {
       return (
-        <p className={style.emptyFolderMessage}>Un momento, por favor...</p>
+        <p className={style.emptyFolderMessage}>
+          Un momento, por favor...
+        </p>
       )
     }
 
-    console.log('folders', folders)
+
+    const handleDrop = (event) => {
+      event.preventDefault();
+      const file = event.dataTransfer.files[0];
+
+      if (file) {
+        dispatch(
+          uploadFile({
+            file,
+            // path: currentFolder === '' ? id : currentFolder
+            path: ''
+          })
+        );
+      }
+      // setNewPopup(false);
+    };
+
+    const handleDragOver = (event) => {
+      event.preventDefault();
+    };
+
+    const handleDragStart = () => {
+      // Puedes agregar lógica adicional si es necesario
+    };
+
+
+
+    if (folders.length === 0 && empty === true) {
+      return (
+        <div
+          className={style.emptyFolderMessage}
+          draggable
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onDragStart={handleDragStart}
+        >
+          Esta carpeta está vacía
+        </div>
+      )
+    }
+
     return folders.map((directory, index) => {
       // console.log('ddirr', directory)
       const folderName = directory.Key.split('/').filter(Boolean).pop()
@@ -270,27 +328,26 @@ export default function Page({ params, setIsNew }) {
       return (
         <div
           key={index}
-          onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
           draggable
           onDragOver={handleDragOver}
+          onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
           onDragStart={() => handleDragStart(directory, isFile, folderName)}
           className={style.drive_folder_container}
         >
           <div
+            className={style.drive_clickeable_folder_container}
             onClick={() => {
               isFile
                 ? handleFileClick(directory.Key)
                 : handleFolderClick(directory.Key)
-            }
-            }
-            className={style.drive_clickeable_folder_container}
+            }}
           >
 
             <div className={style.drive_folder_title_container}>
               <div>
                 <input
                   type="checkbox"
-                  // checked={selectedFolders.includes(directory.Key)}
+                  className={`${style.input} ${selectedFolders.length > 0 ? '' : style.hidden}`}
                   checked={selectedFolders.some((selectedFolder) => selectedFolder.Key === directory.Key)}
                   onClick={(e) => {
                     e.stopPropagation()
@@ -306,6 +363,7 @@ export default function Page({ params, setIsNew }) {
             </div>
             <div className={style.drive_folder_lastmodified_container}>1d</div>
           </div>
+
           <div className={style.fileRightSection}>
             <span
               className={style.fileOption}
@@ -314,6 +372,7 @@ export default function Page({ params, setIsNew }) {
               <img src={Menu} alt="" />
             </span>
           </div>
+
           {folderOptions[index] &&
             (isFile ? (
               <FileOptions
@@ -344,6 +403,9 @@ export default function Page({ params, setIsNew }) {
       )
     })
   }
+
+
+
   const renderRecentFiles = (recentFilesFiltered) => {
     return recentFilesFiltered.slice(0, 3).map((file, index) => {
       const fileName = file.Key.split('/').filter(Boolean).pop()
@@ -405,6 +467,10 @@ export default function Page({ params, setIsNew }) {
       )
     })
   }
+
+
+
+
   return (
     <div className={style.main_drive_page}>
       <div className={style.drive_header}>
@@ -419,23 +485,41 @@ export default function Page({ params, setIsNew }) {
         </div>
         <div className={style.drive_header_right}>
           {filtersData.map((filter, index) => (
-            <div key={index} className={style.drive_header_right_filter}>
-              <p className={style.drive_header_right_filter_text}>
-                {filter.name}
-              </p>
-              <p className={style.drive_header_right_filter_text}>
-                {filter.option}
-              </p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                alt="Chevron"
-              >
-                <path
-                  fill="currentColor"
-                  d="M12 21l-12-18h24z"
-                />
-              </svg>
+            <div key={index} style={{ position: 'relative' }} >
+              <div className={style.drive_header_right_filter} onClick={() => handleClickFilter(filter.name)}>
+                <p className={style.drive_header_right_filter_text}>
+                  {filter.name}
+                </p>
+                <p className={style.drive_header_right_filter_text}>
+                  {filter.option}
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  alt="Chevron"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 21l-12-18h24z"
+                  />
+                </svg>
+              </div>
+              {filter.view && (
+                <ul className={style.drive_options}>
+                  <li>
+                    Name
+                  </li>
+                  <li>
+                    Last modified
+                  </li>
+                  <li>
+                    Last modified by me
+                  </li>
+                  <li>
+                    Last opened by me
+                  </li>
+                </ul>
+              )}
             </div>
           ))}
         </div>
@@ -492,35 +576,48 @@ export default function Page({ params, setIsNew }) {
                 >
                   {folder}
                 </span>
-                {/* <p>
+                <p>
                   {index !== currentPath.split('/').length && (
-                    <Image src={Chevron} priority />
+                    // <Image src={Chevron} priority />
+                    <div>
+                      e
+                    </div>
                   )}
-                </p> */}
+                </p>
               </div>
             ))}
         </div>
         <div className={style.drive_folders_container}>
           <div className={style.drive_folders_filters_container}>
             <div className={style.drive_folders_filters_title_container}>
-              <input className={style.input} type="checkbox" checked={selectAll} onChange={handleSelectAllChange} />
-              <p className={style.drive_folders_filters_title}>Name</p>
-              <img src={ArrowUpWard} />
+              <input
+                className={`${style.input} ${selectedFolders.length > 0 ? '' : style.hidden}`}
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAllChange}
+              />
+              <p className={style.drive_folders_filters_title}>
+                Name
+              </p>
+              <Filters name="name" filters={filters} setFilters={setFilters} />
             </div>
             <div className={style.drive_folder_size_container}>
-              <p className={style.drive_folders_filters_title}>Tamaño</p>
-              <img src={ArrowUpWard} />
+              <p className={style.drive_folders_filters_title}>
+                Tamaño
+              </p>
+              <Filters name="size" filters={filters} setFilters={setFilters} />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>
                 Último modificado
               </p>
-              <img src={ArrowUpWard} />
+              <Filters name="lastedAt" filters={filters} setFilters={setFilters} />
             </div>
           </div>
           {renderFolders(filteredFolders)}
         </div>
       </div>
+
       {selectedFolders.length > 0 && (
         <div className={style.drive_banner_data}>
           <div>
@@ -545,6 +642,39 @@ export default function Page({ params, setIsNew }) {
           </div>
         </div>
       )}
+
+
+
     </div>
   )
+}
+
+
+
+
+const Filters = ({ name, filters, setFilters }) => {
+  const [isActive, setIsActive] = useState(filters)
+  console.log('filters', filters)
+  const handleClick = (order) => {
+    setFilters({ name, order });
+  };
+
+  return (
+    <div
+      className={`${style.filters} 
+      ${filters.name !== name ? '' : filters.order == 'asc' ? style.bottom : style.top}
+      `}
+      onClick={() => handleClick(filters.order === 'asc' ? 'dsc' : 'asc')}
+    >
+      <svg
+        className={style.top} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19V5m0 14-4-4m4 4 4-4" />
+      </svg>
+      <svg
+        className={style.bottom} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v13m0-13 4 4m-4-4-4 4" />
+      </svg>
+    </div>
+  )
+
 }

@@ -22,34 +22,7 @@ const encodeVector = (id) => {
   return base64Str
 }
 
-function decodeToken(token) {
-  try {
-    // Decodifica el token utilizando la clave secreta
-    const decoded = jwt.verify(token, secretKey);
-    return decoded;
-  } catch (error) {
-    // Maneja errores de decodificación, por ejemplo, token no válido o expirado
-    console.error('Error al decodificar el token:', error.message);
-    return null;
-  }
-}
 
-
-const isAuth = async (token) => {
-  const data = await decodeToken(token)
-  const path = encodeVector(ID)
-
-  const options = [
-    { field: 'id', operator: '==', value: data.id },
-    { field: 'user', operator: '==', value: data.user },
-    { field: 'isverified', operator: '==', value: true }
-  ];
-
-  const resp = await getVector(path, 'users', [0, 0], options)
-
-  if (resp.length > 0) return resp[0]
-  return false
-}
 
 
 
@@ -59,68 +32,55 @@ const isAuth = async (token) => {
 
 
 const fetchsDashboard = async (req, res) => {
-  try{
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    
-    // console.log('1234 - dashboard', token)
-    
+  try {
+    // const { user } = req
     const path = encodeVector(ID)
-    const result = await isAuth(token)
 
-    if (result) {
-      const data = await getVector(path, 'dashboards')
-      // console.log('fetchsDashboard', data)
-      if (Array.isArray(data)) {
-        return res.status(200).send(data)
-      }
+    console.log('==================')
+
+    const data = await getVector(path, 'dashboards')
+    // console.log('fetchsDashboard', data)
+    if (Array.isArray(data)) {
+      return res.status(200).send(data)
     }
-    
+
+
     return res.status(200).send([])
-  }catch(err){
+  } catch (err) {
     return res.status(200).send([])
   }
 }
 
 const fetchDashboard = async (req, res) => {
-  try{
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    const result = await isAuth(token)
+  try {
     const path = encodeVector(ID)
 
 
-    if (result) {
-      const data = await getVector(path, 'dashboards')
-      if (Array.isArray(data)) {
-        return res.status(200).send(data)
-      }
+    const data = await getVector(path, 'dashboards')
+    if (Array.isArray(data)) {
+      return res.status(200).send(data)
     }
-    
+
     return res.status(200).send([])
-  }catch(err){
+  } catch (err) {
     return res.status(200).send([])
   }
 }
 
 const deleteDashboard = async (req, res) => {
-  try{
-    const { token, id } = req.body
+  try {
+    const { id } = req.body
 
-    const result = await isAuth(token)
     const path = encodeVector(ID)
-  
-    if (!result) {
-      return res.status(501).send(arr)
-    } else {
-      const resp = await deleteVector(path, 'dashboards', id)
-  
-      console.log('resp', resp)
-    }
-  
+
+
+    const resp = await deleteVector(path, 'dashboards', id)
+
+    console.log('resp', resp)
+
+
     return res.status(200).send(id)
-  }catch(err){
+  } catch (err) {
     return res.status(200).send(id)
   }
 }
@@ -129,20 +89,17 @@ const deleteDashboard = async (req, res) => {
 
 
 const addDashboard = async (req, res) => {
-  try{
-    const { token, dashboard } = req.body
+  try {
+    const { user } = req
+    const { dashboard } = req.body
     const path = encodeVector(ID)
-    const result = await isAuth(token)
 
-    
-    if (result) {
-      const resp = await addVector(path, 'dashboards', [0, 0], dashboard, { users: result })
-      
-      return res.status(200).send(resp)
-    }else{
-      return res.status(501).send('Not verify user')
-    }
-  }catch(err){
+
+    const resp = await addVector(path, 'dashboards', [0, 0], dashboard, { users: user })
+
+    return res.status(200).send(resp)
+
+  } catch (err) {
     return res.status(500).send('Not verify user')
   }
 }
@@ -150,23 +107,17 @@ const addDashboard = async (req, res) => {
 
 
 const updateDashboard = async (req, res) => {
-  try{
-    const { token, dashboard } = req.body
+  try {
+    const { dashboard } = req.body
     const path = encodeVector(ID)
-    const result = await isAuth(token)
 
     console.log('wuijduwjiduwjeji')
-    
-    if (result) {
-      const resp = await updateVector(path, 'dashboards', [0, 0], dashboard)
 
-      console.log('rres', resp)
-      
-      return res.status(200).send(resp)
-    }else{
-      return res.status(501).send('Not verify user')
-    }
-  }catch(err){
+    const resp = await updateVector(path, 'dashboards', [0, 0], dashboard)
+
+    console.log('rres', resp)
+
+  } catch (err) {
     return res.status(500).send('Not verify user')
   }
 }

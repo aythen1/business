@@ -2,6 +2,8 @@ const { catchedAsync, response } = require('../utils/err')
 const jwt = require('jsonwebtoken')
 const { ClientError } = require('../utils/err/errors')
 
+const fs = require('fs').promises
+const path = require('path')
 // const crypto = require('crypto');
 
 
@@ -36,6 +38,37 @@ const encodeVector = (id) => {
 }
 
 
+async function getFolderFromDirectory(directory) {
+  try {
+      // Read the elements in the directory
+      const elements = await fs.readdir(directory);
+
+      // Filter only folders with the .lance extension
+      const folders = await Promise.all(
+          elements.map(async (element) => {
+              const fullPath = path.join(directory, element);
+              const stats = await fs.stat(fullPath);
+              
+              if (stats.isDirectory() && element.endsWith('.lance')) {
+                  // Remove the .lance extension and add the name to the list
+                  return element.slice(0, -('.lance'.length));
+              }
+              
+              return null;
+          })
+      );
+
+      // Filter out non-null folders and return the resulting array
+      return folders.filter((folder) => folder !== null);
+  } catch (error) {
+      console.error('Error retrieving folder names:', error);
+      return [];
+  }
+}
+
+
+
+
 
 
 
@@ -57,17 +90,46 @@ const fetchsAddon = async (req, res) => {
 
 const fetchAddon = async (req, res) => {
   try {
-    const path = encodeVector(ID)
+    const { id } = req.params
+    const pathAddon = encodeVector(ID)
 
-    const data = await getVector(path, 'dashboards')
-    if (Array.isArray(data)) {
-      return res.status(200).send(data)
+    console.log('wcxwc')
+    const options = [
+      { field: 'id', operator: '==', value: id },
+    ];
+
+    const respAddon = await getVector(pathAddon, 'addons', [0, 0], options)
+    
+    if(respAddon.length == 0){
+      return res.status(404).send('Not exist')
     }
 
-    return res.status(200).send([])
+    const addon = respAddon[0]
+    const nameAddon = addon.title || 'shared'
+    const pathVector = encodeVector(`addon/${nameAddon}`)
+
+    const arr = await getFolderFromDirectory(`data/vector/addon/${nameAddon}`)
+
+
+    const vectors = []
+    for(var i = 0; i<arr.length; i++){
+      const respVector = await getVector(pathVector, arr[i])
+      if(respVector.length !== 0){
+        vectors.push(respVector[0])
+      }
+      // console.log('rrrs', vectors)
+    }
+
+
+    return res.status(200).send({
+      addon,
+      vectors
+    })
   } catch (err) {
-    return res.status(200).send([])
+    console.log('err', err)
   }
+
+  
 }
 
 
@@ -94,11 +156,11 @@ const deleteAddon = async (req, res) => {
 const addAddon = async (req, res) => {
   try {
     const { user } = req
-    const { dashboard } = req.body
+    const { addon } = req.body
     const path = encodeVector(ID)
     // const result = await isAuth(token)
 
-    const resp = await addVector(path, 'addons', [0, 0], dashboard, { users: user })
+    const resp = await addVector(path, 'addons', [0, 0], addon, { users: user })
 
     return res.status(200).send(resp)
 
@@ -106,6 +168,29 @@ const addAddon = async (req, res) => {
     return res.status(500).send('Not verify user')
   }
 }
+
+
+
+
+const addVectorAddon = async (req, res) => {
+  try {
+    const { addon, vector } = req.body
+    
+    // console.log('==============', addon, vector)
+    const path = encodeVector(`addon/${addon.title || 'shared'}`)
+    const name = vector.title || 'default'
+    // const result = await isAuth(token)
+    
+    const resp = await addVector(path, name, [0, 0], vector, { addons: addon })
+  
+    // console.log('reess', resp)
+    return res.status(200).send(resp)
+  
+  } catch (err) {
+    return res.status(500).send('Not verify user')
+  }  
+}
+
 
 
 const updateAddon = async (req, res) => {
@@ -151,13 +236,12 @@ const visionAddon = async (req, res) => {
 
 const codeAddon = async (req, res) => {
   try {
-    const { code } = req.body
+    const { code, user } = req.body
     const path = encodeVector(ID)
 
     console.log('wuijduwjiduwjeji', code)
 
-    const resp = await codeGPT(code)
-    console.log('resp', resp)
+    const resp = await codeGPT(code, user)
     // const resp = await updateVector(path, 'addons', [0, 0], addon)
     // const resp = []
 
@@ -193,6 +277,8 @@ module.exports = {
   deleteAddon: catchedAsync(deleteAddon),
   addAddon: catchedAsync(addAddon),
   updateAddon: catchedAsync(updateAddon),
+  
+  addVectorAddon: catchedAsync(addVectorAddon),
   
   visionAddon: catchedAsync(visionAddon),
   codeAddon: catchedAsync(codeAddon),
