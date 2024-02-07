@@ -54,15 +54,16 @@ const SettingsCurrentConsumption = () => {
         navigate('/es/app/settings/contracts')
     }
 
+   
 
 
     return (
         <div className={styles["boxConsumption1"]}>
             <div className={styles["grid2"]}>
                 <div className={styles["bar"]}>
-                    <BarChart className={styles["image"]} />
+                    <BarChart className={styles["image"]}  />
                     {/* <img src={GraphDonut}  /> */}
-                    <div className={styles["box"]}>
+                    <div className={styles["box"]} >
                         <b className={styles["pricing"]}>
                             €0.00
                         </b>

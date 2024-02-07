@@ -4,7 +4,8 @@ import styles from "./index.module.css";
 
 
 import SelectFlags from '@/views/app/pages/shared/SelectFlags'
-
+import { publish } from '../eventHandler';
+import tinycolor from 'tinycolor2';
 
 import {
   updateUser,
@@ -185,18 +186,37 @@ export const MenuLeftUser = ({
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   }
 
+  const generarTonalidades = (baseColor) => {
+    const color = tinycolor(baseColor);
+    const tonalidades = [
+      color.lighten(15).toString(),
+      color.toString(),
+      color.darken(15).toString(),
+    ];
+    return tonalidades;
+  };
+
   const handleColorClick = (index) => {
     const updatedColors = [...colores];
+    const clickedColor = updatedColors[index];
+    console.log('Color clicado:', clickedColor);
+
+    // Generar tonalidades y mostrar en consola
+    const tonalidades = generarTonalidades(clickedColor);
+    console.log('Tonalidades:', tonalidades);
+
     updatedColors[index] = generarColorAleatorio();
     setColores(updatedColors);
-  }
+    publish('colorChanged', clickedColor);
+  };
 
-  const [colores, setColores] = useState([
+  const [colores, setColores] = useState(() => ([
     generarColorAleatorio(),
     generarColorAleatorio(),
     generarColorAleatorio(),
     generarColorAleatorio(),
-  ]);
+  ]));
+
 
   return (
     <div className={styles["frame-1171276727"]}>
@@ -390,13 +410,7 @@ export const MenuLeftUser = ({
           </div>
         </div>
       </div>
-      {/* <div className={styles["horizontal-color-containers"]}>
-      <div className={styles["color-container"]} style={{ background: 'var(--default)', border: '1px solid #000' }} onClick={handleClickWhite}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor1 }} onClick={() => handleClick1()}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor2 }} onClick={() => handleClick2()}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor3 }} onClick={() => handleClick3()}></div>
-    </div> */}
-
+     
       <div className={styles["horizontal-color-containers"]}>
         {colores.map((color, index) => (
           <div

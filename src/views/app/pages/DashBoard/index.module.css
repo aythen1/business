@@ -2,7 +2,7 @@
     display: flex;
     align-items: flex-start;
     gap: 6px;
-    border-left: 3px solid #000fff;
+  
     background: var(--background-alert);
     border-radius: 4px;
     padding: 12px 10px;

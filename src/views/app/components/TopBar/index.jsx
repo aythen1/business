@@ -24,7 +24,7 @@ import {
   // setOpenMenuLeft,
 } from '@/slices/iamSlice'
 
-
+import { subscribe } from '../eventHandler';
 
 import {
   logout,
@@ -33,46 +33,46 @@ import {
   setOpenChatBot,
 } from '@/actions/iam'
 
-import { 
-  updateDashboard, 
+import {
+  updateDashboard,
 } from '@/actions/dashboard';
 
 
 
 export const TopBar = ({
   themeMode,
-  setThemeMode
+  setThemeMode,
+
 }) => {
+  const [selectedColor, setSelectedColor] = useState('#0000ff');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // const { openMenuLeft, openChatBot } = useSelector((state) => state.iam)
 
-
   const { user } = useSelector((state) => state.iam)
   const { dashboard, status } = useSelector((state) => state.dashboard)
-
   const [openMenuMobile, setOpenMenuMobile] = useState(false)
   const [isUpgrade, setIsUpgrade] = useState(false)
   const [stateUpgrade, setStateUpgrade] = useState(false)
-
-  const [isShowDashBoard, setIsShowDashBoard ] = useState(false)
+  const [isShowDashBoard, setIsShowDashBoard] = useState(false)
 
   // --------------------------------------------------------------
-  
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const dashboardParam = urlParams.get('dashboard');
 
     console.log('ddd', dashboardParam)
-    if(dashboardParam){
+    if (dashboardParam) {
       setIsShowDashBoard(true)
-    }else{
+    } else {
       setIsShowDashBoard(false)
     }
+
+
   }, [])
-
-
 
   useEffect(() => {
     if (user && user.upgradedat) {
@@ -83,17 +83,23 @@ export const TopBar = ({
     }
   }, [user]);
 
+  useEffect(() => {
+    const subscription = subscribe('colorChanged', (color) => {
+      setSelectedColor(color);
+    });
+
+    return () => {
+      subscription(); // Cleanup subscription on component unmount
+    };
+  }, []);
+
   // --------------------------------------------------------------
-
-
 
   const handleClickUser = () => {
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft('user'))
-    
     setOpenMenuMobile(false)
   }
-
 
   const handleClickSave = () => {
     console.log('dash', dashboard)
@@ -109,7 +115,6 @@ export const TopBar = ({
       </div>
     ))
   }
-
 
   const handleClickChat = () => {
     setOpenMenuMobile(false)
@@ -137,8 +142,6 @@ export const TopBar = ({
     navigate(`/${'es'}/app/langchain`);
   }
 
-
-
   const handleClickReport = () => {
     setOpenMenuMobile(false)
 
@@ -163,7 +166,6 @@ export const TopBar = ({
 
     navigate(`/${'es'}/app/drive`);
   }
-
 
   const handleClickDashboard = () => {
     setOpenMenuMobile(false)
@@ -210,13 +212,12 @@ export const TopBar = ({
 
   const handleClickOpenMenu = () => {
     setOpenMenuMobile(false)
-    
+
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
     setOpenMenuMobile(!openMenuMobile)
   }
-
 
   // -------------------------------------
   useEffect(() => {
@@ -227,16 +228,13 @@ export const TopBar = ({
     }
   }, [stateUpgrade])
 
-  // -------------------------------------
-
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
-      // Maneja el error de la carga de la imagen
-      setImageError(true);
+    // Maneja el error de la carga de la imagen
+    setImageError(true);
   };
 
-  
   return (
     <div className={styles["frame-2087325960"]}>
       <div
@@ -248,18 +246,18 @@ export const TopBar = ({
         </div> */}
 
         <div className={styles["ellipse-2325"]}>
-            {imageError ? (
-                <div className={styles.initial}>
-                    {user?.user.charAt(0)}
-                </div>
-            ) : (
-                <img src={`http://localhost:3001/service/v1/iam/user/${user?.id}`} onError={handleImageError} />
-            )}
+          {imageError ? (
+            <div className={styles.initial}>
+              {user?.user.charAt(0)}
+            </div>
+          ) : (
+            <img src={`http://localhost:3001/service/v1/iam/user/${user?.id}`} onError={handleImageError} />
+          )}
         </div>
 
         <div className={styles["frame-23415"]}>
           <div className={styles["welcome-john-doe"]}>
-            Welcome, { user?.name || 'Not found'}
+            Welcome, {user?.name || 'Not found'}
           </div>
           <div
             onClick={(e) => {
@@ -304,35 +302,37 @@ export const TopBar = ({
         ) : (
           <div
             onClick={() => handleClickUpgrade()}
-            className={styles["component-8"]}
+              className={styles["component-8"]} style={{ backgroundColor: selectedColor }}
           >
-            <div className={styles["label"]}>Upgrade </div>
+              <div className={styles["label"]} >
+                Upgrade
+              </div>
           </div>
         )}
         <div className={styles["group-1171276726"]}>
           <div className={styles["component-7"]}>
 
             {isShowDashBoard ? (
-                <div 
-                  onClick={() => handleClickReport()}
-                  className={styles["informe"]}
+              <div
+                onClick={() => handleClickReport()}
+                className={styles["informe"]}
+              >
+                <svg
+                  className={styles["archive-tray"]}
+                  width="23"
+                  height="23"
+                  viewBox="0 0 23 23"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <svg
-                    className={styles["archive-tray"]}
-                    width="23"
-                    height="23"
-                    viewBox="0 0 23 23"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M17.9688 3.49414H4.21875C3.85408 3.49414 3.50434 3.63475 3.24648 3.88502C2.98862 4.1353 2.84375 4.47475 2.84375 4.8287V18.1743C2.84375 18.5282 2.98862 18.8677 3.24648 19.118C3.50434 19.3682 3.85408 19.5088 4.21875 19.5088H17.9688C18.3334 19.5088 18.6832 19.3682 18.941 19.118C19.1989 18.8677 19.3438 18.5282 19.3438 18.1743V4.8287C19.3438 4.47475 19.1989 4.1353 18.941 3.88502C18.6832 3.63475 18.3334 3.49414 17.9688 3.49414ZM7.85734 10.3621C7.92119 10.3001 7.99702 10.2509 8.08048 10.2173C8.16394 10.1837 8.2534 10.1664 8.34375 10.1664C8.4341 10.1664 8.52356 10.1837 8.60702 10.2173C8.69048 10.2509 8.76631 10.3001 8.83016 10.3621L10.4062 11.8927V6.83054C10.4062 6.65356 10.4787 6.48384 10.6076 6.3587C10.7365 6.23356 10.9114 6.16326 11.0938 6.16326C11.2761 6.16326 11.451 6.23356 11.5799 6.3587C11.7088 6.48384 11.7812 6.65356 11.7812 6.83054V11.8927L13.3573 10.3621C13.4212 10.3001 13.4971 10.2509 13.5805 10.2174C13.664 10.1838 13.7534 10.1666 13.8438 10.1666C13.9341 10.1666 14.0235 10.1838 14.107 10.2174C14.1904 10.2509 14.2663 10.3001 14.3302 10.3621C14.394 10.4241 14.4447 10.4977 14.4793 10.5787C14.5138 10.6597 14.5316 10.7465 14.5316 10.8342C14.5316 10.9219 14.5138 11.0087 14.4793 11.0897C14.4447 11.1707 14.394 11.2443 14.3302 11.3063L11.5802 13.9754C11.5163 14.0375 11.4405 14.0867 11.357 14.1203C11.2736 14.1539 11.1841 14.1711 11.0938 14.1711C11.0034 14.1711 10.9139 14.1539 10.8305 14.1203C10.747 14.0867 10.6712 14.0375 10.6073 13.9754L7.85734 11.3063C7.79342 11.2443 7.74271 11.1707 7.70812 11.0897C7.67352 11.0087 7.65571 10.9219 7.65571 10.8342C7.65571 10.7465 7.67352 10.6597 7.70812 10.5787C7.74271 10.4977 7.79342 10.4241 7.85734 10.3621ZM17.9688 18.1743H4.21875V14.8379H6.6843L8.34375 16.4494C8.47113 16.5736 8.62261 16.672 8.78945 16.739C8.95628 16.806 9.13515 16.8403 9.3157 16.8397H12.8718C13.0524 16.8403 13.2314 16.806 13.3982 16.7388C13.5651 16.6717 13.7165 16.573 13.8438 16.4485L15.5032 14.8379H17.9688V18.1743Z"
-                      fill="#979797"
-                    />
-                  </svg>
-                  <span className={styles["informe-span2"]}>Informe</span>
-                </div>
-            ):(
+                  <path
+                    d="M17.9688 3.49414H4.21875C3.85408 3.49414 3.50434 3.63475 3.24648 3.88502C2.98862 4.1353 2.84375 4.47475 2.84375 4.8287V18.1743C2.84375 18.5282 2.98862 18.8677 3.24648 19.118C3.50434 19.3682 3.85408 19.5088 4.21875 19.5088H17.9688C18.3334 19.5088 18.6832 19.3682 18.941 19.118C19.1989 18.8677 19.3438 18.5282 19.3438 18.1743V4.8287C19.3438 4.47475 19.1989 4.1353 18.941 3.88502C18.6832 3.63475 18.3334 3.49414 17.9688 3.49414ZM7.85734 10.3621C7.92119 10.3001 7.99702 10.2509 8.08048 10.2173C8.16394 10.1837 8.2534 10.1664 8.34375 10.1664C8.4341 10.1664 8.52356 10.1837 8.60702 10.2173C8.69048 10.2509 8.76631 10.3001 8.83016 10.3621L10.4062 11.8927V6.83054C10.4062 6.65356 10.4787 6.48384 10.6076 6.3587C10.7365 6.23356 10.9114 6.16326 11.0938 6.16326C11.2761 6.16326 11.451 6.23356 11.5799 6.3587C11.7088 6.48384 11.7812 6.65356 11.7812 6.83054V11.8927L13.3573 10.3621C13.4212 10.3001 13.4971 10.2509 13.5805 10.2174C13.664 10.1838 13.7534 10.1666 13.8438 10.1666C13.9341 10.1666 14.0235 10.1838 14.107 10.2174C14.1904 10.2509 14.2663 10.3001 14.3302 10.3621C14.394 10.4241 14.4447 10.4977 14.4793 10.5787C14.5138 10.6597 14.5316 10.7465 14.5316 10.8342C14.5316 10.9219 14.5138 11.0087 14.4793 11.0897C14.4447 11.1707 14.394 11.2443 14.3302 11.3063L11.5802 13.9754C11.5163 14.0375 11.4405 14.0867 11.357 14.1203C11.2736 14.1539 11.1841 14.1711 11.0938 14.1711C11.0034 14.1711 10.9139 14.1539 10.8305 14.1203C10.747 14.0867 10.6712 14.0375 10.6073 13.9754L7.85734 11.3063C7.79342 11.2443 7.74271 11.1707 7.70812 11.0897C7.67352 11.0087 7.65571 10.9219 7.65571 10.8342C7.65571 10.7465 7.67352 10.6597 7.70812 10.5787C7.74271 10.4977 7.79342 10.4241 7.85734 10.3621ZM17.9688 18.1743H4.21875V14.8379H6.6843L8.34375 16.4494C8.47113 16.5736 8.62261 16.672 8.78945 16.739C8.95628 16.806 9.13515 16.8403 9.3157 16.8397H12.8718C13.0524 16.8403 13.2314 16.806 13.3982 16.7388C13.5651 16.6717 13.7165 16.573 13.8438 16.4485L15.5032 14.8379H17.9688V18.1743Z"
+                    fill="#979797"
+                  />
+                </svg>
+                <span className={styles["informe-span2"]}>Informe</span>
+              </div>
+            ) : (
               <div onClick={() => handleClickDashboard()}>
                 Dashboard
               </div>

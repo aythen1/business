@@ -16,7 +16,7 @@ import Contract from './contract'
 // import Support from './support'
 import Drive from './drive'
 
-
+import { subscribe } from '../../components/eventHandler';
 
 
 
@@ -63,6 +63,16 @@ const Settings = ({  }) => {
       }
     };
 
+  const [selectedColor, setSelectedColor] = useState('#0000ff');
+  useEffect(() => {
+    const subscription = subscribe('colorChanged', (color) => {
+      setSelectedColor(color);
+    });
+
+    return () => {
+      subscription(); // Cleanup subscription on component unmount
+    };
+  }, []);
 
     return (
         <div className={styles["main"]}>
@@ -70,7 +80,7 @@ const Settings = ({  }) => {
                 <button 
                     onClick={() => selectTag('home')}
                     className={tag === 'home' ? styles.selected : ''}
-                >
+                    style={{ backgroundColor: selectedColor }}>
                     Home
                 </button>
                 <button 

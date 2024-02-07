@@ -1,12 +1,7 @@
-import React, {useEffect, useState} from "react";
-// import ChartistGraph from "react-chartist";
+import React, { useEffect, useState } from "react";
+import { PieChart } from 'chartist';
 
-import { PieChart, BarChart } from 'chartist';
-
-
-// import 'chartist/dist/index.css';
-import './BarChart.css'
-
+import './BarChart.css';
 
 function generateID() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -20,33 +15,31 @@ function generateID() {
   return randomCode;
 }
 
+const BarCharts = () => {
+  const [id] = useState(generateID());
 
-const BarCharts = ( ) =>  {
-    const [id] = useState(generateID())
+  const data = {
+    series: [50, 10, 30, 40],
+  };
 
-    // console.log('id')
+  const colors = ['red', 'green', 'blue', 'yellow']; // Asigna colores según tus necesidades
 
-    const data = {
-        series: [50, 10, 30, 40],
-      };
 
-    useEffect(() => {
-        new PieChart(`#chart-${id}`, data, {
-            donut: true,
-            donutWidth: 18, // Ancho del hueco
-            startAngle: 270,
-            showLabel: true,
-            chartPadding: 0, // Ajusta el espaciado del gráfico
-            // labelInterpolationFnc: (value) => `${value}%`, // Personaliza la forma en que se muestran las etiquetas
+  useEffect(() => {
+    new PieChart(`#chart-${id}`, data, {
+      donut: true,
+      donutWidth: 18,
+      donutSolid: true,
+      donutSolidColor: colors, // Proporciona el array de colores
+      startAngle: 270,
+      showLabel: true,
+      chartPadding: 0,
+    });
+  }, [id, colors]);
 
-          });
-    }, [])
-      
   return (
-    // <div style={{position:'relative'}}>
-      <div id={`chart-${id}`} className={'box-chart'}/>
-    // </div>
+    <div id={`chart-${id}`} className={'box-chart'} />
   );
 }
 
-export default BarCharts
+export default BarCharts;
