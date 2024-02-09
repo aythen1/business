@@ -69,6 +69,7 @@ import {
   calculateFolderSize,
   deleteItemsInDirectory,
   getFilesInDescendingOrder,
+  formatLastModified,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 import Menu from "../../assets/Menu-figma.svg";
@@ -397,6 +398,10 @@ export default function Page({ params, setIsNew }) {
       // console.log('ddirr', directory)
       const folderName = directory.Key.split("/").filter(Boolean).pop();
       const isFile = regexExtensiones.test(folderName);
+      const fileExtension = folderName
+        .toLowerCase()
+        .match(regexExtensiones)?.[1];
+      const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
       const size = isFile
         ? convertToMegabytes(directory.Size)
         : convertToMegabytes(
@@ -436,13 +441,15 @@ export default function Page({ params, setIsNew }) {
                   }}
                 />
               </div>
-              <img src={isFile ? Imagen : Folder} />
+              <img src={icon} style={{ width: 16 }} />
               <p className={style.drive_folder_title}>{folderName}</p>
             </div>
             <div className={style.drive_folder_size_container}>
               <span>{size}</span>
             </div>
-            <div className={style.drive_folder_lastmodified_container}>1d</div>
+            <div className={style.drive_folder_lastmodified_container}>
+              {formatLastModified(directory.LastModified)}
+            </div>
           </div>
 
           <div className={style.fileRightSection}>
@@ -486,18 +493,17 @@ export default function Page({ params, setIsNew }) {
   };
 
   const renderRecentFiles = (recentFilesFiltered) => {
-    // Filtra primero para obtener solo archivos
+    // filtramos primero para obtener solo archivos
     const filesOnly = recentFilesFiltered.filter((file) => {
       const fileName = file.Key.split("/").filter(Boolean).pop();
       return regexExtensiones.test(fileName); // Retorna true si el archivo cumple con el regex de extensiones, indicando que es un archivo.
     });
 
-    // Luego, trabaja solo con los primeros 3 archivos
+    // trabajamos solo con los primeros 3 archivos
     return filesOnly.slice(0, 3).map((file, index) => {
       const fileName = file.Key.split("/").filter(Boolean).pop();
-      // Aquí, isFile siempre será true, por lo que la variable podría eliminarse si no se usa para otro propósito
       const fileExtension = fileName.toLowerCase().match(regexExtensiones)?.[1];
-      const icon = fileExtension ? icons[fileExtension] : file1; // Usa el ícono correspondiente o default si no se encuentra
+      const icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
       const size = convertToMegabytes(file.Size);
       return (
         <div
