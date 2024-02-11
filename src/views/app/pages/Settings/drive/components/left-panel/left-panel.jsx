@@ -1,164 +1,153 @@
-'use client'
-import { useDispatch, useSelector } from 'react-redux'
-import { useState, useRef, useEffect } from 'react'
+"use client";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef, useEffect } from "react";
 // import { useRouter, useParams } from 'next/navigation'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
 // import { updateUser } from '../../../../../../store/redux/actions/user.js'
 import {
   createNewFolder,
   addFolderLocal,
-  uploadFile
-} from '@/actions/assets'
-import style from './left-panel.module.css'
+  uploadFile,
+  selectCategory,
+} from "@/actions/assets";
+import style from "./left-panel.module.css";
 // import Image from 'next/image'
 // import Chevron from '../../../../../../../assets/Vector 161 (Stroke).svg'
-import Search from '../../assets/search.svg'
-import Sun from '../../assets/SunDim.svg'
-import Info from '../../assets/Info.svg'
-import Group from '../../assets/Group.svg'
-import Star from '../../assets/Star.svg'
-import Trash from '../../assets/Trash.svg'
-import Time from '../../assets/Time.svg'
+import Search from "../../assets/search.svg";
+import Info from "../../assets/Info.svg";
+import Group from "../../assets/Group.svg";
+import Star from "../../assets/Star.svg";
+import Trash from "../../assets/Trash.svg";
+import Time from "../../assets/Time.svg";
 
-import Folder from '../../assets/FolderFigma.svg'
-import file1 from '../../assets/File-to-upload.svg'
+import Folder from "../../assets/FolderFigma.svg";
+import file1 from "../../assets/File-to-upload.svg";
 
-import MyDocs from '../../assets/MyDocs.svg'
-import { setSearchFiles } from '@/slices/assetsSlice'
-import Modal from 'react-modal'
+import MyDocs from "../../assets/MyDocs.svg";
+import { setSearchFiles } from "@/slices/assetsSlice";
+import Modal from "react-modal";
 // import { listMvps } from './listMvps';
 // import { useNavigate } from 'react-router-dom'
 
 // import stylesModal from './stylesModal'
 
-import { listMvps } from './listMvps'
+import { listMvps } from "./listMvps";
 
-import {
-  setModal
-} from '@/slices/iamSlice'
+import { setModal } from "@/slices/iamSlice";
 
-import ModalLanceDb from './ModalLanceDb'
-
-
+import ModalLanceDb from "./ModalLanceDb";
 
 export default function DriveLeftPanel({ isNew, setIsNew }) {
-  const params = useParams()
+  const params = useParams();
   // const router = useRouter()
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // const { id, driveId, lng } = params
-  const { lng } = params
+  const { lng } = params;
 
-  const draveId = '1234'
+  const draveId = "1234";
   // const driveId = id + '1'
 
+  const componentRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-  const componentRef = useRef(null)
-  const fileInputRef = useRef(null)
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.persistedReducer.user)
   // const user = JSON.parse(localStorage.getItem('user')).user
   const { currentFolder, loading, searchFiles } = useSelector(
     (state) => state.assets
-  )
-  const [nameFolder, setNameFolder] = useState('')
-  const [newPopup, setNewPopup] = useState(isNew || false)
-  const [newSubPopup, setSubNewPopup] = useState(false)
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const isCreatingFolder = loading?.UPDATE_DIRECTORY === true
+  );
+  const [nameFolder, setNameFolder] = useState("");
+  const [newPopup, setNewPopup] = useState(isNew || false);
+  const [newSubPopup, setSubNewPopup] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const isCreatingFolder = loading?.UPDATE_DIRECTORY === true;
 
   // ------------------------------------
   useEffect(() => {
     // setNewPopup(newPopup)
-    console.log('new', newPopup)
-    if (newPopup == 'title') {
-
-
-    } else if (newPopup == 'lancedb') {
+    console.log("new", newPopup);
+    if (newPopup == "title") {
+    } else if (newPopup == "lancedb") {
       // alert(11)
-      dispatch(setModal(<ModalLanceDb />))
+      dispatch(setModal(<ModalLanceDb />));
     }
-  }, [newPopup])
-
+  }, [newPopup]);
 
   const handleCreateNewFolder = async () => {
     if (!nameFolder.trim()) {
-      return
+      return;
     }
 
     const folderPath =
-      currentFolder === ''
+      currentFolder === ""
         ? `${driveId}/${nameFolder}`
-        : `${currentFolder}/${nameFolder}`
+        : `${currentFolder}/${nameFolder}`;
     // Puedes verificar si ya existe una carpeta con ese nombre aquí
     // y modificar newFolderName en consecuencia, por ejemplo, añadiendo un número
 
-    await dispatch(createNewFolder(folderPath))
-    console.log('listo')
-    dispatch(addFolderLocal(folderPath + '/'))
+    await dispatch(createNewFolder(folderPath));
+    console.log("listo");
+    dispatch(addFolderLocal(folderPath + "/"));
     // Limpiar el estado después de crear la carpeta
-    setModalIsOpen(false)
-    setNameFolder('')
-  }
+    setModalIsOpen(false);
+    setNameFolder("");
+  };
   const handleFileInputChange = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
 
     if (file) {
       dispatch(
         uploadFile({
           file,
-          path: currentFolder === '' ? draveId : currentFolder
+          path: currentFolder === "" ? draveId : currentFolder,
         })
-      )
+      );
     }
-    setNewPopup(false)
-  }
+    setNewPopup(false);
+  };
   const handleNavigate = (path) => {
     // router.push(`/${lng}/workspace/${id}/drive/${driveId}/${path}`)
-    navigate(`/${lng}/app/settings/drive/${path}`)
-  }
+    navigate(`/${lng}/app/settings/drive/${path}`);
+  };
 
   const handleClickMvp = () => {
-    setSubNewPopup(true)
-  }
+    setSubNewPopup(true);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (componentRef.current && !componentRef.current.contains(event.target))
-        setNewPopup(false)
-    }
-    document.addEventListener('mousedown', handleClickOutside)
+        setNewPopup(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
-
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
         e.preventDefault();
 
-        const inputElement = document.getElementById('searchFile');
+        const inputElement = document.getElementById("searchFile");
         if (inputElement) {
           inputElement.focus();
         }
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener("keydown", handleKeyPress);
     };
   }, []);
-
 
   return (
     <div>
       <div className={style.drive_transformers_container}>
-
         <div className={style.drive_input_container}>
           <img src={Search} />
           <input
@@ -175,10 +164,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
       </div>
 
-
-      <div
-        className={style.drive_create_new_container}
-      >
+      <div className={style.drive_create_new_container}>
         <p
           onClick={() => setNewPopup(!newPopup)}
           className={style.drive_create_new}
@@ -189,12 +175,14 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         <div
           ref={componentRef}
           className={`${style.drive_create_new_popup_container} 
-        ${newPopup ? style.show : ''} ${newPopup == 'title' ? style.title : ''}`}
+        ${newPopup ? style.show : ""} ${
+            newPopup == "title" ? style.title : ""
+          }`}
         >
           <div
             onClick={() => {
-              setNewPopup(false)
-              setModalIsOpen(true)
+              setNewPopup(false);
+              setModalIsOpen(true);
             }}
             className={style.drive_create_new_option}
           >
@@ -204,7 +192,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           </div>
           <div
             onClick={() => {
-              setNewPopup('lancedb')
+              setNewPopup("lancedb");
             }}
             className={style.drive_create_new_option}
           >
@@ -216,7 +204,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             onClick={() => {
               // Abrir el explorador de archivos al hacer clic
               if (fileInputRef.current) {
-                fileInputRef.current.click()
+                fileInputRef.current.click();
               }
             }}
             className={style.drive_create_new_option}
@@ -226,7 +214,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             <input
               type="file"
               ref={fileInputRef}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handleFileInputChange}
             />
           </div>
@@ -242,11 +230,18 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             <img src={file1} width={25} height={25} />
 
             <p>20 mvps aythen</p>
-            <div className={`${style.drive_create_new_popup_container}
-            ${newSubPopup ? style.showSubPopup : ''}`}>
+            <div
+              className={`${style.drive_create_new_popup_container}
+            ${newSubPopup ? style.showSubPopup : ""}`}
+            >
               <div className={`${style.drive_create_new_subpopup_container}`}>
                 {listMvps.map((item, index) => (
-                  <div key={index} className={`${style.drive_create_new_mvp} ${item.lock ? style.active : ''}`}>
+                  <div
+                    key={index}
+                    className={`${style.drive_create_new_mvp} ${
+                      item.lock ? style.active : ""
+                    }`}
+                  >
                     <img src={item.path} width={28} height={28} />
                     <p>Use {item.title}</p>
                   </div>
@@ -255,75 +250,135 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             </div>
           </div>
         </div>
-
       </div>
-
 
       <div className={style.drive_options_container}>
         <div className={style.drive_option}>
           <img src={MyDocs} />
           <p
             className={style.drive_option_text}
-            onClick={() => handleNavigate('document')}
+            onClick={() => dispatch(selectCategory("document"))}
           >
             Mis documentos
           </p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => handleNavigate('addon')}
+          onClick={() => dispatch(selectCategory("addon"))}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" class="css-yaskf e1wwql4e0"><g class="Serverless"><path fill="#A365F6" d="M11.59 3.72a.526.526 0 0 0-.96-.422l-4.056 8.02c-.154.288-.064.536.228.536l2.271-.015c.38 0 .38.194.248.684l-.94 3.858c-.13.64.69.863 1.001.287l4.071-8.06a.301.301 0 0 0-.252-.462l-2.36.01a.236.236 0 0 1-.243-.309z" class="fillStrong"></path><path fill="#4F0599" d="M17.5 14.5A1.5 1.5 0 0 1 16 16h-2.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 13.89 14h1.61V6h-1.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 14.39 4H16a1.5 1.5 0 0 1 1.5 1.5zm-15-9A1.5 1.5 0 0 1 4 4h3.116a.3.3 0 0 1 .29.373l-.31 1.247A.5.5 0 0 1 6.61 6H4.5v8h1.616a.3.3 0 0 1 .29.373l-.311 1.248A.5.5 0 0 1 5.61 16H4a1.5 1.5 0 0 1-1.5-1.5z" class="fill" clip-rule="evenodd" fill-rule="evenodd"></path></g></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            class="css-yaskf e1wwql4e0"
+          >
+            <g class="Serverless">
+              <path
+                fill="#A365F6"
+                d="M11.59 3.72a.526.526 0 0 0-.96-.422l-4.056 8.02c-.154.288-.064.536.228.536l2.271-.015c.38 0 .38.194.248.684l-.94 3.858c-.13.64.69.863 1.001.287l4.071-8.06a.301.301 0 0 0-.252-.462l-2.36.01a.236.236 0 0 1-.243-.309z"
+                class="fillStrong"
+              ></path>
+              <path
+                fill="#4F0599"
+                d="M17.5 14.5A1.5 1.5 0 0 1 16 16h-2.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 13.89 14h1.61V6h-1.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 14.39 4H16a1.5 1.5 0 0 1 1.5 1.5zm-15-9A1.5 1.5 0 0 1 4 4h3.116a.3.3 0 0 1 .29.373l-.31 1.247A.5.5 0 0 1 6.61 6H4.5v8h1.616a.3.3 0 0 1 .29.373l-.311 1.248A.5.5 0 0 1 5.61 16H4a1.5 1.5 0 0 1-1.5-1.5z"
+                class="fill"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </g>
+          </svg>
           <p className={style.drive_option_text}>Addons</p>
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => handleNavigate('dashboard')}
+          onClick={() => dispatch(selectCategory("dashboard"))}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" class="css-yaskf e1wwql4e0"><g class="Containers"><path fill="#4F0599" d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm12 0H5v10h10z" class="fill" clip-rule="evenodd" fill-rule="evenodd"></path><path fill="#A365F6" d="M8 7a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1" class="fillStrong" clip-rule="evenodd" fill-rule="evenodd"></path></g></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            class="css-yaskf e1wwql4e0"
+          >
+            <g class="Containers">
+              <path
+                fill="#4F0599"
+                d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm12 0H5v10h10z"
+                class="fill"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+              <path
+                fill="#A365F6"
+                d="M8 7a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1"
+                class="fillStrong"
+                clip-rule="evenodd"
+                fill-rule="evenodd"
+              ></path>
+            </g>
+          </svg>
           <p className={style.drive_option_text}>Dashboards</p>
           <label className={style.drive_option_label}>Soon</label>
         </div>
-        <div 
+        <div
           className={style.drive_option}
-          onClick={() => handleNavigate('priority')}
+          onClick={() => dispatch(selectCategory("priority"))}
         >
           <img src={Info} />
           <p className={style.drive_option_text}>Prioritarios</p>
         </div>
-        <div 
+        <div
           className={style.drive_option}
-          onClick={() => handleNavigate('shared')}
+          onClick={() => dispatch(selectCategory("shared"))}
         >
           <img src={Group} />
           <p className={style.drive_option_text}>Compartidos</p>
         </div>
-        <div 
+        <div
           className={style.drive_option}
-          onClick={() => handleNavigate('recent')}
+          onClick={() => dispatch(selectCategory("recent"))}
         >
           <img src={Time} />
           <p className={style.drive_option_text}>Recientes</p>
         </div>
-        <div 
+        <div
           className={style.drive_option}
-          onClick={() => handleNavigate('featured')}
+          onClick={() => dispatch(selectCategory("featured"))}
         >
           <img src={Star} />
           <p className={style.drive_option_text}>Destacados</p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => handleNavigate('trash')}
+          onClick={() => dispatch(selectCategory("trash"))}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" class="css-yaskf e1wwql4e0"><g class="Database"><g class="DB"><path fill="#A365F6" d="M10.024 12.797c-2.89 0-6-.841-6-2.69h1.444c.084.32 1.612 1.187 4.556 1.187s4.473-.867 4.557-1.196l1.443.01c0 1.848-3.11 2.69-6 2.69Z" class="fillStrong"></path><path fill="#4F0599" d="M16.497 5.532c0-.01.003-.018.003-.028C16.5 3.44 13.13 2.5 10 2.5s-6.5.94-6.5 3.004c0 .02.005.037.006.057v8.952h.003c.018 2.052 3.373 2.987 6.493 2.987 3.114 0 6.461-.932 6.49-2.977h.005zM10 4.5c2.576 0 4.085.65 4.444 1.004-.359.353-1.868 1.003-4.444 1.003-2.576 0-4.085-.65-4.444-1.003C5.915 5.15 7.425 4.5 10 4.5m.002 11c-2.797 0-4.335-.768-4.489-1.003h-.002V7.75c1.242.512 2.895.757 4.489.757 1.595 0 3.25-.246 4.492-.758v6.679c-.207.328-1.734 1.072-4.49 1.072" class="fill"></path></g></g></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            class="css-yaskf e1wwql4e0"
+          >
+            <g class="Database">
+              <g class="DB">
+                <path
+                  fill="#A365F6"
+                  d="M10.024 12.797c-2.89 0-6-.841-6-2.69h1.444c.084.32 1.612 1.187 4.556 1.187s4.473-.867 4.557-1.196l1.443.01c0 1.848-3.11 2.69-6 2.69Z"
+                  class="fillStrong"
+                ></path>
+                <path
+                  fill="#4F0599"
+                  d="M16.497 5.532c0-.01.003-.018.003-.028C16.5 3.44 13.13 2.5 10 2.5s-6.5.94-6.5 3.004c0 .02.005.037.006.057v8.952h.003c.018 2.052 3.373 2.987 6.493 2.987 3.114 0 6.461-.932 6.49-2.977h.005zM10 4.5c2.576 0 4.085.65 4.444 1.004-.359.353-1.868 1.003-4.444 1.003-2.576 0-4.085-.65-4.444-1.003C5.915 5.15 7.425 4.5 10 4.5m.002 11c-2.797 0-4.335-.768-4.489-1.003h-.002V7.75c1.242.512 2.895.757 4.489.757 1.595 0 3.25-.246 4.492-.758v6.679c-.207.328-1.734 1.072-4.49 1.072"
+                  class="fill"
+                ></path>
+              </g>
+            </g>
+          </svg>
           <p className={style.drive_option_text}>Glaciar</p>
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => handleNavigate('trash')}
+          onClick={() => handleNavigate("trash")}
         >
           <img src={Trash} />
           <p className={style.drive_option_text}>Eliminados</p>
@@ -339,47 +394,47 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           {isCreatingFolder ? (
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <p style={{ fontSize: '18px' }}>Un momento...</p>
+              <p style={{ fontSize: "18px" }}>Un momento...</p>
             </div>
           ) : (
             <>
               <div
-                style={{ borderBottom: '1px solid #c6c6c6' }}
+                style={{ borderBottom: "1px solid #c6c6c6" }}
                 className={style.drive_modal_title_container}
               >
                 <p className={style.drive_modal_title}>Nueva carpeta</p>
               </div>
-              <div style={{ padding: '10px' }}>
+              <div style={{ padding: "10px" }}>
                 <div className={style.drive_modal_name_container} tabIndex="0">
                   <input
                     className={style.drive_modal_name}
                     autoFocus
                     value={nameFolder}
                     onChange={(e) => {
-                      e.preventDefault()
-                      setNameFolder(e.target.value)
+                      e.preventDefault();
+                      setNameFolder(e.target.value);
                     }}
                   />
                 </div>
               </div>
               <div className={style.drive_modal_buttons_container}>
                 <span
-                  style={{ color: 'blue', cursor: 'pointer' }}
+                  style={{ color: "blue", cursor: "pointer" }}
                   onClick={(e) => {
-                    setNameFolder('')
-                    setModalIsOpen(false)
+                    setNameFolder("");
+                    setModalIsOpen(false);
                   }}
                 >
                   Cancelar
                 </span>
                 <span
                   onClick={handleCreateNewFolder}
-                  style={{ color: 'blue', cursor: 'pointer' }}
+                  style={{ color: "blue", cursor: "pointer" }}
                 >
                   Crear
                 </span>
@@ -389,16 +444,5 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
       </Modal>
     </div>
-  )
+  );
 }
-
-
-
-
-
-
-
-
-
-
-
