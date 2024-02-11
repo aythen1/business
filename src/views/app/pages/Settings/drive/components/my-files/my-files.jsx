@@ -6,7 +6,6 @@ import Chevron from "../../assets/Vector 161 (Stroke).svg";
 import ArrowDropDown from "../../assets/arrow-drop-down.svg";
 // import ArrowUpWard from '../../assets/arrow-upward.svg'
 import Folder from "../../assets/FolderFigma.svg";
-import Imagen from "../../assets/imagen.svg";
 
 import ai from "../../assets/icons/AI.svg";
 import avi from "../../assets/icons/AVI.svg";
@@ -121,22 +120,17 @@ const icons = {
 const extensions = Object.keys(icons);
 const regexExtensiones = new RegExp(`\.(${extensions.join("|")})$`, "i");
 
-export default function Page({ params, setIsNew }) {
+export default function Page({ setIsNew, categoryFiles, driveId }) {
   const dispatch = useDispatch();
-
-  // const { driveId } = useParams();
-  const { user } = useSelector((state) => state.iam);
-  const driveId = "1234";
-
-  console.log("driveId", driveId);
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
 
-  const { directoriesData, loading, empty, fileToCopy, searchFiles } =
-    useSelector((state) => state.assets);
+  const { loading, empty, fileToCopy, searchFiles } = useSelector(
+    (state) => state.assets
+  );
 
   const [currentPath, setCurrentPath] = useState(driveId + "/");
-  const [filteredFolders, setFilteredFolders] = useState([]);
+  const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
   const [folderOptions, setFolderOptions] = useState({});
   const [isDragginFile, setIsDragginFile] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
@@ -209,16 +203,12 @@ export default function Page({ params, setIsNew }) {
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
   useEffect(() => {
-    dispatch(getRootDirectories({ Prefix: driveId }));
-  }, []);
-
-  useEffect(() => {
-    setRecentFiles(getFilesInDescendingOrder(directoriesData));
-  }, [directoriesData]);
+    setRecentFiles(getFilesInDescendingOrder(categoryFiles));
+  }, [categoryFiles]);
 
   useEffect(() => {
     if (searchFiles !== "" && searchFiles !== undefined) {
-      const filtered = directoriesData.filter(
+      const filtered = categoryFiles.filter(
         (folder) =>
           folder.Key.startsWith(currentPath) &&
           folder.Key !== currentPath &&
@@ -235,7 +225,7 @@ export default function Page({ params, setIsNew }) {
       setFilteredFolders(sortedFiltered);
     } else {
       // Reset filteredFolders when uploadSearch is empty
-      const filtered = directoriesData.filter(
+      const filtered = categoryFiles.filter(
         (folder) =>
           folder.Key.startsWith(currentPath) &&
           folder.Key !== currentPath &&
@@ -246,7 +236,7 @@ export default function Page({ params, setIsNew }) {
 
       setFilteredFolders(filtered);
     }
-  }, [currentPath, directoriesData, searchFiles]);
+  }, [currentPath, categoryFiles, searchFiles]);
 
   // / / / / / / / / / / / / / / / / / / / / / F U N C I O N E S / / / / / / / / / / / / / / / / / / / /
 
@@ -271,7 +261,7 @@ export default function Page({ params, setIsNew }) {
     dispatch(deleteFolder(path));
   };
   const clearStorage = (path) => {
-    deleteItemsInDirectory(path, handleDeleteDirectory, directoriesData);
+    deleteItemsInDirectory(path, handleDeleteDirectory, categoryFiles);
     dispatch(deleteFolder(path));
   };
   const sendFileToTrash = (path) => {
@@ -350,6 +340,7 @@ export default function Page({ params, setIsNew }) {
   // / / / / / / / / / / / / / / / / M E T O D O S / / / / / / / / / / / / / /
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
   const renderFolders = (folders) => {
+    console.log("folders", folders);
     if (isGettingFolder && folders.length === 0 && empty !== true) {
       return (
         <p className={style.emptyFolderMessage}>Un momento, por favor...</p>
@@ -395,7 +386,6 @@ export default function Page({ params, setIsNew }) {
     }
 
     return folders.map((directory, index) => {
-      // console.log('ddirr', directory)
       const folderName = directory.Key.split("/").filter(Boolean).pop();
       const isFile = regexExtensiones.test(folderName);
       const fileExtension = folderName
@@ -404,9 +394,7 @@ export default function Page({ params, setIsNew }) {
       const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
       const size = isFile
         ? convertToMegabytes(directory.Size)
-        : convertToMegabytes(
-            calculateFolderSize(directory.Key, directoriesData)
-          );
+        : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
 
       return (
         <div
