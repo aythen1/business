@@ -7,47 +7,6 @@ import ArrowDropDown from "../../assets/arrow-drop-down.svg";
 // import ArrowUpWard from '../../assets/arrow-upward.svg'
 import Folder from "../../assets/FolderFigma.svg";
 
-import ai from "../../assets/icons/AI.svg";
-import avi from "../../assets/icons/AVI.svg";
-import bmp from "../../assets/icons/BMP.svg";
-import crd from "../../assets/icons/CRD.svg";
-import csv from "../../assets/icons/CSV.svg";
-import dll from "../../assets/icons/DLL.svg";
-import doc from "../../assets/icons/DOC.svg";
-import docx from "../../assets/icons/DOCX.svg";
-import dwg from "../../assets/icons/DWG.svg";
-import eps from "../../assets/icons/EPS.svg";
-import exe from "../../assets/icons/EXE.svg";
-import flv from "../../assets/icons/FLV.svg";
-import gif from "../../assets/icons/GIF.svg";
-import html from "../../assets/icons/HTML.svg";
-import iso from "../../assets/icons/ISO.svg";
-import javs from "../../assets/icons/JAVS.svg";
-import jpeg from "../../assets/icons/JPEG.svg";
-import mdb from "../../assets/icons/MDB.svg";
-import mid from "../../assets/icons/MID.svg";
-import mov from "../../assets/icons/MOV.svg";
-import mp3 from "../../assets/icons/MP3.svg";
-import mp4 from "../../assets/icons/MP4.svg";
-import mpeg from "../../assets/icons/MPEG.svg";
-import pdf from "../../assets/icons/PDF.svg";
-import png from "../../assets/icons/PNG.svg";
-import ppt from "../../assets/icons/PPT.svg";
-import ps from "../../assets/icons/PS.svg";
-import psd from "../../assets/icons/PSD.svg";
-import pub from "../../assets/icons/PUB.svg";
-import rar from "../../assets/icons/RAR.svg";
-import raw from "../../assets/icons/RAW.svg";
-import rss from "../../assets/icons/RSS.svg";
-import svg from "../../assets/icons/SVG.svg";
-import tiff from "../../assets/icons/TIFF.svg";
-import txt from "../../assets/icons/TXT.svg";
-import wav from "../../assets/icons/WAV.svg";
-import wma from "../../assets/icons/WMA.svg";
-import xml from "../../assets/icons/XML.svg";
-import xsl from "../../assets/icons/XSL.svg";
-import zip from "../../assets/icons/ZIP.svg";
-
 import file1 from "../../assets/File (1).svg";
 
 import { useState, useEffect } from "react";
@@ -69,66 +28,24 @@ import {
   deleteItemsInDirectory,
   getFilesInDescendingOrder,
   formatLastModified,
+  icons,
+  regexExtensiones,
+  categoryTitles,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 import Menu from "../../assets/Menu-figma.svg";
 import FolderOptions from "../FolderOptions";
 import FileOptions from "../FileOptions";
 
-const icons = {
-  ai,
-  avi,
-  bmp,
-  crd,
-  csv,
-  dll,
-  doc,
-  docx,
-  dwg,
-  eps,
-  exe,
-  flv,
-  gif,
-  html,
-  iso,
-  javs,
-  jpeg,
-  mdb,
-  mid,
-  mov,
-  mp3,
-  mp4,
-  mpeg,
-  pdf,
-  png,
-  ppt,
-  ps,
-  psd,
-  pub,
-  rar,
-  raw,
-  rss,
-  svg,
-  tiff,
-  txt,
-  wav,
-  wma,
-  xml,
-  xsl,
-  zip,
-};
-const extensions = Object.keys(icons);
-const regexExtensiones = new RegExp(`\.(${extensions.join("|")})$`, "i");
-
 export default function Page({ setIsNew, categoryFiles, driveId }) {
   const dispatch = useDispatch();
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
 
-  const { loading, empty, fileToCopy, searchFiles } = useSelector(
+  const { loading, empty, fileToCopy, searchFiles, category } = useSelector(
     (state) => state.assets
   );
-
+  const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
   const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
   const [folderOptions, setFolderOptions] = useState({});
@@ -340,7 +257,6 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
   // / / / / / / / / / / / / / / / / M E T O D O S / / / / / / / / / / / / / /
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
   const renderFolders = (folders) => {
-    console.log("folders", folders);
     if (isGettingFolder && folders.length === 0 && empty !== true) {
       return (
         <p className={style.emptyFolderMessage}>Un momento, por favor...</p>
@@ -573,7 +489,7 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
             onClick={() => setIsNew("title")}
             className={style.drive_header_left_title_container}
           >
-            <p className={style.drive_header_left_title}>Documents</p>
+            <p className={style.drive_header_left_title}>{title}</p>
             <img src={ArrowDropDown} />
           </span>
         </div>
@@ -738,8 +654,6 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
 }
 
 const Filters = ({ name, filters, setFilters }) => {
-  const [isActive, setIsActive] = useState(filters);
-  console.log("filters", filters);
   const handleClick = (order) => {
     setFilters({ name, order });
   };
