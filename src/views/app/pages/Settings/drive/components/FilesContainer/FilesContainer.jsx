@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import MyFiles from "../my-files/my-files";
+import { getFilesInDescendingOrder, regexExtensiones } from "../../assetsAux";
 import { getRootDirectories } from "@/actions/assets";
 
 export const FilesContainer = ({ setIsNew }) => {
@@ -41,16 +42,23 @@ const filterFilesByCategory = (files, category) => {
     case "document":
       return files;
     case "addon":
-      return files.filter((file) => file.isShared);
+      return files.filter((file) => {
+        const folderName = file.Key.split("/").filter(Boolean).pop();
+        console.log("folderName", folderName);
+        // Verifica si folderName termina en '.png'
+        return folderName.toLowerCase().endsWith(".png");
+      });
+
     case "dashboard":
       return files.filter((file) => file.isShared);
     case "priority":
-      console.log("files", files);
       return files.filter((file) => file.isPriority);
     case "shared":
       return files.filter((file) => file.isShared);
     case "recent":
-      return files.filter((file) => file.isShared);
+      return getFilesInDescendingOrder(files).filter((file) =>
+        regexExtensiones.test(file.Key.split("/").filter(Boolean).pop())
+      );
     case "featured":
       return files.filter((file) => file.isShared);
     case "glaciar":
