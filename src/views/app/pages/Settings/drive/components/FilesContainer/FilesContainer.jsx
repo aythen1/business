@@ -24,7 +24,11 @@ export const FilesContainer = ({ setIsNew }) => {
   }, [directoriesData, category]);
 
   return (
-    <MyFiles files={filteredFiles} driveId={driveId} setIsNew={setIsNew} />
+    <MyFiles
+      categoryFiles={filteredFiles}
+      driveId={driveId}
+      setIsNew={setIsNew}
+    />
   );
 };
 
@@ -35,7 +39,7 @@ const filterFilesByCategory = (files, category) => {
   // Por ejemplo, esto es un pseudocódigo:
   switch (category) {
     case "document":
-      return files.filter((file) => file.isShared);
+      return files;
     case "addon":
       return files.filter((file) => file.isShared);
     case "dashboard":
