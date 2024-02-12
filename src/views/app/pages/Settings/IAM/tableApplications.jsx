@@ -138,7 +138,15 @@ const PopupModalApp = ({ styles }) => {
       description: state.description,
       status: 'active',
       // tags: state.tags,
-      createdAt: new Date()
+      createdAt: new Date(),
+      tags: [{
+        key: '',
+        value: ''
+      }],
+      policies: [{
+        key: '',
+        value: ''
+      }]
       // polices: state.polices,
     }
 

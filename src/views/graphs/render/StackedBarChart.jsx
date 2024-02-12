@@ -4,21 +4,21 @@ import { generateID } from './utils'
 import './BarChart.css'
 
 
+const initialData = {
+  labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+  series: [
+    [800000, 1200000, 1400000, 1300000],
+    [200000, 400000, 500000, 300000],
+    [100000, 200000, 400000, 600000]
+  ]
+}
 
-
-const StackedBarChart = () => {
+const StackedBarChart = ({ value = initialData }) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
 
-        new Chartist.Bar(`#chart-${id}`, {
-          labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-          series: [
-            [800000, 1200000, 1400000, 1300000],
-            [200000, 400000, 500000, 300000],
-            [100000, 200000, 400000, 600000]
-          ]
-        }, {
+        new Chartist.Bar(`#chart-${id}`, value, {
           stackBars: true,
           axisY: {
             labelInterpolationFnc: function(value) {

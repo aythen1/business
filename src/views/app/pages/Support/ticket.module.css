@@ -3,8 +3,8 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        color: #000fff;
-        fill: #000fff;
+        color: var(--color-primary-0);
+        fill: var(--color-primary-0);
         font-weight: 600;
         font-size: 12px;
         margin-top: 6px;
@@ -125,7 +125,7 @@
         font-weight: 500;
         line-height: 24px;
         background: none;
-        border: 1px solid rgb(181, 183, 189);
+        border: 1px solid var(--border-color);
         color: rgb(63, 66, 80);
         &.desactive{
             border: none;
@@ -135,7 +135,7 @@
         }
         &.active{
             border: none;
-            background: #000fff;
+            background: var(--color-primary-0);
             color: rgb(255, 255, 255);
             fill: #fff;
         }

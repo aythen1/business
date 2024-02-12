@@ -10,6 +10,9 @@ const schemaVectors = {
         code: { type: 'string' },
         data: { type: 'string' },
 
+        nodes: { type: 'string', default: '[]' },
+        edges: { type: 'string', default: '[]' },
+
         updatedAt: { type: 'string', format: 'date-time' },
         createdAt: { type: 'string', format: 'date-time' },
     },

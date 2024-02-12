@@ -149,7 +149,6 @@ useEffect( () => {
   // const dataTable = JSON.parse(tokenRoomTable)
   const fetchData = async () => {
     try {
-      console.log('1234')
       await dispatch(fetchs({}))
 
     } catch (err) {

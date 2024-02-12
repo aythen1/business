@@ -27,7 +27,7 @@
         color: var(--text-primary);
 
         &.selected{
-            background: #000fff;
+            background: var(--color-primary-0);
             color: #fff;
         }
     }

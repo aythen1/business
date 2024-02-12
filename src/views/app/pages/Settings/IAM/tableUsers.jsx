@@ -158,7 +158,6 @@ const PopupModalAddUser = ({ styles }) => {
 
      const handleAddUser = () => {
         const data = {
-            token: token,
             user: state.email,
             tags: state.tags,
             group: state.group

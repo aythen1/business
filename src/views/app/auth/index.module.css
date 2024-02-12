@@ -251,6 +251,7 @@
   position: relative;
   overflow: visible;
   cursor: pointer;
+  margin-top: -10px;
 }
 .frame-1547755086 {
   display: flex;
@@ -285,7 +286,7 @@
   position: relative;
 }
 .forgot-password {
-  color: var(--text-primary, #0000ff);
+  color:  var(--color-primary-0);
   text-align: left;
   font-size: 14px;
   font-weight: 400;
@@ -293,7 +294,7 @@
   cursor: pointer;
 }
 .frame-1547755110 {
-  background: var(--azul-electrico, #0000ff);
+  background: var(--color-primary-0);
   border-radius: 4px;
   padding: 11px 2px;
   display: flex;
@@ -324,6 +325,9 @@
   flex-shrink: 0;
   position: relative;
 }
+.frame-error{
+  color: var(--text-color);
+}
 .don-t-have-an-account {
   color: var(--text-color);
   text-align: left;
@@ -332,7 +336,7 @@
   position: relative;
 }
 .sign-up {
-  color: #000fff;
+  color: var(--color-primary-0);
   text-align: left;
   font-size: 14px;
   font-weight: 500;

@@ -95,8 +95,6 @@ createAsyncThunk('iam/fetchsInvoice', async ({ dispatch }) => {
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
 
-    console.log('res', response)
-
     return response.data
   } catch (error) {
     console.log('err', error)
@@ -233,16 +231,18 @@ export const fetchsBilling =
 createAsyncThunk('iam/fetchsBilling', async ({}, { dispatch }) => {
   try {
     const token = localStorage.getItem('token')
+    console.log('12345')
 
-    const response = await apiBackend.post(
-      '/iam/billing/fetchs',
-      {
-        
-      },{
+      const response = await apiBackend.get(
+        '/iam/billing/fetchs', 
+        {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
+        // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
+      });
+    
+    console.log('reesss', response)
 
     return response.data
   } catch (error) {
@@ -484,7 +484,6 @@ createAsyncThunk('iam/updatePasswordUser', async ({password}, { dispatch }) => {
         },
       })
 
-      console.log('response', response)
     return {
       token: response.data.token,
       user: response.data.user
@@ -546,14 +545,11 @@ createAsyncThunk('iam/verify', async ({}, { dispatch }) => {
         },
       })
 
-      console.log('response', response)
-
     return {
       user: response.data.user,
       token: response.data.token
     }
   } catch (error) {
-    console.log('err1', error)
     if(error.response.status == 400){
       throw 'Ya existe el usuario'
     }else if(error.response && error.response.status >= 500 && error.response.status < 600){
@@ -692,6 +688,8 @@ createAsyncThunk('iam/addApplication', async ({application}, { dispatch }) => {
           'Authorization': `Bearer ${token}`
         },
       })
+
+      console.log('res', response)
 
     return response.data
   } catch (error) {

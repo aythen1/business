@@ -56,7 +56,7 @@ routerIAM
 .post('/load/default', authenticateToken, fetchsDefault)
 .put('/load/default', authenticateToken, updateDefault)
 
-.post('/billing/fetchs', authenticateToken, fetchsBilling)
+.get('/billing/fetchs', authenticateToken, fetchsBilling)
 .post('/billing/update', authenticateToken, updateBilling)
 
 .get('/billing/invoices', authenticateToken, fetchsInvoice)

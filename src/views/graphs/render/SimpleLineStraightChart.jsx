@@ -4,22 +4,21 @@ import { generateID } from './utils'
 import './BarChart.css'
 
 
+var initialData = {
+    labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6'],
+    series: [
+        [5, 4, 3, 7, 5, 10],
+        [3, 2, 9, 5, 4, 6],
+        [2, 1, -3, -4, -2, 0]
+    ]
+};
 
-
-const SimpleLineStraightChart = () => {
+const SimpleLineStraightChart = ({ value = initialData}) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
 
-        // Our labels and three data series
-        var data = {
-            labels: ['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6'],
-            series: [
-                [5, 4, 3, 7, 5, 10],
-                [3, 2, 9, 5, 4, 6],
-                [2, 1, -3, -4, -2, 0]
-            ]
-        };
+      
 
         // We are setting a few options for our chart and override the defaults
         var options = {
@@ -48,7 +47,7 @@ const SimpleLineStraightChart = () => {
         };
 
         // All you need to do is pass your configuration as third parameter to the chart function
-        new Chartist.Line(`#chart-${id}`, data, options);
+        new Chartist.Line(`#chart-${id}`, value, options);
     }, [])
 
     return (

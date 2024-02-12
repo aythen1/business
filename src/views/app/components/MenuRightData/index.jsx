@@ -7,11 +7,11 @@ import * as XLSX from 'xlsx';
 
 
 import {
-  getVector,
+  fetchsVector,
   iniVector,
   addVector
   // getAllVector
-} from '@/utils/vector'
+} from '@/actions/vector'
 
 
 import {
@@ -42,7 +42,7 @@ const MenuRightData = ({ }) => {
 
   // Simulated data (replace this with your actual data fetching logic)
   const fetchData = async () => {
-    const _dbs = await getVector(tokenVector, 'datas', searchTerm)
+    const _dbs = await fetchsVector(tokenVector, 'datas', searchTerm)
 
     const filteredData = _dbs.filter(db =>
       db.title.toLowerCase().includes(searchTerm.toLowerCase())

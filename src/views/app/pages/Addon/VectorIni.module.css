@@ -133,7 +133,7 @@
         
       } */
     &.active {
-      background: #000fff;
+      background: var(--color-primary-0);
       color: rgb(255, 255, 255);
     }
 

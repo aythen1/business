@@ -34,7 +34,7 @@ import * as IconFile from '../assets/icon/images'
 import {
   // openVector,
   openFile
-} from '@/utils/vector'
+} from '@/actions/vector'
 
 // import { ChromePicker } from 'react-color'
 

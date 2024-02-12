@@ -6,14 +6,20 @@ import './BarChart.css'
 
 
 
-const GaugeChart = () => {
+const initialData = {
+  series: [20, 10, 30, 40]
+}
+
+
+
+
+
+const GaugeChart = ({ value = initialData }) => {
   const [id] = useState(generateID())
 
   useEffect(() => {
 
-    new Chartist.Pie(`#chart-${id}`, {
-      series: [20, 10, 30, 40]
-    }, {
+    new Chartist.Pie(`#chart-${id}`, value, {
       donut: true,
       donutWidth: 60,
       donutSolid: true,
