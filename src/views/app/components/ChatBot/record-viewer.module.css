@@ -7,7 +7,7 @@
 .recordViewer {
   padding: 2px 6px;
   background: #dce4ff;
-  color: #0000ff;
+  color:  var(--color-primary-0);
   font-size: 12px;
   border-radius: 6px;
   display: flex;

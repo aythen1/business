@@ -14,9 +14,9 @@ import IconEarse from './assets/IconEarse.svg'
 
 
 import {
-  getVector,
+  fetchsVector,
   iniVector
-} from '@/utils/vector'
+} from '@/actions/vector'
 
 
 import {
@@ -356,7 +356,7 @@ const CustomData = ({ component, state, setState, regexOptions }) => {
 
   // Simulated data (replace this with your actual data fetching logic)
   const fetchData = async () => {
-    const _dbs = await getVector(tokenVector, 'datas', searchTerm)
+    const _dbs = await fetchsVector(tokenVector, 'datas', searchTerm)
 
     const filteredData = _dbs.filter(db =>
       db.title.toLowerCase().includes(searchTerm.toLowerCase())

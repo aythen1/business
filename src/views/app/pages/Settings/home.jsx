@@ -356,7 +356,7 @@ const Home = ({
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M10.7071 7.29289C11.0976 7.68342 11.0976 8.31658 10.7071 8.70711L6.70711 12.7071C6.31658 13.0976 5.68342 13.0976 5.29289 12.7071C4.90237 12.3166 4.90237 11.6834 5.29289 11.2929L8.58579 8L5.29289 4.70711C4.90237 4.31658 4.90237 3.68342 5.29289 3.29289C5.68342 2.90237 6.31658 2.90237 6.70711 3.29289L10.7071 7.29289Z"></path></svg>
                             </button>
                         </div>
-                        <Changelog item={itemChangelog} />
+                        <Changelog item={itemChangelog} onClick={handleClickSupport}/>
 
                     </div>
                 </div>
@@ -425,7 +425,7 @@ const News = ({ items }) => {
     const navigate = useNavigate()
 
     const onClickSupport = () => {
-        navigate('/es/app/settings/support')
+        navigate('/es/app/support')
     }
 
     return (
@@ -462,7 +462,7 @@ const News = ({ items }) => {
 
 
 
-const Changelog = ({ item }) => {
+const Changelog = ({ item, onClick}) => {
     return (
         <div>
             <img src={ChangelogKubernetes} className={styles["image"]} />
@@ -482,7 +482,10 @@ const Changelog = ({ item }) => {
                                 system`}
                 </p>
             </div>
-            <div className={styles["share"]}>
+            <div 
+            className={styles["share"]}
+            onClick={() =>  onClick()}
+            >
                 <a>
                     <svg viewBox="0 0 24 24"><path d="M15 5l-1.41 1.41L18.17 11H2v2h16.17l-4.59 4.59L15 19l7-7-7-7z"></path></svg>
                     {item?.next || 'View changes'}

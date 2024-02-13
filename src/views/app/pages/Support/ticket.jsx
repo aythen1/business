@@ -12,7 +12,7 @@ import {
 
 import {
     calculateTimeAgo
-} from '@/utils/vector'
+} from '@/actions/vector'
 
 
 

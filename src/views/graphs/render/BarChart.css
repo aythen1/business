@@ -1,34 +1,52 @@
 .box-chart{
   padding: 10px;  
   height: 100%;
+  width: 100%;
 }
+
+/******************************************/
+.ct-label{
+  fill: var(--label-color);
+  color: var(--text-color);
+}
+
+.ct-grid{
+  stroke: var(--label-color);
+}
+
+
+
 
 /******************************************/
 .ct-series-a .ct-slice-donut-solid,
 .ct-series-a .ct-slice-pie,
 .ct-series-a .ct-area{
-  fill: #000fff;
+  /* fill: #000fff; */
+  fill: var(--color-primary-0);
 }
 
 
 .ct-series-b .ct-slice-donut-solid,
 .ct-series-b .ct-slice-pie,
 .ct-series-b .ct-area{
-  fill: #3333ff;
+  /* fill: #3333ff; */
+  fill: var(--color-primary-1);
 }
 
 
 .ct-series-c .ct-slice-donut-solid,
 .ct-series-c .ct-slice-pie,
 .ct-series-c .ct-area{
-  fill: #6666ff;
+  fill: var(--color-primary-2);
+  /* fill: #6666ff; */
 }
 
 
 .ct-series-d .ct-slice-donut-solid,
 .ct-series-d .ct-slice-pie,
 .ct-series-d .ct-area{
-  fill: #9999ff;
+  fill: var(--color-primary-3);
+  /* fill: #9999ff; */
 }
 
 
@@ -38,7 +56,8 @@
 .ct-series-a .ct-bar,
 .ct-series-a .ct-line, .ct-series-a .ct-point, 
 .ct-series-a .ct-slice-donut {
-  stroke: #0000ff;
+  stroke: var(--color-primary-1);
+  /* stroke: #0000ff; */
 }
 
 
@@ -46,7 +65,8 @@
 .ct-series-b .ct-bar,
 .ct-series-b .ct-line, .ct-series-b .ct-point,
 .ct-series-b .ct-slice-donut {
-  stroke: #3333ff;
+  stroke: var(--color-primary-2);
+  /* stroke: #3333ff; */
 }
 
 
@@ -54,7 +74,8 @@
 .ct-series-c .ct-bar,
 .ct-series-c .ct-line, .ct-series-c .ct-point,
 .ct-series-c .ct-slice-donut {
-  stroke: #6666ff;
+  stroke: var(--color-primary-3);
+  /* stroke: #6666ff; */
 }
 
 
@@ -62,7 +83,8 @@
 .ct-series-d .ct-bar,
 .ct-series-d .ct-line, .ct-series-d .ct-point,
 .ct-series-d .ct-slice-donut {
-  stroke: #9999ff;
+  stroke: var(--color-primary-4);
+  /* stroke: #9999ff; */
 }
 
 
@@ -70,7 +92,8 @@
 .ct-series-e .ct-bar,
 .ct-series-e .ct-line, .ct-series-d .ct-point,
 .ct-series-e .ct-slice-donut {
-  stroke: #aaaaf9;
+  stroke: var(--color-primary-5);
+  /* stroke: #aaaaf9; */
 }
 
 
@@ -78,7 +101,8 @@
 .ct-series-f .ct-bar,
 .ct-series-f .ct-line, .ct-series-d .ct-point,
 .ct-series-f .ct-slice-donut {
-  stroke: #c3c3ff;
+  stroke: var(--color-primary-6);
+  /* stroke: #c3c3ff; */
 }
 
 
@@ -86,7 +110,8 @@
 .ct-series-g .ct-bar,
 .ct-series-g .ct-line, .ct-series-d .ct-point,
 .ct-series-g .ct-slice-donut {
-  stroke: #dcdcff;
+  stroke: var(--color-primary-7);
+  /* stroke: #dcdcff; */
 }
 
 

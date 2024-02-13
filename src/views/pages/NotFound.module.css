@@ -9,7 +9,7 @@
     h2{
         font-size: 40px;
         margin: 0px;
-        color: #000fff;
+        color: var(--color-primary-0);
     }
 
     p{

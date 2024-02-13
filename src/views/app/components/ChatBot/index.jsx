@@ -30,7 +30,7 @@ import Bot from './bot'
 // import { openDB, deleteDB, wrap, unwrap } from 'idb'
 
 import {
-  getVector,
+  fetchsVector,
   updateVector,
   deleteVector,
   detectBot,
@@ -41,7 +41,7 @@ import {
   removeAllVector
   // addVector,
   // getAllVector
-} from '@/utils/vector'
+} from '@/actions/vector'
 
 // import SelectBot from './selectBot'
 // import Bot from './bot'
@@ -110,7 +110,6 @@ const ChatBot = ({
     }
 
     const handleDrop = (e) => {
-      console.log('drop')
       e.preventDefault()
   
       const droppedFile = e.dataTransfer.files[0]
@@ -256,7 +255,7 @@ const ChatBot = ({
   useEffect(() => {
     const loadFromIndexedDB = async () => {
       try {
-        const dataValues1 = await getVector(tokenVector, 'bots')
+        const dataValues1 = await fetchsVector(tokenVector, 'bots')
         const dataValues = JSON.parse(dataValues1[0].message)
         console.log('val', dataValues)
 

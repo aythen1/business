@@ -21,7 +21,7 @@
 }
 
 :global(.selectedComponent){
-    border: 2px solid #000fff;
+    border: 2px solid var(--color-primary-0);
     cursor: pointer;
     position: relative;
 }
@@ -39,7 +39,7 @@
         display: flex;
         gap: 6px;
         padding: 4px;
-        background: #000fff;
+        background: var(--color-primary-0);
         border-radius: 8px 8px 0px 0px;
         :global(button){
             height: 22px;

@@ -6,24 +6,26 @@ const schemaApplications = {
         description: { type: 'string' },
         status: { type: 'string' },
         tags: {
-          type: 'array',
-          items: {
-              type: 'object',
-              properties: {
-                  key: { type: 'string' },
-                  value: { type: 'string' },
-              }
-          },
+          type: 'string',
+          default: '[]'
+        //   items: {
+        //       type: 'object',
+        //       properties: {
+        //           key: { type: 'string' },
+        //           value: { type: 'string' },
+        //       }
+        //   },
         },
         policies: {
-          type: 'array',
-          items: {
-              type: 'object',
-              properties: {
-                  key: { type: 'string' },
-                  value: { type: 'string' },
-              }
-          },
+          type: 'string',
+          default: '[]'
+        //   items: {
+        //       type: 'object',
+        //       properties: {
+        //           key: { type: 'string' },
+        //           value: { type: 'string' },
+        //       }
+        //   },
         },
         createdAt: { type: 'string', format: 'date-time' },
     },

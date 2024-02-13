@@ -5,15 +5,19 @@ import './BarChart.css'
 
 
 
+const initialData = {
+  labels: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
+  series: [20, 60, 120, 200, 180, 20, 10]
+}
 
-const DistributedSeries = () => {
+
+
+
+const DistributedSeries = ({ value = initialData }) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
-            new Chartist.Bar(`#chart-${id}`, {
-              labels: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
-              series: [20, 60, 120, 200, 180, 20, 10]
-            }, {
+            new Chartist.Bar(`#chart-${id}`, value, {
               distributeSeries: true
             });
           

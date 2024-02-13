@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 // import 'chartist/dist/index.css';
-import BarChart from '@/views/graphs/render/BarChart'
-
+import { BarChart } from '@/views/graphs/render'
 
 
 import styles from './settingsCurrentConsumption.module.css'
@@ -15,6 +14,12 @@ import styles from './settingsCurrentConsumption.module.css'
 
 const SettingsCurrentConsumption = () => {
     const navigate = useNavigate()
+
+    const value = {
+        series: [20, 10, 30, 40],
+        label: ['1', '2']
+    }
+
 
     const [listPricing, setListPricing] = useState([])
     
@@ -60,7 +65,7 @@ const SettingsCurrentConsumption = () => {
         <div className={styles["boxConsumption1"]}>
             <div className={styles["grid2"]}>
                 <div className={styles["bar"]}>
-                    <BarChart className={styles["image"]} />
+                    <BarChart className={styles["image"]} value={value} />
                     {/* <img src={GraphDonut}  /> */}
                     <div className={styles["box"]}>
                         <b className={styles["pricing"]}>

@@ -137,9 +137,13 @@ const updateDefault = async (req, res, next) => {
 
 const fetchsBilling = async (req, res, next) => {
   try {
+    console.log('11234')
     const { user } = req
     const path = encodeVector(ID)
     // ---------------------------------------------------------
+    // tests() {
+    //   description
+    // }
     const options = `
    query {
     users(id: ${user.id}) {
@@ -149,19 +153,23 @@ const fetchsBilling = async (req, res, next) => {
       createdat
       isverified
       billings(limit: 5) {
-        address
-        vat
+        id
+        type
+        name
         email
         limit
+        iban
+        currency
+        vat
         paymentmethod
+        address
         upgradedat
         createdat
-        tests() {
-          description
-        }
       }
     }
   }`
+
+  console.log('res', options)
 
     const resp = await getVector(path, options, [0, 0])
 
@@ -185,18 +193,18 @@ const updateBilling = async (req, res, next) => {
     // console.log('billliiingg', payload)
 
 
-    const resp = await addVector(path, 'billings', [0, 0], billing, { users: user })
+    const resp = await updateVector(path, 'billings', [0, 0], billing, { users: user })
 
-    var data = {
-      title: 'title',
-      description: 'description',
-    }
-    const _resp = await addVector(path, 'tests', [0, 0], data, { users: user, billings: resp[0] })
+    // var data = {
+    //   title: 'title',
+    //   description: 'description',
+    // }
+    // const _resp = await addVector(path, 'tests', [0, 0], data, { users: user, billings: resp[0] })
 
     console.log('resp', resp)
-    console.log('_resp', _resp)
+    // console.log('_resp', _resp)
 
-    return res.status(200).send(resp)
+    return res.status(200).send(resp[0])
 
   } catch (err) {
     return res.status(500).send(err)
@@ -728,9 +736,11 @@ const addApplication = async (req, res) => {
     const { user } = req
     const { application } = req.body
 
+    console.log('adddd', application)
+
     const path = encodeVector(ID)
 
-    console.log('apps', result, application)
+    console.log('apps', application)
     const resp = await addVector(path, 'applications', [0, 0], application, { users: user })
     console.log('re', resp)
     return res.status(200).send(resp)

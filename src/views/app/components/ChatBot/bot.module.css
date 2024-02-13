@@ -54,7 +54,7 @@
             outline: none;
           }
           .active {
-            color: #000fff;
+            color: var(--color-primary-0);
             &:hover {
               color: #c0c0c0;
             }
@@ -62,7 +62,7 @@
           .desactive {
             color: #c6c6c6;
             &:hover {
-              color: #000fff;
+              color: var(--color-primary-0);
             }
           }
           svg {
@@ -118,6 +118,21 @@
         display: flex;
         flex-direction: column;
       }
+      .return {
+        background: #eaeaea;
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        margin-left: auto;
+        svg{
+          width: 14px;
+        }
+        &:hover{
+          background: red;
+        }
+      }
     }
     .image {
       min-width: 45px;
@@ -149,27 +164,27 @@
         overflow: hidden;
         text-overflow: ellipsis;
         .buttonFav {
-            display: flex;
-            align-items: center;
-            button {
-              outline: none;
-            }
-            .active {
-              color: #000fff;
-              &:hover {
-                color: #c0c0c0;
-              }
-            }
-            .desactive {
-              color: #c6c6c6;
-              &:hover {
-                color: #000fff;
-              }
-            }
-            svg {
-              width: 14px;
+          display: flex;
+          align-items: center;
+          button {
+            outline: none;
+          }
+          .active {
+            color: var(--color-primary-0);
+            &:hover {
+              color: #c0c0c0;
             }
           }
+          .desactive {
+            color: #c6c6c6;
+            &:hover {
+              color: var(--color-primary-0);
+            }
+          }
+          svg {
+            width: 14px;
+          }
+        }
       }
       .description {
         margin: 0px;
@@ -182,12 +197,12 @@
         color: #c0c0c0;
         display: flex;
         gap: 4px;
-        
+
         span {
-            border: 1px solid #d6d6d6;
-            padding: 0px 8px;
-            border-radius: 6px;
-            font-size: 9px;
+          border: 1px solid #d6d6d6;
+          padding: 0px 8px;
+          border-radius: 6px;
+          font-size: 9px;
         }
         .author {
         }

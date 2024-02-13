@@ -1,16 +1,16 @@
-.alertInstance {
+.alertBoard {
     display: flex;
     align-items: flex-start;
     gap: 6px;
-    border-left: 3px solid #000fff;
+    border-left: 3px solid var(--color-primary-0);
     background: var(--background-alert);
     border-radius: 4px;
     padding: 12px 10px;
   
-    .alertInstanceText {
+    .alertBoardText {
       b {
         font-size: 15px;
-        color: #000fff;
+        color: var(--color-primary-0);
       }
       p {
         font-size: 14px;
@@ -38,7 +38,7 @@
   }
   
   /**/
-  .boxInstances {
+  .boxBoards {
     max-width: 900px;
     width: 100%;
     margin: 10px auto;
@@ -99,7 +99,7 @@
   
   /**/
   
-  .listInstances {
+  .listBoards {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -107,18 +107,18 @@
     color: var(--text-color-secondary);
   }
   
-  .instancesList {
+  .boardsList {
     display: flex;
     border: 1px solid var(--border-color);
     padding: 10px 4px;
     border-radius: 4px;
     cursor: pointer;
     &:hover {
-      border: 1px solid #000fff;
+      border: 1px solid var(--color-primary-0);
     }
   }
   
-  .instanceCheckBox {
+  .boardCheckBox {
     width: 40px;
     height: 40px;
     display: flex;
@@ -138,14 +138,14 @@
   }
   
   .activeCheckbox {
-    .instanceCheckBox {
+    .boardCheckBox {
       input {
         display: block;
       }
     }
   }
   
-  .instanceName {
+  .boardName {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -163,7 +163,7 @@
       display: flex;
       flex-direction: column;
       b {
-        color: #000fff;
+        color: var(--color-primary-0);
       }
       span {
         text-transform: uppercase;
@@ -171,7 +171,7 @@
     }
   }
   
-  .instanceIP {
+  .boardIP {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -192,7 +192,7 @@
     }
   }
   
-  .instanceCreatedAt {
+  .boardCreatedAt {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -200,7 +200,7 @@
     /* background: red; */
   }
   
-  .instanceCountry {
+  .boardCountry {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -212,7 +212,7 @@
     }
   }
   
-  .instanceMove {
+  .boardMove {
     display: flex;
     align-items: center;
     .button {
@@ -221,7 +221,7 @@
       justify-content: center;
       cursor: pointer;
       background: transparent;
-      color: #000fff;
+      color: var(--color-primary-0);
       border-radius: 4px;
       height: 30px;
       width: 80px;
@@ -233,7 +233,7 @@
     }
   }
   
-  .instanceSettings {
+  .boardSettings {
     position: relative;
     display: flex;
     align-items: center;
@@ -244,7 +244,7 @@
       justify-content: center;
       cursor: pointer;
       background: transparent;
-      color: #000fff;
+      color: var(--color-primary-0);
       border-radius: 4px;
       height: 30px;
       width: 30px;
@@ -322,7 +322,7 @@
         border: none;
         border-radius: 6px;
         color: #fff;
-        background: #000fff;
+        background: var(--color-primary-0);
         font-size: 14px;
         cursor:pointer;
         svg {
@@ -338,9 +338,9 @@
         display: flex;
         align-items: center;
         gap: 4px;
-        color: #000fff;
+        color: var(--color-primary-0);
         svg {
-          fill: #000fff;
+          fill: var(--color-primary-0);
           width: 10px;
         }
       }
@@ -360,7 +360,7 @@
   @media (max-width: 1200px) {
     .mdNone {
       .headerCreated,
-      .instanceCreatedAt {
+      .boardCreatedAt {
         display: none;
       }
     }

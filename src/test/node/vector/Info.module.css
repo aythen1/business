@@ -1,0 +1,104 @@
+
+
+.modal{
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    margin-top: 10px;
+    width: 300px;
+    padding: 12px;
+    border-radius: 16px;
+    .header{
+        h2{
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 12px;
+            text-transform: uppercase;
+        }
+    }
+
+    .banner{
+        background: #fafafa;
+        margin: 12px 0px;
+        border-radius: 8px;
+        p{
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #464545;
+
+        }
+        .buttons{
+            display: flex; 
+            align-items: center;
+            gap: 12px;
+            button{
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 4px 6px;
+                border-radius: 8px;
+                background: #e8e6e6;
+                color:rgb(23, 23, 23);
+                display: flex;
+                img{
+                    min-width: 20px;
+                    width: 20px;
+                    height: 20px;
+                }
+                &:hover{
+                    background: rgb(212, 212, 212);
+                }
+            }
+            .desactive{
+                opacity: 0.8;
+                background: #fff;
+                color:rgb(59, 58, 58);
+
+            }
+        }
+    }
+
+    .form{
+        b{
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .input{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            input{
+                width: 14px;
+                width: 14px;
+                outline: none;
+            }
+            span{
+                font-size: 18px;
+            }
+        }
+    }
+
+    .divButton{
+        display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    width: 100%;
+        button{
+            width: 100%;
+            padding: 6px 12px;
+            background: var(--color-primary-0);
+            color: #ffffff;
+            font-size: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            
+            &.bot{
+                background: #000;
+                color: #ffffff;
+                
+            }
+        }
+    }
+}

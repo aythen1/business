@@ -53,6 +53,7 @@ const iamSlice = createSlice({
     billing: null,
     token:  null,
     
+    
     vector: {},
     vectors: [],
 
@@ -144,6 +145,8 @@ const iamSlice = createSlice({
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {
         // state.billing = action.payload
+        console.log('fetchsBillingfetchsBilling,', action.payload)
+        state.billing = action.payload
       })
       .addCase(updateBilling.fulfilled, (state, action) => {
         state.billing = action.payload
@@ -255,8 +258,9 @@ const iamSlice = createSlice({
 
 
       .addCase(addUser.fulfilled, (state, action) => {
-        console.log('payload', action.payload)
-        state.users = { ...state.users, ...action.payload.user};
+        state.users = action.payload.concat(
+          state.users.filter((user2) => !action.payload.find((user1) => user1.id === user2.id))
+        );
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         const indexToDelete = state.users.findIndex(user => user.id === action.payload);
@@ -271,7 +275,9 @@ const iamSlice = createSlice({
 
       .addCase(addApplication.fulfilled, (state, action) => {
         console.log('payload', action.payload)
-        state.applications = { ...state.applications, ...action.payload};
+        state.applications = action.payload.concat(
+          state.applications.filter((app2) => !action.payload.find((app1) => app1.id === app2.id))
+        );
         // state.applications.push(action.payload;
       })
       .addCase(deleteApplication.fulfilled, (state, action) => {
@@ -285,7 +291,10 @@ const iamSlice = createSlice({
       })
       
       .addCase(addPolice.fulfilled, (state, action) => {
-        state.polices.push(action.payload);
+        // state.polices.push(action.payload);
+        state.polices = action.payload.concat(
+          state.polices.filter((police2) => !action.payload.find((police1) => police1.id === police2.id))
+        );
       })
       .addCase(deletePolice.fulfilled, (state, action) => {
         const indexToDelete = state.polices.findIndex(police => police.id === action.payload);
@@ -298,7 +307,12 @@ const iamSlice = createSlice({
       })
 
       .addCase(addApi.fulfilled, (state, action) => {
-        state.apis.push(action.payload);
+        // state.apis.push(action.payload);
+
+        state.apis = action.payload.concat(
+          state.apis.filter((api2) => !action.payload.find((api1) => api1.id === api2.id))
+        );
+
       })
       .addCase(deleteApi.fulfilled, (state, action) => {
         const indexToDelete = state.apis.findIndex(api => api.id === action.payload);

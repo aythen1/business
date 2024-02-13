@@ -6,18 +6,23 @@ import './BarChart.css'
 
 
 
-const HorizontalBarChart = () => {
+const initialData = {
+  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+  series: [
+    [5, 4, 3, 7, 5, 10, 3],
+    [3, 2, 9, 5, 4, 6, 4]
+  ]
+}
+
+
+
+
+const HorizontalBarChart = ({ value =  initialData }) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
 
-        new Chartist.Bar(`#chart-${id}`, {
-          labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-          series: [
-            [5, 4, 3, 7, 5, 10, 3],
-            [3, 2, 9, 5, 4, 6, 4]
-          ]
-        }, {
+        new Chartist.Bar(`#chart-${id}`, value, {
           seriesBarDistance: 10,
           reverseData: true,
           horizontalBars: true,

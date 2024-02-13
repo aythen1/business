@@ -18,8 +18,9 @@
 
             .boxQuery {
                 width: 100%;
-                background: #fff;
-                box-shadow: rgba(217, 218, 221, 0.4) 0px 4px 24px 6px;
+                color: var(--text-primary);
+                background: var(--background);
+                box-shadow: var(--background) 0px 4px 24px 6px;
                 position: absolute;
                 padding: 10px;
                 display: flex;
@@ -27,7 +28,7 @@
                 gap: 6px;
 
                 div {
-                    border-bottom: 1px solid #dbdbdb;
+                    border-bottom: 1px solid var(--border-color);
                     padding: 10px 2px;
                     cursor: pointer;
                     display: flex;
@@ -45,7 +46,7 @@
                 }
 
                 &:hover {
-                    background: #fafafa;
+                    background: var(--background-secondary);
                 }
             }
         }
@@ -65,7 +66,7 @@
             input {
                 transition: border-color 0.2s ease 0s, box-shadow 0.2s ease 0s;
                 appearance: none;
-                background-color: rgb(255, 255, 255);
+                background-color: var(--background);
                 background-image: none;
                 border: 1px solid var(--border-color);
                 border-radius: 4px;
@@ -116,15 +117,15 @@
                 color: rgb(63, 66, 80);
                 text-decoration: none;
                 border: 1px solid var(--border-color);
-
-                border-radius: 4px;
-                background: rgb(255, 255, 255);
-                overflow-wrap: break-word;
-                color: rgb(63, 66, 80);
                 background: var(--background);
 
+                border-radius: 4px;
+                /* background: rgb(255, 255, 255); */
+                overflow-wrap: break-word;
+                color: rgb(63, 66, 80);
+
                 &:hover {
-                    background: #fafafa;
+                    background: var(--background-secondary);
                 }
 
                 &>div {
@@ -142,9 +143,11 @@
 
                 svg {
                     width: 20px;
+                    fill: var(--text-color);
                 }
 
                 button {
+                    background: var(--background-secondary);
                     display: flex;
                     width: -moz-fit-content;
                     width: fit-content;
@@ -156,7 +159,6 @@
                     width: 40px;
                     border: none;
                     margin-left: auto;
-                    background: #f3f3f3;
                 }
             }
         }
@@ -177,6 +179,7 @@
             }
 
             .box {
+                margin-top: 8px;
                 display: flex;
                 gap: 0px;
                 flex-flow: column;
@@ -192,14 +195,14 @@
                     align-items: center;
                     justify-content: space-between;
                     gap: 10px;
-                    border-bottom: 1px solid gainsboro;
+                    border-bottom: 1px solid var(--border-color);
                     color: rgb(63, 66, 80);
                     background: var(--background);
                     padding: 10px;
                     cursor: pointer;
 
                     &:hover {
-                        background: #fafafa;
+                        background: var(--background-secondary);
                     }
 
                     &:last-child {
@@ -234,9 +237,12 @@
 
                     button {
                         display: inline-flex;
-                        background: #f3f3f3;
+                        background: var(--background-secondary);
                         padding: 8px;
                         border-radius: 4px;
+                        svg{
+                            fill: var(--text-color);
+                        }
                     }
                 }
             }
@@ -248,6 +254,7 @@
             }
 
             .box {
+                margin-top: 8px;
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
@@ -266,7 +273,7 @@
                     cursor: pointer;
 
                     &:hover {
-                        background: #fafafa;
+                        background: var(--background-secondary);
                     }
 
                     b {
@@ -312,7 +319,11 @@
         }
 
         .boxGoing {
+            .titleHead {
+                color: var(--text-primary);
+            }
             .box {
+                margin-top: 8px;
                 display: flex;
                 flex-direction: column;
                 gap: 12px;
@@ -331,7 +342,7 @@
                     gap: 4px;
 
                     &:hover {
-                        background: #fafafa;
+                        background: var(--background-secondary);
                     }
 
                     div {
@@ -360,8 +371,8 @@
                         display: inline-flex;
                         font-size: 10px;
                         border-radius: 16px;
-                        color: rgb(255, 255, 255);
-                        background: #f3f3f3;
+                        fill: var(--text-primary);
+                        background: var(--background-secondary);
 
                         padding: 8px;
                         border-radius: 4px;

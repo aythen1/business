@@ -21,11 +21,11 @@ import NoneDashboard from './assets/NoneDashboard.webp'
 
 
 // import {
-//   // postInstance,
+//   // postBoard,
 //   // getServersZone,
-//   deleteInstance,
-//   getProjectInstance
-// } from '@/store/redux/actions/instances'
+//   deleteBoard,
+//   getProjectBoard
+// } from '@/store/redux/actions/boards'
 
 // import { useParams } from 'next/navigation'
 
@@ -34,9 +34,9 @@ import {
   fetchsDashboard
 } from '@/actions/dashboard'
 
-import { 
+import {
   setDashboard
- } from '@/slices/dashboardSlice'
+} from '@/slices/dashboardSlice'
 
 
 import { useNavigate } from 'react-router-dom'
@@ -44,7 +44,7 @@ import { useNavigate } from 'react-router-dom'
 
 // import { fetchsDashboard } from '../../../../../service/controllers/dashboard'
 
-const Dashboard = ({}) => {
+const Dashboard = ({ }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -57,18 +57,18 @@ const Dashboard = ({}) => {
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
   const [positionToolTip, setPositionToolTip] = useState({ top: 0, left: 0 })
 
-  // const instances = dispatch(getProjectInstance()
-  const { 
+  // const boards = dispatch(getProjectBoard()
+  const {
     dashboards,
     dashboard
-   } = useSelector((state) => state.dashboard)
+  } = useSelector((state) => state.dashboard)
 
 
 
 
 
   // ---------------------------------------------------------------------
-  
+
   // useEffect(() => {
   //   const urlParams = new URLSearchParams(window.location.search);
   //   const dashboardParam = urlParams.get('dashboard');
@@ -82,26 +82,26 @@ const Dashboard = ({}) => {
   //     }
   //   }
 
-    
+
   //   setListDashboards(dashboards)
   // }, [dashboards])
 
 
   useEffect(() => {
     const fetchsItems = async () => {
-      try{
+      try {
         await dispatch(fetchsDashboard())
-      }catch(err){
+      } catch (err) {
         console.log('Err', err)
       }
     }
-    
-    if(dashboards.length == 0) fetchsItems()
+
+    if (dashboards.length == 0) fetchsItems()
   }, [])
 
-  
-  
-  
+
+
+
   // ---------------------------------------------------------------------
 
   const handleAddDashboard = async (uuid) => {
@@ -119,14 +119,14 @@ const Dashboard = ({}) => {
     // navigate(`/es/app/board`)
     navigate(`/es/app/board?dashboard=${encodeURIComponent(newDashboard.id)}`)
   }
-  
+
   const handleClickDashboard = (item) => {
     // const newUUID = uuidv4()
     // setDashboardId(id)
     // setDashboardId(id)
 
     dispatch(setDashboard(item))
-    
+
     // const newURL = `?dashboard=${encodeURIComponent(id)}`
     navigate(`/es/app/board?dashboard=${item.id}`)
     // window.history.pushState(null, null, newURL)
@@ -148,18 +148,18 @@ const Dashboard = ({}) => {
   //   alert(1)
   // }
 
-  const handleMoreInfo = () => {}
+  const handleMoreInfo = () => { }
 
-  const handlePowerOff = () => {}
+  const handlePowerOff = () => { }
 
-  const handleReboot = () => {}
+  const handleReboot = () => { }
 
-  const handleStandby = () => {}
+  const handleStandby = () => { }
 
-  const handleDetachIP = () => {}
+  const handleDetachIP = () => { }
 
-  const handleDeleteInstance = (id) => {
-    // dispatch(deleteInstance(id))
+  const handleDeleteBoard = (id) => {
+    // dispatch(deleteBoard(id))
   }
 
   const Filters = () => {
@@ -191,38 +191,45 @@ const Dashboard = ({}) => {
   /* visible settings */
   const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
 
-  const togglePopupSettings = (instanceIndex) => {
+  const togglePopupSettings = (boardIndex) => {
     setVisiblePopupSettings((prevVisiblePopups) => ({
       ...prevVisiblePopups,
-      [instanceIndex]: !prevVisiblePopups[instanceIndex]
+      [boardIndex]: !prevVisiblePopups[boardIndex]
     }))
   }
 
-  const closePopup = (instanceIndex) => {
+  const closePopup = (boardIndex) => {
     setVisiblePopupSettings((prevVisiblePopups) => ({
       ...prevVisiblePopups,
-      [instanceIndex]: false
+      [boardIndex]: false
     }))
+  }
+
+
+
+
+  const handleClickSupport = () => {
+    navigate(`/${'es'}/app/support`)
   }
 
   return (
     <div>
       {!dashboard ? (
-        <div className={styles.boxInstances + ' ' + styles.mdNone}>
+        <div className={styles.boxBoards + ' ' + styles.mdNone}>
           {dashboards.length !== 0 ? (
             <div>
-              <div className={styles.alertInstance}>
-                <div className={styles.alertInstanceIcon}>
+              <div className={styles.alertBoard}>
+                <div className={styles.alertBoardIcon}>
                   <IconImportant width={'20'} fill={'#000fff'} />
                 </div>
-                <div className={styles.alertInstanceText}>
+                <div className={styles.alertBoardText}>
                   <b>Requirements for moving to routed IP</b>
                   <p>
                     Before moving to a ROUTED IP, ensure no static network
                     configuration is in use, and your ‘scaleway-ecosystem’ and
-                    ‘cloud-init’ packages are updated. Note that Instances with a
+                    ‘cloud-init’ packages are updated. Note that Boards with a
                     bootscript are not compatible with routed IPs.
-                    <a>
+                    <a onClick={() => handleClickSupport()}>
                       Using routed IPs
                       <svg viewBox="0 0 24 24">
                         <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
@@ -255,12 +262,12 @@ const Dashboard = ({}) => {
                     ? styles.activeCheckbox
                     : '') +
                   ' ' +
-                  styles.listInstances
+                  styles.listBoards
                 }
               >
                 {dashboards.map((dashboard, index) => (
-                  <div key={index} className={styles.instancesList}>
-                    <div className={styles.instanceCheckBox}>
+                  <div key={index} className={styles.boardsList}>
+                    <div className={styles.boardCheckBox}>
                       <input
                         type="checkbox"
                         checked={selectedDashboards[index]}
@@ -268,7 +275,7 @@ const Dashboard = ({}) => {
                       />
                     </div>
                     <div
-                      className={styles.instanceName}
+                      className={styles.boardName}
                       onClick={() => handleClickDashboard(dashboard)}
                     >
                       <span
@@ -290,7 +297,7 @@ const Dashboard = ({}) => {
                         <IconImportant width={'30'} height={'30'} />
                       </div>
                     </div>
-                    <div className={styles.instanceIP}>
+                    <div className={styles.boardIP}>
                       {dashboard.ip || 'Not Assigned'}
                       <button
                         className={styles.buttonCopy}
@@ -302,14 +309,14 @@ const Dashboard = ({}) => {
                       </button>
                     </div>
                     <div
-                      className={styles.instanceCreatedAt}
+                      className={styles.boardCreatedAt}
                       data-toolTip={'15 de diciembre'}
                       onMouseEnter={handleToolTipMouseEnter}
                       onMouseLeave={handleToolTipMouseLeave}
                     >
                       15 days ago
                     </div>
-                    <div className={styles.instanceCountry}>
+                    <div className={styles.boardCountry}>
                       <img
                         alt=""
                         className={styles.flag}
@@ -317,10 +324,10 @@ const Dashboard = ({}) => {
                       />
                       {dashboard.zone}
                     </div>
-                    <div className={styles.instanceMove}>
+                    <div className={styles.boardMove}>
                       <button className={styles.button}>Move Ip</button>
                     </div>
-                    <div className={styles.instanceSettings}>
+                    <div className={styles.boardSettings}>
                       <button
                         className={styles.button}
                         // onClick={handlePopupSettings}
@@ -340,7 +347,7 @@ const Dashboard = ({}) => {
                           <li onClick={() => handleReboot()}>Reboot</li>
                           <li onClick={() => handleStandby()}>Standby</li>
                           <li onClick={() => handleDetachIP()}>Detach IP(s)</li>
-                          <li onClick={() => handleDeleteInstance(instance.id)}>Delete</li>
+                          <li onClick={() => handleDeleteBoard(board.id)}>Delete</li>
                         </ul>
                       )}
                     </div>
@@ -374,7 +381,7 @@ const Dashboard = ({}) => {
                   Create Dashboard
                 </button>
                 <a>
-                  Instance Quickstart Documentation
+                  Board Quickstart Documentation
                   <svg viewBox="0 0 24 24">
                     <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
                   </svg>
@@ -383,8 +390,30 @@ const Dashboard = ({}) => {
             </div>
           )}
         </div>
-      ):(
-        <Board  />
+      ) : (
+        <div>
+          <div className={styles.alertBoard}>
+            <div className={styles.alertBoardIcon}>
+              <IconImportant width={'20'} fill={'#000fff'} />
+            </div>
+            <div className={styles.alertBoardText}>
+              <b>Requirements for moving to routed IP</b>
+              <p>
+                Before moving to a ROUTED IP, ensure no static network
+                configuration is in use, and your ‘scaleway-ecosystem’ and
+                ‘cloud-init’ packages are updated. Note that Boards with a
+                bootscript are not compatible with routed IPs.
+                <a onClick={() => handleClickSupport()}>
+                  Using routed IPs
+                  <svg viewBox="0 0 24 24">
+                    <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
+                  </svg>
+                </a>
+              </p>
+            </div>
+          </div>
+          <Board />
+        </div>
       )}
     </div>
   )

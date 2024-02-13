@@ -13,7 +13,7 @@
       justify-content: center;
       cursor: pointer;
       background: transparent;
-      color: #000fff;
+      color: var(--color-primary-0);
       border-radius: 4px;
       height: 30px;
       width: 30px;
@@ -31,7 +31,7 @@
     .popupSettings {
       width: 100px;
       list-style: none;
-      background: var(--background);
+      background: var(--background-secondary);
       position: absolute;
       overflow:hidden;
       top: 10px;
@@ -43,11 +43,11 @@
         padding: 6px 8px;
         font-size: 10px;
         &:hover{
-          background: #f8f8f8;
+          background: var(--background);
         }
       }
       li.hr {
-        border-bottom: 1px solid #f2f2f2;
+        border-bottom: 1px solid var(--border-color);
       }
     }
   }
@@ -74,7 +74,7 @@
   letter-spacing: 0px;
   line-height: 20px;
   background: none;
-  border: 1px solid rgb(181, 183, 189);
+  border: 1px solid var(--border-color);
   fill: rgb(63, 66, 80);
   
 }
@@ -120,7 +120,7 @@
       left: 0px;
       width: 100%;
       height: calc(100% - 10px);
-      border: 1px solid rgb(197, 197, 197);
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       margin-top: 0px;
       margin-left: -14px;
@@ -128,7 +128,7 @@
     }
     &:hover{
       &:after{
-        background: #fafafa;
+        background: var(--background);
       }
     }
   }
@@ -161,7 +161,7 @@
     background-color: red;
     border-radius: 50%;
     &.active{
-      background-color: #000fff;
+      background-color: var(--color-primary-0);
     }
   }
   .avatar{
