@@ -321,7 +321,7 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
       // Puedes agregar lógica adicional si es necesario
     };
 
-    if (folders.length === 0 && empty === true) {
+    if (folders.length === 0) {
       return (
         <div
           className={style.emptyFolderMessage}
