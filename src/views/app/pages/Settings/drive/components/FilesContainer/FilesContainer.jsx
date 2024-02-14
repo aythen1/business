@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import MyFiles from "../my-files/my-files";
 import { getFilesInDescendingOrder, regexExtensiones } from "../../assetsAux";
 import { getRootDirectories } from "@/actions/assets";
+import Trash from "../trash/trash";
 
 export const FilesContainer = ({ setIsNew }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ export const FilesContainer = ({ setIsNew }) => {
     setFilteredFiles(filteredFiles);
   }, [directoriesData, category]);
 
-  return (
+  return category === "trash" ? (
+    <Trash driveId={driveId} />
+  ) : (
     <MyFiles
       categoryFiles={filteredFiles}
       driveId={driveId}
@@ -46,7 +49,7 @@ const filterFilesByCategory = (files, category) => {
         const folderName = file.Key.split("/").filter(Boolean).pop();
         console.log("folderName", folderName);
         // Verifica si folderName termina en '.png'
-        return folderName.toLowerCase().endsWith(".png");
+        return folderName.toLowerCase().endsWith(".ay");
       });
 
     case "dashboard":
