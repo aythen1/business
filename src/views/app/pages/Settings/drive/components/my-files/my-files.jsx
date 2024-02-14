@@ -679,7 +679,7 @@ export default function Page({
                 Último modificado
               </p>
               <Filters
-                name="lastedAt"
+                name="Last modified"
                 filters={filters}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
