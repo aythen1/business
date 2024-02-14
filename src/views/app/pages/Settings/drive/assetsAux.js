@@ -1,4 +1,5 @@
 import ai from "./assets/icons/AI.svg";
+import ay from "./assets/File (1).svg";
 import avi from "./assets/icons/AVI.svg";
 import bmp from "./assets/icons/BMP.svg";
 import crd from "./assets/icons/CRD.svg";
@@ -129,6 +130,7 @@ export function formatLastModified(lastModified) {
 
 export const icons = {
   ai,
+  ay,
   avi,
   bmp,
   crd,
