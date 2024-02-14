@@ -12,7 +12,6 @@ import file1 from "../../assets/File (1).svg";
 import { useState, useEffect } from "react";
 import {
   directoriesDB,
-  getRootDirectories,
   deleteFolders,
   deleteFolder,
   deleteFile,
@@ -21,7 +20,6 @@ import {
   obtainFileData,
   moveFile,
 } from "@/actions/assets";
-// import { getElementTag } from '@/actions/component'
 import {
   convertToMegabytes,
   calculateFolderSize,
@@ -61,12 +59,20 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
 
   const handleClickFilter = (name) => {
     setFiltersData((prevFilters) => {
+      // verifico si algún filtro está abierto
+      const isAnyFilterOpen = prevFilters.some(
+        (filter) => filter.name !== name && filter.view
+      );
+
       return prevFilters.map((filter) => {
         if (filter.name === name) {
-          // Toggle the 'view' property
+          // si se clickea el mismo filtro, invertimos su view
           return { ...filter, view: !filter.view };
+        } else if (isAnyFilterOpen) {
+          // si hay otro filtro abierto, lo cierro
+          return { ...filter, view: false };
         }
-        return filter;
+        return filter; // para los filtros no clickeados, mantengo su estado actual
       });
     });
   };
@@ -141,16 +147,44 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
 
       setFilteredFolders(sortedFiltered);
     } else {
-      // Reset filteredFolders when uploadSearch is empty
-      const filtered = categoryFiles.filter(
-        (folder) =>
+      // Determina si la entrada es una carpeta basándose en su tamaño.
+      const isFolder = (folder) => folder.Size === 6;
+
+      // Calcula la profundidad de la ruta proporcionada.
+      const getPathDepth = (path) => path.split("/").length;
+
+      // Verifica si la categoría permite ignorar la validación de profundidad para archivos.
+      const categoryIgnoresDepth = (category) => {
+        return ["recent", "addon", "dashboard", "priority"].includes(category);
+      };
+
+      // Función para validar si un elemento debe ser incluido basado en la categoría y su ruta.
+      const isValidElement = (folder) => {
+        const folderDepth = getPathDepth(folder.Key);
+        const currentPathDepth = getPathDepth(currentPath);
+        let isValidDepth;
+
+        if (isFolder(folder)) {
+          // Para carpetas, se espera que su profundidad sea exactamente 1 nivel más profundo que la ruta actual.
+          isValidDepth = folderDepth === currentPathDepth + 1;
+        } else if (categoryIgnoresDepth(category)) {
+          // Si la categoría ignora la profundidad, todos los archivos son válidos independientemente de su profundidad.
+          isValidDepth = true;
+        } else {
+          // Para otros casos, la profundidad del archivo debe coincidir con la de la ruta actual.
+          isValidDepth = folderDepth === currentPathDepth;
+        }
+
+        return (
           folder.Key.startsWith(currentPath) &&
           folder.Key !== currentPath &&
-          (folder.Size === 6 //cuando es una carpeta
-            ? folder.Key.split("/").length === currentPath.split("/").length + 1
-            : folder.Key.split("/").length === currentPath.split("/").length)
-      );
+          isValidDepth
+        );
+      };
 
+      // Filtra los archivos o carpetas según las validaciones definidas.
+      const filtered = categoryFiles.filter(isValidElement);
+      console.log("filtered", filtered);
       setFilteredFolders(filtered);
     }
   }, [currentPath, categoryFiles, searchFiles]);
