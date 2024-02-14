@@ -35,7 +35,12 @@ import Menu from "../../assets/Menu-figma.svg";
 import FolderOptions from "../FolderOptions";
 import FileOptions from "../FileOptions";
 
-export default function Page({ setIsNew, categoryFiles, driveId }) {
+export default function Page({
+  setIsNew,
+  categoryFiles,
+  driveId,
+  setSortOrder,
+}) {
   const dispatch = useDispatch();
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
@@ -75,6 +80,11 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
         return filter; // para los filtros no clickeados, mantengo su estado actual
       });
     });
+  };
+
+  const handleSelectFilter = (name, order) => {
+    console.log({ by: name, order });
+    setSortOrder({ by: name, order });
   };
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
@@ -550,10 +560,28 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
               </div>
               {filter.view && (
                 <ul className={style.drive_options}>
-                  <li>Name</li>
-                  <li>Last modified</li>
-                  <li>Last modified by me</li>
-                  <li>Last opened by me</li>
+                  <li onClick={() => handleSelectFilter("Name", "dsc")}>
+                    Name
+                  </li>
+                  <li
+                    onClick={() => handleSelectFilter("Last modified", "dsc")}
+                  >
+                    Last modified
+                  </li>
+                  <li
+                    onClick={() =>
+                      handleSelectFilter("Last modified by me", "dsc")
+                    }
+                  >
+                    Last modified by me
+                  </li>
+                  <li
+                    onClick={() =>
+                      handleSelectFilter("Last opened by me", "dsc")
+                    }
+                  >
+                    Last opened by me
+                  </li>
                 </ul>
               )}
             </div>
@@ -630,20 +658,31 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
                 onChange={handleSelectAllChange}
               />
               <p className={style.drive_folders_filters_title}>Name</p>
-              <Filters name="name" filters={filters} setFilters={setFilters} />
+              <Filters
+                name="Name"
+                filters={filters}
+                setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
+              />
             </div>
             <div className={style.drive_folder_size_container}>
               <p className={style.drive_folders_filters_title}>Tamaño</p>
-              <Filters name="size" filters={filters} setFilters={setFilters} />
+              <Filters
+                name="Size"
+                filters={filters}
+                setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
+              />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>
                 Último modificado
               </p>
               <Filters
-                name="lastedAt"
+                name="Last modified"
                 filters={filters}
                 setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
               />
             </div>
           </div>
@@ -687,7 +726,7 @@ export default function Page({ setIsNew, categoryFiles, driveId }) {
   );
 }
 
-const Filters = ({ name, filters, setFilters }) => {
+const Filters = ({ name, filters, setFilters, handleSelectFilter }) => {
   const handleClick = (order) => {
     setFilters({ name, order });
   };
@@ -703,7 +742,10 @@ const Filters = ({ name, filters, setFilters }) => {
           : style.top
       }
       `}
-      onClick={() => handleClick(filters.order === "asc" ? "dsc" : "asc")}
+      onClick={() => {
+        handleClick(filters.order === "asc" ? "dsc" : "asc");
+        handleSelectFilter(name, filters.order === "asc" ? "dsc" : "asc");
+      }}
     >
       <svg
         className={style.top}
