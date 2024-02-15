@@ -17,7 +17,7 @@ export const FilesContainer = ({ setIsNew }) => {
   // Asume que el estado de Redux ya tiene una lista de todos los archivos
   const { directoriesData, category } = useSelector((state) => state.assets);
   const [filteredFiles, setFilteredFiles] = useState([]);
-  const [sortOrder, setSortOrder] = useState({ by: "", order: "" });
+  const [sortOrder, setSortOrder] = useState({ name: "", order: "" });
 
   // Este efecto se dispara solo una vez, para cargar los directorios iniciales
   useEffect(() => {
@@ -41,6 +41,7 @@ export const FilesContainer = ({ setIsNew }) => {
       driveId={driveId}
       setIsNew={setIsNew}
       setSortOrder={setSortOrder}
+      sortOrder={sortOrder}
     />
   );
 };
@@ -86,8 +87,14 @@ const filterFilesByCategory = (files, category) => {
 const sortFiles = (files, sortOrder) => {
   // Crea una copia del array antes de ordenarlo para evitar modificar el original
   let sortedFiles = [...files];
-
-  switch (sortOrder.by) {
+  const getSizeInMegabytes = (file, sortedFiles) => {
+    const folderName = file.Key.split("/").filter(Boolean).pop();
+    const isFile = regexExtensiones.test(folderName);
+    return isFile
+      ? convertToMegabytes(file.Size)
+      : convertToMegabytes(calculateFolderSize(file.Key, sortedFiles));
+  };
+  switch (sortOrder.name) {
     case "Name":
       sortedFiles.sort((a, b) =>
         sortOrder.order === "asc"
@@ -97,17 +104,9 @@ const sortFiles = (files, sortOrder) => {
       break;
     case "Size":
       sortedFiles.sort((a, b) => {
-        const aFolderName = a.Key.split("/").filter(Boolean).pop();
-        const aIsFile = regexExtensiones.test(aFolderName);
-        const aSize = aIsFile
-          ? convertToMegabytes(a.Size)
-          : convertToMegabytes(calculateFolderSize(a.Key, sortedFiles));
-        const bFolderName = b.Key.split("/").filter(Boolean).pop();
-        const bIsFile = regexExtensiones.test(bFolderName);
-        const bSize = bIsFile
-          ? convertToMegabytes(a.Size)
-          : convertToMegabytes(calculateFolderSize(b.Key, sortedFiles));
-
+        const aSize = getSizeInMegabytes(a, sortedFiles);
+        const bSize = getSizeInMegabytes(b, sortedFiles);
+        // No es necesario loguear cada vez, pero si deseas hacerlo para depuración, puedes hacerlo fuera de esta función
         return sortOrder.order === "asc" ? aSize - bSize : bSize - aSize;
       });
       break;

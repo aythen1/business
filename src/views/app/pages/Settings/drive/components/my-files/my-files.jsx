@@ -40,6 +40,7 @@ export default function Page({
   categoryFiles,
   driveId,
   setSortOrder,
+  sortOrder,
 }) {
   const dispatch = useDispatch();
 
@@ -83,8 +84,8 @@ export default function Page({
   };
 
   const handleSelectFilter = (name, order) => {
-    console.log({ by: name, order });
-    setSortOrder({ by: name, order });
+    console.log({ name, order });
+    setSortOrder({ name, order });
   };
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
@@ -560,24 +561,24 @@ export default function Page({
               </div>
               {filter.view && (
                 <ul className={style.drive_options}>
-                  <li onClick={() => handleSelectFilter("Name", "dsc")}>
+                  <li onClick={() => handleSelectFilter("Name", "asc")}>
                     Name
                   </li>
                   <li
-                    onClick={() => handleSelectFilter("Last modified", "dsc")}
+                    onClick={() => handleSelectFilter("Last modified", "asc")}
                   >
                     Last modified
                   </li>
                   <li
                     onClick={() =>
-                      handleSelectFilter("Last modified by me", "dsc")
+                      handleSelectFilter("Last modified by me", "asc")
                     }
                   >
                     Last modified by me
                   </li>
                   <li
                     onClick={() =>
-                      handleSelectFilter("Last opened by me", "dsc")
+                      handleSelectFilter("Last opened by me", "asc")
                     }
                   >
                     Last opened by me
@@ -661,6 +662,7 @@ export default function Page({
               <Filters
                 name="Name"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -670,6 +672,7 @@ export default function Page({
               <Filters
                 name="Size"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -681,6 +684,7 @@ export default function Page({
               <Filters
                 name="Last modified"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -726,25 +730,20 @@ export default function Page({
   );
 }
 
-const Filters = ({ name, filters, setFilters, handleSelectFilter }) => {
-  const handleClick = (order) => {
-    setFilters({ name, order });
-  };
-
+const Filters = ({ name, sortOrder, handleSelectFilter }) => {
   return (
     <div
-      className={`${style.filters} 
+      className={`${style.sortOrder} 
       ${
-        filters.name !== name
+        sortOrder.name !== name
           ? ""
-          : filters.order == "asc"
+          : sortOrder.order == "asc"
           ? style.bottom
           : style.top
       }
       `}
       onClick={() => {
-        handleClick(filters.order === "asc" ? "dsc" : "asc");
-        handleSelectFilter(name, filters.order === "asc" ? "dsc" : "asc");
+        handleSelectFilter(name, sortOrder.order === "asc" ? "dsc" : "asc");
       }}
     >
       <svg
