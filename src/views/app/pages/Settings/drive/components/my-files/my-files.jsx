@@ -31,7 +31,6 @@ import {
   categoryTitles,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
-import Menu from "../../assets/Menu-figma.svg";
 import FolderOptions from "../FolderOptions";
 import FileOptions from "../FileOptions";
 
@@ -40,6 +39,7 @@ export default function Page({
   categoryFiles,
   driveId,
   setSortOrder,
+  sortOrder,
 }) {
   const dispatch = useDispatch();
 
@@ -55,6 +55,8 @@ export default function Page({
   const [isDragginFile, setIsDragginFile] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
   const [filtersData, setFiltersData] = useState([
     { name: "Filter by:", option: "All files", view: false },
     { name: "Sort by:", option: "Last viewed", view: false },
@@ -83,8 +85,8 @@ export default function Page({
   };
 
   const handleSelectFilter = (name, order) => {
-    console.log({ by: name, order });
-    setSortOrder({ by: name, order });
+    console.log({ name, order });
+    setSortOrder({ name, order });
   };
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
@@ -356,6 +358,20 @@ export default function Page({
         ? convertToMegabytes(directory.Size)
         : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
 
+      const handleContextMenu = (e) => {
+        e.preventDefault();
+        const x = e.clientX;
+        const y = e.clientY;
+        setPosition({ x, y });
+
+        setFolderOptions((prevOptions) => {
+          const newOptions = { ...prevOptions };
+          newOptions[index] = !newOptions[index];
+          return newOptions;
+        });
+        // Aquí podrías también establecer el estado para la posición del menú si es necesario
+      };
+
       return (
         <div
           key={index}
@@ -363,6 +379,7 @@ export default function Page({
           onDragOver={handleDragOver}
           onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
           onDragStart={() => handleDragStart(directory, isFile, folderName)}
+          onContextMenu={handleContextMenu}
           className={style.drive_folder_container}
         >
           <div
@@ -400,14 +417,14 @@ export default function Page({
             </div>
           </div>
 
-          <div className={style.fileRightSection}>
+          {/* <div className={style.fileRightSection}>
             <span
               className={style.fileOption}
               onClick={() => handleToggleFolderOption(index)}
             >
               <img src={Menu} alt="" />
             </span>
-          </div>
+          </div> */}
 
           {folderOptions[index] &&
             (isFile ? (
@@ -421,6 +438,7 @@ export default function Page({
                 handleDeleteFolder={sendFileToTrash}
                 folderName={folderName}
                 directory={directory}
+                position={position}
               />
             ) : (
               <FolderOptions
@@ -433,6 +451,7 @@ export default function Page({
                 handleDeleteFolder={clearStorage}
                 folderName={folderName}
                 directory={directory.Key}
+                position={position}
               />
             ))}
         </div>
@@ -560,24 +579,24 @@ export default function Page({
               </div>
               {filter.view && (
                 <ul className={style.drive_options}>
-                  <li onClick={() => handleSelectFilter("Name", "dsc")}>
+                  <li onClick={() => handleSelectFilter("Name", "asc")}>
                     Name
                   </li>
                   <li
-                    onClick={() => handleSelectFilter("Last modified", "dsc")}
+                    onClick={() => handleSelectFilter("Last modified", "asc")}
                   >
                     Last modified
                   </li>
                   <li
                     onClick={() =>
-                      handleSelectFilter("Last modified by me", "dsc")
+                      handleSelectFilter("Last modified by me", "asc")
                     }
                   >
                     Last modified by me
                   </li>
                   <li
                     onClick={() =>
-                      handleSelectFilter("Last opened by me", "dsc")
+                      handleSelectFilter("Last opened by me", "asc")
                     }
                   >
                     Last opened by me
@@ -661,6 +680,7 @@ export default function Page({
               <Filters
                 name="Name"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -670,6 +690,7 @@ export default function Page({
               <Filters
                 name="Size"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -681,6 +702,7 @@ export default function Page({
               <Filters
                 name="Last modified"
                 filters={filters}
+                sortOrder={sortOrder}
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
@@ -726,25 +748,20 @@ export default function Page({
   );
 }
 
-const Filters = ({ name, filters, setFilters, handleSelectFilter }) => {
-  const handleClick = (order) => {
-    setFilters({ name, order });
-  };
-
+const Filters = ({ name, sortOrder, handleSelectFilter }) => {
   return (
     <div
-      className={`${style.filters} 
+      className={`${style.sortOrder} 
       ${
-        filters.name !== name
+        sortOrder.name !== name
           ? ""
-          : filters.order == "asc"
+          : sortOrder.order == "asc"
           ? style.bottom
           : style.top
       }
       `}
       onClick={() => {
-        handleClick(filters.order === "asc" ? "dsc" : "asc");
-        handleSelectFilter(name, filters.order === "asc" ? "dsc" : "asc");
+        handleSelectFilter(name, sortOrder.order === "asc" ? "dsc" : "asc");
       }}
     >
       <svg
