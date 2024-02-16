@@ -113,8 +113,8 @@ const sortFiles = (files, sortOrder) => {
     case "Last modified":
       sortedFiles.sort((a, b) =>
         sortOrder.order === "asc"
-          ? new Date(a.LastModified) - new Date(b.LastModified)
-          : new Date(b.LastModified) - new Date(a.LastModified)
+          ? new Date(b.LastModified) - new Date(a.LastModified)
+          : new Date(a.LastModified) - new Date(b.LastModified)
       );
       break;
     case "Last modified by me":
