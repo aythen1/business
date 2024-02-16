@@ -31,7 +31,6 @@ import {
   categoryTitles,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
-import Menu from "../../assets/Menu-figma.svg";
 import FolderOptions from "../FolderOptions";
 import FileOptions from "../FileOptions";
 
@@ -56,6 +55,8 @@ export default function Page({
   const [isDragginFile, setIsDragginFile] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
   const [filtersData, setFiltersData] = useState([
     { name: "Filter by:", option: "All files", view: false },
     { name: "Sort by:", option: "Last viewed", view: false },
@@ -357,6 +358,20 @@ export default function Page({
         ? convertToMegabytes(directory.Size)
         : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
 
+      const handleContextMenu = (e) => {
+        e.preventDefault();
+        const x = e.clientX;
+        const y = e.clientY;
+        setPosition({ x, y });
+
+        setFolderOptions((prevOptions) => {
+          const newOptions = { ...prevOptions };
+          newOptions[index] = !newOptions[index];
+          return newOptions;
+        });
+        // Aquí podrías también establecer el estado para la posición del menú si es necesario
+      };
+
       return (
         <div
           key={index}
@@ -364,6 +379,7 @@ export default function Page({
           onDragOver={handleDragOver}
           onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
           onDragStart={() => handleDragStart(directory, isFile, folderName)}
+          onContextMenu={handleContextMenu}
           className={style.drive_folder_container}
         >
           <div
@@ -401,14 +417,14 @@ export default function Page({
             </div>
           </div>
 
-          <div className={style.fileRightSection}>
+          {/* <div className={style.fileRightSection}>
             <span
               className={style.fileOption}
               onClick={() => handleToggleFolderOption(index)}
             >
               <img src={Menu} alt="" />
             </span>
-          </div>
+          </div> */}
 
           {folderOptions[index] &&
             (isFile ? (
@@ -422,6 +438,7 @@ export default function Page({
                 handleDeleteFolder={sendFileToTrash}
                 folderName={folderName}
                 directory={directory}
+                position={position}
               />
             ) : (
               <FolderOptions
@@ -434,6 +451,7 @@ export default function Page({
                 handleDeleteFolder={clearStorage}
                 folderName={folderName}
                 directory={directory.Key}
+                position={position}
               />
             ))}
         </div>
