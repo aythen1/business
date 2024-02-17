@@ -227,69 +227,19 @@ export default function Page({
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
+  useEffect(
+    () => setRecentFiles(getFilesInDescendingOrder(categoryFiles)),
+    [categoryFiles]
+  );
   useEffect(() => {
-    setRecentFiles(getFilesInDescendingOrder(categoryFiles));
-  }, [categoryFiles]);
-
-  useEffect(() => {
-    if (searchFiles !== "" && searchFiles !== undefined) {
-      const filtered = categoryFiles.filter(
-        (folder) =>
-          folder.Key.startsWith(currentPath) &&
-          folder.Key !== currentPath &&
-          folder.Key.toLowerCase().includes(searchFiles.toLowerCase())
-      );
-
-      // Ensure strict order based on the search string
-      const sortedFiltered = filtered.sort((a, b) => {
-        const indexA = a.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
-        const indexB = b.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
-        return indexA - indexB;
-      });
-
-      setFilteredFolders(sortedFiltered);
-    } else {
-      // Determina si la entrada es una carpeta basándose en su tamaño.
-      const isFolder = (folder) => folder.Size === 6;
-
-      // Calcula la profundidad de la ruta proporcionada.
-      const getPathDepth = (path) => path.split("/").length;
-
-      // Verifica si la categoría permite ignorar la validación de profundidad para archivos.
-      const categoryIgnoresDepth = (category) => {
-        return ["recent", "addon", "dashboard", "priority"].includes(category);
-      };
-
-      // Función para validar si un elemento debe ser incluido basado en la categoría y su ruta.
-      const isValidElement = (folder) => {
-        const folderDepth = getPathDepth(folder.Key);
-        const currentPathDepth = getPathDepth(currentPath);
-        let isValidDepth;
-
-        if (isFolder(folder)) {
-          // Para carpetas, se espera que su profundidad sea exactamente 1 nivel más profundo que la ruta actual.
-          isValidDepth = folderDepth === currentPathDepth + 1;
-        } else if (categoryIgnoresDepth(category)) {
-          // Si la categoría ignora la profundidad, todos los archivos son válidos independientemente de su profundidad.
-          isValidDepth = true;
-        } else {
-          // Para otros casos, la profundidad del archivo debe coincidir con la de la ruta actual.
-          isValidDepth = folderDepth === currentPathDepth;
-        }
-
-        return (
-          folder.Key.startsWith(currentPath) &&
-          folder.Key !== currentPath &&
-          isValidDepth
-        );
-      };
-
-      // Filtra los archivos o carpetas según las validaciones definidas.
-      const filtered = categoryFiles.filter(isValidElement);
-      console.log("filtered", filtered);
-      setFilteredFolders(filtered);
-    }
-  }, [currentPath, categoryFiles, searchFiles]);
+    const filtered = filterFoldersBasedOnSearchAndPath(
+      searchFiles,
+      categoryFiles,
+      currentPath,
+      category
+    );
+    setFilteredFolders(filtered);
+  }, [currentPath, categoryFiles, searchFiles, category]);
 
   // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 
@@ -511,5 +461,46 @@ export default function Page({
         </div>
       )}
     </div>
+  );
+}
+
+function filterFoldersBasedOnSearchAndPath(
+  searchFiles,
+  categoryFiles,
+  currentPath,
+  category
+) {
+  if (searchFiles) {
+    return categoryFiles
+      .filter(
+        (folder) =>
+          folder.Key.startsWith(currentPath) &&
+          folder.Key.toLowerCase().includes(searchFiles.toLowerCase())
+      )
+      .sort(
+        (a, b) =>
+          a.Key.toLowerCase().indexOf(searchFiles.toLowerCase()) -
+          b.Key.toLowerCase().indexOf(searchFiles.toLowerCase())
+      );
+  } else {
+    return categoryFiles.filter((folder) =>
+      isValidElementForCategory(folder, currentPath, category)
+    );
+  }
+}
+
+function isValidElementForCategory(folder, currentPath, category) {
+  const isFolder = folder.Size === 6;
+  const folderDepth = folder.Key.split("/").length;
+  const currentPathDepth = currentPath.split("/").length;
+  let isValidDepth = isFolder
+    ? folderDepth === currentPathDepth + 1
+    : folderDepth === currentPathDepth;
+  if (["recent", "addon", "dashboard", "priority"].includes(category))
+    isValidDepth = true;
+  return (
+    folder.Key.startsWith(currentPath) &&
+    folder.Key !== currentPath &&
+    isValidDepth
   );
 }
