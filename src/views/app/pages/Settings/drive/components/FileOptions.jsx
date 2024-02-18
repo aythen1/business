@@ -5,7 +5,7 @@ import styles from "./FolderOptions.module.css";
 import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { obtainFileData } from "@/actions/assets";
 
-const FolderOptions = ({
+const FileOptions = ({
   setShowFolderOption,
   handleDeleteFolder,
   folderName,
@@ -16,6 +16,7 @@ const FolderOptions = ({
   const componentRef = useRef(null);
   const { x, y } = position;
   const handleCopyFile = () => {
+    console.log("copy");
     dispatch(
       obtainFileData({
         directoryCopied: directory.Key,
@@ -27,6 +28,7 @@ const FolderOptions = ({
   };
   useEffect(() => {
     const handleClickOutside = (event) => {
+      event.stopPropagation();
       if (componentRef.current && !componentRef.current.contains(event.target))
         setShowFolderOption(false);
     };
@@ -66,4 +68,4 @@ const FolderOptions = ({
   );
 };
 
-export default FolderOptions;
+export default FileOptions;
