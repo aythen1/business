@@ -29,6 +29,7 @@ const FolderOptions = ({
   };
   useEffect(() => {
     const handleClickOutside = (event) => {
+      event.stopPropagation();
       if (componentRef.current && !componentRef.current.contains(event.target))
         setShowFolderOption(false);
     };
