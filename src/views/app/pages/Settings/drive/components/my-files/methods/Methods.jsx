@@ -234,7 +234,7 @@ export const renderFilesDB = (folders, handleDragStart) => {
     return (
       <div
         className={style.drive_suggestion_container}
-        key={index}
+        key={index + "files"}
         onDragStart={() => handleDragStart(file.Key, true)}
         draggable
       >
@@ -269,7 +269,15 @@ export const renderFilesDB = (folders, handleDragStart) => {
   });
 };
 
-export const renderRecentFiles = (recentFilesFiltered, handleDragStart) => {
+export const renderRecentFiles = (
+  recentFilesFiltered,
+  handleDragStart,
+  sendFileToTrash,
+  position,
+  setPosition,
+  folderOptions,
+  setFolderOptions
+) => {
   // filtramos primero para obtener solo archivos
   const filesOnly = recentFilesFiltered.filter((file) => {
     const fileName = file.Key.split("/").filter(Boolean).pop();
@@ -282,12 +290,27 @@ export const renderRecentFiles = (recentFilesFiltered, handleDragStart) => {
     const fileExtension = fileName.toLowerCase().match(regexExtensiones)?.[1];
     const icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
     const size = convertToMegabytes(file.Size);
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+      const x = e.clientX;
+      const y = e.clientY;
+      setPosition({ x, y });
+
+      setFolderOptions((prevOptions) => {
+        const newOptions = { ...prevOptions };
+        newOptions[index] = !newOptions[index];
+        return newOptions;
+      });
+      // Aquí podrías también establecer el estado para la posición del menú si es necesario
+    };
+
     return (
       <div
         className={style.drive_suggestion_container}
-        key={index}
+        key={index + "recent"}
         onDragStart={() => handleDragStart(file.Key, true)}
         draggable
+        onContextMenu={handleContextMenu}
       >
         <div className={style.icon}>
           <div className={style.file}>
@@ -307,6 +330,20 @@ export const renderRecentFiles = (recentFilesFiltered, handleDragStart) => {
             <div className={style.kb}>{size}</div>
           </div>
         </div>
+        {folderOptions[index] && (
+          <FileOptions
+            setShowFolderOption={(value) =>
+              setFolderOptions((prevOptions) => ({
+                ...prevOptions,
+                [index]: value,
+              }))
+            }
+            handleDeleteFolder={sendFileToTrash}
+            folderName={fileName}
+            directory={file}
+            position={position}
+          />
+        )}
       </div>
     );
   });

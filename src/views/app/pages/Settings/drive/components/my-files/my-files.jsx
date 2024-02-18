@@ -46,6 +46,7 @@ export default function Page({
   const [currentPath, setCurrentPath] = useState(driveId + "/");
   const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
   const [folderOptions, setFolderOptions] = useState({});
+  const [recentFilesOptions, setRecentFilesOptions] = useState({});
   const [isDragginFile, setIsDragginFile] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
@@ -323,7 +324,15 @@ export default function Page({
         </div>
         <div className={style.drive_suggested_container}>
           {showTypeDrive == "cloud"
-            ? renderRecentFiles(recentFiles, handleDragStart)
+            ? renderRecentFiles(
+                recentFiles,
+                handleDragStart,
+                sendFileToTrash,
+                position,
+                setPosition,
+                recentFilesOptions,
+                setRecentFilesOptions
+              )
             : renderFilesDB(filteredFolders, handleDragStart)}
         </div>
       </div>
