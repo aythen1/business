@@ -57,7 +57,6 @@ const filterFilesByCategory = (files, category) => {
     case "addon":
       return files.filter((file) => {
         const folderName = file.Key.split("/").filter(Boolean).pop();
-        console.log("folderName", folderName);
         // Verifica si folderName termina en '.png'
         return folderName.toLowerCase().endsWith(".ay");
       });
@@ -65,15 +64,25 @@ const filterFilesByCategory = (files, category) => {
     case "dashboard":
       return files.filter((file) => file.isShared);
     case "priority":
-      return files.filter((file) => file.isPriority);
+      return files.filter((file) => {
+        const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+        const isPriority = originalFolderName.includes("Priority.")
+          ? true
+          : false;
+        return isPriority;
+      });
+    case "featured":
+      return files.filter((file) => {
+        const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+        const isMarker = originalFolderName.includes("Marker.") ? true : false;
+        return isMarker;
+      });
     case "shared":
       return files.filter((file) => file.isShared);
     case "recent":
       return getFilesInDescendingOrder(files).filter((file) =>
         regexExtensiones.test(file.Key.split("/").filter(Boolean).pop())
       );
-    case "featured":
-      return files.filter((file) => file.isShared);
     case "glaciar":
       return files.filter((file) => file.isShared);
     case "trash":

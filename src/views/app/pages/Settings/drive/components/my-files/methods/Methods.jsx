@@ -118,7 +118,10 @@ export const renderFolders = (
   }
 
   return folders.map((directory, index) => {
-    const folderName = directory.Key.split("/").filter(Boolean).pop();
+    const originalFolderName = directory.Key.split("/").filter(Boolean).pop();
+    const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
+    // usamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía
+    const folderName = originalFolderName.replace(prefixRegex, "");
     const isFile = regexExtensiones.test(folderName);
     const fileExtension = folderName.toLowerCase().match(regexExtensiones)?.[1];
     const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
@@ -286,7 +289,10 @@ export const renderRecentFiles = (
 
   // trabajamos solo con los primeros 3 archivos
   return filesOnly.slice(0, 3).map((file, index) => {
-    const fileName = file.Key.split("/").filter(Boolean).pop();
+    const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+    const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
+    // utilizamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía.
+    const fileName = originalFolderName.replace(prefixRegex, "");
     const fileExtension = fileName.toLowerCase().match(regexExtensiones)?.[1];
     const icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
     const size = convertToMegabytes(file.Size);

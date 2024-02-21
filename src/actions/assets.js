@@ -161,9 +161,9 @@ export const moveFile = createAsyncThunk(
         destinationKey,
         userId,
       };
-      const { data } = await apiBackend.post("/assets/copy-file", body);
-      dispatch(copyFileLocal({ ...file, Key: destinationKey }));
       dispatch(filterFolder(sourceKey));
+      dispatch(copyFileLocal({ ...file, Key: destinationKey }));
+      const { data } = await apiBackend.post("/assets/move-file", body);
 
       return data.data.body;
     } catch (error) {

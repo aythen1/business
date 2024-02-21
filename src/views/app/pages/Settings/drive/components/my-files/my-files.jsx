@@ -9,6 +9,8 @@ import {
 } from "./methods/Methods";
 import Chevron from "../../assets/Vector 161 (Stroke).svg";
 import ArrowDropDown from "../../assets/arrow-drop-down.svg";
+import Info from "../../assets/Info.svg";
+import Star from "../../assets/Star.svg";
 
 import { useState, useEffect } from "react";
 import {
@@ -79,6 +81,47 @@ export default function Page({
   //     return newOptions;
   //   });
   // };
+  const handleSetPrefix = (prefix) => {
+    if (selectedFolders.length === 1) {
+      const [file] = selectedFolders;
+      const { Key } = file;
+
+      const originalFileName = Key.split("/").filter(Boolean).pop();
+      let newKey;
+      const otherPrefix = prefix === "Marker." ? "Priority." : "Marker.";
+      const hasPrefix = new RegExp(`\\b${prefix}\\b`).test(originalFileName);
+      const hasOtherPrefix = new RegExp(`\\b${otherPrefix}\\b`).test(
+        originalFileName
+      );
+
+      if (hasPrefix) {
+        // Si ya contiene el prefijo, quitarlo
+        newKey = Key.replace(prefix, "");
+      } else {
+        // Si no contiene el prefijo, agregarlo al inicio o después del otro prefijo si este último está presente
+        if (hasOtherPrefix) {
+          newKey = Key.replace(
+            originalFileName,
+            originalFileName.replace(
+              new RegExp(`^(${otherPrefix})`),
+              `$1${prefix}`
+            )
+          );
+        } else {
+          newKey = Key.replace(originalFileName, prefix + originalFileName);
+        }
+      }
+      dispatch(moveFile({ sourceKey: Key, destinationKey: newKey, file }));
+      setSelectedFolders([]);
+    }
+  };
+
+  // uso para "Marker."
+  const handleSetMarker = () => handleSetPrefix("Marker.");
+
+  // uso para "Priority."
+  const handleSetPriority = () => handleSetPrefix("Priority.");
+
   const handleDeleteDirectory = (path) => {
     dispatch(deleteFolder(path));
   };
@@ -448,6 +491,28 @@ export default function Page({
             <p>{selectedFolders.length} items selected</p>
           </div>
           <div>
+            <button
+              onClick={handleSetMarker}
+              className={style.buttonDelete}
+              style={{
+                borderColor: selectedFolders[0].Key.includes("Marker.")
+                  ? "#bba400"
+                  : "grey",
+              }}
+            >
+              <img src={Star} />
+            </button>
+            <button
+              onClick={handleSetPriority}
+              className={style.buttonDelete}
+              style={{
+                borderColor: selectedFolders[0].Key.includes("Priority.")
+                  ? "#bba400"
+                  : "grey",
+              }}
+            >
+              <img src={Info} />
+            </button>
             <button onClick={handleDB} className={style.buttonDB}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599">
                 <g>
@@ -505,7 +570,9 @@ function isValidElementForCategory(folder, currentPath, category) {
   let isValidDepth = isFolder
     ? folderDepth === currentPathDepth + 1
     : folderDepth === currentPathDepth;
-  if (["recent", "addon", "dashboard", "priority"].includes(category))
+  if (
+    ["recent", "addon", "dashboard", "priority", "featured"].includes(category)
+  )
     isValidDepth = true;
   return (
     folder.Key.startsWith(currentPath) &&
