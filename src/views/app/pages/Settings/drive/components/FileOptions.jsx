@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./FolderOptions.module.css";
 import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
-import { obtainFileData } from "@/actions/assets";
+import { obtainFileData, copyFile } from "@/actions/assets";
+import { icons } from "../assetsAux";
 
 const FileOptions = ({
   setShowFolderOption,
@@ -15,13 +16,44 @@ const FileOptions = ({
   const dispatch = useDispatch();
   const componentRef = useRef(null);
   const { x, y } = position;
-  const handleCopyFile = () => {
-    console.log("copy");
+
+  const handleDuplicateFile = () => {
+    const extensionList = Object.keys(icons);
+    function addCopyToFileName() {
+      // Encontrar la extensión del archivo
+      const extension = extensionList.find((ext) =>
+        folderName.endsWith("." + ext)
+      );
+
+      if (extension) {
+        // Si encuentra la extensión, reemplaza la extensión por "-copy" + extensión original
+        const newFileName = folderName.replace(
+          "." + extension,
+          "-copy." + extension
+        );
+
+        return directory.Key.replace(folderName, newFileName);
+      } else {
+        // Si no encuentra una extensión conocida, simplemente agrega "-copy" al final
+        return folderName + "-copy";
+      }
+    }
+
+    dispatch(
+      copyFile({
+        sourceKey: directory.Key,
+        destinationKey: addCopyToFileName(),
+        file: directory,
+      })
+    );
+  };
+  const handleCopyFile = (action) => {
     dispatch(
       obtainFileData({
         directoryCopied: directory.Key,
         folderNameCopied: folderName,
         file: directory,
+        action,
       })
     );
     setShowFolderOption(false);
@@ -50,8 +82,16 @@ const FileOptions = ({
       className={styles.folderOptionsContainer}
       style={style}
     >
-      <div className={styles.option} onClick={handleCopyFile}>
+      <div className={styles.option} onClick={() => handleCopyFile("copy")}>
         Copy
+        <IoSettingsOutline size={17} color="#00f" />
+      </div>
+      <div className={styles.option} onClick={() => handleCopyFile("cut")}>
+        Cut
+        <IoSettingsOutline size={17} color="#00f" />
+      </div>
+      <div className={styles.option} onClick={handleDuplicateFile}>
+        Duplicate
         <IoSettingsOutline size={17} color="#00f" />
       </div>
       <div
