@@ -142,28 +142,19 @@ export default function Page({
     dispatch(deleteFolder(path));
   };
   const copyElement = (sourceKey, destinationKey, file) => {
+    console.log({ sourceKey, destinationKey, file });
     dispatch(copyFile({ sourceKey, destinationKey, file }));
   };
   const createFolder = (newPath) => {
     dispatch(createNewFolder(newPath));
     dispatch(addFolderLocal(newPath + "/"));
   };
+  const moveElement = (sourceKey, destinationKey, file) => {
+    dispatch(moveFile({ sourceKey, destinationKey, file }));
+  };
   const copyFolder = (newPath) => {
     const { directoryCopied, folderNameCopied } = folderToCopy;
-    folderToCut,
-      iterateElementsToCopy(
-        directoryCopied,
-        copyElement,
-        categoryFiles,
-        newPath,
-        createFolder,
-        folderNameCopied
-      );
-  };
-  const cutFolder = (newPath) => {
-    const { directoryCopied, folderNameCopied } = folderToCut;
-
-    iterateElementsToCut(
+    iterateElementsToCopy(
       directoryCopied,
       copyElement,
       categoryFiles,
@@ -171,7 +162,19 @@ export default function Page({
       createFolder,
       folderNameCopied
     );
-    clearStorage(directoryCopied);
+  };
+  const cutFolder = (newPath) => {
+    const { directoryCopied, folderNameCopied } = folderToCut;
+
+    iterateElementsToCut(
+      directoryCopied,
+      moveElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderNameCopied,
+      handleDeleteDirectory
+    );
     dispatch(obtainFileData({ action: "reset" }));
   };
   const sendFileToTrash = (path) => {
