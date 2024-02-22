@@ -27,6 +27,7 @@ import {
   deleteItemsInDirectory,
   getFilesInDescendingOrder,
   categoryTitles,
+  regexExtensiones,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 
@@ -185,7 +186,6 @@ export default function Page({
   };
 
   const handleDB = async () => {
-    console.log("selectedFolders", selectedFolders);
     await dispatch(directoriesDB(selectedFolders));
 
     // setSelectedFolders([]);
@@ -213,7 +213,6 @@ export default function Page({
   };
 
   const handleSelectFilter = (name, order) => {
-    console.log({ name, order });
     setSortOrder({ name, order });
   };
 
@@ -251,6 +250,7 @@ export default function Page({
           directoryCopied: directory.Key,
           folderNameCopied: folderName,
           file: directory,
+          action: "copy",
         })
       );
       dispatch(
@@ -258,14 +258,14 @@ export default function Page({
           fileName: directory.Key,
         })
       );
-      dispatch(
-        getElementTag({
-          type: "image",
-          tag: "img",
-          tagName: "img",
-          rol: "default",
-        })
-      );
+      // dispatch(
+      //   getElementTag({
+      //     type: "image",
+      //     tag: "img",
+      //     tagName: "img",
+      //     rol: "default",
+      //   })
+      // );
     }
   };
 
@@ -276,6 +276,7 @@ export default function Page({
     [categoryFiles]
   );
   useEffect(() => {
+    setSelectedFolders([]);
     const filtered = filterFoldersBasedOnSearchAndPath(
       searchFiles,
       categoryFiles,
@@ -491,28 +492,33 @@ export default function Page({
             <p>{selectedFolders.length} items selected</p>
           </div>
           <div>
-            <button
-              onClick={handleSetMarker}
-              className={style.buttonDelete}
-              style={{
-                borderColor: selectedFolders[0].Key.includes("Marker.")
-                  ? "#bba400"
-                  : "grey",
-              }}
-            >
-              <img src={Star} />
-            </button>
-            <button
-              onClick={handleSetPriority}
-              className={style.buttonDelete}
-              style={{
-                borderColor: selectedFolders[0].Key.includes("Priority.")
-                  ? "#bba400"
-                  : "grey",
-              }}
-            >
-              <img src={Info} />
-            </button>
+            {selectedFolders.length < 2 &&
+              regexExtensiones.test(selectedFolders[0].Key) && (
+                <>
+                  <button
+                    onClick={handleSetMarker}
+                    className={style.buttonDelete}
+                    style={{
+                      borderColor: selectedFolders[0].Key.includes("Marker.")
+                        ? "#bba400"
+                        : "grey",
+                    }}
+                  >
+                    <img src={Star} />
+                  </button>
+                  <button
+                    onClick={handleSetPriority}
+                    className={style.buttonDelete}
+                    style={{
+                      borderColor: selectedFolders[0].Key.includes("Priority.")
+                        ? "#bba400"
+                        : "grey",
+                    }}
+                  >
+                    <img src={Info} />
+                  </button>
+                </>
+              )}
             <button onClick={handleDB} className={style.buttonDB}>
               <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599">
                 <g>

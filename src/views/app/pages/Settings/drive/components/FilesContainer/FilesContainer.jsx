@@ -29,7 +29,6 @@ export const FilesContainer = ({ setIsNew }) => {
   useEffect(() => {
     let sortedFilteredFiles = filterFilesByCategory(directoriesData, category);
     sortedFilteredFiles = sortFiles(sortedFilteredFiles, sortOrder);
-    console.log({ sortedFilteredFiles });
     setFilteredFiles(sortedFilteredFiles);
   }, [directoriesData, category, sortOrder]);
 

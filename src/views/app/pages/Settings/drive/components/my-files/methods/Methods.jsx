@@ -314,7 +314,7 @@ export const renderRecentFiles = (
       <div
         className={style.drive_suggestion_container}
         key={index + "recent"}
-        onDragStart={() => handleDragStart(file.Key, true)}
+        onDragStart={() => handleDragStart(file, true, originalFolderName)}
         draggable
         onContextMenu={handleContextMenu}
       >
