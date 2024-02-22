@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./FolderOptions.module.css";
 import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
-import { copyFile, obtainFileData } from "@/actions/assets";
+import { copyFile, obtainFileData, moveFile } from "@/actions/assets";
 
 const FolderOptions = ({
   setShowFolderOption,
@@ -13,18 +13,30 @@ const FolderOptions = ({
   position,
 }) => {
   const dispatch = useDispatch();
-  const { fileToCopy } = useSelector((state) => state.assets);
-  const isCopyActive = fileToCopy !== "";
+  const { fileToCopy, fileToCut } = useSelector((state) => state.assets);
+  const isCopyActive = fileToCopy !== "" || fileToCut !== "";
   const componentRef = useRef(null);
   const { x, y } = position;
 
   const handlePasteFile = () => {
     if (isCopyActive) {
-      const { directoryCopied, folderNameCopied, file } = fileToCopy;
-      const destinationKey = directory + folderNameCopied;
-      dispatch(copyFile({ sourceKey: directoryCopied, destinationKey, file }));
-      dispatch(obtainFileData(""));
-      setShowFolderOption(false);
+      if (fileToCopy !== "" && fileToCut === "") {
+        const { directoryCopied, folderNameCopied, file } = fileToCopy;
+        const destinationKey = directory + folderNameCopied;
+        dispatch(
+          copyFile({ sourceKey: directoryCopied, destinationKey, file })
+        );
+        dispatch(obtainFileData(""));
+        setShowFolderOption(false);
+      } else if (fileToCopy === "" && fileToCut !== "") {
+        const { directoryCopied, folderNameCopied, file } = fileToCut;
+        const destinationKey = directory + folderNameCopied;
+        dispatch(
+          moveFile({ sourceKey: directoryCopied, destinationKey, file })
+        );
+        dispatch(obtainFileData(""));
+        setShowFolderOption(false);
+      }
     }
   };
   useEffect(() => {
