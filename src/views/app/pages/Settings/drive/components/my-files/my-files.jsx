@@ -33,6 +33,7 @@ import {
   regexExtensiones,
   iterateElementsToCopy,
   iterateElementsToCut,
+  iterateElementsToDuplicate,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 
@@ -161,6 +162,24 @@ export default function Page({
       newPath,
       createFolder,
       folderNameCopied
+    );
+  };
+  const duplicateFolder = (path, folderName) => {
+    // Añadir "-copy" al final del nombre de la carpeta principal a duplicar
+    let newPath;
+    if (path.endsWith("/")) {
+      newPath = path.slice(0, -1);
+    }
+    newPath = `${newPath}-copy`;
+    console.log({ newPath });
+
+    iterateElementsToDuplicate(
+      path,
+      copyElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderName
     );
   };
   const cutFolder = (newPath) => {
@@ -525,7 +544,8 @@ export default function Page({
             dropAndUpload,
             handleDragStart,
             copyFolder,
-            cutFolder
+            cutFolder,
+            duplicateFolder
           )}
         </div>
       </div>

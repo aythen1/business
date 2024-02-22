@@ -118,6 +118,76 @@ export const iterateElementsToCopy = (
     }
   });
 };
+export const iterateElementsToDuplicates = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      console.log({ Key: item.Key, destinationKey, item });
+      // copyElement(item.Key, destinationKey, item);
+    } else {
+      console.log({ destinationKey });
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      // createFolder(destinationKey);
+    }
+  });
+};
+export const iterateElementsToDuplicate = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    // Aquí aseguramos que solo agregamos "-copy" al nivel de la carpeta principal que estamos duplicando
+    // y mantenemos la estructura de carpetas internas intacta para los subelementos.
+    let destinationKey;
+    if (directory === newPath) {
+      // Solo para el nivel más alto
+      destinationKey = `${newPath}`;
+    } else {
+      destinationKey = `${newPath}/${relativePath}`;
+    }
+
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      copyElement(item.Key, destinationKey, item);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+    }
+  });
+};
 export const iterateElementsToCut = (
   directory,
   moveFile,
@@ -143,13 +213,11 @@ export const iterateElementsToCut = (
     const newItem = { ...item, Key: destinationKey };
     if (regexExtensiones.test(item.Key)) {
       // Si es un archivo, copiarlo
-      // console.log("soy un archivo", { Key: item.Key, destinationKey, newItem });
       moveFile(item.Key, destinationKey, newItem);
     } else {
       // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
       createFolder(destinationKey);
       handleDeleteDirectory(item.Key);
-      // console.log("soy una nueva carpeta", { destinationKey });
     }
   });
 };

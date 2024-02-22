@@ -79,7 +79,8 @@ export const renderFolders = (
   dropAndUpload,
   handleDragStart,
   copyFolder,
-  cutFolder
+  cutFolder,
+  duplicateFolder
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
@@ -227,6 +228,7 @@ export const renderFolders = (
               position={position}
               copyFolder={copyFolder}
               cutFolder={cutFolder}
+              duplicateFolder={duplicateFolder}
             />
           ))}
       </div>

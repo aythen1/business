@@ -13,6 +13,7 @@ const FolderOptions = ({
   position,
   copyFolder,
   cutFolder,
+  duplicateFolder,
 }) => {
   const dispatch = useDispatch();
   const { fileToCopy, fileToCut, folderToCopy, folderToCut } = useSelector(
@@ -121,6 +122,16 @@ const FolderOptions = ({
         onClick={() => handleCopyFolder("cutFolder")}
       >
         Cut
+        <IoSettingsOutline size={17} color={"#00f"} />
+      </div>
+      <div
+        className={styles.option}
+        onClick={() => {
+          duplicateFolder(directory.Key, folderName);
+          setShowFolderOption(false);
+        }}
+      >
+        Duplicate
         <IoSettingsOutline size={17} color={"#00f"} />
       </div>
       <div
