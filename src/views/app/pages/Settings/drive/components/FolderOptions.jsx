@@ -11,26 +11,63 @@ const FolderOptions = ({
   folderName,
   directory,
   position,
+  copyFolder,
+  cutFolder,
 }) => {
   const dispatch = useDispatch();
-  const { fileToCopy, fileToCut } = useSelector((state) => state.assets);
-  const isCopyActive = fileToCopy !== "" || fileToCut !== "";
+  const { fileToCopy, fileToCut, folderToCopy, folderToCut } = useSelector(
+    (state) => state.assets
+  );
+  const isCopyActive =
+    fileToCopy !== "" ||
+    fileToCut !== "" ||
+    folderToCut !== "" ||
+    folderToCopy !== "";
   const componentRef = useRef(null);
   const { x, y } = position;
 
+  const handleCopyFolder = (action) => {
+    dispatch(
+      obtainFileData({
+        directoryCopied: directory.Key,
+        folderNameCopied: folderName,
+        file: directory,
+        action,
+      })
+    );
+    setShowFolderOption(false);
+  };
+  const handlePaste = () => {
+    if (folderToCopy !== "" || folderToCut !== "") {
+      handlePasteFolder();
+    } else if (fileToCopy !== "" || fileToCut !== "") {
+      handlePasteFile();
+    }
+  };
+  const handlePasteFolder = () => {
+    if (folderToCut !== "") {
+      cutFolder(directory.Key);
+      setShowFolderOption(false);
+    } else if (folderToCopy !== "") {
+      copyFolder(directory.Key);
+      setShowFolderOption(false);
+    }
+  };
   const handlePasteFile = () => {
     if (isCopyActive) {
       if (fileToCopy !== "" && fileToCut === "") {
         const { directoryCopied, folderNameCopied, file } = fileToCopy;
-        const destinationKey = directory + folderNameCopied;
+        const destinationKey = directory.Key + folderNameCopied;
+        console.log({ sourceKey: directoryCopied, destinationKey, file });
         dispatch(
           copyFile({ sourceKey: directoryCopied, destinationKey, file })
         );
         dispatch(obtainFileData(""));
         setShowFolderOption(false);
       } else if (fileToCopy === "" && fileToCut !== "") {
+        console.log("cut file");
         const { directoryCopied, folderNameCopied, file } = fileToCut;
-        const destinationKey = directory + folderNameCopied;
+        const destinationKey = directory.Key + folderNameCopied;
         dispatch(
           moveFile({ sourceKey: directoryCopied, destinationKey, file })
         );
@@ -64,7 +101,7 @@ const FolderOptions = ({
     >
       <div
         className={isCopyActive ? styles.option : styles.optionDisabled}
-        onClick={handlePasteFile}
+        onClick={handlePaste}
       >
         Paste
         <IoSettingsOutline
@@ -73,8 +110,22 @@ const FolderOptions = ({
         />
       </div>
       <div
+        className={styles.option}
+        onClick={() => handleCopyFolder("copyFolder")}
+      >
+        Copy
+        <IoSettingsOutline size={17} color={"#00f"} />
+      </div>
+      <div
+        className={styles.option}
+        onClick={() => handleCopyFolder("cutFolder")}
+      >
+        Cut
+        <IoSettingsOutline size={17} color={"#00f"} />
+      </div>
+      <div
         onClick={() => {
-          handleDeleteFolder(directory);
+          handleDeleteFolder(directory.Key);
           setShowFolderOption(false);
         }}
         className={styles.option}

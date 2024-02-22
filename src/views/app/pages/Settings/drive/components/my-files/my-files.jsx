@@ -22,12 +22,16 @@ import {
   uploadFile,
   obtainFileData,
   moveFile,
+  copyFile,
+  createNewFolder,
 } from "@/actions/assets";
 import {
   deleteItemsInDirectory,
   getFilesInDescendingOrder,
   categoryTitles,
   regexExtensiones,
+  iterateElementsToCopy,
+  iterateElementsToCut,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 
@@ -42,9 +46,15 @@ export default function Page({
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
 
-  const { loading, empty, fileToCopy, searchFiles, category } = useSelector(
-    (state) => state.assets
-  );
+  const {
+    loading,
+    empty,
+    fileToCopy,
+    folderToCopy,
+    folderToCut,
+    searchFiles,
+    category,
+  } = useSelector((state) => state.assets);
   const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
   const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
@@ -129,6 +139,37 @@ export default function Page({
   const clearStorage = (path) => {
     deleteItemsInDirectory(path, handleDeleteDirectory, categoryFiles);
     dispatch(deleteFolder(path));
+  };
+  const copyElement = (sourceKey, destinationKey, file) => {
+    dispatch(copyFile({ sourceKey, destinationKey, file }));
+  };
+  const createFolder = (newPath) => {
+    dispatch(createNewFolder(newPath));
+  };
+  const copyFolder = (newPath) => {
+    const { directoryCopied, folderNameCopied } = folderToCopy;
+    folderToCut,
+      iterateElementsToCopy(
+        directoryCopied,
+        copyElement,
+        categoryFiles,
+        newPath,
+        createFolder,
+        folderNameCopied
+      );
+  };
+  const cutFolder = (newPath) => {
+    const { directoryCopied, folderNameCopied } = folderToCut;
+
+    iterateElementsToCut(
+      directoryCopied,
+      copyElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderNameCopied
+    );
+    clearStorage(directoryCopied);
   };
   const sendFileToTrash = (path) => {
     dispatch(deleteFile({ path, VersionId: "" }));
@@ -476,7 +517,9 @@ export default function Page({
             handleFolderClick,
             handleCheckboxChange,
             dropAndUpload,
-            handleDragStart
+            handleDragStart,
+            copyFolder,
+            cutFolder
           )}
         </div>
       </div>

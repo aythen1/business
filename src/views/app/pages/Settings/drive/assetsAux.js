@@ -88,6 +88,66 @@ export const deleteItemsInDirectory = (
     }
   });
 };
+export const iterateElementsToCopy = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      copyElement(item.Key, destinationKey, item);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+    }
+  });
+};
+export const iterateElementsToCut = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      copyElement(item.Key, destinationKey, item);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+    }
+  });
+};
 
 export function getFilesInDescendingOrder(directoriesData) {
   // Filtrar elementos que son archivos (Size !== 6)

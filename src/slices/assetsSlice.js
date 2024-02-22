@@ -25,6 +25,8 @@ export const assetsSlice = createSlice({
     directoriesTrash: [],
     fileToCopy: "",
     fileToCut: "",
+    folderToCopy: "",
+    folderToCut: "",
     file: null,
     empty: null,
     cutOrCopy: "",
@@ -77,10 +79,28 @@ export const assetsSlice = createSlice({
         case "copy":
           state.fileToCopy = actions.payload;
           state.fileToCut = "";
+          state.folderToCopy = "";
+          state.folderToCut = "";
 
           break;
         case "cut":
           state.fileToCut = actions.payload;
+          state.fileToCopy = "";
+          state.folderToCopy = "";
+          state.folderToCut = "";
+
+          break;
+        case "copyFolder":
+          state.folderToCopy = actions.payload;
+          state.folderToCut = "";
+          state.fileToCopy = "";
+          state.fileToCut = "";
+
+          break;
+        case "cutFolder":
+          state.folderToCopy = "";
+          state.folderToCut = actions.payload;
+          state.fileToCut = "";
           state.fileToCopy = "";
 
           break;

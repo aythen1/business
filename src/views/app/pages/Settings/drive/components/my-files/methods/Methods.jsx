@@ -77,7 +77,9 @@ export const renderFolders = (
   handleFolderClick,
   handleCheckboxChange,
   dropAndUpload,
-  handleDragStart
+  handleDragStart,
+  copyFolder,
+  cutFolder
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
@@ -221,8 +223,10 @@ export const renderFolders = (
               }
               handleDeleteFolder={clearStorage}
               folderName={folderName}
-              directory={directory.Key}
+              directory={directory}
               position={position}
+              copyFolder={copyFolder}
+              cutFolder={cutFolder}
             />
           ))}
       </div>
