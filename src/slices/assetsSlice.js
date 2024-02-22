@@ -24,6 +24,7 @@ export const assetsSlice = createSlice({
     directoriesData: [],
     directoriesTrash: [],
     fileToCopy: "",
+    fileToCut: "",
     file: null,
     empty: null,
     cutOrCopy: "",
@@ -71,7 +72,22 @@ export const assetsSlice = createSlice({
       state.category = actions.payload;
     },
     setFileToCopy(state, actions) {
-      state.fileToCopy = actions.payload;
+      const { action } = actions.payload;
+      switch (action) {
+        case "copy":
+          state.fileToCopy = actions.payload;
+          state.fileToCut = "";
+
+          break;
+        case "cut":
+          state.fileToCut = actions.payload;
+          state.fileToCopy = "";
+
+          break;
+
+        default:
+          break;
+      }
     },
     copyFileLocal(state, actions) {
       state.directoriesData = [...state.directoriesData, actions.payload];
