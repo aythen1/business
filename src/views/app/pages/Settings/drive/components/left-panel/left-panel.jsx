@@ -82,8 +82,9 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
     const folderPath =
       currentFolder === ""
-        ? `${driveId}/${nameFolder}`
-        : `${currentFolder}/${nameFolder}`;
+        ? `1234/${nameFolder}`
+        : // ? `${driveId}/${nameFolder}`
+          `${currentFolder}/${nameFolder}`;
     // Puedes verificar si ya existe una carpeta con ese nombre aquí
     // y modificar newFolderName en consecuencia, por ejemplo, añadiendo un número
 

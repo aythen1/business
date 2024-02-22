@@ -76,6 +76,13 @@ export const assetsSlice = createSlice({
     setFileToCopy(state, actions) {
       const { action } = actions.payload;
       switch (action) {
+        case "reset":
+          state.fileToCopy = "";
+          state.fileToCut = "";
+          state.folderToCopy = "";
+          state.folderToCut = "";
+
+          break;
         case "copy":
           state.fileToCopy = actions.payload;
           state.fileToCut = "";

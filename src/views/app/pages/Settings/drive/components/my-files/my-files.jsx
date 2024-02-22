@@ -24,6 +24,7 @@ import {
   moveFile,
   copyFile,
   createNewFolder,
+  addFolderLocal,
 } from "@/actions/assets";
 import {
   deleteItemsInDirectory,
@@ -145,6 +146,7 @@ export default function Page({
   };
   const createFolder = (newPath) => {
     dispatch(createNewFolder(newPath));
+    dispatch(addFolderLocal(newPath + "/"));
   };
   const copyFolder = (newPath) => {
     const { directoryCopied, folderNameCopied } = folderToCopy;
@@ -170,6 +172,7 @@ export default function Page({
       folderNameCopied
     );
     clearStorage(directoryCopied);
+    dispatch(obtainFileData({ action: "reset" }));
   };
   const sendFileToTrash = (path) => {
     dispatch(deleteFile({ path, VersionId: "" }));
@@ -270,7 +273,7 @@ export default function Page({
 
       dispatch(moveFile({ sourceKey: directoryCopied, destinationKey, file }));
 
-      dispatch(obtainFileData(""));
+      dispatch(obtainFileData({ action: "reset" }));
     } else if (!isFile) {
       e.preventDefault();
       let path = directory;
@@ -452,7 +455,7 @@ export default function Page({
                 <p>
                   {index !== currentPath.split("/").length && (
                     // <Image src={Chevron} priority />
-                    <div>e</div>
+                    <div></div>
                   )}
                 </p>
               </div>

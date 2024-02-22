@@ -134,17 +134,19 @@ export const iterateElementsToCut = (
   // copiar archivos y carpetas y llamar recursivamente para carpetas
   itemsInDirectory.forEach((item) => {
     const relativePath = item.Key.substring(directory.length);
-
     let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
     if (destinationKey.endsWith("/")) {
       destinationKey = destinationKey.slice(0, -1);
     }
+    const newItem = { ...item, Key: destinationKey + "/" };
     if (regexExtensiones.test(item.Key)) {
       // Si es un archivo, copiarlo
+      console.log("soy un archivo", { Key: item.Key, destinationKey, newItem });
       copyElement(item.Key, destinationKey, item);
     } else {
       // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
       createFolder(destinationKey);
+      console.log("soy una nueva carpeta", { destinationKey });
     }
   });
 };
