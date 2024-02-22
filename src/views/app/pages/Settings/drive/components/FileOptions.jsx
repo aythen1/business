@@ -46,6 +46,7 @@ const FileOptions = ({
         file: directory,
       })
     );
+    setShowFolderOption(false);
   };
   const handleCopyFile = (action) => {
     dispatch(
