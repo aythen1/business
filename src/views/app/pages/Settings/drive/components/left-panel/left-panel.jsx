@@ -10,6 +10,7 @@ import {
   addFolderLocal,
   uploadFile,
   selectCategory,
+  moveFile,
 } from "@/actions/assets";
 import style from "./left-panel.module.css";
 // import Image from 'next/image'
@@ -55,7 +56,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.persistedReducer.user)
   // const user = JSON.parse(localStorage.getItem('user')).user
-  const { currentFolder, loading, searchFiles } = useSelector(
+  const { currentFolder, loading, searchFiles, fileToCopy } = useSelector(
     (state) => state.assets
   );
   const [nameFolder, setNameFolder] = useState("");
@@ -67,7 +68,6 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   // ------------------------------------
   useEffect(() => {
     // setNewPopup(newPopup)
-    console.log("new", newPopup);
     if (newPopup == "title") {
     } else if (newPopup == "lancedb") {
       // alert(11)
@@ -88,7 +88,6 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
     // y modificar newFolderName en consecuencia, por ejemplo, añadiendo un número
 
     await dispatch(createNewFolder(folderPath));
-    console.log("listo");
     dispatch(addFolderLocal(folderPath + "/"));
     // Limpiar el estado después de crear la carpeta
     setModalIsOpen(false);
@@ -115,6 +114,48 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   const handleClickMvp = () => {
     setSubNewPopup(true);
   };
+
+  const handleSetPrefix = (prefix) => {
+    const { directoryCopied, file } = fileToCopy;
+
+    const originalFileName = directoryCopied.split("/").filter(Boolean).pop();
+    let newKey;
+    const otherPrefix = prefix === "Marker." ? "Priority." : "Marker.";
+    const hasPrefix = new RegExp(`\\b${prefix}\\b`).test(originalFileName);
+    const hasOtherPrefix = new RegExp(`\\b${otherPrefix}\\b`).test(
+      originalFileName
+    );
+
+    if (hasPrefix) {
+      // si ya contiene el prefijo, no hacemos nada
+      return;
+    } else {
+      // Si no contiene el prefijo, agregarlo al inicio o después del otro prefijo si este último está presente
+      if (hasOtherPrefix) {
+        newKey = directoryCopied.replace(
+          originalFileName,
+          originalFileName.replace(
+            new RegExp(`^(${otherPrefix})`),
+            `$1${prefix}`
+          )
+        );
+      } else {
+        newKey = directoryCopied.replace(
+          originalFileName,
+          prefix + originalFileName
+        );
+      }
+    }
+    dispatch(
+      moveFile({ sourceKey: directoryCopied, destinationKey: newKey, file })
+    );
+  };
+
+  // uso para "Marker."
+  const handleSetMarker = () => handleSetPrefix("Marker.");
+
+  // uso para "Priority."
+  const handleSetPriority = () => handleSetPrefix("Priority.");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -330,6 +371,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
+          onDrop={handleSetPriority}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("priority");
@@ -360,6 +403,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <p className={style.drive_option_text}>Recientes</p>
         </div>
         <div
+          onDrop={handleSetMarker}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("featured");
