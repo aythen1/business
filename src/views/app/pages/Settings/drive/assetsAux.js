@@ -234,6 +234,15 @@ export function getFilesInDescendingOrder(directoriesData) {
   });
   return filesInDescendingOrder;
 }
+export function getCurrentDateFormatted() {
+  // Obtener la fecha y hora actuales
+  const now = new Date();
+
+  // Formatear según lo requiere formatLastModified
+  // En este caso, simplemente devolvemos el valor de la fecha actual en milisegundos desde la época Unix
+  // ya que formatLastModified espera un timestamp o una cadena que pueda ser convertida a fecha
+  return now.getTime();
+}
 
 export function formatLastModified(lastModified) {
   const now = new Date();
@@ -280,6 +289,7 @@ export const icons = {
   iso,
   javs,
   jpeg,
+  jpg: jpeg,
   mdb,
   mid,
   mov,
