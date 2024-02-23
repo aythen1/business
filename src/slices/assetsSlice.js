@@ -61,9 +61,10 @@ export const assetsSlice = createSlice({
       );
     },
     pushFolder(state, actions) {
+      const { Key, LastModified } = actions.payload;
       state.directoriesData = [
         ...state.directoriesData,
-        { Key: actions.payload, Size: 6 },
+        { Key, Size: 6, LastModified },
       ];
       state.empty = false;
     },
@@ -261,8 +262,9 @@ export const assetsSlice = createSlice({
         state.loading = { ...state.loading, [types.UPLOAD_FILE]: true };
         state.error = { ...state.error, [types.UPLOAD_FILE]: "" };
       })
-      .addCase(uploadFile.fulfilled, (state) => {
+      .addCase(uploadFile.fulfilled, (state, action) => {
         state.loading = { ...state.loading, [types.UPLOAD_FILE]: false };
+        state.directoriesData = [...state.directoriesData, action.payload];
       })
       .addCase(uploadFile.rejected, (state, action) => {
         state.loading = { ...state.loading, [types.UPLOAD_FILE]: false };
