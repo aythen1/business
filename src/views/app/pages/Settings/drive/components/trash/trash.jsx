@@ -44,6 +44,7 @@ export default function Page({
   setSortOrder,
   sortOrder,
 }) {
+  console.log({ categoryFiles });
   const dispatch = useDispatch();
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
@@ -61,9 +62,7 @@ export default function Page({
   const [currentPath, setCurrentPath] = useState(driveId + "/");
   const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
   const [folderOptions, setFolderOptions] = useState({});
-  const [recentFilesOptions, setRecentFilesOptions] = useState({});
   const [isDragginFile, setIsDragginFile] = useState(false);
-  const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [selectedFolders, setSelectedFolders] = useState([]);
@@ -337,10 +336,6 @@ export default function Page({
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
-  useEffect(
-    () => setRecentFiles(getFilesInDescendingOrder(categoryFiles)),
-    [categoryFiles]
-  );
   useEffect(() => {
     setSelectedFolders([]);
     const filtered = filterFoldersBasedOnSearchAndPath(
@@ -432,7 +427,7 @@ export default function Page({
             </button>
           )}
         </div>
-        <div className={style.drive_suggested_container}>
+        {/* <div className={style.drive_suggested_container}>
           {showTypeDrive == "cloud"
             ? renderRecentFiles(
                 recentFiles,
@@ -444,7 +439,7 @@ export default function Page({
                 setRecentFilesOptions
               )
             : renderFilesDB(filteredFolders, handleDragStart)}
-        </div>
+        </div> */}
       </div>
       <div className={style.drive_folders_main_container}>
         <div className={style.drive_folders_title_container}>
@@ -514,11 +509,9 @@ export default function Page({
               />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
-              <p className={style.drive_folders_filters_title}>
-                Último modificado
-              </p>
+              <p className={style.drive_folders_filters_title}>Ruta original</p>
               <Filters
-                name="Last modified"
+                name="Original path"
                 filters={filters}
                 sortOrder={sortOrder}
                 setFilters={setFilters}
@@ -545,7 +538,8 @@ export default function Page({
             handleDragStart,
             copyFolder,
             cutFolder,
-            duplicateFolder
+            duplicateFolder,
+            true
           )}
         </div>
       </div>
@@ -646,7 +640,9 @@ function isValidElementForCategory(folder, currentPath, category) {
     ? folderDepth === currentPathDepth + 1
     : folderDepth === currentPathDepth;
   if (
-    ["recent", "addon", "dashboard", "priority", "featured"].includes(category)
+    ["recent", "addon", "dashboard", "priority", "featured", "trash"].includes(
+      category
+    )
   )
     isValidDepth = true;
   return (
