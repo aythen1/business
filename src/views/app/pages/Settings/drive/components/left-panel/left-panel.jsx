@@ -12,6 +12,9 @@ import {
   selectCategory,
   moveFile,
 } from "@/actions/assets";
+import { setCurrentFolder } from "@/slices/assetsSlice";
+import { getCurrentDateFormatted } from "../../assetsAux";
+
 import style from "./left-panel.module.css";
 // import Image from 'next/image'
 // import Chevron from '../../../../../../../assets/Vector 161 (Stroke).svg'
@@ -52,6 +55,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
   const componentRef = useRef(null);
   const fileInputRef = useRef(null);
+  const folderInputRef = useRef(null);
 
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.persistedReducer.user)
@@ -67,10 +71,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
   // ------------------------------------
   useEffect(() => {
-    // setNewPopup(newPopup)
     if (newPopup == "title") {
     } else if (newPopup == "lancedb") {
-      // alert(11)
       dispatch(setModal(<ModalLanceDb />));
     }
   }, [newPopup]);
@@ -83,14 +85,10 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
     const folderPath =
       currentFolder === ""
         ? `1234/${nameFolder}`
-        : // ? `${driveId}/${nameFolder}`
-          `${currentFolder}/${nameFolder}`;
-    // Puedes verificar si ya existe una carpeta con ese nombre aquí
-    // y modificar newFolderName en consecuencia, por ejemplo, añadiendo un número
+        : `${currentFolder}/${nameFolder}`;
 
     await dispatch(createNewFolder(folderPath));
-    dispatch(addFolderLocal(folderPath + "/"));
-    // Limpiar el estado después de crear la carpeta
+    dispatch(addFolderLocal(folderPath + "/", getCurrentDateFormatted));
     setModalIsOpen(false);
     setNameFolder("");
   };
@@ -106,6 +104,45 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       );
     }
     setNewPopup(false);
+    event.target.value = "";
+  };
+  const handleFolderInputChange = (event) => {
+    const files = event.target.files;
+    let foldersPaths = new Set();
+
+    if (files.length > 0) {
+      Array.from(files).forEach((file) => {
+        const folderPathParts = file.webkitRelativePath.split("/");
+        folderPathParts.pop();
+
+        const folderPath = folderPathParts.join("/");
+        foldersPaths.add(folderPath);
+        const path =
+          currentFolder === ""
+            ? draveId + "/" + folderPath
+            : currentFolder + "/" + folderPath;
+        console.log({ path });
+        dispatch(
+          uploadFile({
+            file,
+            path,
+          })
+        );
+      });
+
+      // Si necesitas trabajar con las rutas de las carpetas como un array
+      const foldersPathsArray = Array.from(foldersPaths);
+      foldersPathsArray.forEach((folderName) => {
+        const folderPath =
+          currentFolder === ""
+            ? `1234/${folderName}`
+            : `${currentFolder}/${folderName}`;
+        dispatch(createNewFolder(folderPath));
+        dispatch(addFolderLocal(folderPath + "/"));
+      });
+    }
+    setNewPopup(false);
+    event.target.value = "";
   };
   const handleNavigate = (path) => {
     // router.push(`/${lng}/workspace/${id}/drive/${driveId}/${path}`)
@@ -260,11 +297,27 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
               onChange={handleFileInputChange}
             />
           </div>
-          <div className={style.drive_create_new_option}>
+          <div
+            onClick={() => {
+              if (folderInputRef.current) {
+                folderInputRef.current.click();
+              }
+            }}
+            className={style.drive_create_new_option}
+          >
             <img src={file1} width={25} height={25} />
-
             <p>Subir carpeta</p>
+            <input
+              type="file"
+              ref={folderInputRef}
+              style={{ display: "none" }}
+              webkitdirectory="" // Permite la selección de carpetas en navegadores que soportan webkit
+              directory="" // Para estandarización, aunque su soporte puede variar
+              multiple // Permite la selección de múltiples archivos
+              onChange={handleFolderInputChange}
+            />
           </div>
+
           <div
             onClick={() => handleClickMvp()}
             className={`${style.drive_create_new_option} ${style.drive_mvp_aythen}`}
@@ -302,6 +355,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             onClick={() => {
               handleNavigate("document");
               dispatch(selectCategory("document"));
+              dispatch(setCurrentFolder(draveId + "/"));
             }}
           >
             Mis documentos
@@ -310,6 +364,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         <div
           className={style.drive_option}
           onClick={() => {
+            dispatch(setCurrentFolder(draveId + "/"));
             handleNavigate("addon");
             dispatch(selectCategory("addon"));
           }}
@@ -343,6 +398,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("dashboard");
             dispatch(selectCategory("dashboard"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <svg
@@ -378,6 +434,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("priority");
             dispatch(selectCategory("priority"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={Info} />
@@ -388,6 +445,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("shared");
             dispatch(selectCategory("shared"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={Group} />
@@ -398,6 +456,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("recent");
             dispatch(selectCategory("recent"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={Time} />
@@ -410,6 +469,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("featured");
             dispatch(selectCategory("featured"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={Star} />
@@ -420,6 +480,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("glaciar");
             dispatch(selectCategory("glaciar"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <svg
@@ -451,6 +512,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("trash");
             dispatch(selectCategory("trash"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={Trash} />
