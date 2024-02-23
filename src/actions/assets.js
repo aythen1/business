@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiBackend from "@/utils/apiBackend";
-
+import { getCurrentDateFormatted } from "../views/app/pages/Settings/drive/assetsAux";
 import {
   setAssets,
   setAssetsVersions,
@@ -111,13 +111,18 @@ export const uploadFile = createAsyncThunk(
       formData.append("userId", userId);
       formData.append("path", path);
       formData.append("image", file);
-
+      console.log({ file });
       const { data } = await apiBackend.post("/assets/add-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      return data.data;
+      const fileData = {
+        ...data.data,
+        LastModified: getCurrentDateFormatted(),
+        Size: file.size,
+      };
+      return fileData;
     } catch (error) {
       throw new Error(error);
     }
@@ -139,7 +144,13 @@ export const copyFile = createAsyncThunk(
         userId,
       };
       const { data } = await apiBackend.post("/assets/copy-file", body);
-      dispatch(copyFileLocal({ ...file, Key: destinationKey }));
+      dispatch(
+        copyFileLocal({
+          ...file,
+          Key: destinationKey,
+          LastModified: getCurrentDateFormatted(),
+        })
+      );
       return data.data.body;
     } catch (error) {
       throw new Error(error);
@@ -162,7 +173,13 @@ export const moveFile = createAsyncThunk(
         userId,
       };
       dispatch(filterFolder(sourceKey));
-      dispatch(copyFileLocal({ ...file, Key: destinationKey }));
+      dispatch(
+        copyFileLocal({
+          ...file,
+          Key: destinationKey,
+          LastModified: getCurrentDateFormatted(),
+        })
+      );
       const { data } = await apiBackend.post("/assets/move-file", body);
 
       return data.data.body;
@@ -274,10 +291,10 @@ export const deleteFolderLocal = (directory) => (dispatch) => {
 };
 
 // Agregar una carpeta en redux
-export const addFolderLocal = (directory) => (dispatch) => {
-  console.log({ directory });
+export const addFolderLocal = (Key) => (dispatch) => {
+  const data = { LastModified: getCurrentDateFormatted(), Key };
   try {
-    dispatch(pushFolder(directory));
+    dispatch(pushFolder(data));
   } catch (error) {
     console.error("Ha ocurrido un error al crear la carpeta:", error);
   }
