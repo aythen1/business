@@ -1,15 +1,19 @@
+"use client";
 import style from "../my-files/my-files.module.css";
-
-import Folder from "../../assets/FolderFigma.svg";
-import Menu from "../../assets/Menu-figma.svg";
-import file1 from "../../assets/File (1).svg";
-import Chevron from "../../assets/Vector 161 (Stroke).svg";
-import ArrowUpWard from "../../assets/arrow-upward.svg";
-
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import {
-  getDirectoriesVersions,
+  Filters,
+  renderFolders,
+  renderFilesDB,
+  renderRecentFiles,
+} from "../my-files/methods/Methods";
+import Chevron from "../../assets/Vector 161 (Stroke).svg";
+import ArrowDropDown from "../../assets/arrow-drop-down.svg";
+import Info from "../../assets/Info.svg";
+import Star from "../../assets/Star.svg";
+
+import { useState, useEffect } from "react";
+import {
   directoriesDB,
   deleteFolders,
   deleteFolder,
@@ -18,53 +22,187 @@ import {
   uploadFile,
   obtainFileData,
   moveFile,
+  copyFile,
+  createNewFolder,
+  addFolderLocal,
 } from "@/actions/assets";
-import FolderOptions from "../FolderOptions";
-import FileTrashOptions from "../FileTrashOptions";
+import {
+  deleteItemsInDirectory,
+  getFilesInDescendingOrder,
+  categoryTitles,
+  regexExtensiones,
+  iterateElementsToCopy,
+  iterateElementsToCut,
+  iterateElementsToDuplicate,
+} from "../../assetsAux";
+import { setCurrentFolder } from "@/slices/assetsSlice";
 
-export default function Trash({ driveId }) {
+export default function Page({
+  setIsNew,
+  categoryFiles,
+  driveId,
+  setSortOrder,
+  sortOrder,
+}) {
   const dispatch = useDispatch();
 
-  const { directoriesTrash, loading, searchFiles } = useSelector(
-    (state) => state.assets
-  );
-  const isGettingFolder = loading?.GET_DIRECTORIES_VERSIONS === true;
+  const [showTypeDrive, setShowTypeDrive] = useState("cloud");
 
+  const {
+    loading,
+    empty,
+    fileToCopy,
+    folderToCopy,
+    folderToCut,
+    searchFiles,
+    category,
+  } = useSelector((state) => state.assets);
+  const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
-  const [filteredFolders, setFilteredFolders] = useState([]);
+  const [filteredFolders, setFilteredFolders] = useState(categoryFiles);
   const [folderOptions, setFolderOptions] = useState({});
+  const [recentFilesOptions, setRecentFilesOptions] = useState({});
+  const [isDragginFile, setIsDragginFile] = useState(false);
+  const [recentFiles, setRecentFiles] = useState([]);
+  const [filters, setFilters] = useState({});
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [selectedFolders, setSelectedFolders] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
-  // / / / / / / / / / / /    F U N C T I O N S    / / / / / / / / / / / / / / / / /
+  const [filtersData, setFiltersData] = useState([
+    { name: "Filter by:", option: "All files", view: false },
+    { name: "Sort by:", option: "Last viewed", view: false },
+  ]);
+  const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
+
+  // / / / / / / / / / / / / / / / / / / / / / F U N C I O N E S / / / / / / / / / / / / / / / / / / / /
 
   const handleFolderClick = (folderName) => {
     setCurrentPath(folderName);
+
+    if (folderName.endsWith("/")) {
+      // Si folderName termina con '/', quítalo antes de navegar
+      folderName = folderName.slice(0, -1);
+    }
+    dispatch(setCurrentFolder(folderName));
   };
 
-  const handleToggleFolderOption = (index) => {
-    setFolderOptions((prevOptions) => {
-      const newOptions = { ...prevOptions };
-      newOptions[index] = !newOptions[index];
-      return newOptions;
-    });
+  // const handleToggleFolderOption = (index) => {
+  //   setFolderOptions((prevOptions) => {
+  //     const newOptions = { ...prevOptions };
+  //     newOptions[index] = !newOptions[index];
+  //     return newOptions;
+  //   });
+  // };
+  const handleSetPrefix = (prefix) => {
+    if (selectedFolders.length === 1) {
+      const [file] = selectedFolders;
+      const { Key } = file;
+
+      const originalFileName = Key.split("/").filter(Boolean).pop();
+      let newKey;
+      const otherPrefix = prefix === "Marker." ? "Priority." : "Marker.";
+      const hasPrefix = new RegExp(`\\b${prefix}\\b`).test(originalFileName);
+      const hasOtherPrefix = new RegExp(`\\b${otherPrefix}\\b`).test(
+        originalFileName
+      );
+
+      if (hasPrefix) {
+        // Si ya contiene el prefijo, quitarlo
+        newKey = Key.replace(prefix, "");
+      } else {
+        // Si no contiene el prefijo, agregarlo al inicio o después del otro prefijo si este último está presente
+        if (hasOtherPrefix) {
+          newKey = Key.replace(
+            originalFileName,
+            originalFileName.replace(
+              new RegExp(`^(${otherPrefix})`),
+              `$1${prefix}`
+            )
+          );
+        } else {
+          newKey = Key.replace(originalFileName, prefix + originalFileName);
+        }
+      }
+      dispatch(moveFile({ sourceKey: Key, destinationKey: newKey, file }));
+      setSelectedFolders([]);
+    }
   };
-  // const handleRestoreFolder = (path) => {
-  //   dispatch(deleteFolder(path))
-  // }
-  const handleDeleteFile = (path) => {
-    directoriesTrash?.Versions?.forEach((element) => {
-      if (element.Key === path)
-        dispatch(deleteFile({ path, VersionId: element.VersionId }));
-    });
-    directoriesTrash?.DeleteMarkers?.forEach((element) => {
-      if (element.Key === path)
-        dispatch(deleteFile({ path, VersionId: element.VersionId }));
-    });
+
+  // uso para "Marker."
+  const handleSetMarker = () => handleSetPrefix("Marker.");
+
+  // uso para "Priority."
+  const handleSetPriority = () => handleSetPrefix("Priority.");
+
+  const handleDeleteDirectory = (path) => {
+    dispatch(deleteFolder(path));
   };
-  const handleRestoreFile = (path, VersionId) => {
-    dispatch(deleteFile({ path, VersionId }));
+  const clearStorage = (path) => {
+    deleteItemsInDirectory(path, handleDeleteDirectory, categoryFiles);
+    dispatch(deleteFolder(path));
   };
+  const copyElement = (sourceKey, destinationKey, file) => {
+    console.log({ sourceKey, destinationKey, file });
+    dispatch(copyFile({ sourceKey, destinationKey, file }));
+  };
+  const createFolder = (newPath) => {
+    dispatch(createNewFolder(newPath));
+    dispatch(addFolderLocal(newPath + "/"));
+  };
+  const moveElement = (sourceKey, destinationKey, file) => {
+    dispatch(moveFile({ sourceKey, destinationKey, file }));
+  };
+  const copyFolder = (newPath) => {
+    const { directoryCopied, folderNameCopied } = folderToCopy;
+    iterateElementsToCopy(
+      directoryCopied,
+      copyElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderNameCopied
+    );
+  };
+  const duplicateFolder = (path, folderName) => {
+    // Añadir "-copy" al final del nombre de la carpeta principal a duplicar
+    let newPath;
+    if (path.endsWith("/")) {
+      newPath = path.slice(0, -1);
+    }
+    newPath = `${newPath}-copy`;
+    console.log({ newPath });
+
+    iterateElementsToDuplicate(
+      path,
+      copyElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderName
+    );
+  };
+  const cutFolder = (newPath) => {
+    const { directoryCopied, folderNameCopied } = folderToCut;
+
+    iterateElementsToCut(
+      directoryCopied,
+      moveElement,
+      categoryFiles,
+      newPath,
+      createFolder,
+      folderNameCopied,
+      handleDeleteDirectory
+    );
+    dispatch(obtainFileData({ action: "reset" }));
+  };
+  const sendFileToTrash = (path) => {
+    dispatch(deleteFile({ path, VersionId: "" }));
+  };
+
   const handleFolderClickBack = (folderName) => {
     if (folderName === driveId + "/") {
+      dispatch(setCurrentFolder(folderName));
       setCurrentPath(folderName);
       return;
     }
@@ -73,130 +211,239 @@ export default function Trash({ driveId }) {
     if (index !== -1) {
       const newPath = arr.slice(0, index + 1);
       setCurrentPath(newPath.join("/") + "/");
+      dispatch(setCurrentFolder(newPath.join("/")));
+    }
+  };
+  const handleFileClick = (fileName) => {
+    dispatch(getFile({ fileName }));
+  };
+
+  const handleCheckboxChange = (directory) => {
+    const selectedIndex = selectedFolders.findIndex(
+      (selectedId) => selectedId.Key === directory.Key
+    );
+
+    if (selectedIndex !== -1) {
+      // Si el directorio ya está seleccionado, lo quitamos de la lista
+      setSelectedFolders(
+        selectedFolders.filter((_, index) => index !== selectedIndex)
+      );
+    } else {
+      // Agregamos el directorio a la lista de seleccionados
+      setSelectedFolders([...selectedFolders, directory]);
     }
   };
 
-  // / / / / / / / / / / / /    M E T O D O S    / / / / / / / / / / / / / / / / /
-
-  const renderFolders = (folders) => {
-    if (isGettingFolder && folders?.length === 0) {
-      return (
-        <p className={style.emptyFolderMessage}>Un momento, por favor...</p>
-      );
+  const handleSelectAllChange = () => {
+    if (selectAll) {
+      setSelectedFolders([]);
+    } else {
+      const allFolders = filteredFolders.map((item) => item);
+      setSelectedFolders(allFolders);
     }
-    if (folders?.length === 0) {
-      return (
-        <p className={style.emptyFolderMessage}>Esta carpeta está vacía</p>
-      );
-    }
-    return folders?.map((directory, index) => {
-      const folderName = directory.Key.split("/").filter(Boolean).pop();
-      const isFile = /\.(png|jpg|txt|jfif)$/i.test(folderName);
+    setSelectAll(!selectAll);
+  };
 
-      return (
-        <div key={index} className={style.drive_folder_container}>
-          <div
-            onClick={() =>
-              !isFile
-                ? handleFolderClick(directory.Key)
-                : handleRestoreFile(directory.Key, directory.VersionId)
-            }
-            className={style.drive_clickeable_folder_container}
-          >
-            <div className={style.drive_folder_title_container}>
-              <img src={isFile ? file1 : Folder} />
-              <p className={style.drive_folder_title}>{folderName}</p>
-            </div>
+  const handleDelete = async () => {
+    await dispatch(deleteFolders(selectedFolders));
 
-            <div className={style.drive_folder_lastmodified_container}>1d</div>
-          </div>
-          <div className={style.fileRightSection}>
-            <span
-              className={style.fileOption}
-              onClick={() => handleToggleFolderOption(index)}
-            >
-              <img priority src={Menu} alt="" />
-            </span>
-          </div>
-          {folderOptions[index] &&
-            (isFile ? (
-              <FileTrashOptions
-                setShowFolderOption={(value) =>
-                  setFolderOptions((prevOptions) => ({
-                    ...prevOptions,
-                    [index]: value,
-                  }))
-                }
-                handleDeleteFile={handleDeleteFile}
-                handleRestoreFile={handleRestoreFile}
-                folderName={folderName}
-                directory={directory}
-              />
-            ) : (
-              <FolderOptions
-                setShowFolderOption={(value) =>
-                  setFolderOptions((prevOptions) => ({
-                    ...prevOptions,
-                    [index]: value,
-                  }))
-                }
-                handleDeleteFolder={handleRestoreFile}
-                folderName={folderName}
-                directory={directory.Key}
-              />
-            ))}
-        </div>
+    setSelectedFolders([]);
+    setSelectAll(false);
+  };
+
+  const handleDB = async () => {
+    await dispatch(directoriesDB(selectedFolders));
+
+    // setSelectedFolders([]);
+    // setSelectAll(false);
+  };
+
+  const handleClickFilter = (name) => {
+    setFiltersData((prevFilters) => {
+      // verifico si algún filtro está abierto
+      const isAnyFilterOpen = prevFilters.some(
+        (filter) => filter.name !== name && filter.view
       );
+
+      return prevFilters.map((filter) => {
+        if (filter.name === name) {
+          // si se clickea el mismo filtro, invertimos su view
+          return { ...filter, view: !filter.view };
+        } else if (isAnyFilterOpen) {
+          // si hay otro filtro abierto, lo cierro
+          return { ...filter, view: false };
+        }
+        return filter; // para los filtros no clickeados, mantengo su estado actual
+      });
     });
   };
 
-  // / / / / / / / / / / /    U S E E F F E C T    / / / / / / / / / / / / / / / / /
-  useEffect(() => {
-    if (searchFiles !== "" && searchFiles !== undefined) {
-      const filtered = directoriesTrash?.DeleteMarkers?.filter(
-        (folder) =>
-          folder.Key.startsWith(currentPath) &&
-          folder.Key !== currentPath &&
-          folder.Key.toLowerCase().includes(searchFiles.toLowerCase())
-      );
+  const handleSelectFilter = (name, order) => {
+    setSortOrder({ name, order });
+  };
 
-      // Ensure strict order based on the search string
-      const sortedFiltered = filtered.sort((a, b) => {
-        const indexA = a.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
-        const indexB = b.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
-        return indexA - indexB;
-      });
+  // / / / / / / / / / / / / / / / D R A G & D R O P / / / / / / / / / / / / / / / /
 
-      setFilteredFolders(sortedFiltered);
-    } else {
-      // Reset filteredFolders when uploadSearch is empty
-      setFilteredFolders(
-        directoriesTrash?.DeleteMarkers?.filter(
-          (folder) =>
-            folder.Key.startsWith(currentPath) &&
-            folder.Key !== currentPath &&
-            (folder.Size === 0
-              ? folder.Key.split("/").length ===
-                currentPath.split("/").length + 1
-              : folder.Key.split("/").length === currentPath.split("/").length)
-        )
-      );
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+  const dropAndUpload = (directory, e, isFile) => {
+    if (!isFile && isDragginFile) {
+      const { directoryCopied, folderNameCopied, file } = fileToCopy;
+
+      const destinationKey = directory + folderNameCopied;
+
+      dispatch(moveFile({ sourceKey: directoryCopied, destinationKey, file }));
+
+      dispatch(obtainFileData({ action: "reset" }));
+    } else if (!isFile) {
+      e.preventDefault();
+      let path = directory;
+      const file = e.dataTransfer.files[0];
+      if (path.endsWith("/")) {
+        path = directory.slice(0, -1);
+      }
+
+      dispatch(uploadFile({ file, path }));
     }
-  }, [currentPath, directoriesTrash, searchFiles]);
+  };
+  const handleDragStart = (directory, isFile, folderName) => {
+    if (isFile) {
+      setIsDragginFile(true);
 
+      dispatch(
+        obtainFileData({
+          directoryCopied: directory.Key,
+          folderNameCopied: folderName,
+          file: directory,
+          action: "copy",
+        })
+      );
+      dispatch(
+        getFile({
+          fileName: directory.Key,
+        })
+      );
+      // dispatch(
+      //   getElementTag({
+      //     type: "image",
+      //     tag: "img",
+      //     tagName: "img",
+      //     rol: "default",
+      //   })
+      // );
+    }
+  };
+
+  // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
+
+  useEffect(
+    () => setRecentFiles(getFilesInDescendingOrder(categoryFiles)),
+    [categoryFiles]
+  );
   useEffect(() => {
-    dispatch(getDirectoriesVersions({ Prefix: driveId }));
-  }, []);
+    setSelectedFolders([]);
+    const filtered = filterFoldersBasedOnSearchAndPath(
+      searchFiles,
+      categoryFiles,
+      currentPath,
+      category
+    );
+    setFilteredFolders(filtered);
+  }, [currentPath, categoryFiles, searchFiles, category]);
+
+  // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 
   return (
     <div className={style.main_drive_page}>
       <div className={style.drive_header}>
         <div className={style.drive_header_left}>
-          <span className={style.drive_header_left_title_container}>
-            <p className={style.drive_header_left_title}>
-              Papelera de reciclaje
-            </p>
+          <span
+            onClick={() => setIsNew("title")}
+            className={style.drive_header_left_title_container}
+          >
+            <p className={style.drive_header_left_title}>{title}</p>
+            <img src={ArrowDropDown} />
           </span>
+        </div>
+        <div className={style.drive_header_right}>
+          {filtersData.map((filter, index) => (
+            <div key={index} style={{ position: "relative" }}>
+              <div
+                className={style.drive_header_right_filter}
+                onClick={() => handleClickFilter(filter.name)}
+              >
+                <p className={style.drive_header_right_filter_text}>
+                  {filter.name}
+                </p>
+                <p className={style.drive_header_right_filter_text}>
+                  {filter.option}
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  alt="Chevron"
+                >
+                  <path fill="currentColor" d="M12 21l-12-18h24z" />
+                </svg>
+              </div>
+              {filter.view && (
+                <ul className={style.drive_options}>
+                  <li onClick={() => handleSelectFilter("Name", "asc")}>
+                    Name
+                  </li>
+                  <li
+                    onClick={() => handleSelectFilter("Last modified", "asc")}
+                  >
+                    Last modified
+                  </li>
+                  <li
+                    onClick={() =>
+                      handleSelectFilter("Last modified by me", "asc")
+                    }
+                  >
+                    Last modified by me
+                  </li>
+                  <li
+                    onClick={() =>
+                      handleSelectFilter("Last opened by me", "asc")
+                    }
+                  >
+                    Last opened by me
+                  </li>
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className={style.drive_suggested_main}>
+        <div className={style.drive_suggested_header}>
+          {showTypeDrive == "cloud" ? (
+            <p className={style.drive_suggested_title}>Recent files</p>
+          ) : (
+            <p className={style.drive_suggested_title}>LanceDB</p>
+          )}
+          {showTypeDrive == "cloud" ? (
+            <button onClick={() => setShowTypeDrive("db")}>View db</button>
+          ) : (
+            <button onClick={() => setShowTypeDrive("cloud")}>
+              View drive
+            </button>
+          )}
+        </div>
+        <div className={style.drive_suggested_container}>
+          {showTypeDrive == "cloud"
+            ? renderRecentFiles(
+                recentFiles,
+                handleDragStart,
+                sendFileToTrash,
+                position,
+                setPosition,
+                recentFilesOptions,
+                setRecentFilesOptions
+              )
+            : renderFilesDB(filteredFolders, handleDragStart)}
         </div>
       </div>
       <div className={style.drive_folders_main_container}>
@@ -219,11 +466,7 @@ export default function Trash({ driveId }) {
                   gap: "9px",
                 }}
               >
-                <img
-                  src={Chevron}
-                  style={{ transform: "rotate(-90deg)" }}
-                  priority
-                />
+                <img src={Chevron} style={{ transform: "rotate(-90deg)" }} />
                 <span
                   key={index}
                   onClick={() => handleFolderClickBack(folder)}
@@ -231,29 +474,184 @@ export default function Trash({ driveId }) {
                 >
                   {folder}
                 </span>
+                <p>
+                  {index !== currentPath.split("/").length && (
+                    // <Image src={Chevron} priority />
+                    <div></div>
+                  )}
+                </p>
               </div>
             ))}
         </div>
         <div className={style.drive_folders_container}>
           <div className={style.drive_folders_filters_container}>
             <div className={style.drive_folders_filters_title_container}>
+              <input
+                className={`${style.input} ${
+                  selectedFolders.length > 0 ? "" : style.hidden
+                }`}
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAllChange}
+              />
               <p className={style.drive_folders_filters_title}>Name</p>
-              <img src={ArrowUpWard} priority />
+              <Filters
+                name="Name"
+                filters={filters}
+                sortOrder={sortOrder}
+                setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
+              />
             </div>
             <div className={style.drive_folder_size_container}>
               <p className={style.drive_folders_filters_title}>Tamaño</p>
-              <img src={ArrowUpWard} priority />
+              <Filters
+                name="Size"
+                filters={filters}
+                sortOrder={sortOrder}
+                setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
+              />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>
                 Último modificado
               </p>
-              <img src={ArrowUpWard} priority />
+              <Filters
+                name="Last modified"
+                filters={filters}
+                sortOrder={sortOrder}
+                setFilters={setFilters}
+                handleSelectFilter={handleSelectFilter}
+              />
             </div>
           </div>
-          {renderFolders(filteredFolders)}
+          {renderFolders(
+            filteredFolders,
+            isGettingFolder,
+            selectedFolders,
+            folderOptions,
+            empty,
+            categoryFiles,
+            position,
+            setPosition,
+            setFolderOptions,
+            sendFileToTrash,
+            clearStorage,
+            handleFileClick,
+            handleFolderClick,
+            handleCheckboxChange,
+            dropAndUpload,
+            handleDragStart,
+            copyFolder,
+            cutFolder,
+            duplicateFolder
+          )}
         </div>
       </div>
+
+      {selectedFolders.length > 0 && (
+        <div className={style.drive_banner_data}>
+          <div>
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={handleSelectAllChange}
+            />
+            <p>{selectedFolders.length} items selected</p>
+          </div>
+          <div>
+            {selectedFolders.length < 2 &&
+              regexExtensiones.test(selectedFolders[0].Key) && (
+                <>
+                  <button
+                    onClick={handleSetMarker}
+                    className={style.buttonDelete}
+                    style={{
+                      borderColor: selectedFolders[0].Key.includes("Marker.")
+                        ? "#bba400"
+                        : "grey",
+                    }}
+                  >
+                    <img src={Star} />
+                  </button>
+                  <button
+                    onClick={handleSetPriority}
+                    className={style.buttonDelete}
+                    style={{
+                      borderColor: selectedFolders[0].Key.includes("Priority.")
+                        ? "#bba400"
+                        : "grey",
+                    }}
+                  >
+                    <img src={Info} />
+                  </button>
+                </>
+              )}
+            <button onClick={handleDB} className={style.buttonDB}>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599">
+                <g>
+                  <g>
+                    <path
+                      fill="fillCurrent"
+                      d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"
+                    ></path>
+                    <path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path>
+                  </g>
+                </g>
+              </svg>
+            </button>
+            <button onClick={handleDelete} className={style.buttonDelete}>
+              <svg viewBox="0 0 24 24">
+                <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function filterFoldersBasedOnSearchAndPath(
+  searchFiles,
+  categoryFiles,
+  currentPath,
+  category
+) {
+  if (searchFiles) {
+    return categoryFiles
+      .filter(
+        (folder) =>
+          folder.Key.startsWith(currentPath) &&
+          folder.Key.toLowerCase().includes(searchFiles.toLowerCase())
+      )
+      .sort(
+        (a, b) =>
+          a.Key.toLowerCase().indexOf(searchFiles.toLowerCase()) -
+          b.Key.toLowerCase().indexOf(searchFiles.toLowerCase())
+      );
+  } else {
+    return categoryFiles.filter((folder) =>
+      isValidElementForCategory(folder, currentPath, category)
+    );
+  }
+}
+
+function isValidElementForCategory(folder, currentPath, category) {
+  const isFolder = folder.Size === 6;
+  const folderDepth = folder.Key.split("/").length;
+  const currentPathDepth = currentPath.split("/").length;
+  let isValidDepth = isFolder
+    ? folderDepth === currentPathDepth + 1
+    : folderDepth === currentPathDepth;
+  if (
+    ["recent", "addon", "dashboard", "priority", "featured"].includes(category)
+  )
+    isValidDepth = true;
+  return (
+    folder.Key.startsWith(currentPath) &&
+    folder.Key !== currentPath &&
+    isValidDepth
   );
 }
