@@ -7,7 +7,7 @@ import {
   convertToMegabytes,
   calculateFolderSize,
 } from "../../assetsAux";
-import { getRootDirectories } from "@/actions/assets";
+import { getRootDirectories, getDirectoriesVersions } from "@/actions/assets";
 import Trash from "../trash/trash";
 
 export const FilesContainer = ({ setIsNew }) => {
@@ -15,25 +15,37 @@ export const FilesContainer = ({ setIsNew }) => {
   const driveId = "1234";
 
   // Asume que el estado de Redux ya tiene una lista de todos los archivos
-  const { directoriesData, category } = useSelector((state) => state.assets);
+  const { directoriesData, directoriesTrash, category } = useSelector(
+    (state) => state.assets
+  );
   const [filteredFiles, setFilteredFiles] = useState([]);
   const [sortOrder, setSortOrder] = useState({ name: "", order: "" });
 
   // Este efecto se dispara solo una vez, para cargar los directorios iniciales
   useEffect(() => {
     dispatch(getRootDirectories({ Prefix: driveId }));
+    dispatch(getDirectoriesVersions({ Prefix: driveId }));
   }, [dispatch, driveId]);
 
   // Este efecto se encarga de filtrar los archivos cada vez que cambian
   // los archivos en Redux o la categoría seleccionada
   useEffect(() => {
-    let sortedFilteredFiles = filterFilesByCategory(directoriesData, category);
+    let sortedFilteredFiles = filterFilesByCategory(
+      category === "trash " ? directoriesTrash?.DeleteMarkers : directoriesData,
+      category
+    );
     sortedFilteredFiles = sortFiles(sortedFilteredFiles, sortOrder);
     setFilteredFiles(sortedFilteredFiles);
   }, [directoriesData, category, sortOrder]);
 
   return category === "trash" ? (
-    <Trash driveId={driveId} />
+    <Trash
+      categoryFiles={filteredFiles}
+      driveId={driveId}
+      setIsNew={setIsNew}
+      setSortOrder={setSortOrder}
+      sortOrder={sortOrder}
+    />
   ) : (
     <MyFiles
       categoryFiles={filteredFiles}
@@ -85,7 +97,7 @@ const filterFilesByCategory = (files, category) => {
     case "glaciar":
       return files.filter((file) => file.isShared);
     case "trash":
-      return files.filter((file) => file.isShared);
+      return files;
     // Añade más casos según tus categorías
     default:
       return files; // Por defecto, devuelve todos los archivos si no hay filtro
