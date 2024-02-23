@@ -56,6 +56,7 @@ export default function Page({
     folderToCut,
     searchFiles,
     category,
+    currentFolder,
   } = useSelector((state) => state.assets);
   const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
@@ -339,8 +340,10 @@ export default function Page({
 
   useEffect(
     () => setRecentFiles(getFilesInDescendingOrder(categoryFiles)),
+
     [categoryFiles]
   );
+
   useEffect(() => {
     setSelectedFolders([]);
     const filtered = filterFoldersBasedOnSearchAndPath(
@@ -351,6 +354,12 @@ export default function Page({
     );
     setFilteredFolders(filtered);
   }, [currentPath, categoryFiles, searchFiles, category]);
+
+  useEffect(() => {
+    if (currentFolder === driveId + "/") {
+      setCurrentPath(driveId + "/");
+    }
+  }, [currentFolder]);
 
   // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 
@@ -646,7 +655,9 @@ function isValidElementForCategory(folder, currentPath, category) {
     ? folderDepth === currentPathDepth + 1
     : folderDepth === currentPathDepth;
   if (
-    ["recent", "addon", "dashboard", "priority", "featured"].includes(category)
+    ["recent", "addon", "dashboard", "priority", "featured", "trash"].includes(
+      category
+    )
   )
     isValidDepth = true;
   return (

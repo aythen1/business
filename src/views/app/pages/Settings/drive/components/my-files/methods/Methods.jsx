@@ -80,7 +80,8 @@ export const renderFolders = (
   handleDragStart,
   copyFolder,
   cutFolder,
-  duplicateFolder
+  duplicateFolder,
+  isTrash
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
@@ -143,7 +144,6 @@ export const renderFolders = (
         newOptions[index] = !newOptions[index];
         return newOptions;
       });
-      // Aquí podrías también establecer el estado para la posición del menú si es necesario
     };
 
     return (
@@ -187,7 +187,9 @@ export const renderFolders = (
             <span>{size}</span>
           </div>
           <div className={style.drive_folder_lastmodified_container}>
-            {formatLastModified(directory.LastModified)}
+            {isTrash
+              ? directory.Key
+              : formatLastModified(directory.LastModified)}
           </div>
         </div>
 
