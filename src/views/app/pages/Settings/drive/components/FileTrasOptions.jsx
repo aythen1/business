@@ -6,7 +6,7 @@ import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { obtainFileData, copyFile } from "@/actions/assets";
 import { icons } from "../assetsAux";
 
-const FileOptions = ({
+const FileTrashOptions = ({
   setShowFolderOption,
   handleDeleteFolder,
   folderName,
@@ -84,20 +84,20 @@ const FileOptions = ({
       style={style}
     >
       <div className={styles.option} onClick={() => handleCopyFile("copy")}>
-        Copy
+        tras
         <IoSettingsOutline size={17} color="#00f" />
       </div>
       <div className={styles.option} onClick={() => handleCopyFile("cut")}>
-        Cut
+        tras
         <IoSettingsOutline size={17} color="#00f" />
       </div>
       <div className={styles.option} onClick={handleDuplicateFile}>
-        Duplicate
+        tras
         <IoSettingsOutline size={17} color="#00f" />
       </div>
       <div
         onClick={() => {
-          handleDeleteFolder(directory?.Key, directory?.Size);
+          handleDeleteFolder(directory.Key, directory?.VersionId ?? "");
           setShowFolderOption(false);
         }}
         className={styles.option}
@@ -109,4 +109,4 @@ const FileOptions = ({
   );
 };
 
-export default FileOptions;
+export default FileTrashOptions;
