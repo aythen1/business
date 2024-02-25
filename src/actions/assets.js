@@ -111,16 +111,18 @@ export const uploadFile = createAsyncThunk(
       formData.append("userId", userId);
       formData.append("path", path);
       formData.append("image", file);
-      console.log({ file });
       const { data } = await apiBackend.post("/assets/add-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
       const fileData = {
-        ...data.data,
+        Key: data.data.Key,
+        Location: data?.data?.Location || "",
+        VersionId: data?.data?.VersionId || "",
         LastModified: getCurrentDateFormatted(),
         Size: file.size,
+        IsLatest: true,
       };
       return fileData;
     } catch (error) {
@@ -214,6 +216,29 @@ export const deleteFolder = createAsyncThunk(
 // Borrar un archivo en scaleway
 export const deleteFile = createAsyncThunk(
   "assets/deleteFile",
+  async ({ path, VersionId, Size, act }, { dispatch }) => {
+    try {
+      // const userId = JSON.parse(localStorage.getItem('user')).user.id
+      const userId = "1234";
+      console.log({ path, VersionId });
+      const query = buildQueryString({
+        userId,
+        path,
+        VersionId,
+      });
+      const { data } = await apiBackend.delete(`/assets/file?${query}`);
+      // dispatch(filterFolder(path));
+      const objectData = { Key: path, VersionId, Size, act };
+
+      return objectData;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un archivo en scaleway
+export const deletePermanentFile = createAsyncThunk(
+  "assets/deleteFile",
   async ({ path, VersionId }, { dispatch }) => {
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
@@ -292,7 +317,7 @@ export const deleteFolderLocal = (directory) => (dispatch) => {
 
 // Agregar una carpeta en redux
 export const addFolderLocal = (Key) => (dispatch) => {
-  const data = { LastModified: getCurrentDateFormatted(), Key };
+  const data = { LastModified: getCurrentDateFormatted(), Key, IsLatest: true };
   try {
     dispatch(pushFolder(data));
   } catch (error) {

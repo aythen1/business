@@ -51,6 +51,7 @@ export function convertToMegabytes(valueInKilobytes) {
 
 export const calculateFolderSize = (directory, directoriesData) => {
   // Filtrar archivos y carpetas dentro del directorio actual
+  directoriesData.forEach((item) => {});
   const itemsInDirectory = directoriesData.filter(
     (item) => item.Key.startsWith(directory) && item.Key !== directory
   );
