@@ -144,7 +144,6 @@ export default function Page({
     dispatch(deleteFolder(path));
   };
   const copyElement = (sourceKey, destinationKey, file) => {
-    console.log({ sourceKey, destinationKey, file });
     dispatch(copyFile({ sourceKey, destinationKey, file }));
   };
   const createFolder = (newPath) => {
@@ -172,7 +171,6 @@ export default function Page({
       newPath = path.slice(0, -1);
     }
     newPath = `${newPath}-copy`;
-    console.log({ newPath });
 
     iterateElementsToDuplicate(
       path,
@@ -197,8 +195,8 @@ export default function Page({
     );
     dispatch(obtainFileData({ action: "reset" }));
   };
-  const sendFileToTrash = (path) => {
-    dispatch(deleteFile({ path, VersionId: "" }));
+  const sendFileToTrash = (path, Size) => {
+    dispatch(deleteFile({ path, VersionId: "", Size }));
   };
 
   const handleFolderClickBack = (folderName) => {

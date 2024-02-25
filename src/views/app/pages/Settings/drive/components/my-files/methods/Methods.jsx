@@ -86,7 +86,6 @@ export const renderFolders = (
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
-
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -183,9 +182,11 @@ export const renderFolders = (
             <img src={icon} style={{ width: 16 }} />
             <p className={style.drive_folder_title}>{folderName}</p>
           </div>
-          <div className={style.drive_folder_size_container}>
-            <span>{size}</span>
-          </div>
+          {isTrash !== true && (
+            <div className={style.drive_folder_size_container}>
+              <span>{size}</span>
+            </div>
+          )}
           <div className={style.drive_folder_lastmodified_container}>
             {isTrash
               ? directory.Key
@@ -203,6 +204,7 @@ export const renderFolders = (
           </div> */}
 
         {folderOptions[index] &&
+          isTrash !== true &&
           (isFile ? (
             <FileOptions
               setShowFolderOption={(value) =>

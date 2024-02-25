@@ -43,8 +43,8 @@ export default function Page({
   driveId,
   setSortOrder,
   sortOrder,
+  directories,
 }) {
-  console.log({ categoryFiles });
   const dispatch = useDispatch();
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
@@ -57,6 +57,7 @@ export default function Page({
     folderToCut,
     searchFiles,
     category,
+    directoriesTrash,
   } = useSelector((state) => state.assets);
   const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
@@ -142,7 +143,6 @@ export default function Page({
     dispatch(deleteFolder(path));
   };
   const copyElement = (sourceKey, destinationKey, file) => {
-    console.log({ sourceKey, destinationKey, file });
     dispatch(copyFile({ sourceKey, destinationKey, file }));
   };
   const createFolder = (newPath) => {
@@ -170,7 +170,6 @@ export default function Page({
       newPath = path.slice(0, -1);
     }
     newPath = `${newPath}-copy`;
-    console.log({ newPath });
 
     iterateElementsToDuplicate(
       path,
@@ -332,6 +331,34 @@ export default function Page({
       //   })
       // );
     }
+  };
+  const handleDeleteFile = (path) => {
+    directoriesTrash?.Versions?.forEach((element) => {
+      if (element.Key === path)
+        console.log({ path, VersionId: element.VersionId });
+      dispatch(deleteFile({ path, VersionId: element.VersionId }));
+    });
+    directoriesTrash?.DeleteMarkers?.forEach((element) => {
+      if (element.Key === path)
+        console.log({ path, VersionId: element.VersionId });
+      dispatch(deleteFile({ path, VersionId: element.VersionId }));
+    });
+  };
+  const handleRestoreFile = (path, VersionId) => {
+    dispatch(deleteFile({ path, VersionId, act: "restore" }));
+  };
+
+  const iterateFilesToDelete = (action) => {
+    selectedFolders.forEach((file) => {
+      const path = file.Key;
+      const VersionId = file.VersionId;
+      const isLatest = file.IsLatest;
+      if (action === "delete") {
+        handleDeleteFile(path);
+      } else if (action === "restore" && isLatest) {
+        handleRestoreFile(path, VersionId);
+      }
+    });
   };
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
@@ -498,7 +525,7 @@ export default function Page({
                 handleSelectFilter={handleSelectFilter}
               />
             </div>
-            <div className={style.drive_folder_size_container}>
+            {/* <div className={style.drive_folder_size_container}>
               <p className={style.drive_folders_filters_title}>Tamaño</p>
               <Filters
                 name="Size"
@@ -507,7 +534,7 @@ export default function Page({
                 setFilters={setFilters}
                 handleSelectFilter={handleSelectFilter}
               />
-            </div>
+            </div> */}
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>Ruta original</p>
               <Filters
@@ -582,20 +609,16 @@ export default function Page({
                   </button>
                 </>
               )}
-            <button onClick={handleDB} className={style.buttonDB}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599">
-                <g>
-                  <g>
-                    <path
-                      fill="fillCurrent"
-                      d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"
-                    ></path>
-                    <path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path>
-                  </g>
-                </g>
-              </svg>
+            <button
+              onClick={() => iterateFilesToDelete("restore")}
+              className={style.buttonDB}
+            >
+              Restaurar
             </button>
-            <button onClick={handleDelete} className={style.buttonDelete}>
+            <button
+              onClick={() => iterateFilesToDelete("delete")}
+              className={style.buttonDelete}
+            >
               <svg viewBox="0 0 24 24">
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
               </svg>
