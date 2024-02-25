@@ -7,7 +7,7 @@ const getDirectoryContent = async (bucketName, Prefix) => {
   const params = {
     Bucket: bucketName,
     Prefix,
-    OptionalObjectAttributes: ["Contents", "IsTruncated"],
+    OptionalObjectAttributes: ["Contents", "IsTruncated", "VersionId"],
     // TagFilter: [
     //   {
     //     Key: "Tag1Key",
