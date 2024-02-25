@@ -59,14 +59,12 @@ const FolderOptions = ({
       if (fileToCopy !== "" && fileToCut === "") {
         const { directoryCopied, folderNameCopied, file } = fileToCopy;
         const destinationKey = directory.Key + folderNameCopied;
-        console.log({ sourceKey: directoryCopied, destinationKey, file });
         dispatch(
           copyFile({ sourceKey: directoryCopied, destinationKey, file })
         );
         dispatch(obtainFileData(""));
         setShowFolderOption(false);
       } else if (fileToCopy === "" && fileToCut !== "") {
-        console.log("cut file");
         const { directoryCopied, folderNameCopied, file } = fileToCut;
         const destinationKey = directory.Key + folderNameCopied;
         dispatch(
@@ -136,7 +134,7 @@ const FolderOptions = ({
       </div>
       <div
         onClick={() => {
-          handleDeleteFolder(directory.Key);
+          handleDeleteFolder(directory?.Key, directory?.Size);
           setShowFolderOption(false);
         }}
         className={styles.option}

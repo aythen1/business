@@ -86,7 +86,6 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       currentFolder === ""
         ? `1234/${nameFolder}`
         : `${currentFolder}/${nameFolder}`;
-
     await dispatch(createNewFolder(folderPath));
     dispatch(addFolderLocal(folderPath + "/", getCurrentDateFormatted));
     setModalIsOpen(false);
@@ -94,12 +93,19 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   };
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
-
+    // console.log({ path: currentFolder === "" ? draveId : currentFolder });
     if (file) {
+      let currentFolderTrim = currentFolder;
+      if (currentFolderTrim.endsWith("/")) {
+        currentFolderTrim = currentFolderTrim.slice(0, -1);
+      }
+      const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
+      const pathDepured = path.replace(/\/\/+/g, "/");
+
       dispatch(
         uploadFile({
           file,
-          path: currentFolder === "" ? draveId : currentFolder,
+          pathDepured,
         })
       );
     }
@@ -117,15 +123,18 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
         const folderPath = folderPathParts.join("/");
         foldersPaths.add(folderPath);
-        const path =
+        let path =
           currentFolder === ""
             ? draveId + "/" + folderPath
             : currentFolder + "/" + folderPath;
-        console.log({ path });
+        if (path.endsWith("/")) {
+          path = path.slice(0, -1);
+        }
+        const pathDepured = path.replace(/\/\/+/g, "/");
         dispatch(
           uploadFile({
             file,
-            path,
+            pathDepured,
           })
         );
       });
@@ -137,8 +146,11 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           currentFolder === ""
             ? `1234/${folderName}`
             : `${currentFolder}/${folderName}`;
-        dispatch(createNewFolder(folderPath));
-        dispatch(addFolderLocal(folderPath + "/"));
+        const pathDepured = folderPath.replace(/\/\/+/g, "/");
+
+        dispatch(createNewFolder(pathDepured));
+        const folderPathLocal = pathDepured + "/";
+        dispatch(addFolderLocal(folderPathLocal));
       });
     }
     setNewPopup(false);
