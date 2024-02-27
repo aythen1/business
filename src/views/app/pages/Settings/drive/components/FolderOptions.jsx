@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./FolderOptions.module.css";
-import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
+// import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { copyFile, obtainFileData } from "@/actions/assets";
 
 const FolderOptions = ({
@@ -55,10 +55,10 @@ const FolderOptions = ({
         onClick={handlePasteFile}
       >
         Paste
-        <IoSettingsOutline
-          size={17}
+        {/* <IoSettingsOutline */}
+        {/* size={17}
           color={isCopyActive ? "#00f" : "#525252"}
-        />
+        /> */}
       </div>
       <div
         onClick={() => {
@@ -68,7 +68,7 @@ const FolderOptions = ({
         className={styles.option}
       >
         Delete Folder
-        <IoTrashOutline size={17} color="#D0342C" />
+        {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>
   );

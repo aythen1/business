@@ -52,7 +52,7 @@ const FileOptions = ({
     >
       <div className={styles.option} onClick={handleCopyFile}>
         Copy
-        <IoSettingsOutline size={17} color="#00f" />
+        {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div
         onClick={() => {
@@ -62,7 +62,7 @@ const FileOptions = ({
         className={styles.option}
       >
         Delete File
-        <IoTrashOutline size={17} color="#D0342C" />
+        {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>
   );
