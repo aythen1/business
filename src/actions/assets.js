@@ -103,14 +103,15 @@ export const createNewFolder = createAsyncThunk(
 // Crear carpeta
 export const uploadFile = createAsyncThunk(
   "assets/uploadFile",
-  async ({ file, path }) => {
+  async ({ file, pathDepured }) => {
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const formData = new FormData();
       formData.append("userId", userId);
-      formData.append("path", path);
+      formData.append("path", pathDepured);
       formData.append("image", file);
+      console.log({ formData });
       const { data } = await apiBackend.post("/assets/add-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

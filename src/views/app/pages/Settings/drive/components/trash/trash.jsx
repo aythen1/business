@@ -25,6 +25,7 @@ import {
   copyFile,
   createNewFolder,
   addFolderLocal,
+  getDirectoriesVersions,
 } from "@/actions/assets";
 import {
   deleteItemsInDirectory,
@@ -373,6 +374,10 @@ export default function Page({
     );
     setFilteredFolders(filtered);
   }, [currentPath, categoryFiles, searchFiles, category]);
+  useEffect(() => {
+    // setSelectedFolders([]);
+    dispatch(getDirectoriesVersions({ Prefix: driveId }));
+  }, []);
 
   // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 

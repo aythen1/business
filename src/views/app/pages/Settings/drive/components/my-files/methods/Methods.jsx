@@ -86,6 +86,7 @@ export const renderFolders = (
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
+  console.log({ folders });
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];

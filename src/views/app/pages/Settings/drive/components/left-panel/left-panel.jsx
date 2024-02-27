@@ -86,8 +86,9 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       currentFolder === ""
         ? `1234/${nameFolder}`
         : `${currentFolder}/${nameFolder}`;
-    await dispatch(createNewFolder(folderPath));
-    dispatch(addFolderLocal(folderPath + "/", getCurrentDateFormatted));
+    const pathDepured = folderPath.replace(/\/\/+/g, "/");
+    await dispatch(createNewFolder(pathDepured));
+    dispatch(addFolderLocal(pathDepured + "/", getCurrentDateFormatted));
     setModalIsOpen(false);
     setNameFolder("");
   };
@@ -101,7 +102,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       }
       const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
       const pathDepured = path.replace(/\/\/+/g, "/");
-
+      console.log({ pathDepured });
       dispatch(
         uploadFile({
           file,

@@ -146,22 +146,17 @@ export const assetsSlice = createSlice({
 
       .addCase(deleteFolders.fulfilled, (state, action) => {
         const { payload } = action;
-        console.log({ payload });
 
         const deletedKeys = action.payload.map(
           (deletedFolder) => deletedFolder.Key
         );
-        // Filtrar el array de assets para excluir los elementos con las claves eliminadas
-        const remainingFiles = state.directoriesTrash.Versions.filter(
-          (asset) => !deletedKeys.includes(asset.Key)
-        );
-        const remainingFilesPares = JSON.parse(
-          JSON.stringify({ remainingFiles })
-        );
-        console.log({ remainingFilesPares });
-        state.directoriesTrash.Versions = [
-          ...remainingFilesPares.remainingFiles,
-        ];
+
+        // Actualizar las propiedades IsLatest de los archivos coincidentes sin filtrarlos fuera
+        state.directoriesTrash.Versions.forEach((file) => {
+          if (deletedKeys.includes(file.Key)) {
+            file.IsLatest = false; // Actualiza IsLatest a false para los archivos coincidentes
+          }
+        });
         state.directoriesTrash.DeleteMarkers = [
           ...state.directoriesTrash.DeleteMarkers,
           ...payload,
@@ -203,14 +198,19 @@ export const assetsSlice = createSlice({
           state.directoriesTrash.DeleteMarkers =
             state.directoriesTrash.DeleteMarkers.filter((f) => f.Key !== Key);
         } else {
-          console.log("delete file slice");
-          state.directoriesTrash.Versions =
-            state.directoriesTrash.Versions.filter((f) => f.Key !== Key);
-          const deletedObject = { Key, VersionId, Size };
-          state.directoriesTrash.DeleteMarkers = {
+          const index = state.directoriesTrash.Versions.findIndex(
+            (marker) => marker.Key === Key && marker.IsLatest === true
+          );
+          if (index !== -1) {
+            // actualizamos la propiedad IsLatest del objeto encontrado
+            state.directoriesTrash.Versions[index].IsLatest = false;
+          }
+
+          const deletedObject = { Key, VersionId };
+          state.directoriesTrash.DeleteMarkers = [
             ...state.directoriesTrash.DeleteMarkers,
             deletedObject,
-          };
+          ];
         }
       })
       .addCase(deleteFile.rejected, (state, action) => {

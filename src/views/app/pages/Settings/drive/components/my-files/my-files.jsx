@@ -34,6 +34,7 @@ import {
   iterateElementsToCopy,
   iterateElementsToCut,
   iterateElementsToDuplicate,
+  icons,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 
@@ -69,10 +70,11 @@ export default function Page({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [selectedFolders, setSelectedFolders] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [filterIsActive, setFilterIsActive] = useState(false);
 
   const [filtersData, setFiltersData] = useState([
-    { name: "Filter by:", option: "All files", view: false },
-    { name: "Sort by:", option: "Last viewed", view: false },
+    { name: "Filter by:", type: "filter", view: false },
+    { name: "Sort by:", type: "sort", view: false },
   ]);
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
 
@@ -277,7 +279,30 @@ export default function Page({
     });
   };
 
-  const handleSelectFilter = (name, order) => {
+  const handleSelectFilter = (extension) => {
+    // Filtramos solo los elementos que son archivos (no terminan en '/')
+    // y que coinciden con la extensión seleccionada.
+    if (filterIsActive) {
+      setFilterIsActive(false);
+      return;
+    } else {
+      setFilterIsActive(true);
+      const filtered = categoryFiles.filter((item) => {
+        // Verificar si es un archivo (no es una carpeta).
+        const isFile = !item.Key.endsWith("/");
+        if (!isFile) return false;
+
+        // Extraer la extensión del archivo de la propiedad Key.
+        const itemExtension = item.Key.split(".").pop().toLowerCase();
+        // Comparar la extensión del archivo con la extensión seleccionada.
+        return itemExtension === extension.toLowerCase();
+      });
+      // Actualizar el estado con los archivos filtrados.
+      console.log({ filtered });
+      setFilteredFolders(filtered);
+    }
+  };
+  const handleSelectSort = (name, order) => {
     setSortOrder({ name, order });
   };
 
@@ -348,7 +373,8 @@ export default function Page({
       searchFiles,
       categoryFiles,
       currentPath,
-      category
+      category,
+      filterIsActive
     );
     setFilteredFolders(filtered);
   }, [currentPath, categoryFiles, searchFiles, category]);
@@ -396,28 +422,33 @@ export default function Page({
               </div>
               {filter.view && (
                 <ul className={style.drive_options}>
-                  <li onClick={() => handleSelectFilter("Name", "asc")}>
-                    Name
-                  </li>
-                  <li
-                    onClick={() => handleSelectFilter("Last modified", "asc")}
-                  >
-                    Last modified
-                  </li>
-                  <li
-                    onClick={() =>
-                      handleSelectFilter("Last modified by me", "asc")
-                    }
-                  >
-                    Last modified by me
-                  </li>
-                  <li
-                    onClick={() =>
-                      handleSelectFilter("Last opened by me", "asc")
-                    }
-                  >
-                    Last opened by me
-                  </li>
+                  {filter.type === "sort" ? (
+                    <>
+                      <li onClick={() => handleSelectSort("Name", "asc")}>
+                        Name
+                      </li>
+                      <li
+                        onClick={() => handleSelectSort("Last modified", "asc")}
+                      >
+                        Last modified
+                      </li>
+                      {/* Agrega más opciones de sorteo aquí si es necesario */}
+                    </>
+                  ) : (
+                    Object.entries(icons).map(([iconName, iconPath]) => (
+                      <li
+                        key={iconName}
+                        onClick={() => handleSelectFilter(iconName)}
+                      >
+                        <img
+                          src={iconPath}
+                          alt={iconName}
+                          style={{ width: "20px", height: "20px" }}
+                        />
+                        {iconName}
+                      </li>
+                    ))
+                  )}
                 </ul>
               )}
             </div>
@@ -624,7 +655,8 @@ function filterFoldersBasedOnSearchAndPath(
   searchFiles,
   categoryFiles,
   currentPath,
-  category
+  category,
+  filterIsActive
 ) {
   if (searchFiles) {
     return categoryFiles
@@ -640,12 +672,17 @@ function filterFoldersBasedOnSearchAndPath(
       );
   } else {
     return categoryFiles.filter((folder) =>
-      isValidElementForCategory(folder, currentPath, category)
+      isValidElementForCategory(folder, currentPath, category, filterIsActive)
     );
   }
 }
 
-function isValidElementForCategory(folder, currentPath, category) {
+function isValidElementForCategory(
+  folder,
+  currentPath,
+  category,
+  filterIsActive
+) {
   const isFolder = folder.Size === 6;
   const folderDepth = folder.Key.split("/").length;
   const currentPathDepth = currentPath.split("/").length;
@@ -655,7 +692,8 @@ function isValidElementForCategory(folder, currentPath, category) {
   if (
     ["recent", "addon", "dashboard", "priority", "featured", "trash"].includes(
       category
-    )
+    ) ||
+    filterIsActive === true
   )
     isValidDepth = true;
   return (
