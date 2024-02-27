@@ -1,9 +1,6 @@
 .folderOptionsContainer {
   display: flex;
-  position: absolute;
   width: 150px;
-  bottom: 45px;
-  right: 10px;
   padding: 5px 3px;
   border-radius: 6px;
   background: #fff;
@@ -39,9 +36,8 @@
   &:hover {
     background: #f2f2f2;
   }
-
 }
 
 .optionDisabled {
-  color: #404040;
+  color: #525252;
 }

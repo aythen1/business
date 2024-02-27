@@ -257,14 +257,20 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <img src={MyDocs} />
           <p
             className={style.drive_option_text}
-            onClick={() => dispatch(selectCategory("document"))}
+            onClick={() => {
+              handleNavigate("document");
+              dispatch(selectCategory("document"));
+            }}
           >
             Mis documentos
           </p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("addon"))}
+          onClick={() => {
+            handleNavigate("addon");
+            dispatch(selectCategory("addon"));
+          }}
         >
           <svg
             width="20"
@@ -292,7 +298,10 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("dashboard"))}
+          onClick={() => {
+            handleNavigate("dashboard");
+            dispatch(selectCategory("dashboard"));
+          }}
         >
           <svg
             width="20"
@@ -322,35 +331,50 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("priority"))}
+          onClick={() => {
+            handleNavigate("priority");
+            dispatch(selectCategory("priority"));
+          }}
         >
           <img src={Info} />
           <p className={style.drive_option_text}>Prioritarios</p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("shared"))}
+          onClick={() => {
+            handleNavigate("shared");
+            dispatch(selectCategory("shared"));
+          }}
         >
           <img src={Group} />
           <p className={style.drive_option_text}>Compartidos</p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("recent"))}
+          onClick={() => {
+            handleNavigate("recent");
+            dispatch(selectCategory("recent"));
+          }}
         >
           <img src={Time} />
           <p className={style.drive_option_text}>Recientes</p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("featured"))}
+          onClick={() => {
+            handleNavigate("featured");
+            dispatch(selectCategory("featured"));
+          }}
         >
           <img src={Star} />
           <p className={style.drive_option_text}>Destacados</p>
         </div>
         <div
           className={style.drive_option}
-          onClick={() => dispatch(selectCategory("trash"))}
+          onClick={() => {
+            handleNavigate("glaciar");
+            dispatch(selectCategory("glaciar"));
+          }}
         >
           <svg
             width="20"
@@ -378,7 +402,10 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
         <div
           className={style.drive_option}
-          onClick={() => handleNavigate("trash")}
+          onClick={() => {
+            handleNavigate("trash");
+            dispatch(selectCategory("trash"));
+          }}
         >
           <img src={Trash} />
           <p className={style.drive_option_text}>Eliminados</p>
