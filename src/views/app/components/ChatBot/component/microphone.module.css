@@ -141,7 +141,7 @@ width: 40px;
   cursor: pointer;
   .iconEnd {
     width: 25px;
-    color: #000fff;
+    color: var(--color-primary-0);
   }
 }
 

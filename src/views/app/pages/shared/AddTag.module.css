@@ -1,0 +1,169 @@
+
+.labelsTag{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    label{
+      padding: 2px 8px;
+      border:1px solid rgb(215, 215, 215);
+      border-radius: 8px;
+    }
+  }
+
+
+  
+.addTag{
+    display: inline-flex;
+    height: 38px;
+    padding: 0px 16px;
+    flex-direction: row;
+    gap: 8px;
+    border-radius: 4px;
+    width: auto;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    outline-offset: 2px;
+    white-space: nowrap;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 24px;
+    background: rgb(233, 234, 235);
+    border: none;
+    color: rgb(34, 38, 56);
+    margin: 12px 0px;
+    svg{
+      fill: rgb(34, 38, 56);
+    }
+  }
+  
+  
+
+
+
+  .container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+
+  .title{
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 32px;
+    text-transform: none;
+    text-decoration: none;
+    top: 0px;
+    /* margin-bottom: 10px; */
+  }
+
+  .text{
+    color: rgb(63, 66, 80);
+    font-size: 12px;
+    line-height: 20px;
+  }
+
+
+  .box{
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-top: 8px;
+  }
+
+
+
+  
+  .gird2{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    /* justify-content: space-between; */
+    width: 100%;
+  }
+
+
+
+
+
+
+  .buttonItem{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  
+    &.active{
+      .save{
+        border: 1px solid var(--color-primary-0);
+        color: var(--color-primary-0);
+      }
+      .delete{
+        border: 1px solid rgb(179, 20, 77);
+        color: rgb(179, 20, 77);
+      }
+    }
+    
+    button{
+      display: inline-flex;
+      height: 40px;
+      padding: 0px 4px;
+      flex-direction: row;
+      gap: 8px;
+      border-radius: 4px;
+      box-sizing: border-box;
+      width: 40px;
+      align-items: center;
+      cursor: pointer;
+      justify-content: center;
+      outline-offset: 2px;
+      white-space: nowrap;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      line-height: 24px;
+      background: none;
+      color: rgb(216, 197, 252);
+      border: 1px solid rgb(216, 197, 252);
+      svg{
+        width: 18px;
+        fill: currentColor;
+      }
+  
+    
+  
+      &.xs{
+        width: 22px;
+        height: 22px;
+        
+        svg{
+          min-width: 10px !important;
+        }
+      }
+  
+      &.deleteButton{
+        border: 1px solid rgb(179, 20, 77);
+        color: rgb(179, 20, 77);
+      }
+    }
+  }
+  
+
+
+
+
+
+  .list{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  

@@ -137,9 +137,13 @@ const updateDefault = async (req, res, next) => {
 
 const fetchsBilling = async (req, res, next) => {
   try {
+    console.log('11234')
     const { user } = req
     const path = encodeVector(ID)
     // ---------------------------------------------------------
+    // tests() {
+    //   description
+    // }
     const options = `
    query {
     users(id: ${user.id}) {
@@ -149,19 +153,23 @@ const fetchsBilling = async (req, res, next) => {
       createdat
       isverified
       billings(limit: 5) {
-        address
-        vat
+        id
+        type
+        name
         email
         limit
+        iban
+        currency
+        vat
         paymentmethod
+        address
         upgradedat
         createdat
-        tests() {
-          description
-        }
       }
     }
   }`
+
+  console.log('res', options)
 
     const resp = await getVector(path, options, [0, 0])
 
@@ -185,18 +193,18 @@ const updateBilling = async (req, res, next) => {
     // console.log('billliiingg', payload)
 
 
-    const resp = await addVector(path, 'billings', [0, 0], billing, { users: user })
+    const resp = await updateVector(path, 'billings', [0, 0], billing, { users: user })
 
-    var data = {
-      title: 'title',
-      description: 'description',
-    }
-    const _resp = await addVector(path, 'tests', [0, 0], data, { users: user, billings: resp[0] })
+    // var data = {
+    //   title: 'title',
+    //   description: 'description',
+    // }
+    // const _resp = await addVector(path, 'tests', [0, 0], data, { users: user, billings: resp[0] })
 
     console.log('resp', resp)
-    console.log('_resp', _resp)
+    // console.log('_resp', _resp)
 
-    return res.status(200).send(resp)
+    return res.status(200).send(resp[0])
 
   } catch (err) {
     return res.status(500).send(err)
@@ -491,8 +499,7 @@ const loginUser = async (req, res, next) => {
 
     if (data.isverified !== true) {
       // resend email confirm email
-      const email = sendEmail('info@aythen.com', 'confirm-email', { token })
-
+      // const email = sendEmail('info@aythen.com', 'confirm-email', { token })
       return res.status(301).send({message: 301})
     } else {
       return res.status(200).send({
@@ -554,15 +561,19 @@ const registerUser = async (req, res, next) => {
 
 
 const upgradeUser = async (req, res, next) => {
+  console.log('1234566')
   try {
+    const { user } = req
     const { upgradedat } = req.body
     const path = encodeVector(ID)
 
+    
     const data = {
-      id: result.id,
+      id: user.id,
       upgradedat: upgradedat
     }
-
+    
+    console.log('eee', data)
 
     const _resp = await updateVector(path, 'users', [0, 0], data, false)
 
@@ -594,6 +605,9 @@ const recoverPasswordUser = async (req, res, next) => {
       { field: 'user', operator: '==', value: email }
     ];
 
+
+    //path
+
     const resp = await getVector(path, 'users', [0, 0], options, false)
 
     if (resp.error) {
@@ -623,10 +637,12 @@ const recoverPasswordUser = async (req, res, next) => {
 
 const updatePasswordUser = async (req, res, next) => {
   try {
+    console.log('123456')
     const { user } = req
     const { password } = req.body
 
-    let _user = user.user
+    console.log('usertoekn, ', user.user)
+    let _user = user
     _user.password = password
 
     console.log('_token', _user)
@@ -672,7 +688,7 @@ const addUser = async (req, res) => {
         isverified: true
       }
 
-      const resp = await addVector(path, 'users', [0, 0], data, false)
+      const resp = await addVector(path, 'users', [0, 0, 0, 0, 0, 0, 0], data, false)
       console.log('re', resp)
       arr.push(resp)
     }
@@ -708,8 +724,23 @@ const deleteUser = async (req, res) => {
 const fetchsUser = async (req, res) => {
   try {
     const path = encodeVector(ID)
+    const order = req.query.order;
 
-    const data = await getVector(path, 'users')
+
+
+    let condition = []
+
+    if(order){
+      conditions = [
+        { field: order.param, operator: '!==', value: '%', order: order.type}
+      ];
+    }
+
+
+    console.log('conditions', conditions)
+
+    const data = await getVector(path, 'users', [0, 0], conditions)
+    console.log('d', 'load load user')
     return res.status(200).send(data)
   } catch (err) {
     return res.status(500).send(err)
@@ -728,9 +759,11 @@ const addApplication = async (req, res) => {
     const { user } = req
     const { application } = req.body
 
+    console.log('adddd', application)
+
     const path = encodeVector(ID)
 
-    console.log('apps', result, application)
+    console.log('apps', application)
     const resp = await addVector(path, 'applications', [0, 0], application, { users: user })
     console.log('re', resp)
     return res.status(200).send(resp)
@@ -899,9 +932,13 @@ const fetchsApi = async (req, res) => {
 const addLog = async (req, res) => {
   try {
     const { user } = req
-    const { log } = req.body
+    const { log, options } = req.body
 
     const path = encodeVector(ID)
+
+    const email = sendEmail('info@aythen.com', 'confirm-email', { 
+      backgroundColor: options?.backgroundColor || 'red' 
+    })
 
     const resp = await addVector(path, 'logs', [0, 0], log, {users: user})
     return res.status(200).send(resp)
@@ -930,6 +967,20 @@ const deleteLog = async (req, res) => {
 }
 
 
+
+
+const deleteLogs = async (req, res) => {
+  try {
+    const { id } = req.body
+
+    const path = encodeVector(ID)
+    const resp = await removeVector(path, 'logs')
+
+    return res.status(200).send(id)
+  } catch (err) {
+    console.log('err', err)
+  }
+}
 
 
 const fetchsLog = async (req, res) => {
@@ -991,5 +1042,6 @@ module.exports = {
 
   addLog: catchedAsync(addLog),
   deleteLog: catchedAsync(deleteLog),
+  deleteLogs: catchedAsync(deleteLogs),
   fetchsLog: catchedAsync(fetchsLog),
 }

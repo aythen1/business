@@ -8,7 +8,7 @@ import Table from './table'
 import styles from './index.module.css'
 import stylesModal from './modal.module.css'
 
-import AddTag from './AddTag'
+import AddTag from '@/views/app/pages/shared/AddTag'
 
 
 
@@ -138,7 +138,15 @@ const PopupModalApp = ({ styles }) => {
       description: state.description,
       status: 'active',
       // tags: state.tags,
-      createdAt: new Date()
+      createdAt: new Date(),
+      tags: [{
+        key: '',
+        value: ''
+      }],
+      policies: [{
+        key: '',
+        value: ''
+      }]
       // polices: state.polices,
     }
 

@@ -15,7 +15,7 @@
 
 .bar{
     position: relative;
-    height: 160px;
+    height: 180px;
 
     .box{
         position: absolute;
@@ -60,6 +60,7 @@
         align-items: center;
         gap: 6px;
         .dot{
+            min-width: 10px;
             width: 10px;
             height: 10px;
             background: rgb(239, 232, 232);
@@ -77,6 +78,12 @@
             &.green{
                 background: rgb(53, 254, 39);
             }
+        }
+        p{
+            white-space: nowrap;  
+            overflow: hidden;         
+            text-overflow: ellipsis;  
+            width: 200px;             
         }
     }
 }
@@ -111,7 +118,7 @@
             letter-spacing: 0px;
             line-height: 20px;
             background: none;
-            border: 1px solid rgb(181, 183, 189);
+            border: 1px solid var(--border-color);
             color: rgb(63, 66, 80);
             svg{
                 width: 15px;

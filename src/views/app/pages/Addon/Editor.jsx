@@ -1,12 +1,12 @@
 
 import React, { useEffect, useState, useRef } from "react";
-import { Route, Routes, Outlet, useParams } from 'react-router-dom';
-
-
+import { Route, Routes, Outlet, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 
 
-import { default as AY } from './Component';
+
+
+import Component from './Component';
 
 import { getSvgAsImage } from "@/lib/getSvgAsImage";
 import { blobToBase64 } from "@/lib/blobToBase64";
@@ -23,6 +23,11 @@ import {
 import {
   fetchAddon
 } from '@/actions/addon'
+
+
+import {
+  setStatus
+} from '@/slices/addonSlice'
 
 
 // import DOMPurify from 'dompurify';
@@ -47,50 +52,71 @@ export const AddonEditor = ({
 
 }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
 
-  const { vectors } = useSelector((state) => state.addon)
+  const { addon, vectors } = useSelector((state) => state.addon)
+  const [fetchsItemCompleted, setFetchsItemCompleted] = useState(false);
 
 
-  // const addon = [{
-  //   data: [],
-  //   rpa: [],
-  //   version: 0,
-  //   description: ''
-  // }]
-
-
+  
+  
   useEffect(() => {
+    console.log('addong', addon, id)
     const fetchsItem = async () => {
-      dispatch(fetchAddon(id))
+      await dispatch(fetchAddon(id))
+      setFetchsItemCompleted(true);
     }
 
-    fetchsItem()
+    if (addon && id) {
+      fetchsItem()
+    } else {
+      setFetchsItemCompleted(true);
+    }
   }, [])
-
+  
+  
 
   useEffect(() => {
-    console.log('cc', vectors)
-
+    console.log('vv', vectors)
+    
+    if(vectors.length > 0){
+      console.log('status active')
+      dispatch(setStatus('active'))
+    }
+    
+    
   }, [vectors])
+  
+  
+    useEffect(() => {
+      if (fetchsItemCompleted) {
+        if (Object.keys(addon).length > 0) {
+          console.log('exist loading')
+        }else{
+          navigate(`/${'es'}/app/settings/home`)
+        }
+      }
+  
+    }, [addon, fetchsItemCompleted])
 
 
 
   return (
     <div>
       {vectors.length > 0 ? (
-        <div>
-          {vectors.map((vector, index) => {
-            <AY
+        <>
+          {vectors.map((vector, index) => (
+            <Component
               key={index}
               component={vector}
             />
-          })}
-        </div>
+          ))}
+        </>
       ) : (
-          <VectorIni />
+        <VectorIni setModal={setModal} vector={''} />
       )}
 
     </div>

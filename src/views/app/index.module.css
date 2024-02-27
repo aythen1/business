@@ -25,7 +25,7 @@ body{
     .Board{
         min-height: 100%;
         max-width: 900px;
-        margin: 0px auto;
+        margin: 10px 20px;
     }
 }
 
@@ -35,21 +35,23 @@ body{
 
 
 .MenuLeft{
-    box-shadow: 0px -2px 4px 3px #f4f4f4;
-    padding: 12px;
-    border-radius: 14px;
+    box-shadow: 0px -2px 10px 0px var(--background-container);
+    /* padding: 12px; */
+    border-radius: 4px;
     position: fixed;
-    background: #f8f8f8;
-    height: calc(100vh - 100px);
+    /* background: #f8f8f8; */
+    height: calc(100vh - 75px);
     overflow-y: scroll;
     overflow-x: hidden;
     z-index: 9999;
-    left: 30px;
-    bottom: 30px;
+    left: 14px;
+    bottom: 14px;
     .MenuLeftUser{
-        width: 300px;        
+        height: 100%;
+        width: 260px;        
     }
     .MenuLeftData{
+        height: 100%;
         width: 270px;
     }
 }
@@ -115,7 +117,7 @@ body{
     bottom: 0px;
     left: 0px;
     background: var(--background);
-    height: 160px;
+    /* height: 160px; */
     width: calc(100% - 380px);
     box-shadow: 0px -17px 38px 18px var(--background);
     z-index: 0;

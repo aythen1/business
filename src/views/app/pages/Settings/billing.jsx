@@ -30,11 +30,27 @@ const Billing = ({ }) => {
     const [editContact, setEditContact] = useState(false)
     const [stateTable, setStateTable] = useState('')
 
-    const { invoices } = useSelector((state) => state.iam)
+    const { billing, invoices } = useSelector((state) => state.iam)
+
+    // const organization = {
+    //     name: 'Aythen',
+    //     currency: 'eur',
+    //     iban: 'ESB61077863',
+    //     type: 'professional account',
+    //     address: {
+    //         mame: 'Pasaje Barcelona',
+    //         num: 'n8 local 2',
+    //         zip: '08130',
+    //         city: 'Santa Perpetua de Mogoda',
+    //         province: 'Barcelona',
+    //         country: 'SPAIN'
+    //     }
+    // }
 
 
     // ---
     const [state, setState] = useState({
+        id: null,
         corporate: false,
         name: '',
         address1: '',
@@ -49,6 +65,38 @@ const Billing = ({ }) => {
         vat: '',
         paymentmethod: ''
     });
+
+
+    useEffect(() => {
+        console.log('billlingg', billing)
+        if (billing) {
+            console.log('billing', billing)
+            const address = JSON.parse(billing?.billings?.address || "{}")
+
+            console.log('eessss', address)
+            setState({
+                id: billing.billings?.id || null,
+                type: billing.billings?.type || '',
+                name: billing.billings?.name || '',
+                email: billing.billings?.email || '',
+                limit: billing.billings?.limit || 0,
+                iban: billing.billings?.iban || '',
+                currency: billing.billings?.currency || '',
+                vat: billing.billings?.vat || '',
+                paymentmethod: billing.billings?.paymentmethod || 'credit',
+
+                address1: address.address1 || '',
+                address2: address.address2 || '',
+                zip: address.zip || '',
+                city: address.city || '',
+                country: address.country || '',
+                region: address.region || '',
+            })
+
+
+        }
+    }, [billing])
+
 
 
     const handleInputChange = (e, property) => {
@@ -80,26 +128,6 @@ const Billing = ({ }) => {
     };
 
 
-
-
-
-    const organization = {
-        name: 'Aythen',
-        currency: 'eur',
-        iban: 'ESB61077863',
-        type: 'professional account',
-        address: {
-            mame: 'Pasaje Barcelona',
-            num: 'n8 local 2',
-            zip: '08130',
-            city: 'Santa Perpetua de Mogoda',
-            province: 'Barcelona',
-            country: 'SPAIN'
-        }
-    }
-
-
-
     const handleClickEdit = () => {
         dispatch(setModal(<ModalPopupContact styles={stylesModal} state={state} setState={setState} setEditContact={setEditContact} />))
     }
@@ -107,7 +135,7 @@ const Billing = ({ }) => {
 
     useEffect(() => {
         const fetchsItems = async () => {
-            dispatch(fetchsBilling())
+            dispatch(fetchsBilling({}))
         }
 
         fetchsItems()
@@ -117,11 +145,15 @@ const Billing = ({ }) => {
     useEffect(() => {
         if (editContact) {
             const data = {
+                id: state.id || null,
+                type: state.typ || '',
                 name: state.name || '',
-                limit: state.limit || 0,
                 email: state.email || '',
+                limit: state.limit || 0,
+                iban: state.iban || '',
+                currency: state.currency || '',
                 vat: state.vat || '',
-                paymentmethod: state.paymentmethod || '',
+                paymentmethod: state.paymentmethod || 'credit',
                 // test: '12345'
                 address: {
                     steetaddress1: state.address1 || '',
@@ -133,9 +165,9 @@ const Billing = ({ }) => {
                 }
             }
 
-            console.log('data', data)
+            console.log('update Billing: ', data)
 
-            dispatch(updateBilling({billing: data }))
+            dispatch(updateBilling({ billing: data }))
         }
     }, [editContact])
 
@@ -156,58 +188,95 @@ const Billing = ({ }) => {
 
 
     useEffect(() => {
-      console.log('stateTable', stateTable)
-
-      if(stateTable.startsWith('download-file:')){
-        const id = stateTable.split(':')[1].trim()
-        console.log('id', id)
-        alert(id)
-      }
+        if (stateTable.startsWith('download-file:')) {
+            const id = stateTable.split(':')[1].trim()
+            console.log('id', id)
+            alert(id)
+        }
     }, [stateTable])
-    
 
 
 
 
+
+    // ---------------------
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash.substring(1);
+            const section = document.getElementById(hash);
+
+            if (hash == 'invoice' && section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange();
+        return () => {
+            window.removeEventListener('hashchange', handleHashChange);
+        };
+    }, []);
 
 
     return (
         <div className={styles.containerBilling}>
             {false && (
-            <div style={{gridColumn: 'span 2'}}>
-               <Invoice />
-            </div>
+                <div style={{ gridColumn: 'span 2' }}>
+                    <Invoice />
+                </div>
             )}
             <div className={styles.containerInformation}>
                 <h2 className={styles.title}>
                     Información de Cuenta
                 </h2>
-                <div className={styles.boxInformation}>
-                    <div>
-                        <h2 className={styles.title}>
-                            {organization?.name}
-                        </h2>
-                        <div className={styles.description}>
-                            <div className={styles.descriptionOne}>
-                                {organization?.address?.mame}, {organization?.address?.num}<br />
-                                {organization?.address?.zip} {organization?.address?.city} <br />
-                                {organization?.address?.province} <br />
-                                {organization?.address?.country} <br /> <br />
-                            </div>
-                            <div>
-                                {organization.type}<br />
-                                Currency {organization.currency}<br />
-                                {organization.iban}
+                {state?.name ? (
+                    <div className={styles.boxInformation}>
+                        <div>
+                            <h2 className={styles.title}>
+                                {state?.name}
+                            </h2>
+                            <div className={styles.description}>
+                                <div className={styles.descriptionOne}>
+                                    {state?.address1}<br />
+                                    {state?.zip} {state?.city} <br />
+                                    {state?.region} <br />
+                                    {state?.country} <br /> <br />
+                                </div>
+                                <div>
+                                    {state.type}<br />
+                                    Currency {state.currency}<br />
+                                    {state.iban}
+                                </div>
                             </div>
                         </div>
+                        <button
+                            onClick={() => handleClickEdit()}
+                            className={styles.button}
+                        >
+                            Editar
+                        </button>
                     </div>
-                    <button
-                        onClick={() => handleClickEdit()}
-                        className={styles.button}
-                    >
-                        Editar
-                    </button>
-                </div>
+                ) : (
+                    <div className={styles.boxInformation}>
+                        <div>
+
+                            <p>
+                                Rellena los datos de usuario para verificar tu cuenta y poder entrar en las aplicaciones
+                                con tus credenciales.
+                            </p>
+                            <button
+                                onClick={() => handleClickEdit()}
+                                className={styles.button}
+                            >
+                                Insertar información
+                            </button>
+                        </div>
+
+                    </div>
+                )}
             </div>
 
             <div className={styles.containerConsumption}>
@@ -236,9 +305,9 @@ const Billing = ({ }) => {
                             <label>
                                 Billing email
                             </label>
-                            <input 
-                                type='text' 
-                                placeholder={'placeholder@demo.com'} 
+                            <input
+                                type='text'
+                                placeholder={'placeholder@demo.com'}
                                 value={state.email}
                                 onChange={(e) => handleInputChange(e, 'email')}
                             />
@@ -278,10 +347,10 @@ const Billing = ({ }) => {
                             </label>
                             <div className={styles.grid2}>
                                 <div className={styles.value}>
-                                    <input 
-                                     placeholder={'1000'} 
-                                     value={state.limit}
-                                     onChange={(e) => handleInputChange(e, 'limit')}
+                                    <input
+                                        placeholder={'1000'}
+                                        value={state.limit}
+                                        onChange={(e) => handleInputChange(e, 'limit')}
                                     />
                                 </div>
                                 <div className={styles.current}>
@@ -320,16 +389,16 @@ const Billing = ({ }) => {
                         </p>
                         <div className={styles.input}>
                             <div className={styles.credit}>
-                                <input 
-                                    type="radio" 
+                                <input
+                                    type="radio"
                                     checked={state.paymentmethod === 'card'}
                                     onChange={(e) => handleInputChange('card', 'paymentmethod')}
                                 />
                                 Credit card
                             </div>
                             <div className={styles.sepa}>
-                                <input 
-                                    type="radio" 
+                                <input
+                                    type="radio"
                                     checked={state.paymentmethod === 'sepa'}
                                     onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
                                 />
@@ -359,9 +428,9 @@ const Billing = ({ }) => {
                             <label>
                                 VAT
                             </label>
-                            <input 
-                                type='text' 
-                                placeholder={'ESB61077863VAT'} 
+                            <input
+                                type='text'
+                                placeholder={'ESB61077863VAT'}
                                 value={state.vat}
                                 onChange={(e) => handleInputChange(e, 'vat')}
                             />
@@ -376,7 +445,7 @@ const Billing = ({ }) => {
             </div>
 
 
-            <div className={styles.containerInvoices}>
+            <div id="invoice" className={styles.containerInvoices}>
                 <h2 className={styles.title}>
                     Facturas enviadas
                 </h2>
@@ -433,8 +502,8 @@ export default Billing
 
 
 const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
-
     const [input, setInput] = useState(state)
+    const [isActive, setIsActive] = useState(state.name.length > 5)
 
     const handleClickAccept = () => {
         setState(input)
@@ -448,11 +517,20 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
             value = e.target.value;
         }
 
+        if (property === "name") {
+            if (value.length > 5) {
+                setIsActive(true);
+            } else {
+                setIsActive(false);
+            }
+        }
+
+
+
         setInput((prevState) => ({
             ...prevState,
             [property]: value,
         }));
-
     };
 
 
@@ -466,6 +544,7 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                 <div className={styles.items}>
                     <input
                         type="checkbox"
+                        spellCheck="false"
                         value={input.corporate || false}
                         onChange={(e) => handleInputChange(e, 'corporate')}
                     />
@@ -479,6 +558,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Company Name'}
                         value={input.name}
                         onChange={(e) => handleInputChange(e, 'name')}
@@ -490,6 +571,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Street Address'}
                         value={input.address1}
                         onChange={(e) => handleInputChange(e, 'address1')}
@@ -501,6 +584,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Street Address 2'}
                         value={input.address2}
                         onChange={(e) => handleInputChange(e, 'address2')}
@@ -512,6 +597,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Postal Code'}
                         value={input.zip}
                         onChange={(e) => handleInputChange(e, 'zip')}
@@ -523,6 +610,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'City'}
                         value={input.city}
                         onChange={(e) => handleInputChange(e, 'city')}
@@ -534,6 +623,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Country'}
                         value={input.country}
                         onChange={(e) => handleInputChange(e, 'country')}
@@ -545,6 +636,8 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     </label>
                     <input
                         required
+                        type="text"
+                        spellCheck="false"
                         placeholder={'Region'}
                         value={input.region}
                         onChange={(e) => handleInputChange(e, 'region')}
@@ -556,7 +649,9 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     onClick={() => handleClickAccept()}
                     className={styles.button}
                 >
-                    <button>
+                    <button
+                        className={`${isActive && styles.active}`}
+                    >
                         Confirm changes
                     </button>
                 </div>

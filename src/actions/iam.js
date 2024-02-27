@@ -56,6 +56,16 @@ createAsyncThunk('iam/setOpenChatBot', async (value, { dispatch }) => {
 });
 
 
+export const setOpenModal = 
+createAsyncThunk('iam/setOpenModal', async (value, { dispatch }) => {
+  try {
+    return value;
+  } catch (error) {
+    throw error;
+  }
+});
+
+
 
 
 
@@ -94,8 +104,6 @@ createAsyncThunk('iam/fetchsInvoice', async ({ dispatch }) => {
       },
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
-
-    console.log('res', response)
 
     return response.data
   } catch (error) {
@@ -233,16 +241,18 @@ export const fetchsBilling =
 createAsyncThunk('iam/fetchsBilling', async ({}, { dispatch }) => {
   try {
     const token = localStorage.getItem('token')
+    console.log('12345')
 
-    const response = await apiBackend.post(
-      '/iam/billing/fetchs',
-      {
-        
-      },{
+      const response = await apiBackend.get(
+        '/iam/billing/fetchs', 
+        {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
+        // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
+      });
+    
+    console.log('reesss', response)
 
     return response.data
   } catch (error) {
@@ -344,12 +354,15 @@ createAsyncThunk('iam/userUpgrade', async ({}, { dispatch }) => {
           'Authorization': `Bearer ${token}`
         },
       })
+
+    console.log('reess', response)
       
     return {
       user: response.data.token,
       token: response.data.user
     } 
   } catch (error) {
+    console.log('error', error)
     if(error.response.status == 400){
       throw 'Ya existe el usuario'
     }
@@ -470,10 +483,10 @@ createAsyncThunk('iam/updateUser', async ({user}, { dispatch }) => {
 
 
 export const updatePasswordUser = 
-createAsyncThunk('iam/updatePasswordUser', async ({password}, { dispatch }) => {
+createAsyncThunk('iam/updatePasswordUser', async ({token, password}, { dispatch }) => {
   try {
-    const token = localStorage.getItem('token')
-
+    console.log('eduwedue', token)
+    // const token = localStorage.getItem('token')
     const response = await apiBackend.post(
       '/iam/user/password',
       {
@@ -484,7 +497,6 @@ createAsyncThunk('iam/updatePasswordUser', async ({password}, { dispatch }) => {
         },
       })
 
-      console.log('response', response)
     return {
       token: response.data.token,
       user: response.data.user
@@ -546,14 +558,11 @@ createAsyncThunk('iam/verify', async ({}, { dispatch }) => {
         },
       })
 
-      console.log('response', response)
-
     return {
       user: response.data.user,
       token: response.data.token
     }
   } catch (error) {
-    console.log('err1', error)
     if(error.response.status == 400){
       throw 'Ya existe el usuario'
     }else if(error.response && error.response.status >= 500 && error.response.status < 600){
@@ -661,6 +670,12 @@ createAsyncThunk('iam/fetchsUser', async ({}, { dispatch }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: {
+        order: {
+          type: 'ASC',
+          param: 'createdat'
+        }
+      },
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
 
@@ -692,6 +707,8 @@ createAsyncThunk('iam/addApplication', async ({application}, { dispatch }) => {
           'Authorization': `Bearer ${token}`
         },
       })
+
+      console.log('res', response)
 
     return response.data
   } catch (error) {
@@ -918,11 +935,15 @@ createAsyncThunk('iam/fetchsApi', async ({}, { dispatch }) => {
 export const addLog = 
 createAsyncThunk('iam/addLog', async ({log}, { dispatch }) => {
   try {
+    const themeColor = localStorage.getItem('themeColor')
     const token = localStorage.getItem('token')
     const response = await apiBackend.post(
       '/iam/log/add-log',
       {
         log,
+        options: {
+          backgroundColor: themeColor
+        }
       },{
         headers: {
           'Authorization': `Bearer ${token}`
@@ -942,6 +963,30 @@ createAsyncThunk('iam/addLog', async ({log}, { dispatch }) => {
   }
 })
 
+
+export const deleteLogs = 
+createAsyncThunk('iam/deleteLogs', async ({}, { dispatch }) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await apiBackend.post(
+      '/iam/log/delete-logs',
+      {
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      })
+
+    return response.data
+  } catch (error) {
+    console.log('ee', error)
+    if(error.response.status == 400){
+      throw 'Ya existe el logs'
+    }else if(error.response.status == 501){
+      throw 'Permision denied'
+    }
+  }
+})
 
 export const deleteLog = 
 createAsyncThunk('iam/deleteLog', async ({id}, { dispatch }) => {

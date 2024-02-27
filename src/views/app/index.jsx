@@ -3,6 +3,9 @@ import { Route, Routes, Outlet, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useDarkMode from 'use-dark-mode';
 
+import generateColors from '@/utils/colors'
+
+
 
 import styles from "./index.module.css";
 
@@ -38,6 +41,7 @@ import SettingsIAM from './pages/Settings/iam'
 import Addon from './pages/Addon'
 import GPTs from './pages/OpenAi'
 import LangChain from './pages/LangChain'
+import Vector from './pages/Vector'
 
 
 // import useDarkMode from 'use-dark-mode';
@@ -81,7 +85,12 @@ export const App = ({ }) => {
   // const [openMenuLeft, setOpenMenuLeft] = useState(null)
 
 
-  const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
+  const {
+    themeColor,
+    openMenuLeft,
+    openMenuRight,
+    openChatBot
+  } = useSelector((state) => state.iam)
 
 
   // Estado para controlar el modo oscuro o claro
@@ -172,51 +181,77 @@ export const App = ({ }) => {
 
   //
 
+  const [colorsLight, setColorsLight] = useState([])
+  const [colorsDark, setColorsDark] = useState([])
+
+  useEffect(() => {
+    const color = localStorage.getItem('themeColor')
+    const colors = generateColors(color)
+    setColorsLight(colors.light)
+    setColorsDark(colors.dark)
+  }, [themeColor])
 
 
   return (
-    <div 
-      onClick={() => {
-        // setOpenChatBot(null)
-        // setOpenMenuRight(null)
-        // _selectedComponent(null)
-      }}
-    >
+    <div>
+      {themeColor && (
+        <style>
+          {`
+          :root {
+            ${colorsLight.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          }
+          body.dark-mode {
+            ${colorsDark.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          }
+        `}
+        </style>
+      )}
       <Modal />
-      <div className={styles["TopBar"]}>
+      <div 
+        className={styles["TopBar"]}
+        onClick={() => {
+          dispatch(setOpenChatBot(null))
+          // dispatch(setOpenMenuRight(null))
+          dispatch(setOpenMenuLeft(null))
+          // _selectedComponent(null)
+        }}
+      >
         <TopBar
           themeMode={themeMode}
           setThemeMode={setThemeMode}
         />
       </div>
       <div className={styles["Container"]}>
-        <div 
+        <div
           className={styles["Board"]}
           onClick={() => _selectedComponent(null)}
         >
-            <Routes>
-              <Route path="board/*" element={<DashBoard  />} />
-              <Route path="/*" element={<Outlet />}>
-                {/* Ruta dinámica que carga el componente correspondiente según el path */}
-                <Route path="iam" element={<SettingsIAM />} />
+          <Routes>
+            <Route path="board/*" element={<DashBoard />} />
+            <Route path="/*" element={<Outlet />}>
+              {/* Ruta dinámica que carga el componente correspondiente según el path */}
+              <Route path="iam" element={<SettingsIAM />} />
 
-                <Route path="" element={<Settings />} />
-                <Route path="settings/:settingsTag/*" element={<Settings />} />
+              <Route path="" element={<Settings />} />
+              <Route path="settings/:settingsTag/*" element={<Settings />} />
+              
+              <Route path="vector" element={<Vector />} />
+              <Route path="vector/:vectorId" element={<Vector />} />
 
-                <Route path="support" element={<Support />} />
-                <Route path="support/tickets" element={<Tickets />} />
-                <Route path="support/ticket/:ticketId" element={<Ticket />} />
+              <Route path="support" element={<Support />} />
+              <Route path="support/tickets" element={<Tickets />} />
+              <Route path="support/ticket/:ticketId" element={<Ticket />} />
 
-                {/* <Route path="contract" element={<SettingsContract />} /> */}
-                <Route path="addon/*" element={<Addon  />} />
-                <Route path="addon" element={<Addon />} />
-                {/* <Route path="drive/:id" element={<Drive />} /> */}
-                <Route path="gpt" element={<GPTs />} />
-                <Route path="langchain" element={<LangChain />} />
-                <Route path="*" element={<NotFound />} />
-                {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
-              </Route>
-            </Routes>
+              {/* <Route path="contract" element={<SettingsContract />} /> */}
+              <Route path="addon/*" element={<Addon />} />
+              <Route path="addon" element={<Addon />} />
+              {/* <Route path="drive/:id" element={<Drive />} /> */}
+              <Route path="gpt" element={<GPTs />} />
+              <Route path="langchain" element={<LangChain />} />
+              <Route path="*" element={<NotFound />} />
+              {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
+            </Route>
+          </Routes>
         </div>
         {openMenuLeft && (
           <div
@@ -249,7 +284,7 @@ export const App = ({ }) => {
               >
                 <MenuRightData />
               </div>
-            ): openMenuRight == 'component' && (
+            ) : openMenuRight == 'component' && (
               <div className={styles["MenuRightComponent"]}>
                 <MenuRightComponent />
               </div>

@@ -1,61 +1,112 @@
-.search{
-    border: 1px solid red;
-    padding: 4px 12px;
-    border-radius: 8px;
+.search {
+  border: 1px solid red;
+  padding: 4px 12px;
+  border-radius: 8px;
 
-    input{
-        background: transparent;
-        border: none;
-        outline: none;
-    }
+  input {
+    background: transparent;
+    border: none;
+    outline: none;
+  }
 }
 
-
-.listComponent{
-    .component{
-        cursor: pointer;
-        img{
-            width: 100%
-        }
-    }
-}
-
-:global(.selectedComponent){
-    border: 2px solid #000fff;
+.listComponent {
+  .component {
     cursor: pointer;
-    position: relative;
+    img {
+      width: 100%;
+    }
+  }
 }
 
-:global(.customButtons){
+
+[class^="Container"] {
+    /* overflow: unset; */
+}
+
+
+
+:global(.selectedComponent) {
+outline: 2px dashed var(--color-primary-0);
+  cursor: pointer;
+  position: relative;
+}
+
+:global(.customButtons) {
+    top: -10px;
+    left: 0px;
     position: absolute;
+    width: 100%;
+
+  :global(>div) {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     width: 100%;
-    top: -30px;
-    left: 0px;
-    :global(div){
-        height: 30px;
+    padding: 0px 4px;
+    :global(>div) {
+      height: 18px;
+      display: flex;
+      gap: 4px;
+      padding: 3px;
+      background: var(--background);
+      border-radius: 6px;
+      :global(button) {
+        height: 20px;
+        width: 20px;
         display: flex;
-        gap: 6px;
-        padding: 4px;
-        background: #000fff;
-        border-radius: 8px 8px 0px 0px;
-        :global(button){
-            height: 22px;
-            width: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgb(68, 137, 255);
-            border-radius: 5px;
-            :global(img){
-                width: 16px;
-            }
-    
-            &:hover {
-                background: rgb(52, 124, 247);
-            }
+        align-items: center;
+        justify-content: center;
+        background: var(--color-primary-2);
+        border-radius: 4px;
+        :global(img) {
+          width: 16px;
         }
+
+        &:hover {
+          background: var(--color-primary-1);
+        }
+      }
     }
+  }
 }
+
+
+[class*="relativeClass-"] {
+  position: relative !important;
+}
+
+
+
+[class*="loadGPT-"] {
+    /* :global() { */
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-primary-4); /* Initial color */
+      animation: colorChange 1s infinite alternate; /* 1s animation with alternate change */
+    
+      /* Additional styles for transition effect */
+      transition: background-color 0.5s;
+      color: var(--color-primary-0);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+}
+
+@keyframes colorChange {
+  from {
+      background-color: var(--color-primary-4);
+      color: var(--color-primary-0);
+  }
+  to {
+      background-color: var(--color-primary-5);
+      color: var(--color-primary-1);
+  }
+}
+
+

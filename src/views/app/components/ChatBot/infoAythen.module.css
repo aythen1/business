@@ -1,0 +1,55 @@
+.container{
+    background: #fff;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    .paragraph{
+        font-size: 14px;
+        font-weight: 300;
+        text-align: center;
+    }
+    
+    .buttons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 14px;
+        button{
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            &.create{
+                background: var(--color-primary-0);
+                color: #fff;
+                font-weight: 600;
+                padding: 6px;
+                border-radius: 4px;
+                svg{
+                    color: #fff;
+                }
+            }
+            svg{
+                color: var(--color-primary-0);
+            }
+        }
+    }
+    .button{
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        justify-content: center;
+        font-size: 12px;
+        margin-top: 10px;
+        font-weight: 600;
+        color: var(--color-primary-0);
+        svg{
+            width: 12px;
+            color: var(--color-primary-0);
+        }
+    }
+}

@@ -7,7 +7,7 @@ import Table from './table'
 import styles from './index.module.css'
 import stylesModal from './modal.module.css'
 
-import AddTag from './AddTag'
+import AddTag from '@/views/app/pages/shared/AddTag'
 
 
 import {
@@ -30,23 +30,29 @@ const TableUsers = ({
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    
 
+    // const [selectedItems, setSelectedItems] = useState()
     const [stateTable, setStateTable] = useState('')
 
     useEffect(() => {
-      if(stateTable.startsWith('edit-item:')){
-        const id = stateTable.split(':')[1]
-        const index = users.findIndex(user => user.id === id);
-        const user = users[index]
-        console.log('user', user)
+        if (stateTable.startsWith('edit-item:')) {
+            const id = stateTable.split(':')[1]
+            const index = users.findIndex(user => user.id === id);
+            const user = users[index]
+            console.log('user', user)
 
-        dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
-      }else if(stateTable.startsWith('delete-item:')){
-        const id = stateTable.split(':')[1]
-        dispatch(deleteUser({id}))
-      }
+            dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
+        } else if (stateTable.startsWith('delete-item:')) {
+            const id = stateTable.split(':')[1]
+            dispatch(deleteUser({ id }))
+        } else if (stateTable.startsWith('checkbox-item')) {
+            console.log('selected checkbox')
+        }
     }, [stateTable])
+
+
+
+
 
     const handleClickSupport = () => {
         navigate(`/${'es'}/app/support`)
@@ -73,7 +79,7 @@ const TableUsers = ({
             </div>
             <div>
 
-                <Table 
+                <Table
                     fetchs={fetchsUser}
                     items={users}
                     setStateTable={setStateTable}
@@ -82,6 +88,9 @@ const TableUsers = ({
                     <header>
                         Users
                     </header>
+                    <item filter="checkbox" size="50">
+
+                    </item>
                     <item filter="user-email">
                         User
                     </item>
@@ -91,7 +100,7 @@ const TableUsers = ({
                     <item filter="date" name="upgradedat">
                         Last Login
                     </item>
-                    <item  filter="date" name="upgradedat">
+                    <item filter="date" name="upgradedat">
                         Joined On
                     </item>
                     <item filter="options">
@@ -121,44 +130,43 @@ const PopupModalAddUser = ({ styles }) => {
         email: [],
         tags: [],
         group: '',
-      });
+    });
 
-      
 
-      
-      const handleInputChange = (e, property) => {
+
+
+    const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
-          value = e.target.value;
+            value = e.target.value;
         }
-      
+
         if (property === 'email') {
-          // Dividir los correos electrónicos por comas y quitar los espacios en blanco
-          const emailArray = value.split(',').map(email => email.trim());
-      
-          // Verificar si al menos hay un correo electrónico válido
-          const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-      
-          setIsActive(isValidEmail);
-      
-          setState((prevState) => ({
-            ...prevState,
-            [property]: isValidEmail ? emailArray : [value],
-          }));
+            // Dividir los correos electrónicos por comas y quitar los espacios en blanco
+            const emailArray = value.split(',').map(email => email.trim());
+
+            // Verificar si al menos hay un correo electrónico válido
+            const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+
+            setIsActive(isValidEmail);
+
+            setState((prevState) => ({
+                ...prevState,
+                [property]: isValidEmail ? emailArray : [value],
+            }));
         } else {
-          setState((prevState) => ({
-            ...prevState,
-            [property]: value,
-          }));
+            setState((prevState) => ({
+                ...prevState,
+                [property]: value,
+            }));
         }
-      };
+    };
 
 
 
 
-     const handleAddUser = () => {
+    const handleAddUser = () => {
         const data = {
-            token: token,
             user: state.email,
             tags: state.tags,
             group: state.group
@@ -189,21 +197,21 @@ const PopupModalAddUser = ({ styles }) => {
             <p className={styles.text1}>
                 Key value tags helps you organize your users. You can assign up to 10 tags per user.
             </p>
-            <AddTag 
+            <AddTag
                 handleInputChange={handleInputChange}
-                />
+            />
             <p className={styles.textBold}>
                 Add to an existing group (optional)
             </p>
             <div className={styles.input}>
-                <input 
+                <input
                     type="text"
                     value={state.group || 'Select or type group'}
                     onChange={(e) => handleInputChange(e, 'group')}
                 />
             </div>
             <div className={styles.button}>
-                <button 
+                <button
                     onClick={() => handleAddUser()}
                     className={`${styles.desactive} ${isActive ? styles.active : ''}`}
                 >
@@ -220,7 +228,7 @@ const PopupModalUser = ({ styles, user }) => {
 
     const handleClickRemoveUser = () => {
         const id = user.id
-        dispatch(deleteUser({id}))   
+        dispatch(deleteUser({ id }))
         dispatch(setModal(null))
     }
 
@@ -297,7 +305,7 @@ const PopupModalUser = ({ styles, user }) => {
                         Removing a user from this Organization automatically deletes their API keys, and any policies directly attached to them will be left orphaned.
                     </p>
                     <div className={styles.button}>
-                        <button 
+                        <button
                             onClick={() => handleClickRemoveUser()}
                             className={styles.delete}
                         >

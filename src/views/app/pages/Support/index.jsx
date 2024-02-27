@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import styles from './index.module.css'
 import { useNavigate } from 'react-router-dom';
 
-
+//require('./assets/icon-get-started.svg').default
+// import IconGetStarted from './assets/icon-get-started.svg'
 
 
 const Support = () => {
@@ -19,30 +20,32 @@ const Support = () => {
 
 
     const initialTopics = [{
-        icon: require('./assets/icon-get-started.svg').default,
+        icon: require('./assets/icon-get-started.jsx').default,
         title: 'Get started',
         href: '/es/app/support/tickets'
-    }, {
-        icon: require('./assets/icon-account.svg').default,
+    }, 
+    {
+        icon: require('./assets/icon-account.jsx').default,
         title: 'Account',
         href: '/es/app/support/tickets'
     }, {
-        icon: require('./assets/icon-billing.svg').default,
+        icon: require('./assets/icon-billing.jsx').default,
         title: 'Billing',
         href: '/es/app/support/tickets'
     }, {
-        icon: require('./assets/icon-instance.svg').default,
+        icon: require('./assets/icon-instance.jsx').default,
         title: 'instance',
         href: '/es/app/support/tickets'
     }, {
-        icon: require('./assets/icon-elastic-metal.svg').default,
+        icon: require('./assets/icon-elastic-metal.jsx').default,
         title: 'Elastic Metal',
         href: '/es/app/support/tickets'
     }, {
-        icon: require('./assets/icon-kubernetes.svg').default,
+        icon: require('./assets/icon-kubernetes.jsx').default,
         title: 'Kubernetes',
         href: '/es/app/support/tickets'
-    }]
+    }
+]
 
     const initialStatus = [{
         title: 'Containers',
@@ -152,7 +155,7 @@ const Support = () => {
                     {listTopics.map((topic, index) => (
                         <div key={index} className={styles.box}>
                             <div>
-                                <img src={topic.icon} className={styles.icon} />
+                                {<topic.icon />}
                                 {topic.title}
                             </div>
                             <button onClick={() => navigate(topic.href)}>

@@ -43,7 +43,7 @@ const IAM = ({
           className={styles.back}
           onClick={() => handleClickHome()}
         > 
-          <svg viewBox="0 0 16 16" class="e1afnb7a2 css-1bkb0co e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
+          <svg viewBox="0 0 16 16" ><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
           Back to home
         </div>
         <h2 className={styles.title}>

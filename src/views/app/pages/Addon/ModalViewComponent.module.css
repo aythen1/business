@@ -1,0 +1,11 @@
+:global(.scrollbar){
+    /* invisible scrollbar vertical fade */
+    width: 8px !important;
+}
+
+
+.modal{
+    width: 90vw;
+    height: 90vh;
+}
+

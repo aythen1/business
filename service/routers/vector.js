@@ -1,27 +1,37 @@
 const { Router } = require('express')
 const routerVector = Router()
 
+
+const { authenticateToken } = require('../middlewares/auth/auth');
+
+
+
 const {
-    loadVector,
-    addVector,
-    deleteVector,
-    removeVector,
-    openVector,
-    getVector,
-    getAllVector,
-    updateVector
+  addVector,
+  updateVector,
+  addVectorData,
+
+  loadVector,
+  deleteVector,
+  removeVector,
+  openVector,
+  getVector,
+  getAllVector,
 } = require('../controllers/vector')
 
 routerVector
-  .post('/file', openVector)
-  .post('/', addVector)
-  .post('/load/:id/:name', loadVector)
-  .post('/update/:id/:name', updateVector)
-  .delete('/update/:id/:name', deleteVector)
-  .post('/remove/all', removeVector)
-  .post('/:id/:name', getVector)
-  .get('/', getAllVector)
-  
+  .post('/', authenticateToken, addVector)
+  .post('/update/:id/:name', authenticateToken, updateVector)
+  .post('/data', authenticateToken, addVectorData)
+
+  .post('/file', authenticateToken, openVector)
+  .post('/load/:id/:name', authenticateToken, loadVector)
+
+  .delete('/:id/:name', authenticateToken, deleteVector)
+  .post('/remove/all', authenticateToken, removeVector)
+  .post('/:id/:name', authenticateToken, getVector)
+  .get('/', authenticateToken, getAllVector)
+
 
 module.exports = routerVector
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 // import ChartistGraph from "react-chartist";
 
-import { PieChart, BarChart } from 'chartist';
+// import { PieChart, BarChart } from 'chartist';
 
 
 // import 'chartist/dist/index.css';
@@ -21,25 +21,27 @@ function generateID() {
 }
 
 
-const BarCharts = ( ) =>  {
+
+const initialData = {
+  series: [50, 10, 30, 40],
+};
+
+
+
+const BarChart = ({value = initialData}) =>  {
     const [id] = useState(generateID())
 
     // console.log('id')
 
-    const data = {
-        series: [50, 10, 30, 40],
-      };
-
+  
     useEffect(() => {
-        new PieChart(`#chart-${id}`, data, {
-            donut: true,
-            donutWidth: 18, // Ancho del hueco
-            startAngle: 270,
-            showLabel: true,
-            chartPadding: 0, // Ajusta el espaciado del gráfico
-            // labelInterpolationFnc: (value) => `${value}%`, // Personaliza la forma en que se muestran las etiquetas
-
-          });
+        new Chartist.Pie(`#chart-${id}`, value, {
+          donut: true,
+          donutWidth: 20,
+          donutSolid: true,
+          startAngle: 270,
+          showLabel: true
+        });
     }, [])
       
   return (
@@ -49,4 +51,4 @@ const BarCharts = ( ) =>  {
   );
 }
 
-export default BarCharts
+export default BarChart

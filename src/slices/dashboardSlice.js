@@ -1,7 +1,7 @@
 // userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-import { 
+import {
   fetchsDashboard,
   fetchDashboard,
   addDashboard,
@@ -10,11 +10,11 @@ import {
 } from '@/actions/dashboard'
 // import dashboard from '../../service/controllers/dashboard';
 
-export const initialComponent = {     
+export const initialComponent = {
   id: '',
   available: '',
   type: '',
-  position: '',  
+  position: '',
   title: '',
   description: '',
   columnSize: '',
@@ -30,6 +30,9 @@ const dashboardSlice = createSlice({
     loading: false,
 
     status: null,
+
+    nodes: [],
+    edges: [],
 
     dashboard: null,
     dashboards: [],
@@ -65,6 +68,13 @@ const dashboardSlice = createSlice({
       state.components.push(action.payload)
       state.dashboard.components = state.components
       state.status = 'save'
+    },
+
+    setNodes: (state, action) => {
+      state.nodes = action.payload
+    },
+    setEdges: (state, action) => {
+      state.edges = action.payload
     }
     // otras acciones...
   },
@@ -113,7 +123,7 @@ const dashboardSlice = createSlice({
         state.error = action.error.message;
       })
 
-    
+
       .addCase(updateDashboard.pending, (state) => {
         state.status = 'pending';
       })
@@ -142,11 +152,14 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { 
+export const {
   setDashboard,
   addComponent,
   deleteComponent,
   setComponent,
   setComponents,
+
+  setNodes,
+  setEdges
 } = dashboardSlice.actions;
 export default dashboardSlice.reducer;

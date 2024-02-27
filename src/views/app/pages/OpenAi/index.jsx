@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./index.module.css";
 
 
-import IconSearch from './assets/IconSearch.svg'
-
+// import IconSearch from 
+import { ReactComponent as IconSearch } from './assets/IconSearch.svg'
 
 // import {
 //   listGPT,
@@ -14,7 +14,7 @@ import IconSearch from './assets/IconSearch.svg'
 // } from './utilsGPT'
 
 
-import { 
+import {
   updateDefault,
   fetchsDefault
 } from '@/actions/iam'
@@ -24,8 +24,8 @@ const OpenAI = ({ }) => {
   const dispatch = useDispatch()
 
   const {
-      addons,
-      gpts
+    addons,
+    gpts
   } = useSelector((state) => state.iam)
 
 
@@ -52,41 +52,78 @@ const OpenAI = ({ }) => {
   // const randomlistGPT = getRandomItemsFromArray(listGPT, 4);
 
   const [searchGPT, setSearchGPT] = useState('')
+  const [listGPT, setListGPT] = useState([]);
+  const [listTools, setListTools] = useState([]);
+
   const [filteredGPT, setFilteredGPT] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
 
+  const [category, setCategory] = useState();
+  const [categories, setCategories] = useState([]);
 
-    //
-    useEffect(() => {
-      if (addons.length == 0 || gpts.length == 0) {
-        dispatch(fetchsDefault({}))
-      }
-    }, [])
-  
-    useEffect(() => {
 
-      console.log('addons', addons, gpts)
-      setFilteredGPT(addons)
-      setFilteredTools(gpts)
+  //
+  useEffect(() => {
+    if (addons.length == 0 || gpts.length == 0) {
+      dispatch(fetchsDefault({}))
+    }
+  }, [])
 
-    }, [addons, gpts])
+  useEffect(() => {
+    setListTools(addons)
+    setListGPT(gpts)
+
+    setFilteredTools(addons)
+    setFilteredGPT(gpts)
+
+    let _categories = []
+    for(const addon of addons){
+      _categories.push(...JSON.parse(addon.tags));
+    }
+
+    _categories = Object.entries(
+      _categories.reduce((freqMap, element) => (freqMap[element] = (freqMap[element] || 0) + 1, freqMap), {})
+    )
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(entry => entry[0])
+
+
+    setCategories(_categories)
+  }, [addons, gpts])
 
 
   const handleInputSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase(); // Convertir a minúsculas
     setSearchGPT(searchTerm);
 
+
     if (searchTerm.length > 0) {
-      // Filtrar listGPT
       const filteredGPTResults = listGPT.filter(item => item.title.toLowerCase().includes(searchTerm));
       setFilteredGPT(filteredGPTResults);
 
       // Filtrar listTools
       const filteredToolsResults = listTools.filter(item => item.title.toLowerCase().includes(searchTerm));
       setFilteredTools(filteredToolsResults);
-
+    } else {
+      setFilteredGPT(listGPT);
+      setFilteredTools(listTools);
     }
+  }
 
+
+  const onClickCategory = (category = false) => {
+    if(category){
+      const filteredData = listTools.filter(item => {
+        const itemTags = JSON.parse(item.tags);
+        console.log('itemsTags', itemTags, category)
+        return itemTags.includes(category);
+      });
+  
+      setFilteredTools(filteredData)
+    }else{
+      setFilteredTools(listTools)
+    }
   }
 
 
@@ -121,7 +158,8 @@ const OpenAI = ({ }) => {
         </div>
         <div className={styles["search"]}>
           <div className={styles["icon"]}>
-            <img src={IconSearch} />
+            {/* <img src={IconSearch} /> */}
+            <IconSearch />
           </div>
           <input
             type="text"
@@ -133,24 +171,20 @@ const OpenAI = ({ }) => {
         </div>
         <div className={styles["tags"]}>
           <ul className={styles["list"]}>
-            <li className={styles["item"] + ' ' + styles['selected']}>
+            <li 
+              className={styles["item"] + ' ' + styles['selected']}
+              onClick={() => onClickCategory()}
+            >
               Top Picks
             </li>
-            <li className={styles["item"]}>
-              DALL-E
+            {categories.map((category, index) => (
+            <li 
+            className={styles["item"]}
+            onClick={() => onClickCategory(category)}
+            >
+              {category}
             </li>
-            <li className={styles["item"]}>
-              Writing
-            </li>
-            <li className={styles["item"]}>
-              Research & Analysis
-            </li>
-            <li className={styles["item"]}>
-              Phogram
-            </li>
-            <li className={styles["item"]}>
-              Eductation
-            </li>
+            ))}
           </ul>
         </div>
         <div className={styles["info"]}>
@@ -162,7 +196,7 @@ const OpenAI = ({ }) => {
           </p>
         </div>
         <div className={styles["grid-main"]}>
-          {filteredGPT.slice(0, 4).map((item, index) => (
+          {filteredTools.slice(0, 4).map((item, index) => (
             <div
               key={index}
               onClick={() => alert(1)}
@@ -194,7 +228,7 @@ const OpenAI = ({ }) => {
           </p>
         </div>
         <div className={styles["grid-secondary"]}>
-          {filteredTools.map((item, index) => (
+          {filteredGPT.map((item, index) => (
             <div
               key={index}
               onClick={() => alert(1)}
