@@ -1,0 +1,100 @@
+.desactiveGPT{
+    width: 300px;
+    background: #fff;
+    border: 1px solid #c0c0c0;
+    padding: 6px;
+    border-radius: 8px;
+    
+    textarea{
+        width: 100%;
+        outline: none;
+        border-bottom: 1px solid #c0c0c0;
+        padding-bottom: 10px;
+    }
+    .button{
+        button{
+            background: var(--color-primary-0);
+            color: #fff;
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+    .info{
+        p{
+            color: #9a9a9a;
+            font-size: 10px;
+        }
+    }
+    &.error{
+        border-color: red;
+        textarea{
+            border-color: red;
+        }
+        button{
+            background-color: red;
+        }
+    }
+}
+
+
+
+.activeGPT{
+    min-width: 300px;
+    max-width: 400px;
+    background: #fff;
+    border: 1px solid #c0c0c0;
+    padding: 6px;
+    border-radius: 8px;
+    .response{
+        background: #f8f8f8;
+        padding: 8px;
+        border-radius: 8px;
+        margin-top: 10px;
+        max-height: 200px;
+        font-size: 14px;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 8px; 
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.contextMenu{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background: #fff;
+    border: 1px solid #c0c0c0;
+    border-radius: 8px;
+    cursor: pointer;
+    ul{
+        li{
+            padding: 4px 12px;
+           font-size: 14px; 
+           &:hover{
+               background: #f0f0f0;
+           }
+        }
+    }    
+}

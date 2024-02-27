@@ -1,0 +1,219 @@
+.TopBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .filter {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      > div {
+        width: 100%;
+      }
+      .TopBack {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        color: var(--color-primary-0);
+        svg {
+          color: var(--color-primary-0);
+        }
+      }
+      .ButtonAdd{
+        position: absolute;
+      top: 10px;
+      right: 8px;
+      color: var(--text-color-secondary);
+      &:hover{
+        color: var(--color-primary-0);
+      }
+      }
+    }
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      label {
+        background: var(--color-primary-4);
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        color: var(--color-primary-0);
+      }
+      button {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        color: var(--text-color-secondary);
+        svg{
+          color: var(--text-color);
+        }
+        &:hover{
+          color: var(--text-color);
+        }
+      }
+    }
+  }
+  
+  .TopVectors {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    .team {
+      min-width: 180px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      .avatar {
+        .initial {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--color-primary-4);
+          color: var(--color-primary-0);
+          border-radius: 8px;
+          font-size: 22px;
+          font-weight: 600;
+        }
+      }
+      .info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        .title {
+          color: var(--text-color);
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 16px;
+        }
+        .subtitle {
+          color: var(--text-color-secondary);
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 16px;
+        }
+      }
+    }
+    .vector {
+      border: 1px solid var(--border-color);
+      border-bottom: 0px;
+      position: relative;
+      padding: 2px 10px 4px;
+      cursor: pointer;
+      color: var(--text-color-secondary);
+      .title {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #c0c0c0;
+      }
+      .current {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 16px;
+        div {
+          font-weight: 400;
+          font-size: 15px;
+        }
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        font-size: 10px;
+        svg {
+          width: 14px;
+        }
+      }
+      &.active {
+        color: var(--text-color);
+        margin-bottom: -2px;
+        background: var(--background);
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px; 
+          background-color: var(--color-primary-0); 
+        }
+      }
+      &:hover {
+        color: vsar(--text-color);
+        margin-bottom: -2px;
+        background: var(--background);
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px; /* Grosor del contorno */
+          background-color: blue; /* Cambia "blue" al color que desees */
+        }
+      }
+    }
+    .ButtonAddData{
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: var(--text-color-secondary);
+      min-width: 150px;
+      svg{
+        width: 22px;
+        color: var(--color-primary-0);
+      }
+    }
+  }
+  
+  .BoardFlow {
+    height: calc(100vh - 200px);
+    background: var(--background);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: scroll;
+    padding-right: 6px;
+    padding-bottom: 6px;
+    .board {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      /* background-color: red; */
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: var(--color-primary-0);
+    }
+  }
+  

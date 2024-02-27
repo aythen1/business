@@ -36,6 +36,7 @@ const Contract = ({ }) => {
     useEffect(() => {
         if (stateTable.startsWith('download-file')) {
             const [, fileName] = stateTable.split(':');
+            console.log('fileName', fileName, stateTable)
             // console.log('file name', `./public/${fileName}`, process.env.PUBLIC_URL)
             // Crear el enlace de descarga dinámico
             const downloadLink = document.createElement('a');
@@ -67,7 +68,7 @@ const Contract = ({ }) => {
                     <header>
                         Account Contracts
                     </header>
-                    <item>
+                    <item filter="title">
                         Name
                     </item>
                     <item>
@@ -76,7 +77,7 @@ const Contract = ({ }) => {
                     <item filter="date" name="date">
                         End At
                     </item>
-                    <item size="100">
+                    <item size="100" filter="download">
                         Download
                     </item>
                 </Table>

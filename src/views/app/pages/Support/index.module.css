@@ -8,7 +8,7 @@
         flex-flow: column;
         align-items: normal;
         justify-content: normal;
-        background: linear-gradient(151deg, #5d65ed 0%, #161fb1 28.91%, rgb(21, 26, 45) 75.01%);
+        background: linear-gradient(151deg, var(--color-primary-2) 0%, var(--color-primary-1) 28.91%, var(--background-secondary) 75.01%);
         border-radius: 4px;
         padding: 32px;
 
@@ -59,7 +59,7 @@
             text-transform: none;
             text-decoration: none;
             text-align: center;
-            color: rgb(255, 255, 255);
+            color: var(--text-color);
         }
 
         .input {
@@ -129,6 +129,7 @@
                 }
 
                 &>div {
+                    color: var(--text-color);
                     display: flex;
                     gap: 16px;
                     flex-flow: row;
@@ -227,6 +228,7 @@
                         }
 
                         b {
+                            color: var(--text-color);
                             font-size: 12px;
                             width: 150px;
                             white-space: nowrap;
@@ -280,7 +282,7 @@
                         display: flex;
                         align-items: center;
                         gap: 6px;
-                        color: rgb(63, 66, 80);
+                        color: var(--text-color);
                         font-size: 14px;
                         font-weight: 500;
                         letter-spacing: 0px;
@@ -353,7 +355,7 @@
 
                     b {
                         font-size: 14px;
-                        color: rgb(63, 66, 80);
+                        color: var(--text-color);
                         font-weight: 500;
                         letter-spacing: 0px;
                         line-height: 24px;

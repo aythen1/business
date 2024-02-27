@@ -108,7 +108,7 @@ const RecoverPassword = ({ onLogin }) => {
 
 
   const handleClickSignIn = () => {
-    navigate(`/${'es'}/login`)
+    navigate(`/${'es'}/app/login`)
   }
 
 
@@ -218,7 +218,7 @@ const RecoverPassword = ({ onLogin }) => {
         </div>
 
         {isToken ? (
-          <div style={{width: '100%', display: 'flex', flexDirection: 'column', gap: 4}}>
+          <div className={styles["frame-1547755145"]}>
             <div className={styles["frame-1547755083"]}>
               <div className={styles["frame-1547755082"]}>
                 <div className={styles["password"]}>

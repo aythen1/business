@@ -189,8 +189,9 @@ async ({id, name, data}) => {
       }
     )
 
+    console.log('resspso', res)
     
-    return res.data.data.data
+    return res.data[0]
   } catch (error) {
     console.error('Error:', error)
   }
@@ -247,7 +248,9 @@ async ({id, name, data}) => {
       }
     )
 
-    return res.data.data.data
+    console.log('res update', res)
+
+    return res.data
   } catch (error) {
     console.error('Error:', error)
   }
@@ -256,18 +259,24 @@ async ({id, name, data}) => {
 
 export const deleteVector = 
 createAsyncThunk('vector/deleteVector',
-async ({id, name}) => {
+async ({id, name, data}) => {
   try {
     const token = localStorage.getItem('token')
+
+    console.log('delete vector', data)
     const res = await apiBackend.delete(
       `/vector/${id}/${name}`, {
         headers: {
           Authorization: `Bearer ${token}`,
+        },
+        data: {
+          data
         }
       }
     )
+    
     console.log('dd', res)
-    return res.data.data.slice(0, 4)
+    return res.data
   } catch (error) {
     console.error('Error:', error)
   }
@@ -300,13 +309,13 @@ async ({path}) => {
 
 export const fetchsVector = 
 createAsyncThunk('vector/fetchsVector',
-async ({id, name, title = false}) => {
+async ({id, name, data = false}) => {
   try {
     const token = localStorage.getItem('token')
 
      const res = await apiBackend.post(
       `/vector/${id}/${name}`,{
-        title
+        data
       },{
         headers: {
           'Authorization': `Bearer ${token}`
@@ -314,11 +323,41 @@ async ({id, name, title = false}) => {
       }
     )
 
-    return res.data[0]
+    console.log('res fetchs', res)
+
+    return res.data
   } catch (error) {
     console.error('Error:', error)
   }
 })
+
+
+
+export const fetchVector = 
+createAsyncThunk('vector/fetchVector',
+async ({id, name, data = false}) => {
+  try {
+    const token = localStorage.getItem('token')
+
+     const res = await apiBackend.post(
+      `/vector/${id}/${name}`,{
+        data
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }
+    )
+
+    console.log('res fetchHHHH', res)
+
+    return res.data
+  } catch (error) {
+    console.error('Error:', error)
+  }
+})
+
+
 
 
 

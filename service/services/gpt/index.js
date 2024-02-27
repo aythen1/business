@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 // var token = "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"
-var token = "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"
+var token = "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"
 
 
 // const systemPromptjsx = `You are an expert in creating JSX code for web 

@@ -1,16 +1,19 @@
 .container {
+  max-width: 900px;
+  margin: 0 auto;
     .subheader{
         display: flex;
         align-items: center;
         gap: 4px;
-        color: var(--color-primary-0);
-        fill: var(--color-primary-0);
+        color: var(--color-primary-3);
+        fill: var(--color-primary-3);
         font-weight: 600;
         font-size: 12px;
         margin-top: 6px;
         cursor: pointer;
         svg{
-            width: 10px;
+          width: 10px;
+          fill: var(--color-primary-3);
         }
     }
   .header {
@@ -28,7 +31,7 @@
       display: flex;
       flex-direction: column;
       h2 {
-        color: rgb(100, 28, 179);
+        color: var(--color-primary-0);
         font-size: 25px;
         font-weight: 400;
         line-height: 32px;
@@ -40,11 +43,10 @@
         gap: 2px;
         font-size: 12px;
         font-weight: 400;
-        color: #c0c0c0;
+        color: var(--text-color-secondary);
         label {
           font-size: 14px;
           font-weight: 500;
-          color: #000;
         }
       }
     }
@@ -79,21 +81,39 @@
     margin-top: 14px;
     .input {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 10px;
+      .avatar {
+        margin-bottom: 30px;
+        .initial{
+          width: 60px;
+          height: 60px;
+          border-radius: 8px;
+          background-color: var(--color-primary-0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-color);
+          label{
+            font-size: 30px;
+          }
+        }
       img {
+        min-width: 60px;
         width: 60px;
         height: 60px;
         border-radius: 8px;
       }
+    }
       textarea {
         width: 100%;
+        height: 130px;
         border: none;
         outline: none;
-        height: 100%;
         padding: 6px;
-        border: 1px solid #c0c0c0;
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
         border-radius: 6px;
         background: transparent;
         outline: none;
@@ -129,27 +149,49 @@
         color: rgb(63, 66, 80);
         &.desactive{
             border: none;
-            background: rgb(229, 219, 253);
-            color: rgb(255, 255, 255);
+            border:1px solid var(--color-primary-0);
+            color: var(--color-primary-0);
             fill: #fff;
+            svg{
+              fill: var(--color-primary-0);
+            }
+            &:hover{
+              background: var(--color-primary-3);
+              color: var(--color-primary-0);
+            }
         }
         &.active{
             border: none;
             background: var(--color-primary-0);
-            color: rgb(255, 255, 255);
+            color: #fff;
             fill: #fff;
+            &:hover{
+              color: #fff;
+              background: var(--color-primary-1);
+            }
+          }
+        &:hover{
+          border-color: var(--color-primary-0);
+          color: var(--color-primary-0);
         }
       }
     }
   }
 
   .messages {
-    margin-top: 14px;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    max-width: 600px;
+    margin: 0 auto;
     .date {
+      border-radius: 8px;
+      width: 120px;
+      margin: 30px auto;
         text-align: center;
+        background: var(--color-primary-5);
+        color: var(--color-primary-3);
+        line-height: 22px;
       label {
         font-size: 12px;
       }
@@ -162,6 +204,19 @@
         gap: 14px;
         .avatar {
             margin-bottom: 30px;
+            .initial{
+              width: 50px;
+              height: 50px;
+              border-radius: 8px;
+              background-color: var(--color-primary-0);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--text-color);
+              label{
+                font-size: 30px;
+              }
+            }
           img {
             min-width: 40px;
             width: 40px;
@@ -177,8 +232,8 @@
             padding: 16px;
             font-size: 16px;
             border-radius: 6px;
-            background: #eeeeee;
-            color: #494848;
+            background: var(--color-primary-4);
+            color: var(--text-color);
           }
           .boxDate {
             margin-top: 6px;
@@ -201,7 +256,8 @@
                 line-height: 13px;
             }
             p{
-                font-size:12px;
+              color: var(--text-color-secondary);
+              font-size:12px;
             }
           }
         }

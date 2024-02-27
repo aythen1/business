@@ -7,6 +7,7 @@ import addonReducer from '@/slices/addonSlice';
 import iamReducer from '@/slices/iamSlice';
 import assetsReducer from '@/slices/assetsSlice';
 import vectorReducer from '@/slices/vectorSlice';
+import chatbotReducer from '@/slices/chatbotSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     iam: iamReducer,
     assets: assetsReducer,
     vector: vectorReducer,
+    chatbot: chatbotReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

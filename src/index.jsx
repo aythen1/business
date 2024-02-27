@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import './style.css'
@@ -9,6 +8,7 @@ import './global.css'
 import { Provider } from 'react-redux';
 
 import store from '@/utils/store';
+import generateColors from '@/utils/colors'
 
 
 import { DndProvider } from 'react-dnd';
@@ -25,6 +25,7 @@ import DynamicRoute from './DynamicRoute';
 import Register from './views/app/auth/register';
 import Login from './views/app/auth/login';
 import RecoverPassword from './views/app/auth/recover-password';
+
 
 
 import App from './views/app'
@@ -51,13 +52,16 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
   const [isElement, setIsElement] = useState(null);
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       var token = localStorage.getItem('token')
       if (!token || token == 'undefined') {
-        navigate('/es/login')
+        navigate('/es/app/login')
         setIsAuth(false)
         setIsElement(null)
+        window.location.reload();
         return false
       }
 
@@ -65,13 +69,17 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
 
       if (res.error?.message >= 500 && res.error?.message <= 599) {
-        navigate('/es/login')
+        navigate('/es/app/login')
         setIsAuth(false)
         setIsElement(null)
+        window.location.reload();
+        return false
       }
 
       if (res.payload?.user?.name) {
         document.title = 'AY > ' + res.payload.user.name
+      }else{
+        document.title = 'AythenDB'
       }
 
       if (res.payload?.user?.id) {
@@ -122,6 +130,8 @@ if (!languageFromPath || !supportedLanguages.includes(languageFromPath)) {
 
 
 const Layout = () => {
+  // const { themeColor } = useSelector((state) => state.iam)
+
   const [isAuth, setIsAuth] = useState(false)
   // const dispatch = useDispatch()
   // Verificar el idioma y redirigir si es necesario
@@ -142,59 +152,27 @@ const Layout = () => {
   // }, [])
 
   // ----------------------------------------------------------
-  const [colors, setColors] = useState([])
-
-  const generateColors = (startColor, steps = 6) => {
-    const colorList = [];
-    const startRGB = hexToRgb(startColor);
-  
-    for (let i = 0; i < steps; i++) {
-      const ratio = i / (steps - 1);
-      const color = interpolateColor([255, 255, 255], startRGB, ratio); // Interpolamos con blanco para suavizar
-      colorList.push(rgbToHex(color));
-    }
-  
-    return colorList.reverse();
-  };
-
-  const hexToRgb = (hex) => {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return [r, g, b];
-  };
-
-  
-const rgbToHex = (rgb) => {
-  return (
-    '#' +
-    ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2])
-      .toString(16)
-      .slice(1)
-  );
-};
-
-  const interpolateColor = (startRGB, endRGB, ratio) => {
-    const result = [];
-    for (let i = 0; i < 3; i++) {
-      result[i] = Math.round(startRGB[i] + ratio * (endRGB[i] - startRGB[i]));
-    }
-    return result;
-  };  
+  const [colorsLight, setColorsLight] = useState([])
+  const [colorsDark, setColorsDark] = useState([])
 
   useEffect(() => {
     const color = localStorage.getItem('themeColor')
-    setColors( generateColors(color) )
+    const colors = generateColors(color)
+
+    setColorsLight(colors.light)
+    setColorsDark(colors.dark)
   }, [])
 
   return (
     <div>
-      {colors && (
+      {colorsLight.length > 0 && (
       <style>
         {`
-          :root, body.dark-mode {
-            ${colors.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          :root{
+            ${colorsLight.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          }
+          body.dark-mode{
+            ${colorsDark.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
           }
         `}
       </style>
@@ -209,6 +187,11 @@ const rgbToHex = (rgb) => {
                 path="/:lng/vector/:vectorId"
                 element={<Test />}
               />
+              
+              <Route
+                path="/:lng/vector/:vectorId"
+                element={<Test />}
+              />
 
               <Route
                 path="/:lng/*"
@@ -216,15 +199,15 @@ const rgbToHex = (rgb) => {
               />
 
               <Route
-                path="/:lng/register"
+                path="/:lng/app/register"
                 element={isAuth ? <App /> : <Register />}
               />
               <Route
-                path="/:lng/login"
+                path="/:lng/app/login"
                 element={isAuth ? <App /> : <Login />}
               />
               <Route
-                path="/:lng/recover-password"
+                path="/:lng/app/recover-password"
                 element={isAuth ? <App /> : <RecoverPassword />}
               />
               <Route

@@ -28,7 +28,7 @@ const StackedBarChart = ({ value = initialData }) => {
         }).on('draw', function(data) {
           if(data.type === 'bar') {
             data.element.attr({
-              style: 'stroke-width: 30px'
+              style: 'strokeWidth: 30px'
             });
           }
         });

@@ -40,22 +40,33 @@
                 fill: currentColor;
                 width: 20px;
             }
+            
         }
         button:nth-child(1){
             background: var(--color-primary-0);
             color: #fff;
             border: none;
+            &:hover{
+                background: var(--color-primary-1);
+            }
         }
         button{
+            display: flex;
+            align-items: center;
+            gap: 6px;
             background: var(--background);
             border: 1px solid var(--color-primary-0);
+            &:hover{
+                border-color: var(--color-primary-2) !important;
+                color: (--color-primary-2) !important;
+            }
         }
     }
 }
 
 .containerBanner{
     border-radius: 4px;
-    background-color: var(--background-banner);
+    background-color: var(--color-primary-4);
     position: relative;
     overflow: hidden;
     padding: 24px;
@@ -105,11 +116,15 @@
         color: rgb(255, 255, 255);
         width: fit-content;
         margin-top: 10px;
+        &:hover{
+            background: var(--color-primary-1);
+        }
     }
     .backgroundBanner{
         position: absolute;
         right: 0px;
         bottom: 0px;
+        width: 250px;
     }
 }
 
@@ -163,30 +178,68 @@
         border-radius: 4px;
         cursor: pointer;
         transition: box-shadow 0.2s ease 0s, border-color 0.2s ease 0s;
+        .IconAddon{
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background-color: var(--color-primary-4);
+            border-radius: 6px;
+            svg{
+                fill: var(--color-primary-0);
+            }
+        }
+        &:hover{
+            background: var(--background-secondary);
+        }
+        
         div{
             display: flex;
             align-items: center;
             gap: 8px;
 
         }
-        img{
+        button{
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            svg{
+                width: 16px;
+                color: var(--color-primary-2);
+            }
+            &:hover{
+                background: var(--color-primary-4);
+                svg{
+                    color: var(--color-primary-0);
+                }
+            }
+
+        }
+        svg{
             width: 28px;
             height: 28px;
         }
         .IconPlus{
-            width: 28px;
-            height: 28px;
+            width: 22px;
+            height: 22px;
             border-radius: 8px;
-            background-color: #eeeeff;
+            background-color: var(--color-primary-4);
             display: flex;
             align-items: center;
             justify-content: center;
             img{
                 width: 12px;
             }
+            svg{
+                width: 15px;
+                height: 15px;
+                fill: var(--color-primary-0);
+              }
         }
         .LabelNew{
-            background: #dee0ff;
+            background: var(--color-primary-4);
             color: var(--color-primary-0);
             text-transform: uppercase;
             font-size: 8px;
@@ -246,7 +299,7 @@
             background-color: transparent;
             border: none;
             padding: 0px;
-            color: rgb(0, 93, 163);
+            color: var(--color-primary-0);
             display: inline-flex;
             flex-direction: row;
             -webkit-box-align: center;
@@ -361,7 +414,7 @@
             white-space: nowrap;
             font-weight: 500;
             letter-spacing: 0px;
-            color: rgb(0, 93, 163);
+            color: var(--color-primary-0);
             line-height: normal;
             font-size: 14px;
             a{
@@ -553,11 +606,11 @@
                 align-items: center;
                 justify-content: normal;
                 svg{
-                    fill: rgb(0, 93, 163);
+                    fill: var(--color-primary-0);
                     width: 14px;
                 }
                 span{
-                    color: rgb(0, 93, 163);
+                    color: var(--color-primary-0);
                     display: inline-flex;
                     flex-direction: row;
                     align-items: center;
@@ -613,7 +666,7 @@
     display: none !important;
   }
   .lg-hidden{
-    display: block !important; 
+    display: flex !important; 
   }
 
 }

@@ -52,11 +52,11 @@ const SettingsCurrentConsumption = () => {
 
     // --------------------------------------------------------
     const handleBilling = () => {
-        navigate('/es/app/settings/billing')
+        navigate(`/${'es'}/app/settings/billing`)
     }
     
     const handleInvoice = () => {
-        navigate('/es/app/settings/contracts')
+        navigate(`/${'es'}/app/settings/billing#invoice`)
     }
 
 

@@ -13,6 +13,7 @@ import {
 import {
     calculateTimeAgo
 } from '@/actions/vector'
+import e from 'cors';
 
 
 
@@ -21,6 +22,14 @@ import {
 // As a result, your instance has been stopped.However, your data is on a block volume so it has not been
 // impacted or lost.Your instance can now be restarted whenever you want.We apologize for any inconvenience 
 // caused and remain at your disposal if you have any question.Scaleway Team
+
+
+
+const esUUID = (variable) => {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(variable);
+}
+
 
 
 
@@ -54,10 +63,8 @@ const Ticket = () => {
         setMessage(message)
     }
 
-
-
     const openReply = () => {
-        if(message.length > 0){
+        if (message.length > 0) {
             const data = {
                 title: 'tickethello',
                 version: '0',
@@ -67,12 +74,12 @@ const Ticket = () => {
                     date: new Date()
                 }
             }
-    
+
             dispatch(addVectorTicket({
                 ticket: data,
                 vector: [0, 0]
             }))
-    
+
             setMessage('')
         }
     }
@@ -80,7 +87,6 @@ const Ticket = () => {
 
 
     const fetchsItems = async () => {
-        console.log('wfrwifjir1¡1111111')
         dispatch(vectorTicket({
             title: 'tickethello',
             vector: [0, 0]
@@ -88,8 +94,15 @@ const Ticket = () => {
     }
 
     useEffect(() => {
-        fetchsItems()
-    }, [])
+        console.log('ticketId', ticketId)
+        if(esUUID(ticketId)){
+            fetchsItems()
+        }else{
+            navigate(`/${'es'}/app/support/tickets`)
+        }
+        
+    }, [ticketId])
+    
 
     return (
         <div className={styles.container}>
@@ -114,14 +127,25 @@ const Ticket = () => {
                         N/D
                     </div>
                 </div>
-                <button className={styles.buttonClose}>
+                <button
+                    className={styles.buttonClose}
+                    onClick={() => handleClick()}
+                >
                     Close Ticket
                 </button>
             </div>
             <div className={styles.writeMessage}>
                 <div className={styles.input}>
-                    <div>
-                        <img src="" />
+                    <div className={styles.avatar}>
+                        {true ? (
+                            <div className={styles.initial}>
+                                <label>
+                                D
+                                </label>
+                            </div>
+                        ) : (
+                            <img src="" />
+                        )}
                     </div>
                     <textarea
                         spellCheck="false"
@@ -155,7 +179,15 @@ const Ticket = () => {
                             </div>
                             <div className={styles.message}>
                                 <div className={styles.avatar}>
-                                    <img src="" />
+                                    {true ? (
+                                        <div className={styles.initial}>
+                                            <label>
+                                                D
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <img src="" />
+                                    )}
                                 </div>
                                 <div className={styles.text}>
                                     <div className={styles.boxText}>

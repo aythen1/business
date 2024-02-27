@@ -1,4 +1,7 @@
 .container {
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top: 20px;
   .header {
     display: flex;
     flex-direction: column;
@@ -8,7 +11,8 @@
       line-height: 48px;
     }
     .banner {
-      border: 1px solid rgb(217, 218, 221);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 12px;
       display: flex;
@@ -53,12 +57,14 @@
             height: 16px;
             text-transform: uppercase;
             font-size: 10px;
-            color: rgb(0, 93, 163);
-            background: rgb(224, 242, 255);
-            border: 1px solid rgb(224, 242, 255);
+            color: var(--color-primary-0);
+            background: var(--color-primary-4);
+            border: 1px solid var(--color-primary-4);
+            padding: 8px;
           }
         }
         p {
+          color: var(--text-primary);
           font-size: 16px;
           font-weight: 400;
           letter-spacing: 0px;
@@ -85,7 +91,7 @@
           line-height: 24px;
           background: var(--color-primary-0);
           border: none;
-          color: rgb(255, 255, 255);
+          color: var(--text-secondary);
         }
       }
     }
@@ -96,7 +102,7 @@
     justify-content: space-between;
     margin: 14px 0px;
     div {
-      border: 1px solid rgb(217, 218, 221);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 4px;
       display: flex;
@@ -121,12 +127,18 @@
       font-size: 14px;
       font-weight: 500;
       line-height: 10px;
-      background: var(--color-primary-0);
+      background: var(--color-primary-3);
       border: none;
       color: rgb(255, 255, 255);
       &.desactive {
         background-color: transparent;
         color: rgb(63, 66, 80);
+      }
+      &.create{
+        &:hover{
+          background-color: var(--color-primary-2);
+        }
+
       }
     }
   }
@@ -166,10 +178,17 @@
         font-weight: 500;
         line-height: 24px;
         background: none;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--color-primary-0);
         color: rgb(63, 66, 80);
         svg{
+            fill: var(--color-primary-0);
             width: 12px;
-        }
+          }
+          &:hover{
+          border: 1px solid var(--color-primary-2);
+            svg{
+              fill: var(--color-primary-2);
+            }
+          }
     }
 }

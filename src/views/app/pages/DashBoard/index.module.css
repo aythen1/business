@@ -3,9 +3,10 @@
     align-items: flex-start;
     gap: 6px;
     border-left: 3px solid var(--color-primary-0);
-    background: var(--background-alert);
+    background: var(--color-primary-4);
     border-radius: 4px;
     padding: 12px 10px;
+    margin-bottom: 20px;
   
     .alertBoardText {
       b {
@@ -22,11 +23,12 @@
         display: flex;
         align-items: center;
         gap: 2px;
-        color: #5661ff;
+        color: var(--color-primary-0);
+        font-weight: 600;
         margin-left: 2px;
         cursor: pointer;
         svg {
-          fill: #5661ff;
+          fill: var(--color-primary-0);
           width: 10px;
           margin-left: 2px;
         }
@@ -53,9 +55,17 @@
     .headerCheckBox {
       display: flex;
       width: 40px;
+      height: 20px;
+      cursor: pointer;
       input {
+        display: none;
         width: 20px;
         height: 20px;
+      }
+      &:hover{
+        input{
+          display: block !important;
+        }
       }
     }
     .headerName {
@@ -103,10 +113,15 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    padding-bottom: 150px;
     color: var(--text-color-secondary);
   }
   
+  .tableDashboards{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .boardsList {
     display: flex;
     border: 1px solid var(--border-color);
@@ -140,6 +155,11 @@
   .activeCheckbox {
     .boardCheckBox {
       input {
+        display: block;
+      }
+    }
+    .headerCheckBox{
+      input{
         display: block;
       }
     }

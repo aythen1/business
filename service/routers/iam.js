@@ -47,6 +47,7 @@ const {
 
   addLog,
   deleteLog,
+  deleteLogs,
   fetchsLog,
 } = require('../controllers/iam')
 
@@ -70,6 +71,7 @@ routerIAM
 .post('/user/decode', authenticateToken, decoderUser)
 .post('/user/login', loginUser)
 .post('/user/register', registerUser)
+// .post('/user/upgrade', upgradeUser)
 .post('/user/upgrade', authenticateToken, upgradeUser)
 .post('/user', authenticateToken, updateUser)
 .post('/user/recover-password', recoverPasswordUser)
@@ -95,6 +97,7 @@ routerIAM
 
 .post('/log/add-log', authenticateToken, addLog)
 .post('/log/delete-log', authenticateToken, deleteLog)
+.post('/log/delete-logs', authenticateToken, deleteLogs)
 .get('/log/all-log', authenticateToken, fetchsLog)
   
 module.exports = routerIAM

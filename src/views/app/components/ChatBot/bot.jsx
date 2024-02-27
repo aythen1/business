@@ -1,9 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 // import { openDB, deleteDB, wrap, unwrap } from 'idb'
+// import { useDispatch } from 'react-redux'
 
-// import InfoAythen from './infoAythen.jsx'
+import InfoAythen from './infoAythen'
 import styles from './bot.module.css'
 
+
+import {
+  updateDefault
+} from '@/actions/iam'
+
+// import {
+
+// } from '@/slice/chatbot'
 // import { loadWorkspaces, getWorkspace } from './handleBot'
 
 import {
@@ -39,16 +49,23 @@ import { RecordViewer } from './component/record-viewer'
 
 
 
+
 const Bots = ({
   gpt: _gpt,
   gpts,
-  message,
+  messages,
+  handleDelete,
   openVector
 }) => {
+  const dispatch = useDispatch()
   //   const [internalHistory, setInternalHistory] = useState(history)
+  const { message } = useSelector((state) => state.chatbot)
+
   const [gpt, setGpt] = useState(_gpt)
   const [listGpts, setListGpts] = useState(gpts)
-  const [internalMessage, setInternalMessage] = useState(message)
+  const [internalMessage, setInternalMessage] = useState(messages)
+
+
 
   //   const [internalType, setInternalType] = useState(type)
 
@@ -81,7 +98,7 @@ const Bots = ({
   }
 
   useEffect(() => {
-    setInternalMessage(message)
+    setInternalMessage(messages)
     // scrollToBottom()
 
     // Esperar 100 milisegundos antes de llamar a scrollToBottom
@@ -91,7 +108,7 @@ const Bots = ({
 
     // Limpieza del timeout en el caso de que el componente se desmonte antes de que transcurran los 100 ms
     return () => clearTimeout(timeoutId)
-  }, [message])
+  }, [messages])
 
 
 
@@ -207,6 +224,16 @@ const Bots = ({
       ref={chatContainerRef}
       className={styles['container']}
     >
+      {internalMessage.length > 0 && (
+        <div 
+          className={styles.ButtonDelete}
+          onClick={handleDelete}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+          </svg>
+        </div>
+      )}
       {internalMessage.map((message, key) => (
         <div key={key}>
           {renderViewer(message)}
@@ -261,7 +288,7 @@ const Bots = ({
                     </span>
                   </div>
                 </div>
-                <div 
+                <div
                   className={styles['return']}
                   onClick={() => handleReturnClick()}
                 >
@@ -334,12 +361,12 @@ const Bots = ({
           ))}
         </div>
       ) : (
-        <div>
+        <div style={{ height: '100%' }}>
           {internalMessage.length === 0 && (
-            // <InfoAythen />
-            <div>
-              No existe nada que sea el sistema de pago ¿?
-            </div>
+            <InfoAythen />
+            // <div>
+            //   No existe nada que sea el sistema de pago ¿?
+            // </div>
           )}
         </div>
       )}

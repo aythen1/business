@@ -130,7 +130,7 @@ function generateSearchString(conditionsData) {
   } else if ((typeof conditionsData === 'object') && !conditionsData.length) {
     const conditionsStrings = Object.entries(conditionsData).map(([field, value]) => {
       // Convierte el valor a una cadena SQL segura (puedes ajustar según tu necesidad)
-      const sqlSafeValue = typeof value === 'string' ? `'1${value}'` : value;
+      // const sqlSafeValue = typeof value === 'string' ? `'${value}'` : value;
       // return `(relations->>'${field}' = ${sqlSafeValue})`;
       // return `relations = '{"user_id":"94290674-d2dc-4be1-9d51-edb171e56491"}'`;
       return `relations LIKE '%"${field}":"${value}"%'`;
@@ -166,7 +166,14 @@ function generateSearchString(conditionsData) {
     } else {
       // Si es una condición individual, convierte a cadena
       const value = typeof item.value === 'string' ? `'${item.value}'` : item.value;
-      return `${item.field} ${item.operator} ${value}`;
+
+      let order = ''
+      if(item.order){
+        console.log('order order order order', item.order)
+        order = 'ORDER BY ' + item.field + ' ' + item.order
+      }
+
+      return `${item.field} ${item.operator} ${value} ${order}`;
     }
   });
 

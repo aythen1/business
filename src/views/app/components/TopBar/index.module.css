@@ -115,7 +115,7 @@
   position: relative;
   cursor: pointer;
   &:hover{
-    background: #0404e4;
+    background: var(--color-primary-1);
   }
 }
 .label {
@@ -305,8 +305,9 @@
       border-radius: 4px;
       border: none;
       cursor: pointer;
-      img{
-        width: 14px
+      svg{
+        color: var(--text-primary);
+        width: 28px
       }
     }
     

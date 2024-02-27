@@ -83,6 +83,24 @@
 
 
 
+.inputCheckbox{
+  opacity: 0;
+  input{
+    width: 18px;
+    height: 18px;
+    outline: none;
+  }
+
+  &:hover{
+    opacity: 1 !important;
+  }
+
+  &.active{
+    opacity: 1 !important;
+  }
+}
+
+
 
 
 
@@ -93,6 +111,7 @@
 /* CELL */
 
 .table{
+  color: var(--text-primary);
   margin: 0 auto;
   .header{
     padding: 2px;
@@ -101,7 +120,26 @@
       padding: 2px 2px 12px;
       font-size: 14px;
       font-weight: 500;
-      color: #0711a5;
+      color: var(--color-primary-0);
+      .thFilters{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        .filters{
+          >div{
+            height: 10px;
+            svg{
+              cursor: pointer;
+              width: 10px;
+              color: var(--text-color-secondary);
+              &:hover{
+                color: var(--color-primary-0);
+              }
+            }
+          }
+        }
+      }
     }
   }
   .cell{

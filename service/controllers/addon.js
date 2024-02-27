@@ -100,6 +100,7 @@ const fetchAddon = async (req, res) => {
 
     const respAddon = await getVector(pathAddon, 'addons', [0, 0], options)
     
+    console.log('respAddon', respAddon)
     if(respAddon.length == 0){
       return res.status(404).send('Not exist')
     }
@@ -181,8 +182,13 @@ const addVectorAddon = async (req, res) => {
     const name = vector.title || 'default'
     // const result = await isAuth(token)
     
-    const resp = await addVector(path, name, [0, 0], vector, { addons: addon })
+    const resp = await addVector(path, name, [0, 0, 0], vector, { addons: addon })
   
+    console.log('resp', vector, resp)
+    if(resp.error){
+      return res.status(500).send('Error GPT')
+    }
+
     // console.log('reess', resp)
     return res.status(200).send(resp)
   
@@ -244,6 +250,8 @@ const codeAddon = async (req, res) => {
     const resp = await codeGPT(code, user)
     // const resp = await updateVector(path, 'addons', [0, 0], addon)
     // const resp = []
+
+ 
 
     return res.status(200).send(resp[0])
 

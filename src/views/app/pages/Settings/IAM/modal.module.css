@@ -1,3 +1,7 @@
+svg{
+  width: 16px;
+  /* fill: var(--text-color); */
+}
 
 .modal{
   max-width: 500px;
@@ -5,7 +9,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  max-width: 450px;
+  max-width: 350px;
   .maxHeight{
     display: flex;
     flex-direction: column;
@@ -15,6 +19,9 @@
     overflow-y: scroll;
     &::-webkit-scrollbar{
       display: none;
+    }
+    &._400{
+      max-height: 400px;
     }
   }
 
@@ -41,7 +48,7 @@
     display: flex;
     align-items: center;
     gap: 4px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     width: 100%;
   }
 
@@ -106,6 +113,7 @@
     line-height: 24px;
     padding: 8px calc(32px) 8px 8px;
     height: 55px;
+    min-height: 100px;
     resize: vertical;
     width: 100%;
     &::-webkit-scrollbar{
@@ -294,40 +302,6 @@
 
 
 
-.labelsTag{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  label{
-    padding: 2px 8px;
-    border:1px solid rgb(215, 215, 215);
-    border-radius: 8px;
-  }
-}
-
-.addTag{
-  display: inline-flex;
-  height: 38px;
-  padding: 0px 16px;
-  flex-direction: row;
-  gap: 8px;
-  border-radius: 4px;
-  width: auto;
-  align-items: center;
-  cursor: pointer;
-  justify-content: center;
-  outline-offset: 2px;
-  white-space: nowrap;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0px;
-  line-height: 24px;
-  background: rgb(233, 234, 235);
-  border: none;
-  color: rgb(34, 38, 56);
-  margin: 12px 0px;
-}
-
 
 .box{
   width: 100%;
@@ -339,7 +313,7 @@
 
 
 
-.buttonItem{
+/* .buttonItem{
   display: flex;
   align-items: center;
   gap: 4px;
@@ -398,7 +372,7 @@
       color: rgb(179, 20, 77);
     }
   }
-}
+} */
 
 
 
@@ -410,7 +384,7 @@
 .ancle{
   border: none;
   padding: 0px;
-  color: rgb(0, 93, 163);
+  color: var(--color-primary-0);
   text-underline-offset: 2px;
   display: inline-flex;
   flex-direction: row;
@@ -464,9 +438,9 @@
 
 /**/
 .logo{
-  width: 112px;
-  min-width: 112px;
-  height: 112px;
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
   margin-top: 4px;
   border-radius: 12px;
   background: #f2f2f2;
@@ -542,3 +516,9 @@ alert
     color: var(--color-primary-0);
   }
 }
+
+
+
+
+
+

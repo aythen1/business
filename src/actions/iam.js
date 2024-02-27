@@ -56,6 +56,16 @@ createAsyncThunk('iam/setOpenChatBot', async (value, { dispatch }) => {
 });
 
 
+export const setOpenModal = 
+createAsyncThunk('iam/setOpenModal', async (value, { dispatch }) => {
+  try {
+    return value;
+  } catch (error) {
+    throw error;
+  }
+});
+
+
 
 
 
@@ -344,12 +354,15 @@ createAsyncThunk('iam/userUpgrade', async ({}, { dispatch }) => {
           'Authorization': `Bearer ${token}`
         },
       })
+
+    console.log('reess', response)
       
     return {
       user: response.data.token,
       token: response.data.user
     } 
   } catch (error) {
+    console.log('error', error)
     if(error.response.status == 400){
       throw 'Ya existe el usuario'
     }
@@ -470,10 +483,10 @@ createAsyncThunk('iam/updateUser', async ({user}, { dispatch }) => {
 
 
 export const updatePasswordUser = 
-createAsyncThunk('iam/updatePasswordUser', async ({password}, { dispatch }) => {
+createAsyncThunk('iam/updatePasswordUser', async ({token, password}, { dispatch }) => {
   try {
-    const token = localStorage.getItem('token')
-
+    console.log('eduwedue', token)
+    // const token = localStorage.getItem('token')
     const response = await apiBackend.post(
       '/iam/user/password',
       {
@@ -656,6 +669,12 @@ createAsyncThunk('iam/fetchsUser', async ({}, { dispatch }) => {
       {
       headers: {
         Authorization: `Bearer ${token}`,
+      },
+      params: {
+        order: {
+          type: 'ASC',
+          param: 'createdat'
+        }
       },
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
@@ -916,11 +935,15 @@ createAsyncThunk('iam/fetchsApi', async ({}, { dispatch }) => {
 export const addLog = 
 createAsyncThunk('iam/addLog', async ({log}, { dispatch }) => {
   try {
+    const themeColor = localStorage.getItem('themeColor')
     const token = localStorage.getItem('token')
     const response = await apiBackend.post(
       '/iam/log/add-log',
       {
         log,
+        options: {
+          backgroundColor: themeColor
+        }
       },{
         headers: {
           'Authorization': `Bearer ${token}`
@@ -940,6 +963,30 @@ createAsyncThunk('iam/addLog', async ({log}, { dispatch }) => {
   }
 })
 
+
+export const deleteLogs = 
+createAsyncThunk('iam/deleteLogs', async ({}, { dispatch }) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await apiBackend.post(
+      '/iam/log/delete-logs',
+      {
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      })
+
+    return response.data
+  } catch (error) {
+    console.log('ee', error)
+    if(error.response.status == 400){
+      throw 'Ya existe el logs'
+    }else if(error.response.status == 501){
+      throw 'Permision denied'
+    }
+  }
+})
 
 export const deleteLog = 
 createAsyncThunk('iam/deleteLog', async ({id}, { dispatch }) => {

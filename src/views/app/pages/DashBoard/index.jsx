@@ -174,19 +174,21 @@ const Dashboard = ({ }) => {
 
 
   /* checkbox */
-  const [selectedDashboards, setSelectedDashboards] = useState([])
+  const [selectedDashboards, setSelectedDashboards] = useState([]);
 
   const handleCheckboxChange = (index) => {
-    setSelectedDashboard((prevSelectedDashboards) => {
-      // Clonar el array para no mutar el estado directamente
-      const newSelectedDashboards = [...prevSelectedDashboards]
+    setSelectedDashboards((prevSelectedDashboards) => {
+      const newSelectedDashboards = [...prevSelectedDashboards];
+      newSelectedDashboards[index] = !newSelectedDashboards[index];
+      return newSelectedDashboards;
+    });
+  };
 
-      // Alternar la selección de la instancia en el índice dado
-      newSelectedDashboards[index] = !newSelectedDashboards[index]
+  const handleSelectAllChange = () => {
+    const allSelected = selectedDashboards.every((isSelected) => isSelected);
+    setSelectedDashboards(new Array(dashboards.length).fill(!allSelected));
+  };
 
-      return newSelectedDashboards
-    })
-  }
 
   /* visible settings */
   const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
@@ -206,8 +208,6 @@ const Dashboard = ({ }) => {
   }
 
 
-
-
   const handleClickSupport = () => {
     navigate(`/${'es'}/app/support`)
   }
@@ -220,7 +220,7 @@ const Dashboard = ({ }) => {
             <div>
               <div className={styles.alertBoard}>
                 <div className={styles.alertBoardIcon}>
-                  <IconImportant width={'20'} fill={'#000fff'} />
+                  <IconImportant width={'20'} fill={'var(--color-primary-0)'} />
                 </div>
                 <div className={styles.alertBoardText}>
                   <b>Requirements for moving to routed IP</b>
@@ -238,24 +238,6 @@ const Dashboard = ({ }) => {
                   </p>
                 </div>
               </div>
-              <div className={styles.header}>
-                <div className={styles.headerCheckBox}>
-                  <input type="checkbox" />
-                </div>
-                <div className={styles.headerName}>
-                  Name
-                  <Filters />
-                </div>
-                <div className={styles.headerIP}>IP Address</div>
-                <div className={styles.headerCreated}>
-                  Created
-                  <Filters />
-                </div>
-                <div className={styles.headerZone}>
-                  Zone
-                  <Filters />
-                </div>
-              </div>
               <div
                 className={
                   (selectedDashboards.filter((selected) => selected).length >= 1
@@ -265,95 +247,120 @@ const Dashboard = ({ }) => {
                   styles.listBoards
                 }
               >
-                {dashboards.map((dashboard, index) => (
-                  <div key={index} className={styles.boardsList}>
-                    <div className={styles.boardCheckBox}>
-                      <input
-                        type="checkbox"
-                        checked={selectedDashboards[index]}
-                        onChange={() => handleCheckboxChange(index)}
-                      />
-                    </div>
-                    <div
-                      className={styles.boardName}
-                      onClick={() => handleClickDashboard(dashboard)}
-                    >
-                      <span
-                        className={styles.dot}
-                        data-toolTip={'Running'}
-                        onMouseEnter={handleToolTipMouseEnter}
-                        onMouseLeave={handleToolTipMouseLeave}
-                      ></span>
-                      <IconServer width={'30'} height={'30'} />
-                      <div className={styles.title}>
-                        <b>{dashboard?.name}</b>
-                        <span>{dashboard?.type}</span>
+                <div className={styles.header}>
+                  <div className={styles.headerCheckBox}>
+                    <input
+                      type="checkbox"
+                      checked={selectedDashboards.every((isSelected) => isSelected)}
+                      onChange={handleSelectAllChange}
+                    />
+                  </div>
+                  <div className={styles.headerName}>
+                    Name
+                    <Filters />
+                  </div>
+                  <div className={styles.headerIP}>IP Address</div>
+                  <div className={styles.headerCreated}>
+                    Created
+                    <Filters />
+                  </div>
+                  <div className={styles.headerZone}>
+                    Zone
+                    <Filters />
+                  </div>
+                </div>
+                <div className={styles.tableDashboards}>
+                  {dashboards.map((dashboard, index) => (
+                    <div key={index} className={styles.boardsList}>
+                      <div className={styles.boardCheckBox}>
+                        <input
+                          type="checkbox"
+                          checked={selectedDashboards[index]}
+                          onChange={() => handleCheckboxChange(index)}
+                        />
                       </div>
                       <div
-                        data-toolTip={'Move to routed IP to support IP mobility'}
+                        className={styles.boardName}
+                        onClick={() => handleClickDashboard(dashboard)}
+                      >
+                        <span
+                          className={styles.dot}
+                          datatooltip={'Running'}
+                          onMouseEnter={handleToolTipMouseEnter}
+                          onMouseLeave={handleToolTipMouseLeave}
+                        ></span>
+                        <IconServer width={'30'} height={'30'} />
+                        <div className={styles.title}>
+                          <b>{dashboard?.name}</b>
+                          <span>{dashboard?.type}</span>
+                        </div>
+                        <div
+                          datatooltip={'Move to routed IP to support IP mobility'}
+                          onMouseEnter={handleToolTipMouseEnter}
+                          onMouseLeave={handleToolTipMouseLeave}
+                        >
+                          <IconImportant width={'30'} height={'30'} />
+                        </div>
+                      </div>
+                      <div className={styles.boardIP}>
+                        {dashboard.ip || 'Not Assigned'}
+                        <button
+                          className={styles.buttonCopy}
+                          datatooltip={'Copy'}
+                          onMouseEnter={handleToolTipMouseEnter}
+                          onMouseLeave={handleToolTipMouseLeave}
+                        >
+                          <IconCopy width={'20'} height={'20'} />
+                        </button>
+                      </div>
+                      <div
+                        className={styles.boardCreatedAt}
+                        datatooltip={'15 de diciembre'}
                         onMouseEnter={handleToolTipMouseEnter}
                         onMouseLeave={handleToolTipMouseLeave}
                       >
-                        <IconImportant width={'30'} height={'30'} />
+                        15 days ago
+                      </div>
+                      <div className={styles.boardCountry}>
+                        <img
+                          alt=""
+                          className={styles.flag}
+                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjYSkiPgogICAgICAgIDxwYXRoIGZpbGw9IiNGMEYwRjAiIGQ9Ik0xMiAyNGM2LjYyNyAwIDEyLTUuMzczIDEyLTEyUzE4LjYyNyAwIDEyIDAgMCA1LjM3MyAwIDEyczUuMzczIDEyIDEyIDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiNEODAwMjciIGQ9Ik0yNCAxMmMwLTUuMTYtMy4yNTYtOS41NTgtNy44MjYtMTEuMjU0djIyLjUwOEMyMC43NDQgMjEuNTU4IDI0IDE3LjE2IDI0IDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiMwMDUyQjQiIGQ9Ik0wIDEyYzAgNS4xNiAzLjI1NyA5LjU1OCA3LjgyNiAxMS4yNTRWLjc0NkMzLjI1NiAyLjQ0MiAwIDYuODQgMCAxMloiLz4KICAgIDwvZz4KICAgIDxkZWZzPgogICAgICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgICAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMjR2MjRIMHoiLz4KICAgICAgICA8L2NsaXBQYXRoPgogICAgPC9kZWZzPgo8L3N2Zz4K"
+                        />
+                        {dashboard.zone}
+                      </div>
+                      <div className={styles.boardMove}>
+                        <button className={styles.button}>Move Ip</button>
+                      </div>
+                      <div className={styles.boardSettings}>
+                        <button
+                          className={styles.button}
+                          // onClick={handlePopupSettings}
+                          onClick={() => togglePopupSettings(index)}
+                        >
+                          <IconSettings width={'30'} height={'30'} />
+                        </button>
+                        {visiblePopupSettings[index] && (
+                          <ul
+                            className={styles.popupSettings}
+                            onMouseLeave={() => closePopup(index)}
+                          >
+                            <li onClick={() => handleMoreInfo()} className={styles.hr}>
+                              More info
+                            </li>
+                            <li onClick={() => handlePowerOff()}>Power off</li>
+                            <li onClick={() => handleReboot()}>Reboot</li>
+                            <li onClick={() => handleStandby()}>Standby</li>
+                            <li onClick={() => handleDetachIP()}>Detach IP(s)</li>
+                            <li onClick={() => handleDeleteBoard(board.id)}>Delete</li>
+                          </ul>
+                        )}
                       </div>
                     </div>
-                    <div className={styles.boardIP}>
-                      {dashboard.ip || 'Not Assigned'}
-                      <button
-                        className={styles.buttonCopy}
-                        data-toolTip={'Copy'}
-                        onMouseEnter={handleToolTipMouseEnter}
-                        onMouseLeave={handleToolTipMouseLeave}
-                      >
-                        <IconCopy width={'20'} height={'20'} />
-                      </button>
-                    </div>
-                    <div
-                      className={styles.boardCreatedAt}
-                      data-toolTip={'15 de diciembre'}
-                      onMouseEnter={handleToolTipMouseEnter}
-                      onMouseLeave={handleToolTipMouseLeave}
-                    >
-                      15 days ago
-                    </div>
-                    <div className={styles.boardCountry}>
-                      <img
-                        alt=""
-                        className={styles.flag}
-                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjYSkiPgogICAgICAgIDxwYXRoIGZpbGw9IiNGMEYwRjAiIGQ9Ik0xMiAyNGM2LjYyNyAwIDEyLTUuMzczIDEyLTEyUzE4LjYyNyAwIDEyIDAgMCA1LjM3MyAwIDEyczUuMzczIDEyIDEyIDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiNEODAwMjciIGQ9Ik0yNCAxMmMwLTUuMTYtMy4yNTYtOS41NTgtNy44MjYtMTEuMjU0djIyLjUwOEMyMC43NDQgMjEuNTU4IDI0IDE3LjE2IDI0IDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiMwMDUyQjQiIGQ9Ik0wIDEyYzAgNS4xNiAzLjI1NyA5LjU1OCA3LjgyNiAxMS4yNTRWLjc0NkMzLjI1NiAyLjQ0MiAwIDYuODQgMCAxMloiLz4KICAgIDwvZz4KICAgIDxkZWZzPgogICAgICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgICAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMjR2MjRIMHoiLz4KICAgICAgICA8L2NsaXBQYXRoPgogICAgPC9kZWZzPgo8L3N2Zz4K"
-                      />
-                      {dashboard.zone}
-                    </div>
-                    <div className={styles.boardMove}>
-                      <button className={styles.button}>Move Ip</button>
-                    </div>
-                    <div className={styles.boardSettings}>
-                      <button
-                        className={styles.button}
-                        // onClick={handlePopupSettings}
-                        onClick={() => togglePopupSettings(index)}
-                      >
-                        <IconSettings width={'30'} height={'30'} />
-                      </button>
-                      {visiblePopupSettings[index] && (
-                        <ul
-                          className={styles.popupSettings}
-                          onMouseLeave={() => closePopup(index)}
-                        >
-                          <li onClick={() => handleMoreInfo()} className={styles.hr}>
-                            More info
-                          </li>
-                          <li onClick={() => handlePowerOff()}>Power off</li>
-                          <li onClick={() => handleReboot()}>Reboot</li>
-                          <li onClick={() => handleStandby()}>Standby</li>
-                          <li onClick={() => handleDetachIP()}>Detach IP(s)</li>
-                          <li onClick={() => handleDeleteBoard(board.id)}>Delete</li>
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
+
               {isToolTipHovered && (
                 <div
                   className={styles.popupToolTip}

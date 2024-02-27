@@ -19,7 +19,7 @@ import styles from './index.module.css'
 
 
 
-const VectorVersion = ({ }) => {
+const AddonVersion = ({ addon }) => {
     function organizeVersions(inputList) {
         const organizedVersions = [];
 
@@ -86,23 +86,16 @@ const VectorVersion = ({ }) => {
 
     const [listVersion, setListVersion] = useState(organizedVersions)
 
+    
+    
+    
 
     return (
         <div className={styles.modal}>
-            <div className={styles.header}>
-                <h2>
-                    Selection
-                </h2>
-                <div className={styles.filter}>
-                    <svg class="" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.8 4H5.2a1 1 0 0 0-.7 1.7l5.3 6 .2.7v4.8c0 .2 0 .4.2.4l3 2.3c.3.2.8 0 .8-.4v-7.1c0-.3 0-.5.2-.7l5.3-6a1 1 0 0 0-.7-1.7Z" />
-                    </svg>
-                    Filter
-                </div>
-            </div>
+            
             <div className={styles.search}>
                 <div className={styles.input}>
-                    <svg class="" ariaHidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                     </svg>
                     <input
@@ -118,11 +111,11 @@ const VectorVersion = ({ }) => {
                     Select all
                 </a>
             </div>
-            <div>
+            <div className={styles.list}>
                 {listVersion.map((item, index) => (
                     <div className={styles.options}>
                         <div className={styles.arrow}>
-                            <svg class="" ariaHidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m8 10 4 4 4-4" />
                             </svg>
                         </div>
@@ -136,7 +129,7 @@ const VectorVersion = ({ }) => {
 
 
 
-export default VectorVersion
+export default AddonVersion
 
 
 
@@ -234,7 +227,7 @@ const FilterItem = ({ item }) => {
                                             dangerouslySetInnerHTML={{ __html: currentCode }}
                                         />
                                     </div>
-                                    <div  className={styles.chat}>
+                                    <div className={styles.chat}>
                                         <textarea
                                             placeholder={'Escribe'}
                                             spellcheck="false"

@@ -27,7 +27,7 @@ routerVector
   .post('/file', authenticateToken, openVector)
   .post('/load/:id/:name', authenticateToken, loadVector)
 
-  .delete('/update/:id/:name', authenticateToken, deleteVector)
+  .delete('/:id/:name', authenticateToken, deleteVector)
   .post('/remove/all', authenticateToken, removeVector)
   .post('/:id/:name', authenticateToken, getVector)
   .get('/', authenticateToken, getAllVector)

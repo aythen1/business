@@ -4,6 +4,7 @@ import {
   setOpenMenuLeft,
   setOpenMenuRight,
   setOpenChatBot,
+  setOpenModal,
 
   fetchsDefault, 
   updateDefault, 
@@ -42,13 +43,18 @@ import {
 
   addLog,
   deleteLog,
+  deleteLogs,
   fetchsLog
 } from '@/actions/iam'
 // import { fetchsUser } from '../actions/iam';
 
+
+
 const iamSlice = createSlice({
   name: 'iam',
   initialState: {
+    themeColor: '#fff',
+
     user: null,
     billing: null,
     token:  null,
@@ -99,9 +105,12 @@ const iamSlice = createSlice({
     },
     setVectors: (state, action) => {
       state.vectors = action.payload
-    }
+    },
 
     // otras acciones...
+    setThemeColor: (state, action) => {
+      state.themeColor = action.payload
+    }
   },
   extraReducers: (builder) => {
     // Manejar las acciones generadas por createAsyncThunk
@@ -114,6 +123,15 @@ const iamSlice = createSlice({
       })
       .addCase(setOpenChatBot.fulfilled, (state, action) => {
         state.openChatBot = action.payload
+      })
+      .addCase(setOpenModal.fulfilled, (state, action) => {
+        console.log('einderunfur')
+        if(action.payload){
+          state.openModal = true;
+          state.modal = action.payload;
+        }else{
+          state.openModal = false;
+        }
       })
 
 
@@ -191,9 +209,12 @@ const iamSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(upgrade.fulfilled, (state, action) => {
-        localStorage.setItem('token', action.payload)
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        // localStorage.setItem('token', action.payload)
+        // state.token = action.payload.token;
+        // state.user = action.payload.user;
+      })
+      .addCase(upgrade.pending, (state, action) => {
+        state.status = 'loading'
       })
       .addCase(upgrade.rejected, (state, action) => {
         state.error = action.error.message;
@@ -333,6 +354,9 @@ const iamSlice = createSlice({
           state.logs = [...state.logs.slice(0, indexToDelete), ...state.logs.slice(indexToDelete + 1)];
         }
       })
+      .addCase(deleteLogs.fulfilled, (state, action) => {
+        state.logs = []
+      })
       .addCase(fetchsLog.fulfilled, (state, action) => {
         state.logs = action.payload;
       })
@@ -344,6 +368,7 @@ export const {
   setModal,
   setVector,
   setVectors,
+  setThemeColor
 } = iamSlice.actions;
 
 

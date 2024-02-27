@@ -199,6 +199,26 @@ const Billing = ({ }) => {
 
 
 
+    // ---------------------
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash.substring(1);
+            const section = document.getElementById(hash);
+
+            if (hash == 'invoice' && section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange();
+        return () => {
+            window.removeEventListener('hashchange', handleHashChange);
+        };
+    }, []);
 
 
     return (
@@ -212,32 +232,51 @@ const Billing = ({ }) => {
                 <h2 className={styles.title}>
                     Información de Cuenta
                 </h2>
-                <div className={styles.boxInformation}>
-                    <div>
-                        <h2 className={styles.title}>
-                            {state?.name}
-                        </h2>
-                        <div className={styles.description}>
-                            <div className={styles.descriptionOne}>
-                                {state?.address1}<br />
-                                {state?.zip} {state?.city} <br />
-                                {state?.region} <br />
-                                {state?.country} <br /> <br />
-                            </div>
-                            <div>
-                                {state.type}<br />
-                                Currency {state.currency}<br />
-                                {state.iban}
+                {state?.name ? (
+                    <div className={styles.boxInformation}>
+                        <div>
+                            <h2 className={styles.title}>
+                                {state?.name}
+                            </h2>
+                            <div className={styles.description}>
+                                <div className={styles.descriptionOne}>
+                                    {state?.address1}<br />
+                                    {state?.zip} {state?.city} <br />
+                                    {state?.region} <br />
+                                    {state?.country} <br /> <br />
+                                </div>
+                                <div>
+                                    {state.type}<br />
+                                    Currency {state.currency}<br />
+                                    {state.iban}
+                                </div>
                             </div>
                         </div>
+                        <button
+                            onClick={() => handleClickEdit()}
+                            className={styles.button}
+                        >
+                            Editar
+                        </button>
                     </div>
-                    <button
-                        onClick={() => handleClickEdit()}
-                        className={styles.button}
-                    >
-                        Editar
-                    </button>
-                </div>
+                ) : (
+                    <div className={styles.boxInformation}>
+                        <div>
+
+                            <p>
+                                Rellena los datos de usuario para verificar tu cuenta y poder entrar en las aplicaciones
+                                con tus credenciales.
+                            </p>
+                            <button
+                                onClick={() => handleClickEdit()}
+                                className={styles.button}
+                            >
+                                Insertar información
+                            </button>
+                        </div>
+
+                    </div>
+                )}
             </div>
 
             <div className={styles.containerConsumption}>
@@ -406,7 +445,7 @@ const Billing = ({ }) => {
             </div>
 
 
-            <div className={styles.containerInvoices}>
+            <div id="invoice" className={styles.containerInvoices}>
                 <h2 className={styles.title}>
                     Facturas enviadas
                 </h2>
@@ -479,9 +518,9 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
         }
 
         if (property === "name") {
-            if(value.length > 5){
+            if (value.length > 5) {
                 setIsActive(true);
-            }else{
+            } else {
                 setIsActive(false);
             }
         }

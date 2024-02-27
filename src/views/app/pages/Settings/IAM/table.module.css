@@ -179,10 +179,11 @@
           fill: #fff;
         }
         &:hover{
-          background: #0615df;
+          background: var(--color-primary-1);
         }
       }
       a {
+        cursor: pointer;
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -192,6 +193,12 @@
         svg {
           fill: var(--color-primary-0);
           width: 10px;
+        }
+        &:hover{
+          color: var(--color-primary-1);
+          svg{
+            fill: var(--color-primary-1);
+          }
         }
       }
     }

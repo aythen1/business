@@ -73,6 +73,108 @@ const addRelationsToData = (data, relations) => {
 
 // relations
 
+const validateAgainstSchema = (obj, schema) => {
+    const Validator = require('jsonschema').Validator;
+    const v = new Validator();
+
+    // console.log('!!!!!!!!!!!!!!!!!!!!!', obj, schema)
+
+    // const parseObject = (value) => {
+    //     try {
+    //         return JSON.parse(value);
+    //     } catch (error) {
+    //         // Si no se puede analizar, simplemente devuelve el valor original
+    //         return value;
+    //     }
+    // };
+
+    // const parseProperties = (properties) => {
+    //     const result = {};
+    //     for (const prop in properties) {
+    //         if (properties[prop].type === 'array' && properties[prop].items.type === 'object') {
+    //             // Tratar el caso especial de arrays de objetos
+    //             const arrayValue = obj[prop];
+    //             result[prop] = Array.isArray(arrayValue)
+    //                 ? arrayValue.map(item => parseObject(item))
+    //                 : parseObject(arrayValue);
+    //         } else if (properties[prop].type === 'object') {
+    //             // Tratar el caso de propiedades de tipo 'object'
+    //             result[prop] = parseObject(obj[prop]);
+    //         } else {
+    //             result[prop] = obj[prop];
+    //         }
+    //     }
+    //     return result;
+    // };
+
+    // const parsedObj = parseProperties(schema.properties);
+
+    const result = v.validate(obj, schema);
+
+    return {
+        isValid: result.valid,
+        data: obj,
+        errors: result.errors
+    };
+};
+
+
+
+const generateEmptyObjectFromSchema = (schema, data = {}) => {
+    const emptyObject = {};
+
+    const processProperty = (prop, propSchema, obj) => {
+        // console.log('prop', prop, propSchema.type)
+        if (data.hasOwnProperty(prop)) {
+            obj[prop] = data[prop];
+        } else if (propSchema.hasOwnProperty('default')) {
+            obj[prop] = propSchema.default;
+        } else {
+            if (propSchema.enum) {
+                obj[prop] = propSchema.enum[0];
+            } else {
+                // console.log('arrrray', propSchema.type)
+                switch (propSchema.type) {
+                    case 'string':
+                        if (propSchema.format === 'date-time' || propSchema.format === 'date') {
+                            obj[prop] = new Date().toISOString();
+                        } else {
+                            obj[prop] = '';
+                        }
+                        break;
+                    case 'number':
+                        obj[prop] = 0;
+                        break;
+                    case 'object':
+                        obj[prop] = generateEmptyObjectFromSchema({ properties: propSchema.properties });
+                        break;
+                    case 'array':
+                        if (propSchema.items && propSchema.items.type === 'object') {
+                            // Aplicar JSON.stringify a arrays de objetos
+                            obj[prop] = JSON.stringify([generateEmptyObjectFromSchema(propSchema.items)]);
+                        } else {
+                            obj[prop] = JSON.stringify([]);
+                        }
+                        break;
+                }
+            }
+        }
+
+        // if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
+        if (typeof obj[prop] === 'object' || typeof obj[prop] === 'array') {
+            obj[prop] = JSON.stringify(obj[prop]);
+        }
+    };
+
+    for (const prop in schema.properties) {
+        processProperty(prop, schema.properties[prop], emptyObject);
+    }
+
+    return emptyObject;
+};
+
+
+
 
 async function addVector(id, name, vector = [0, 0], data, relations) {
     // id base64
@@ -81,7 +183,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
 
     let schema
 
-    if (path0 == 'addon' || path0 == 'ticket') {
+    if (path0 == 'chatbot' || path0 == 'addon' || path0 == 'ticket') {
         schema = addRelationsToSchema(allSchemas['vectors'])
     } else {
         const schemaExists = allSchemas.hasOwnProperty(name);
@@ -96,13 +198,12 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
         }
     }
 
-    
+
     try {
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
     } catch (err) {
         const db = await lancedb.connect(uri);
-        
         let emptyData
         if (vector.length == 2) {
             emptyData = generateEmptyObjectFromSchema(schema)
@@ -172,6 +273,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
 
     const results = []
 
+
     const arr = Array.isArray(data) ? data : [data];
     // Si data es un array, procesa cada elemento individualmente
     for (const singleData of arr) {
@@ -209,13 +311,21 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
 
     try {
+        let schema
+
         const schemaExists = allSchemas.hasOwnProperty(name);
-        if (!schemaExists) {
-            return "El esquema no existe";
+        if (schemaExists) {
+            schema = allSchemas[name]
+        }else{
+            console.log('103k349j4ij')
+            // return "El esquema no existe";
+            if(!data.id) data.id = uuidv4()
+            schema = addRelationsToSchema(generateSchemaFromObject(data))
+
         }
 
         // Valida el objeto 'data' contra el esquema correspondiente
-        const validObj = validateAgainstSchema(data, allSchemas[name]);
+        const validObj = validateAgainstSchema(data, schema);
 
         // console.log('calid', validObj, data)
         if (!validObj) {
@@ -271,7 +381,7 @@ async function updateVector(id, name, vector = [0, 0], data) {
         console.log('ERROR', error)
         // Not exist table
         const resp = await addVector(id, name, vector = [0, 0], data)
-
+        console.log('rrerr', resp)
         // console.log('respresprespresprespresp', resp)
         return resp[0];
     }
@@ -279,105 +389,10 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
 
 
-const generateEmptyObjectFromSchema = (schema, data = {}) => {
-    const emptyObject = {};
-
-    const processProperty = (prop, propSchema, obj) => {
-        // console.log('prop', prop, propSchema.type)
-        if (data.hasOwnProperty(prop)) {
-            obj[prop] = data[prop];
-        } else if (propSchema.hasOwnProperty('default')) {
-            obj[prop] = propSchema.default;
-        } else {
-            if (propSchema.enum) {
-                obj[prop] = propSchema.enum[0];
-            } else {
-                // console.log('arrrray', propSchema.type)
-                switch (propSchema.type) {
-                    case 'string':
-                        if (propSchema.format === 'date-time' || propSchema.format === 'date') {
-                            obj[prop] = new Date().toISOString();
-                        } else {
-                            obj[prop] = '';
-                        }
-                        break;
-                    case 'number':
-                        obj[prop] = 0;
-                        break;
-                    case 'object':
-                        obj[prop] = generateEmptyObjectFromSchema({ properties: propSchema.properties });
-                        break;
-                    case 'array':
-                        if (propSchema.items && propSchema.items.type === 'object') {
-                            // Aplicar JSON.stringify a arrays de objetos
-                            obj[prop] = JSON.stringify([generateEmptyObjectFromSchema(propSchema.items)]);
-                        } else {
-                            obj[prop] = JSON.stringify([]);
-                        }
-                        break;
-                }
-            }
-        }
-
-        // if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
-        if (typeof obj[prop] === 'object' || typeof obj[prop] === 'array') {
-            obj[prop] = JSON.stringify(obj[prop]);
-        }
-    };
-
-    for (const prop in schema.properties) {
-        processProperty(prop, schema.properties[prop], emptyObject);
-    }
-
-    return emptyObject;
-};
 
 
 
-const validateAgainstSchema = (obj, schema) => {
-    const Validator = require('jsonschema').Validator;
-    const v = new Validator();
 
-    // console.log('!!!!!!!!!!!!!!!!!!!!!', obj, schema)
-
-    // const parseObject = (value) => {
-    //     try {
-    //         return JSON.parse(value);
-    //     } catch (error) {
-    //         // Si no se puede analizar, simplemente devuelve el valor original
-    //         return value;
-    //     }
-    // };
-
-    // const parseProperties = (properties) => {
-    //     const result = {};
-    //     for (const prop in properties) {
-    //         if (properties[prop].type === 'array' && properties[prop].items.type === 'object') {
-    //             // Tratar el caso especial de arrays de objetos
-    //             const arrayValue = obj[prop];
-    //             result[prop] = Array.isArray(arrayValue)
-    //                 ? arrayValue.map(item => parseObject(item))
-    //                 : parseObject(arrayValue);
-    //         } else if (properties[prop].type === 'object') {
-    //             // Tratar el caso de propiedades de tipo 'object'
-    //             result[prop] = parseObject(obj[prop]);
-    //         } else {
-    //             result[prop] = obj[prop];
-    //         }
-    //     }
-    //     return result;
-    // };
-
-    // const parsedObj = parseProperties(schema.properties);
-
-    const result = v.validate(obj, schema);
-
-    return {
-        isValid: result.valid,
-        data: obj,
-        errors: result.errors
-    };
-};
 
 // const validateAgainstSchema = (input, schema) => {
 //     const Validator = require('jsonschema').Validator;
@@ -440,10 +455,6 @@ const validateAgainstSchema = (obj, schema) => {
 //         };
 //     }
 // };
-
-
-
-
 
 
 
@@ -535,6 +546,7 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
         const db = await lancedb.connect(uri)
         const tbl = await db.openTable(name)
 
+        console.log('13455')
         const searchQuery = generateSearchString(conditions);
 
         console.log('searchQuery', searchQuery)
@@ -596,21 +608,8 @@ async function deleteVector(id, name, data) {
     const db = await lancedb.connect(uri)
     const tbl = await db.openTable(name)
     //   await tbl.delete()
-    console.log('deletevector', data)
-    await tbl.delete(`id = '${data}'`)
+    await tbl.delete(`id = '${data.id}'`)
 
-    // const con = await lancedb.connect('./.lancedb')
-    // const data = [
-    //   { id: 1, vector: [1, 2] },
-    //   { id: 2, vector: [3, 4] },
-    //   { id: 3, vector: [5, 6] }
-    // ]
-    // const tbl = await con.createTable('my_table', data)
-    // await tbl.delete('id = 2')
-    // await tbl.countRows() // Returns 2
-
-    // const to_remove = [1, 5]
-    // await tbl.delete(`id IN (${to_remove.join(',')})`)7
     return 200
 }
 

@@ -5,7 +5,7 @@ import { Route, Routes, Outlet, useParams } from 'react-router-dom';
 
 // import SettingsIAM from '../Settings/IAM'
 // import NotFound from '../pages/404'
-// import './index.css'
+import './index.module.css'
 
 import { loadComponent } from '@addon/utils'
 import { AddonEditor } from '@addon/Editor'
@@ -23,19 +23,15 @@ const Addon = ({
   }]
 
   return (
-    <div >
       <Routes>
         <Route path="/*" element={<Outlet />}>
           <Route path="card" element={<AddonCard />} />
           <Route path=":id" element={<AddonEditor/>} />
           {initialRoute.map((item, index) => (
-
             <Route key={index} path={item.path + '/*'} element={item.element} />
           ))}
-
         </Route>
       </Routes>
-    </div>
   )
 }
 

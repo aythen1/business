@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+
 import * as XLSX from 'xlsx';
 
 import { v4 as uuidv4 } from 'uuid'
@@ -28,8 +32,6 @@ import {
 // } from '@/actions/iam'
 
 
-import { useDispatch, useSelector } from 'react-redux'
-
 const Table = ({
   fetchs,
   children,
@@ -38,7 +40,9 @@ const Table = ({
   handleAdd
 }) => {
   // --------------------------------------------------------------------------------------------------------------
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+
   // --------------------------------------------------------------------------------------------------------------
   // const [editMode, setEditMode] = useState(false)
   const [table, setTable] = useState(null)
@@ -101,8 +105,13 @@ const Table = ({
 
   // --------------------------------------------------------------------------------------------------------------
 
-  // --------------------------------------
- 
+  // ---------------------------------------
+  const onFilter = async (type) => {
+    console.log('type filter', type)
+
+    await dispatch(fetchs({ order: 'desc' }))
+  }
+
 
   useEffect(() => {
     const fetchItems = () => {
@@ -117,17 +126,22 @@ const Table = ({
           const name = nameAttribute || item.props.children
           const size = item.props.size || 200
           const component = item.props.component || null
-          
+
           return {
             tag,
-            title, 
+            title,
             name,
             size,
             component
           };
         });
 
-        setTable(<TableRender items={items} filteredItems={filteredItems} setStateTable={setStateTable} />)
+      setTable(<TableRender 
+        items={items} 
+        filteredItems={filteredItems} 
+        setStateTable={setStateTable} 
+        onFilter={onFilter} 
+      />)
     }
     if (items && items.length > 0) fetchItems()
 
@@ -135,31 +149,35 @@ const Table = ({
 
 
 
-  
 
 
 
 
- // ----------------
+
+  // ----------------
 
 
 
-useEffect( () => {
-  // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
-  // const dataTable = JSON.parse(tokenRoomTable)
-  const fetchData = async () => {
-    try {
-      await dispatch(fetchs({}))
+  useEffect(() => {
+    // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
+    // const dataTable = JSON.parse(tokenRoomTable)
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchs({}))
 
-    } catch (err) {
-      console.log(err);
-    }
-  };
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
 
+
+  const handleClickSupport = () => {
+    navigate(`/${'es'}/app/support`)
+  }
 
 
 
@@ -192,7 +210,7 @@ useEffect( () => {
               </svg>
               Create {title}
             </button>
-            <a >
+            <a onClick={() => handleClickSupport()}>
               Instance Quickstart Documentation
               <svg viewBox="0 0 24 24">
                 <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
