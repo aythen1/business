@@ -44,6 +44,7 @@ export default function Page({
   driveId,
   setSortOrder,
   sortOrder,
+  setFilteredFilesContainer,
 }) {
   const dispatch = useDispatch();
 
@@ -281,33 +282,64 @@ export default function Page({
   };
 
   const handleSelectFilter = (extension) => {
-    // Actualizar la lista de extensiones activas.
+    // Actualizar la lista de extensiones activas y luego filtrar basado en las extensiones activas.
     setActiveExtensions((prevActiveExtensions) => {
-      // Verificar si la extensión ya está activa.
-      const isCurrentlyActive = prevActiveExtensions.includes(
-        extension.toLowerCase()
-      );
+      const lowerCaseExtension = extension.toLowerCase();
+      const isCurrentlyActive =
+        prevActiveExtensions.includes(lowerCaseExtension);
+      let newActiveExtensions;
+
       if (isCurrentlyActive) {
         // Si ya está activa, la removemos.
-        return prevActiveExtensions.filter(
-          (ext) => ext !== extension.toLowerCase()
+        newActiveExtensions = prevActiveExtensions.filter(
+          (ext) => ext !== lowerCaseExtension
         );
       } else {
         // Si no está activa, la agregamos.
-        return [...prevActiveExtensions, extension.toLowerCase()];
+        newActiveExtensions = [...prevActiveExtensions, lowerCaseExtension];
       }
+
+      // Verificamos si después de actualizar todavía hay extensiones activas.
+      setFilterIsActive(newActiveExtensions.length > 0);
+
+      // Realizar la filtración basada en las nuevas extensiones activas
+      // Nota: Este paso se hace aquí dentro para asegurarnos de que usamos el estado actualizado inmediatamente después de cambiarlo.
+      const filtered = categoryFiles.filter((item) => {
+        // Verificar si es un archivo (no es una carpeta).
+        const isFile = !item.Key.endsWith("/");
+        if (!isFile && newActiveExtensions.length > 0) return false;
+
+        // Extraer la extensión del archivo de la propiedad Key.
+        const itemExtension = item.Key.split(".").pop().toLowerCase();
+        console.log({ newActiveExtensions, categoryFiles });
+        // Comparar la extensión del archivo con las extensiones activas.
+        return newActiveExtensions.includes(itemExtension);
+      });
+      console.log({ filtered });
+      // Actualizar el estado con los archivos filtrados basado en las nuevas extensiones activas.
+      setFilteredFolders(
+        newActiveExtensions.length > 0
+          ? filtered.filter(
+              (f) => f.Key.startsWith(currentPath) && f.Key !== currentPath
+            )
+          : filterFoldersBasedOnSearchAndPath(
+              searchFiles,
+              categoryFiles,
+              currentPath,
+              category,
+              filterIsActive
+            )
+      );
+
+      return newActiveExtensions;
     });
   };
-
   const handleSelectSort = (name, order) => {
     setSortOrder({ name, order });
   };
 
   // / / / / / / / / / / / / / / / D R A G & D R O P / / / / / / / / / / / / / / / /
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
   const dropAndUpload = (directory, e, isFile) => {
     if (!isFile && isDragginFile) {
       const { directoryCopied, folderNameCopied, file } = fileToCopy;
@@ -360,7 +392,6 @@ export default function Page({
 
   useEffect(
     () => setRecentFiles(getFilesInDescendingOrder(categoryFiles)),
-
     [categoryFiles]
   );
 
@@ -370,8 +401,7 @@ export default function Page({
       searchFiles,
       categoryFiles,
       currentPath,
-      category,
-      filterIsActive
+      category
     );
     setFilteredFolders(filtered);
   }, [currentPath, categoryFiles, searchFiles, category]);
@@ -381,28 +411,6 @@ export default function Page({
       setCurrentPath(driveId + "/");
     }
   }, [currentFolder]);
-
-  // Luego de actualizar activeExtensions, debes filtrar basándote en todas las extensiones activas.
-  // Esto lo puedes hacer con un useEffect que reaccione a cambios en activeExtensions.
-  useEffect(() => {
-    if (activeExtensions.length > 0) {
-      const filtered = categoryFiles.filter((item) => {
-        // Verificar si es un archivo (no es una carpeta).
-        const isFile = !item.Key.endsWith("/");
-        if (!isFile) return false;
-
-        // Extraer la extensión del archivo de la propiedad Key y verificar si está en las activas.
-        const itemExtension = item.Key.split(".").pop().toLowerCase();
-        return activeExtensions.includes(itemExtension);
-      });
-
-      // Actualizar el estado con los archivos filtrados.
-      setFilteredFolders(filtered);
-    } else {
-      // Si no hay extensiones activas, resetear a la lista original de archivos.
-      setFilteredFolders(categoryFiles);
-    }
-  }, [activeExtensions, categoryFiles]);
 
   // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 
@@ -440,7 +448,7 @@ export default function Page({
                 </svg>
               </div>
               {filter.view && (
-                <ul className={style.drive_options}>
+                <ul className={style.drive_options_filter}>
                   {filter.type === "sort" ? (
                     <>
                       <li onClick={() => handleSelectSort("Name", "asc")}>
@@ -465,6 +473,7 @@ export default function Page({
                           style={{ width: "20px", height: "20px" }}
                         />
                         {iconName}
+                        {activeExtensions.includes(iconName) && <div>a</div>}
                       </li>
                     ))
                   )}
@@ -602,7 +611,8 @@ export default function Page({
             handleDragStart,
             copyFolder,
             cutFolder,
-            duplicateFolder
+            duplicateFolder,
+            false
           )}
         </div>
       </div>
@@ -674,8 +684,7 @@ function filterFoldersBasedOnSearchAndPath(
   searchFiles,
   categoryFiles,
   currentPath,
-  category,
-  filterIsActive
+  category
 ) {
   if (searchFiles) {
     return categoryFiles
@@ -691,17 +700,12 @@ function filterFoldersBasedOnSearchAndPath(
       );
   } else {
     return categoryFiles.filter((folder) =>
-      isValidElementForCategory(folder, currentPath, category, filterIsActive)
+      isValidElementForCategory(folder, currentPath, category)
     );
   }
 }
 
-function isValidElementForCategory(
-  folder,
-  currentPath,
-  category,
-  filterIsActive
-) {
+function isValidElementForCategory(folder, currentPath, category) {
   const isFolder = folder.Size === 6;
   const folderDepth = folder.Key.split("/").length;
   const currentPathDepth = currentPath.split("/").length;
@@ -711,8 +715,7 @@ function isValidElementForCategory(
   if (
     ["recent", "addon", "dashboard", "priority", "featured", "trash"].includes(
       category
-    ) ||
-    filterIsActive === true
+    )
   )
     isValidDepth = true;
   return (

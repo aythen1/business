@@ -36,6 +36,7 @@ export const FilesContainer = ({ setIsNew }) => {
   return category === "trash" ? (
     <Trash
       categoryFiles={filteredFiles}
+      setFilteredFilesContainer={setFilteredFiles}
       directoriesTrash={directoriesTrash}
       driveId={driveId}
       setIsNew={setIsNew}
@@ -49,6 +50,7 @@ export const FilesContainer = ({ setIsNew }) => {
       setIsNew={setIsNew}
       setSortOrder={setSortOrder}
       sortOrder={sortOrder}
+      setFilteredFilesContainer={setFilteredFiles}
     />
   );
 };

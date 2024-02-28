@@ -35,6 +35,7 @@ import {
   iterateElementsToCopy,
   iterateElementsToCut,
   iterateElementsToDuplicate,
+  icons,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 
@@ -69,10 +70,12 @@ export default function Page({
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [selectedFolders, setSelectedFolders] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [filterIsActive, setFilterIsActive] = useState(false);
+  const [activeExtensions, setActiveExtensions] = useState([]);
 
   const [filtersData, setFiltersData] = useState([
-    { name: "Filter by:", option: "All files", view: false },
-    { name: "Sort by:", option: "Last viewed", view: false },
+    { name: "Filter by:", type: "filter", view: false },
+    { name: "Sort by:", type: "sort", view: false },
   ]);
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
 
@@ -277,7 +280,60 @@ export default function Page({
     });
   };
 
-  const handleSelectFilter = (name, order) => {
+  const handleSelectFilter = (extension) => {
+    // Actualizar la lista de extensiones activas y luego filtrar basado en las extensiones activas.
+    setActiveExtensions((prevActiveExtensions) => {
+      const lowerCaseExtension = extension.toLowerCase();
+      const isCurrentlyActive =
+        prevActiveExtensions.includes(lowerCaseExtension);
+      let newActiveExtensions;
+
+      if (isCurrentlyActive) {
+        // Si ya está activa, la removemos.
+        newActiveExtensions = prevActiveExtensions.filter(
+          (ext) => ext !== lowerCaseExtension
+        );
+      } else {
+        // Si no está activa, la agregamos.
+        newActiveExtensions = [...prevActiveExtensions, lowerCaseExtension];
+      }
+
+      // Verificamos si después de actualizar todavía hay extensiones activas.
+      setFilterIsActive(newActiveExtensions.length > 0);
+
+      // Realizar la filtración basada en las nuevas extensiones activas
+      // Nota: Este paso se hace aquí dentro para asegurarnos de que usamos el estado actualizado inmediatamente después de cambiarlo.
+      const filtered = categoryFiles.filter((item) => {
+        // Verificar si es un archivo (no es una carpeta).
+        const isFile = !item.Key.endsWith("/");
+        if (!isFile && newActiveExtensions.length > 0) return false;
+
+        // Extraer la extensión del archivo de la propiedad Key.
+        const itemExtension = item.Key.split(".").pop().toLowerCase();
+        console.log({ newActiveExtensions, categoryFiles });
+        // Comparar la extensión del archivo con las extensiones activas.
+        return newActiveExtensions.includes(itemExtension);
+      });
+      console.log({ filtered });
+      // Actualizar el estado con los archivos filtrados basado en las nuevas extensiones activas.
+      setFilteredFolders(
+        newActiveExtensions.length > 0
+          ? filtered.filter(
+              (f) => f.Key.startsWith(currentPath) && f.Key !== currentPath
+            )
+          : filterFoldersBasedOnSearchAndPath(
+              searchFiles,
+              categoryFiles,
+              currentPath,
+              category,
+              filterIsActive
+            )
+      );
+
+      return newActiveExtensions;
+    });
+  };
+  const handleSelectSort = (name, order) => {
     setSortOrder({ name, order });
   };
 
@@ -374,8 +430,8 @@ export default function Page({
     );
     setFilteredFolders(filtered);
   }, [currentPath, categoryFiles, searchFiles, category]);
+
   useEffect(() => {
-    // setSelectedFolders([]);
     dispatch(getDirectoriesVersions({ Prefix: driveId }));
   }, []);
 
@@ -415,29 +471,35 @@ export default function Page({
                 </svg>
               </div>
               {filter.view && (
-                <ul className={style.drive_options}>
-                  <li onClick={() => handleSelectFilter("Name", "asc")}>
-                    Name
-                  </li>
-                  <li
-                    onClick={() => handleSelectFilter("Last modified", "asc")}
-                  >
-                    Last modified
-                  </li>
-                  <li
-                    onClick={() =>
-                      handleSelectFilter("Last modified by me", "asc")
-                    }
-                  >
-                    Last modified by me
-                  </li>
-                  <li
-                    onClick={() =>
-                      handleSelectFilter("Last opened by me", "asc")
-                    }
-                  >
-                    Last opened by me
-                  </li>
+                <ul className={style.drive_options_filter}>
+                  {filter.type === "sort" ? (
+                    <>
+                      <li onClick={() => handleSelectSort("Name", "asc")}>
+                        Name
+                      </li>
+                      <li
+                        onClick={() => handleSelectSort("Last modified", "asc")}
+                      >
+                        Last modified
+                      </li>
+                      {/* Agrega más opciones de sorteo aquí si es necesario */}
+                    </>
+                  ) : (
+                    Object.entries(icons).map(([iconName, iconPath]) => (
+                      <li
+                        key={iconName}
+                        onClick={() => handleSelectFilter(iconName)}
+                      >
+                        <img
+                          src={iconPath}
+                          alt={iconName}
+                          style={{ width: "20px", height: "20px" }}
+                        />
+                        {iconName}
+                        {activeExtensions.includes(iconName) && <div>a</div>}
+                      </li>
+                    ))
+                  )}
                 </ul>
               )}
             </div>
