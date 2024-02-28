@@ -36,7 +36,9 @@ const vectorSlice = createSlice({
     setVectors: (state, action) => {
       state.vectors = action.payload
     },
-
+    setDimension: (state, action) => {
+      state.dimension = action.payload
+    },
   },
   extraReducers: (builder) => {
     // Manejar las acciones generadas por createAsyncThunk
@@ -116,7 +118,8 @@ const vectorSlice = createSlice({
 
 export const {
   setVector,
-  setVectors
+  setVectors,
+  setDimension
 } = vectorSlice.actions;
 
 export default vectorSlice.reducer;

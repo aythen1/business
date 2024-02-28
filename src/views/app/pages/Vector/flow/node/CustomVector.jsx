@@ -1,7 +1,13 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
-import { Handle } from "reactflow";
+import { useDispatch, useSelector } from 'react-redux'
+
+
+import { Handle, useReactFlow } from "reactflow";
+
+// import ReactFlow, { addEdge, useStoreApi, useReactFlow, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+
 
 import styles from './CustomVector.module.css'
 
@@ -19,25 +25,67 @@ import IconOther from './assets/icon-other.svg'
 
 
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
+
+  const {
+    dimension
+} = useSelector((state) => state.vector)
+
+
   const { nodes, edges, setNodes, setEdges } = useGraph();
 
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [filter, setFilter] = useState('')
 
+  const { zoomIn, zoomOut, setCenter } = useReactFlow();
+
 
   const handleSelectVector = () => {
-    if(filter){
+    if (filter) {
       setFilter(null)
-    }else{
+    } else {
       setFilter('info')
     }
   }
+
+
+  useEffect(() => {
+    console.log('Hello world', data)
+    setFilter(data.status)
+
+  }, [data])
+
+
+  
+  useEffect(() => {
+    console.log('dimension')
+    if (dimension) {
+      const nodePosition = dimension.position;
+
+      // Encuentra el elemento con la clase "react-flow"
+      const reactFlowElement = document.querySelector('.react-flow');
+      console.log('reactFlowElement', reactFlowElement.clientWidth)
+      console.log('nodePosition', nodePosition)
+
+      // Hace scroll al nodo dentro de react-flow
+      if (reactFlowElement) {
+        const x = nodePosition.x 
+        const y = nodePosition.y
+
+        const zoom = 1
+
+        setCenter(x, y, { zoom, duration: 1000 });
+
+      }
+    }
+  }, [data, dimension]);
+
 
 
 
 
   const handleDuplicate = () => {
     setShowContextMenu(false)
+    
 
     const node = nodes.filter((node) => node.id === id)[0]
 
@@ -79,7 +127,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         style={{ left: -10, top: 25, background: "#555" }}
         isConnectable={isConnectable}
       />
-      <Handle        type="source"
+      <Handle type="source"
         position="right"
         style={{ right: -10, top: 25, background: "#555" }}
         isConnectable={isConnectable}
@@ -87,7 +135,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       {showContextMenu && (
         <ContextMenu onDuplicate={handleDuplicate} onDelete={handleDelete} />
       )}
-      <div 
+      <div
         className={styles.customVector}
         onClick={() => handleSelectVector()}
         onContextMenu={(e) => {
@@ -123,7 +171,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         ) : filter == 'sql' ? (
           <VectorSQL id={id} data={data} setFilter={setFilter} />
         ) : filter == 'schema' ? (
-          <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes}/>
+          <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes} />
         ) : filter == 'info' && (
           <VectorInfo id={id} data={data} setFilter={setFilter} />
         )}

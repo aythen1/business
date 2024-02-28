@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./FolderOptions.module.css";
-// import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
+import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { copyFile, obtainFileData } from "@/actions/assets";
 
 const FolderOptions = ({

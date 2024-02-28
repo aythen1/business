@@ -202,7 +202,10 @@
     padding-bottom: 6px;
     .board {
       width: 100%;
-      padding: 10px;
+      height: 100%;
+      /* padding: 10px; */
+      /* background: red; */
+      /* overflow: scroll; */
     }
   
     &::-webkit-scrollbar {

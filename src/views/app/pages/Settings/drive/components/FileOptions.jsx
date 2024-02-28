@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import styles from "./FolderOptions.module.css";
-import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
-import { obtainFileData } from "@/actions/assets";
+'use client'
+import { useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import styles from './FolderOptions.module.css'
+// import { IoTrashOutline, IoSettingsOutline } from 'react-icons/io5'
+import { obtainFileData } from '@/actions/assets'
 
 const FileOptions = ({
   setShowFolderOption,
