@@ -84,7 +84,7 @@ const nodeTypes = {
 
 
 
-export default function App() {
+export default function App({ }) {
 
     // const params = useParams()
     const dispatch = useDispatch()
@@ -97,7 +97,7 @@ export default function App() {
     // const [loading, setLoading] = useState(false)
     // const [nodes, setNodes] = useState(initialNodes)
     // const [edges, setEdges] = useState(initialEdges)
-    const reactFlowContainer = useRef(null);
+
 
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
@@ -105,17 +105,16 @@ export default function App() {
 
 
     const [dataVector, setDataVector] = useState([])
-    
+
 
     // ------------------------------
     const { user } = useSelector((state) => state.iam)
-    const { vector } = useSelector((state) => state.vector)
+    const {
+        dimension,
+        vector,
+    } = useSelector((state) => state.vector)
 
     // ------------------------------
-
-
-
-
     useEffect(() => {
         const fetchItems = async () => {
             const id = iniVector({
@@ -139,6 +138,7 @@ export default function App() {
         }
 
     }, [vector])
+
 
 
 
@@ -192,8 +192,6 @@ export default function App() {
     };
 
 
-
-
     const saveNode = async () => {
 
         let id = iniVector({
@@ -228,10 +226,7 @@ export default function App() {
         }))
     }
 
-
     // ------------------------------
-
-
 
     const handleDrop = (e) => {
         e.preventDefault()
@@ -343,36 +338,36 @@ export default function App() {
                 const { type: sourceType } = sourceNode;
                 const { type: targetType } = targetNode;
 
-                if(sourceType == 'selectorVector'){
-                    
-                }else{
+                if (sourceType == 'selectorVector') {
 
-                // Determinar si el handle es top o bottom
-                const isTopHandle = sourceHandle.endsWith('_top')
+                } else {
 
-                // Obtener el nombre del handle
-                const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
+                    // Determinar si el handle es top o bottom
+                    const isTopHandle = sourceHandle.endsWith('_top')
 
-                // Actualizar connectedNodeIds dependiendo del tipo de nodo
-                if (sourceType === 'selectorGPT') {
-                    setNodes((prevNodes) => {
-                        const updatedNodes = [...prevNodes];
-                        const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
-                        if (sourceNodeIndex !== -1) {
-                            updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
-                        }
-                        return updatedNodes;
-                    });
-                } else if (targetType === 'selectorGPT') {
-                    setNodes((prevNodes) => {
-                        const updatedNodes = [...prevNodes];
-                        const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
-                        if (targetNodeIndex !== -1) {
-                            updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
-                        }
-                        return updatedNodes;
-                    });
-                }
+                    // Obtener el nombre del handle
+                    const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
+
+                    // Actualizar connectedNodeIds dependiendo del tipo de nodo
+                    if (sourceType === 'selectorGPT') {
+                        setNodes((prevNodes) => {
+                            const updatedNodes = [...prevNodes];
+                            const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
+                            if (sourceNodeIndex !== -1) {
+                                updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
+                            }
+                            return updatedNodes;
+                        });
+                    } else if (targetType === 'selectorGPT') {
+                        setNodes((prevNodes) => {
+                            const updatedNodes = [...prevNodes];
+                            const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
+                            if (targetNodeIndex !== -1) {
+                                updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
+                            }
+                            return updatedNodes;
+                        });
+                    }
                 }
             }
 
@@ -385,6 +380,40 @@ export default function App() {
 
 
 
+
+    useEffect(() => {
+        console.log('dimen', dimension)
+        if (dimension) {
+            // Encuentra el índice del nodo que coincide con el id
+            const nodeIndex = nodes.findIndex((node) => node.id === dimension.id);
+            console.log('1111', nodeIndex)
+            // Verifica si se encontró el nodo
+            if (nodeIndex !== -1) {
+                // Copia los nodos actuales
+                const updatedNodes = [...nodes];
+
+                // Actualiza el estado del nodo encontrando el nodo y modificando data.status
+                updatedNodes[nodeIndex] = {
+                    ...updatedNodes[nodeIndex],
+                    data: {
+                        ...updatedNodes[nodeIndex].data,
+                        status: 'info', // Reemplaza 'tu_nuevo_estado_aqui' con el nuevo estado
+                    },
+                };
+                console.log('updatedNodes[nodeIndex]', updatedNodes[nodeIndex])
+                // Establece el nuevo estado de los nodos
+                setNodes(updatedNodes);
+            }
+        }
+    }, [dimension])
+
+
+
+
+
+
+
+
     const value = {
         nodes,
         edges,
@@ -392,14 +421,13 @@ export default function App() {
         setEdges,
         selectedEdge,
         setSelectedEdge,
-        reactFlowContainer
     };
 
 
     return (
         <GraphContext.Provider value={value}>
             <div
-                style={{ width: '100vw', height: '100vh' }}
+                style={{ width: '100%', height: '100%' }}
                 onDrop={(e) => handleDrop(e)}
                 onDragOver={(e) => e.preventDefault()}
             >
@@ -429,7 +457,7 @@ export default function App() {
                         >
                             Create node
                         </button>
-       
+
                     </div>
                 </ReactFlow>
             </div>

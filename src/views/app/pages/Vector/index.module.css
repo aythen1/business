@@ -10,16 +10,18 @@
 
   .alertBoardText {
     b {
-      font-size: 15px;
+      font-size: 22px;
       color: var(--color-primary-0);
+      font-weight: 600;
     }
     p {
-      font-size: 14px;
-      line-height: 20px;
+      font-size: 18px;
+      line-height: 24px;
       font-weight: 400;
       color: var(--text-color-secondary);
     }
     a {
+      margin-top: 10px;
       display: flex;
       align-items: center;
       gap: 2px;
@@ -378,7 +380,7 @@
   /* Puedes ajustar otros estilos según tus necesidades */
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 600px) {
   .mdNone {
     .headerCreated,
     .boardCreatedAt {

@@ -109,6 +109,11 @@ const Vector = ({ }) => {
 
 
   useEffect(() => {
+    console.log('vectors', vectors)
+  }, [vectors])
+
+
+  useEffect(() => {
     const fetchsItems = async () => {
       let id = iniVector({
         workspaceId: user.id,
@@ -312,16 +317,15 @@ const Vector = ({ }) => {
                     />
                   </div>
                   <div className={styles.headerName}>
-                    Name
+                    Vector
                     <Filters />
                   </div>
-                  <div className={styles.headerIP}>IP Address</div>
+                  <div className={styles.headerIP}>
+                    Dimension
+                    <Filters />
+                  </div>
                   <div className={styles.headerCreated}>
-                    Created
-                    <Filters />
-                  </div>
-                  <div className={styles.headerZone}>
-                    Zone
+                    Agentes
                     <Filters />
                   </div>
                 </div>
@@ -347,8 +351,8 @@ const Vector = ({ }) => {
                         ></span>
                         <IconServer width={'30'} height={'30'} />
                         <div className={styles.title}>
-                          <b>{vector?.name}</b>
-                          <span>{vector?.type}</span>
+                          <b>{vector?.title || 'Not title'}</b>
+                          <span>{vector?.description || 'Not description'}</span>
                         </div>
                         <div
                           datatooltip={'Move to routed IP to support IP mobility'}
@@ -359,7 +363,7 @@ const Vector = ({ }) => {
                         </div>
                       </div>
                       <div className={styles.boardIP}>
-                        {vector.ip || 'Not Assigned'}
+                        {vector.vector['0'] || 'Not Assigned'}
                         <button
                           className={styles.buttonCopy}
                           datatooltip={'Copy'}
@@ -376,14 +380,6 @@ const Vector = ({ }) => {
                         onMouseLeave={handleToolTipMouseLeave}
                       >
                         15 days ago
-                      </div>
-                      <div className={styles.boardCountry}>
-                        <img
-                          alt=""
-                          className={styles.flag}
-                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCI+CiAgICA8ZyBjbGlwLXBhdGg9InVybCgjYSkiPgogICAgICAgIDxwYXRoIGZpbGw9IiNGMEYwRjAiIGQ9Ik0xMiAyNGM2LjYyNyAwIDEyLTUuMzczIDEyLTEyUzE4LjYyNyAwIDEyIDAgMCA1LjM3MyAwIDEyczUuMzczIDEyIDEyIDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiNEODAwMjciIGQ9Ik0yNCAxMmMwLTUuMTYtMy4yNTYtOS41NTgtNy44MjYtMTEuMjU0djIyLjUwOEMyMC43NDQgMjEuNTU4IDI0IDE3LjE2IDI0IDEyWiIvPgogICAgICAgIDxwYXRoIGZpbGw9IiMwMDUyQjQiIGQ9Ik0wIDEyYzAgNS4xNiAzLjI1NyA5LjU1OCA3LjgyNiAxMS4yNTRWLjc0NkMzLjI1NiAyLjQ0MiAwIDYuODQgMCAxMloiLz4KICAgIDwvZz4KICAgIDxkZWZzPgogICAgICAgIDxjbGlwUGF0aCBpZD0iYSI+CiAgICAgICAgICAgIDxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMjR2MjRIMHoiLz4KICAgICAgICA8L2NsaXBQYXRoPgogICAgPC9kZWZzPgo8L3N2Zz4K"
-                        />
-                        {vector.zone}
                       </div>
                       <div className={styles.boardMove}>
                         <button className={styles.button}>Move Ip</button>

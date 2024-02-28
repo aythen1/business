@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -27,14 +27,15 @@ import {
     getAllVector
 } from '@/actions/vector'
 
+import {
+    setVector,
+    setDimension
+} from '@/slices/vectorSlice'
+
 
 import {
     setModal
 } from '@/slices/iamSlice'
-
-import {
-    setVector
-} from '@/slices/vectorSlice'
 
 
 import {
@@ -44,10 +45,12 @@ import {
 import { iniVector } from '../../../../actions/vector';
 
 
-
 const Board = ({ }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    const boardContainerRef = useRef(null);
+
 
     const [dataSheets, setDataSheets] = useState([]);
     const [dataSheet, setDataSheet] = useState({})
@@ -57,7 +60,11 @@ const Board = ({ }) => {
 
 
     const { user } = useSelector((state) => state.iam)
-    const { vectors, vector } = useSelector((state) => state.vector)
+    const {
+        dimension,
+        vectors,
+        vector
+    } = useSelector((state) => state.vector)
     // -----------------------------------------------------------------------------
 
     const handleClickReturn = () => {
@@ -87,7 +94,8 @@ const Board = ({ }) => {
     const handleLoadData = (item) => {
         console.log('data', item)
         setDataSheet(item)
-        setShow('data')
+        setShow('flow')
+        dispatch(setDimension(item))
     }
 
     // ----------------------------------------------------------------------------
@@ -107,7 +115,7 @@ const Board = ({ }) => {
     const handleAddData = () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
-        fileInput.accept = '.xlsx, .xls'; 
+        fileInput.accept = '.xlsx, .xls';
         fileInput.style.display = 'none';
         fileInput.addEventListener('change', handleDrop);  // Asignar handleDrop directamente al evento change
 
@@ -161,9 +169,9 @@ const Board = ({ }) => {
             let newY = 0
             let newX = 0
 
-            if(lastNode){
+            if (lastNode) {
                 newX = lastNode.position.x;
-                newY = lastNode.position.y + lastNode.height + 20;   
+                newY = lastNode.position.y + lastNode.height + 20;
             }
 
             const newNode = {
@@ -233,7 +241,8 @@ const Board = ({ }) => {
                 date: data.data.date,
                 cells: data.data.data.length,
                 cols: data.data.header.length,
-                data: data.data.data
+                data: data.data.data,
+                position: data.position
             }
         });
 
@@ -242,6 +251,9 @@ const Board = ({ }) => {
 
 
 
+
+
+ 
 
 
     return (
@@ -323,7 +335,7 @@ const Board = ({ }) => {
                     </div>
                     <div className={styles.info}>
                         <div className={styles.title}>
-                            {vector.title || 'Not found'} 
+                            {vector.title || 'Not found'}
                             {/* Matthew Frankina's Team */}
                         </div>
                         <div className={styles.subtitle}>
@@ -366,7 +378,10 @@ const Board = ({ }) => {
                 </div>
             </div>
             <div className={styles.BoardFlow}>
-                <div className={styles.board}>
+                <div
+                    ref={boardContainerRef}
+                    className={styles.board}
+                >
                     {show == 'flow' ? (
                         <VectorFlow />
                     ) : show == 'addon' ? (
@@ -374,7 +389,7 @@ const Board = ({ }) => {
                     ) : show == 'board' ? (
                         <VectorBoard />
                     ) : ( // data
-                        <VectorTable data={dataSheet}/>
+                        <VectorTable data={dataSheet} />
                     )}
                 </div>
             </div>
