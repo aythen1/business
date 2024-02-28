@@ -71,6 +71,7 @@ export default function Page({
   const [selectedFolders, setSelectedFolders] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [filterIsActive, setFilterIsActive] = useState(false);
+  const [activeExtensions, setActiveExtensions] = useState([]);
 
   const [filtersData, setFiltersData] = useState([
     { name: "Filter by:", type: "filter", view: false },
@@ -280,28 +281,24 @@ export default function Page({
   };
 
   const handleSelectFilter = (extension) => {
-    // Filtramos solo los elementos que son archivos (no terminan en '/')
-    // y que coinciden con la extensión seleccionada.
-    if (filterIsActive) {
-      setFilterIsActive(false);
-      return;
-    } else {
-      setFilterIsActive(true);
-      const filtered = categoryFiles.filter((item) => {
-        // Verificar si es un archivo (no es una carpeta).
-        const isFile = !item.Key.endsWith("/");
-        if (!isFile) return false;
-
-        // Extraer la extensión del archivo de la propiedad Key.
-        const itemExtension = item.Key.split(".").pop().toLowerCase();
-        // Comparar la extensión del archivo con la extensión seleccionada.
-        return itemExtension === extension.toLowerCase();
-      });
-      // Actualizar el estado con los archivos filtrados.
-      console.log({ filtered });
-      setFilteredFolders(filtered);
-    }
+    // Actualizar la lista de extensiones activas.
+    setActiveExtensions((prevActiveExtensions) => {
+      // Verificar si la extensión ya está activa.
+      const isCurrentlyActive = prevActiveExtensions.includes(
+        extension.toLowerCase()
+      );
+      if (isCurrentlyActive) {
+        // Si ya está activa, la removemos.
+        return prevActiveExtensions.filter(
+          (ext) => ext !== extension.toLowerCase()
+        );
+      } else {
+        // Si no está activa, la agregamos.
+        return [...prevActiveExtensions, extension.toLowerCase()];
+      }
+    });
   };
+
   const handleSelectSort = (name, order) => {
     setSortOrder({ name, order });
   };
@@ -384,6 +381,28 @@ export default function Page({
       setCurrentPath(driveId + "/");
     }
   }, [currentFolder]);
+
+  // Luego de actualizar activeExtensions, debes filtrar basándote en todas las extensiones activas.
+  // Esto lo puedes hacer con un useEffect que reaccione a cambios en activeExtensions.
+  useEffect(() => {
+    if (activeExtensions.length > 0) {
+      const filtered = categoryFiles.filter((item) => {
+        // Verificar si es un archivo (no es una carpeta).
+        const isFile = !item.Key.endsWith("/");
+        if (!isFile) return false;
+
+        // Extraer la extensión del archivo de la propiedad Key y verificar si está en las activas.
+        const itemExtension = item.Key.split(".").pop().toLowerCase();
+        return activeExtensions.includes(itemExtension);
+      });
+
+      // Actualizar el estado con los archivos filtrados.
+      setFilteredFolders(filtered);
+    } else {
+      // Si no hay extensiones activas, resetear a la lista original de archivos.
+      setFilteredFolders(categoryFiles);
+    }
+  }, [activeExtensions, categoryFiles]);
 
   // / / / / / / / / / / / / / / / / R E N D E R / / / / / / / / / / / / / / / / / / / /
 
