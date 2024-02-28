@@ -1,0 +1,100 @@
+.modal {
+  width: 400px;
+}
+
+.title {
+  font-size: 22px;
+  line-height: 20px;
+}
+
+.text {
+  font-size: 16px;
+}
+
+.listVersion {
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 0px;
+  margin-top: 10px;
+  .boxVersion {
+    margin: 4px 0px 10px;
+    .date {
+      padding: 4px 8px;
+      background: var(--background-secondary);
+      color: var(--text-color-secondary);
+      border-radius: 6px;
+      width: -moz-fit-content;
+      width: fit-content;
+      margin: 0 auto;
+      position: relative;
+      font-size: 8px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .photo {
+      background: var(--background-secondary);
+      border-radius: 6px;
+      padding: 10px;
+    }
+    .prompt {
+      background: var(--color-primary-4);
+      color: var(--color-primary-0);
+      font-size: 12px;
+      margin-top: 10px;
+      border-radius: 4px;
+      padding: 10px;
+    }
+  }
+}
+
+.chat {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  outline: none;
+  padding: 4px;
+  margin-top: 10px;
+  .textarea {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #929292;
+    resize: none;
+  }
+  button {
+    background: var(--color-primary-0);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+}
+
+.buttons {
+  font-size: 14px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  button {
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .acept {
+    background: var(--color-primary-0);
+    color: #fff;
+  }
+  .deny {
+    background: var(--color-primary-4);
+
+    color: #fff;
+  }
+}

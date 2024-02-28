@@ -5,6 +5,10 @@ module.exports = {
       use: ['file-loader'],
     },
   ],
+  // fallback: {
+  //   stream: require.resolve('stream-browserify'),
+  // },
+  // resolve.fallback: { "stream": false }
   // ... otras configuraciones ...
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -12,6 +16,8 @@ module.exports = {
       '@': path.resolve(__dirname, 'src'),
     },
     fallback: {
+      // stream: false,
+      stream: require.resolve('stream-browserify'),
       // path: require.resolve("path-browserify"),
       path: false
     },

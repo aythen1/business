@@ -11,6 +11,16 @@ import {
   updateUser,
 } from '@/actions/iam'
 
+
+
+import { 
+  setThemeColor
+} from '@/slices/iamSlice'
+
+
+
+
+
 export const MenuLeftUser = ({
 
 }) => {
@@ -122,23 +132,37 @@ export const MenuLeftUser = ({
 
 
   // ----------------------------------------------------
-
-  const generarColorAleatorio = () => {
+  const generateColorRandom = () => {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   }
 
+  const themeColor = localStorage.getItem('themeColor')
+
+  console.log('themeColor', themeColor)
+
+
+  const [colors, setColors] = useState([
+    themeColor,
+    generateColorRandom(),
+    generateColorRandom(),
+    generateColorRandom(),
+    generateColorRandom(),
+  ]);
+
+
   const handleColorClick = (index) => {
-    const updatedColors = [...colores];
-    updatedColors[index] = generarColorAleatorio();
-    setColores(updatedColors);
+    if (index == 0) return false;
+
+    const color = colors[index]
+    localStorage.setItem('themeColor', color)
+    dispatch(setThemeColor(color))
+
+    const updatedColors = [...colors];
+    updatedColors[0] = color;
+    updatedColors[index] = generateColorRandom();
+    setColors(updatedColors);
   }
 
-  const [colores, setColores] = useState([
-    generarColorAleatorio(),
-    generarColorAleatorio(),
-    generarColorAleatorio(),
-    generarColorAleatorio(),
-  ]);
 
 
 
@@ -169,10 +193,6 @@ export const MenuLeftUser = ({
       img.src = e.target.result;
 
       img.onload = () => {
-        // setImageError(false);
-        // if (imgRef.current) {
-
-        // Escala la imagen a 400 píxeles
         const scaleFactor = 400 / Math.max(img.width, img.height);
         const scaledWidth = img.width * scaleFactor;
         const scaledHeight = img.height * scaleFactor;
@@ -206,6 +226,39 @@ export const MenuLeftUser = ({
 
   return (
     <div className={styles["frame-1171276727"]}>
+      <div className={styles["frame-2087328700"]}>
+        <div className={styles["horizontal-color-containers"]}>
+          {colors.map((color, index) => (
+            <div
+              key={index}
+              className={styles["color-container"]}
+              style={{ border: '1px solid color', backgroundColor: color }}
+              onClick={() => handleColorClick(index)}
+            ></div>
+          ))}
+        </div>
+        <div className={styles["frame-2087328710"]}>
+          <div className={styles["component-5"]}>
+            <div
+              onClick={() => handleSaveUser()}
+              className={styles["label2"]}
+            >
+              Guardar
+            </div>
+          </div>
+          <div className={styles["component-4"]}>
+            <div
+              onClick={() => handleCloseUser()}
+              className={styles["label"]}
+            >
+              <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
       <div
         className={styles["frame-2087328701"]}
         onClick={handleSaveImage}
@@ -235,26 +288,6 @@ export const MenuLeftUser = ({
           onChange={handleFileChange}
           accept="image/*"
         />
-      </div>
-      <div className={styles["frame-2087328700"]}>
-        <div className={styles["button-container"]}>
-          <div className={styles["component-4"]}>
-            <div
-              onClick={() => handleCloseUser()}
-              className={styles["label"]}
-            >
-              Cancel
-            </div>
-          </div>
-        </div>
-        <div className={styles["component-5"]}>
-          <div
-            onClick={() => handleSaveUser()}
-            className={styles["label2"]}
-          >
-            Guardar
-          </div>
-        </div>
       </div>
       <div className={styles["inner-container"]}>
         <div className={styles["input-container"]}>
@@ -445,23 +478,8 @@ export const MenuLeftUser = ({
           </div>
         </div>
       </div>
-      {/* <div className={styles["horizontal-color-containers"]}>
-      <div className={styles["color-container"]} style={{ background: 'var(--default)', border: '1px solid #000' }} onClick={handleClickWhite}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor1 }} onClick={() => handleClick1()}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor2 }} onClick={() => handleClick2()}></div>
-      <div className={styles["color-container"]} style={{ background: randomColor3 }} onClick={() => handleClick3()}></div>
-    </div> */}
 
-      <div className={styles["horizontal-color-containers"]}>
-        {colores.map((color, index) => (
-          <div
-            key={index}
-            className={styles["color-container"]}
-            style={{ border: '1px solid color', backgroundColor: color }}
-            onClick={() => handleColorClick(index)}
-          ></div>
-        ))}
-      </div>
+
     </div>
   );
 };

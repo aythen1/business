@@ -2,7 +2,7 @@
     display: flex;
     align-items: flex-start;
     gap: 6px;
-    border-left: 3px solid #000fff;
+    border-left: 3px solid var(--color-primary-0);
     background: #ebebff;
     border-radius: 4px;
     padding: 12px 10px;
@@ -10,7 +10,7 @@
     .alertInstanceText {
       b {
         font-size: 15px;
-        color: #000fff;
+        color: var(--color-primary-0);
       }
       p {
         font-size: 14px;
@@ -80,7 +80,7 @@
     border-radius: 4px;
     cursor: pointer;
     &:hover {
-      border: 1px solid #000fff;
+      border: 1px solid var(--color-primary-0);
     }
   }
   
@@ -96,7 +96,7 @@
       justify-content: center;
       cursor: pointer;
       background: transparent;
-      color: #000fff;
+      color: var(--color-primary-0);
       border-radius: 4px;
       height: 30px;
       width: 30px;
@@ -171,7 +171,7 @@
         border: none;
         border-radius: 6px;
         color: #fff;
-        background: #000fff;
+        background: var(--color-primary-0);
         font-size: 14px;
         cursor:pointer;
         svg {
@@ -179,19 +179,26 @@
           fill: #fff;
         }
         &:hover{
-          background: #0615df;
+          background: var(--color-primary-1);
         }
       }
       a {
+        cursor: pointer;
         font-size: 12px;
         display: flex;
         align-items: center;
         gap: 4px;
-        color: #000fff;
+        color: var(--color-primary-0);
      
         svg {
-          fill: #000fff;
+          fill: var(--color-primary-0);
           width: 10px;
+        }
+        &:hover{
+          color: var(--color-primary-1);
+          svg{
+            fill: var(--color-primary-1);
+          }
         }
       }
     }

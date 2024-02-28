@@ -83,11 +83,10 @@ const ticketSlice = createSlice({
 
 
       .addCase(addVectorTicket.fulfilled, (state, action) => {
-        state.messages.push(action.payload)
+        state.messages = [action.payload, ...state.messages]
       })
 
       .addCase(vectorTicket.fulfilled, (state, action) => {
-        console.log('aa', action.payload)
         state.messages = action.payload
       })
 

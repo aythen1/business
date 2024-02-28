@@ -3,26 +3,25 @@ import { generateID } from './utils'
 
 import './BarChart.css'
 
+const initialData = {
+  labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+  series: [{
+    name: 'series-1',
+    data: [5, 2, -4, 2, 0, -2, 5, -3]
+  }, {
+    name: 'series-2',
+    data: [4, 3, 5, 3, 1, 3, 6, 4]
+  }, {
+    name: 'series-3',
+    data: [2, 4, 3, 1, 4, 5, 3, 2]
+  }]
+}
 
-
-const SeriesOverRides = () => {
+const SeriesOverRides = ({ value = initialData }) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
-          var chart = new Chartist.Line(`#chart-${id}`, {
-            labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
-            // Naming the series with the series object array notation
-            series: [{
-              name: 'series-1',
-              data: [5, 2, -4, 2, 0, -2, 5, -3]
-            }, {
-              name: 'series-2',
-              data: [4, 3, 5, 3, 1, 3, 6, 4]
-            }, {
-              name: 'series-3',
-              data: [2, 4, 3, 1, 4, 5, 3, 2]
-            }]
-          }, {
+          var chart = new Chartist.Line(`#chart-${id}`, value, {
             fullWidth: true,
             // Within the series options you can use the series names
             // to specify configuration that will only be used for the

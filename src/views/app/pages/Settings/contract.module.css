@@ -15,7 +15,7 @@
 .box {}
 
 .box {
-    border: 1px solid lightgrey;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 10px 20px;
     margin: 10px 0px;
@@ -24,11 +24,12 @@
 }
 
 .footer {
+    color: var(--text-color);
     a {
         background-color: transparent;
         border: none;
         padding: 0px;
-        color: rgb(0, 93, 163);
+        color: var(--color-primary-0);
         text-decoration: underline 1px transparent;
         text-underline-offset: 2px;
         display: inline-flex;
@@ -47,7 +48,7 @@
         svg {
             width: 14px;
             height: 14px;
-            fill: rgb(0, 93, 163);
+            fill: var(--color-primary-0);
         }
     }
 }

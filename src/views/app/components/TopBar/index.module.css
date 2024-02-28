@@ -37,7 +37,7 @@
   width:100%
 } */
 .frame-2087325960 {
-  /* background: var(--background); */
+  background: var(--background);
   padding: 0px 10px;
   height: 55px;
   display: flex;
@@ -101,7 +101,7 @@
   overflow: visible;
 }
 .component-8 {
-  background: #0000ff;
+  background:  var(--color-primary-0);
   border-radius: 5px;
   padding: 17px 16px 17px 16px;
   display: flex;
@@ -115,7 +115,7 @@
   position: relative;
   cursor: pointer;
   &:hover{
-    background: #0404e4;
+    background: var(--color-primary-1);
   }
 }
 .label {
@@ -147,7 +147,7 @@
   justify-content: flex-start;
   cursor: pointer;
   &:hover{
-    background: #dadbdd;
+    background:  var(--background-button-selected-topbar);
   }
 }
 .informe {
@@ -198,7 +198,7 @@
   padding: 7px;
   cursor: pointer;
   &:hover{
-    background: #dadbdd;
+    background: var(--background-button-selected-topbar);
   }
 }
 .dark {
@@ -240,7 +240,7 @@
   cursor: pointer;
   border-radius: 5px;
   &:hover{
-    background: #dadbdd;
+    background:  var(--background-button-selected-topbar);
   }
 }
 
@@ -305,8 +305,9 @@
       border-radius: 4px;
       border: none;
       cursor: pointer;
-      img{
-        width: 14px
+      svg{
+        color: var(--text-primary);
+        width: 28px
       }
     }
     
@@ -360,7 +361,7 @@
                     padding: 3px 8px;
                     border-radius: 13px;
                     font-size: 11px;
-                    background: #000fff;
+                    background: var(--color-primary-0);
                     color: #fff;
                   }
                   label.new{

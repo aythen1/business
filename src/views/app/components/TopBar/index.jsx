@@ -10,14 +10,14 @@ import IconExit from './assets/IconExit.svg'
 import IconLight from './assets/IconLight.svg'
 import IconReport from './assets/IconReport.svg'
 
-import IconBurger from './assets/IconBurger.svg'
+// import IconBurger from './assets/IconBurger.svg'
 
 
 // import { logout } from '@/views/app/auth/auth';
 
-
 import Pricing from '@/views/web/pricing'
 import Report from '@/views/app/components/TopBar/Report'
+import ModalAddon from '@/views/app/pages/Addon/Vector'
 
 import {
   setModal,
@@ -33,8 +33,8 @@ import {
   setOpenChatBot,
 } from '@/actions/iam'
 
-import { 
-  updateDashboard, 
+import {
+  updateDashboard,
 } from '@/actions/dashboard';
 
 
@@ -50,23 +50,24 @@ export const TopBar = ({
 
 
   const { user } = useSelector((state) => state.iam)
-  const { dashboard, status } = useSelector((state) => state.dashboard)
+  const { dashboard, status: statusDashboard } = useSelector((state) => state.dashboard)
+  const { status: statusAddon } = useSelector((state) => state.addon)
 
   const [openMenuMobile, setOpenMenuMobile] = useState(false)
   const [isUpgrade, setIsUpgrade] = useState(false)
   const [stateUpgrade, setStateUpgrade] = useState(false)
 
-  const [isShowDashBoard, setIsShowDashBoard ] = useState(false)
+  const [isShowDashBoard, setIsShowDashBoard] = useState(false)
 
   // --------------------------------------------------------------
-  
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const dashboardParam = urlParams.get('dashboard');
 
-    if(dashboardParam){
+    if (dashboardParam) {
       setIsShowDashBoard(true)
-    }else{
+    } else {
       setIsShowDashBoard(false)
     }
   }, [])
@@ -84,12 +85,15 @@ export const TopBar = ({
 
   // --------------------------------------------------------------
 
+  const handleClickVersion = () => {
+    dispatch(setModal(<ModalAddon modal={'custom'} />))
+  }
 
 
   const handleClickUser = () => {
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft('user'))
-    
+
     setOpenMenuMobile(false)
   }
 
@@ -110,15 +114,16 @@ export const TopBar = ({
   }
 
 
-  const handleClickChat = () => {
-    setOpenMenuMobile(false)
-
-    dispatch(setOpenMenuLeft(false))
-    dispatch(setOpenChatBot(true))
+  const handleClickChat = (e) => {
+    e.stopPropagation()
+    // setOpenMenuMobile(false)
+    
+    // dispatch(setOpenMenuLeft(false))
+    console.log('efiurwuf')
+    dispatch(setOpenChatBot('hello world'))
   }
 
   const handleClickGPTStore = async () => {
-    alert(1)
     setOpenMenuMobile(false)
 
     setOpenChatBot(false)
@@ -160,18 +165,9 @@ export const TopBar = ({
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
-    navigate(`/${'es'}/app/drive`);
+    navigate(`/${'es'}/app/settings/drive`);
   }
 
-
-  const handleClickDashboard = () => {
-    setOpenMenuMobile(false)
-
-    dispatch(setOpenChatBot(false))
-    dispatch(setOpenMenuLeft(false))
-
-    navigate(`/${'es'}/app/settings/drive/dashboard`);
-  }
 
   const handleClickHome = () => {
     setOpenMenuMobile(false)
@@ -182,13 +178,22 @@ export const TopBar = ({
     navigate(`/${'es'}/app/settings/home`);
   }
 
+  const handleClickDashboard = () => {
+    setOpenMenuMobile(false)
+
+    dispatch(setOpenChatBot(false))
+    dispatch(setOpenMenuLeft(false))
+
+    navigate(`/${'es'}/app/settings/board`);
+  }
+
   const handleClickBilling = () => {
     setOpenMenuMobile(false)
 
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
-    navigate(`/${'es'}/app/billing`);
+    navigate(`/${'es'}/app/settings/billing`);
   }
 
   const handleClickTheme = (theme) => {
@@ -202,14 +207,14 @@ export const TopBar = ({
 
   const handleClickLogout = async () => {
     await logout();
-    navigate(`/${'es'}/login`);
+    navigate(`/${'es'}/app/login`);
     window.location.reload();
 
   }
 
   const handleClickOpenMenu = () => {
     setOpenMenuMobile(false)
-    
+
     dispatch(setOpenChatBot(false))
     dispatch(setOpenMenuLeft(false))
 
@@ -220,8 +225,8 @@ export const TopBar = ({
   // -------------------------------------
   useEffect(() => {
     if (stateUpgrade == 'pay') {
-      dispatch(upgrade())
-      dispatch(setModal(null))
+      dispatch(upgrade({}))
+      // dispatch(setModal(null))
 
     }
   }, [stateUpgrade])
@@ -231,11 +236,11 @@ export const TopBar = ({
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
-      // Maneja el error de la carga de la imagen
-      setImageError(true);
+    // Maneja el error de la carga de la imagen
+    setImageError(true);
   };
 
-  
+
   return (
     <div className={styles["frame-2087325960"]}>
       <div
@@ -247,18 +252,18 @@ export const TopBar = ({
         </div> */}
 
         <div className={styles["ellipse-2325"]}>
-            {imageError ? (
-                <div className={styles.initial}>
-                    {user?.user.charAt(0)}
-                </div>
-            ) : (
-                <img src={`http://localhost:3001/service/v1/iam/user/${user?.id}`} onError={handleImageError} />
-            )}
+          {imageError ? (
+            <div className={styles.initial}>
+              {user?.user.charAt(0)}
+            </div>
+          ) : (
+            <img src={`http://localhost:3001/service/v1/iam/user/${user?.id}`} onError={handleImageError} />
+          )}
         </div>
 
         <div className={styles["frame-23415"]}>
           <div className={styles["welcome-john-doe"]}>
-            Welcome, { user?.name || 'Not found'}
+            Welcome, {user?.name || 'Not found'}
           </div>
           <div
             onClick={(e) => {
@@ -272,7 +277,7 @@ export const TopBar = ({
         </div>
       </div>
       <div className={styles['noneMobile'] + ' ' + styles["frame-20934"]}>
-        {status == 'save' && (
+        {statusDashboard == 'save' && (
           <div className={styles["group-1171276726"]}>
             <div
               onClick={() => handleClickSave()}
@@ -284,7 +289,6 @@ export const TopBar = ({
             </div>
           </div>
         )}
-
 
         {isUpgrade ? (
           <svg
@@ -309,10 +313,21 @@ export const TopBar = ({
           </div>
         )}
         <div className={styles["group-1171276726"]}>
-          <div className={styles["component-7"]}>
-
-            {isShowDashBoard ? (
-                <div 
+          {statusAddon == 'active' ? (
+            <div className={styles["group-1171276726"]}>
+              <div
+                onClick={() => handleClickVersion()}
+                className={styles["component-7"]}
+              >
+                <div className={styles["informe"]}>
+                  <span className={styles["informe-span2"]}>Version</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className={styles["component-7"]}>
+              {isShowDashBoard ? (
+                <div
                   onClick={() => handleClickReport()}
                   className={styles["informe"]}
                 >
@@ -331,16 +346,20 @@ export const TopBar = ({
                   </svg>
                   <span className={styles["informe-span2"]}>Informe</span>
                 </div>
-            ):(
-              <div onClick={() => handleClickDashboard()}>
-                Dashboard
-              </div>
-            )}
-          </div>
+              ) : (
+                <div
+                  className={styles["informe-span2"]}
+                  onClick={() => handleClickDashboard()}
+                >
+                  Dashboard
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className={styles["group-1171276726"]}>
           <div
-            onClick={() => handleClickChat()}
+            onClick={(e) => handleClickChat(e)}
             className={styles["component-7"]}
           >
             <div className={styles["informe"]}>
@@ -458,7 +477,9 @@ export const TopBar = ({
           className={styles['buttonMenu']}
           onClick={() => handleClickOpenMenu()}
         >
-          <img src={IconBurger} />
+          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14" />
+          </svg>
         </button>
         {openMenuMobile && (
 
@@ -466,7 +487,7 @@ export const TopBar = ({
             <ul className={styles['list']}>
               <li className={styles['item']}>
                 <button
-                  onClick={() => handleClickDashboard()}
+                  onClick={() => handleClickHome()}
                   className={styles['button']}
                 >
                   <div className={styles['square']}>
@@ -494,7 +515,7 @@ export const TopBar = ({
               </li>
               <li className={styles['item']}>
                 <button
-                  onClick={() => handleClickHome()}
+                  onClick={() => handleClickDashboard()}
                   className={styles['button']}
                 >
                   <div className={styles['square']}>
@@ -538,7 +559,7 @@ export const TopBar = ({
                     </svg>
                   </div>
                   <span>
-                    Informes
+                    Drive Docs
                   </span>
                   <label className={styles['new']}>
                     NEW
@@ -548,7 +569,7 @@ export const TopBar = ({
 
               <li className={styles['item']}>
                 <button
-                  onClick={() => handleClickChat()}
+                  onClick={(e) => handleClickChat(e)}
                   className={styles['button']}
                 >
                   <div className={styles['square']}>

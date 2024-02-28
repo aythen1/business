@@ -4,17 +4,20 @@ import { generateID } from './utils'
 import './BarChart.css'
 
 
+const initialData = {
+  series: [5, 3, 4]
+};
 
-const SimplePieChart = () => {
+
+
+const SimplePieChart = ({ value = initialData}) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
      
-            var data = {
-              series: [5, 3, 4]
-            };
+           
             
-            new Chartist.Pie(`#chart-${id}`, data, {
+            new Chartist.Pie(`#chart-${id}`, value, {
               series: [20, 10, 30, 40]
             }, {
               donut: true,

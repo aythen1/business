@@ -4,6 +4,7 @@ const schemaAddons = {
         id: { type: 'string', format: 'uuid' },
         image: { type: 'string' },
         tags: { type: 'string', default: '[]' },
+        title: { type: 'string' },
         description: { type: 'string' },
         fav: { type: 'boolean', default: false },
         labels: { type: 'string', default: '{}' },

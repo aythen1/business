@@ -442,8 +442,8 @@
     background: none;
 
     &.buttonDB {
-      fill: #000fff;
-      border: 1px solid #000fff;
+      fill: var(--color-primary-0);
+      border: 1px solid var(--color-primary-0);
     }
     &.buttonDelete {
       color: rgb(179, 20, 77);
@@ -473,14 +473,14 @@
     width: 12px;
     color: rgb(213, 213, 213);
   }
-  &.top {
-    .bottom {
-      color: #000fff;
+  &.top{
+    .bottom{
+      color: var(--color-primary-0);
     }
   }
-  &.bottom {
-    .top {
-      color: #000fff;
+  &.bottom{
+    .top{
+      color: var(--color-primary-0);
     }
   }
 }

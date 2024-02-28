@@ -1,7 +1,8 @@
 
 .main{
     max-width: 900px;
-    margin: 20px auto;
+    margin: 10px auto;
+    padding: 20px;
 }
 
 
@@ -25,10 +26,13 @@
         border: none;
         outline: none;
         color: var(--text-primary);
-
         &.selected{
-            background: #000fff;
+            background: var(--color-primary-0);
             color: #fff;
+        }
+        &:hover{
+            background: var(--background-secondary);
+            color: var(--text-primary);
         }
     }
 }

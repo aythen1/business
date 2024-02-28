@@ -1,11 +1,8 @@
-// https://lancedb.github.io/lancedb/ann_indexes/#projections-select-clause
-
 const { catchedAsync, response } = require('../utils/err')
 const lancedb = require('vectordb')
 const fs = require('fs')
 const path = require('path')
 
-const jwt = require('jsonwebtoken')
 
 
 const {
@@ -18,49 +15,6 @@ const {
 
 
 
-const ID = 'test/test'
-const secretKey = 'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf';
-
-
-const encodeVector = (id) => {
-  const str = `${id}`
-  const base64Str = btoa(str)
-  return base64Str
-}
-
-function decodeToken(token) {
-  try {
-    // Decodifica el token utilizando la clave secreta
-    const decoded = jwt.verify(token, secretKey);
-    return decoded;
-  } catch (error) {
-    // Maneja errores de decodificación, por ejemplo, token no válido o expirado
-    console.error('Error al decodificar el token:', error.message);
-    return null;
-  }
-}
-
-
-
-const isAuth = async (token) => {
-  const data = await decodeToken(token)
-  const path = encodeVector(ID)
-
-  // console.log('ddd', data)
-
-  const options = [
-    { field: 'id', operator: '==', value: data.id },
-    { field: 'user', operator: '==', value: data.user },
-    { field: 'isverified', operator: '==', value: true }
-  ];
-
-  const resp = await getVector(path, 'users', [0, 0], options)
-
-  if (resp.length > 0) return resp[0]
-  return false
-}
-
-
 
 
 
@@ -71,38 +25,77 @@ const decodeVector = (base64Str) => {
   return { workspaceId, projectId }
 }
 
+
+
+
+
+
+
 async function _addVector(req, res) {
   const { id, name, data } = req.body
+
+  // console.log('d', id, name, data)
+
+  const resp = await addVector(id, name, vector = [0, 0], data)
+
+  // console.log('resp', resp)
+  // response(res, 200, { data: resp })
+
+  return res.status(200).send(resp)
+}
+
+
+
+
+async function _updateVector(req, res) {
+  const { data } = req.body
+
+
+  const { id, name } = req.params
   // const { workspaceId, projectId } = decodeVector(id)
   // const uri = 'data/vector/' + workspaceId + '/' + projectId
 
-  console.log('_addVector_addVector', id, name, data)
-  const resp = await addVector(id, name, vector = [0, 0], data)
+  console.log('update vector', id, name, data)
 
+  // const resp = await addVector(id, name, vector = [0, 0], data)
+  const resp = await updateVector(id, name, vector = [0, 0], data)
+  // const resp = await addVector(id, name, vector = [0, 0], {message: data})
   console.log('resp', resp)
-  response(res, 200, { data: id })
+
+  return res.status(200).send(resp)
+  // response(res, 200, { data: resp })
 }
 
-async function _updateVector(req, res) {
-  const { token, data } = req.body
-  const payload = await isAuth(token)
 
-  if (!payload) {
-    return res.status(501).send('Not verify user')
+
+
+
+
+const addVectorData = async (req, res) => {
+  try {
+    const { id, title, data, vector } = req.body
+
+    // console.log('idddd', id, data, vector)
+
+    // console.log('==============', addon, vector)
+    // const path = encodeVector(`addon/${data.title || 'shared'}`)
+    // const name = vector.title + '-' + data.title
+    // const result = await isAuth(token)
+
+    const resp = await addVector(id, title, [0, 0, 0], data, { vectors: vector })
+    // console.log('reess', resp)
+    return res.status(200).send(data)
+
+  } catch (err) {
+    return res.status(500).send('Not verify user')
   }
-
-  const { id, name } = req.params
-  const { workspaceId, projectId } = decodeVector(id)
-  const uri = 'data/vector/' + workspaceId + '/' + projectId
-  
-  
-  console.log('===================================', name, data)
-  
-  const resp = await addVector(id, name, vector = [0, 0], {message: data})
-  
-  console.log('===================================', name, resp)
-  response(res, 200, { data: id })
 }
+
+
+
+
+
+
 
 function _deleteDirSync(directorio) {
   try {
@@ -126,16 +119,25 @@ function _deleteDirSync(directorio) {
   }
 }
 
+
+
 async function _deleteVector(req, res) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  const payload = await isAuth(token)
+  const { id, name } = req.params
+  const { data } = req.body
+  // console.log('delete', id, name, data)
 
-  if (!payload) {
-    return res.status(501).send('Not verify user')
-  }
+  const resp = await deleteVector(id, name, data)
+  // console.log('rrrrrr', resp)
+
+  return res.status(200).send(data)
+  // response(res, 200, { data: 200 })
+}
 
 
+
+async function _removeVector(req, res) {
+
+  // response(res, 200, { data: 'hello world como estás' })
   const { id, name } = req.params
   const { workspaceId, projectId } = decodeVector(id)
 
@@ -149,13 +151,15 @@ async function _deleteVector(req, res) {
     console.error(`Errors al eliminar la tabla ${name}: ${error.message}`)
   }
 
-  response(res, 200, { data: 200 })
+  // response(res, 200, { data: 200 })
+  return res.status(200).send(200)
 }
 
-async function _removeVector(req, res) {
 
-  response(res, 200, { data: 'hello world como estás' })
-}
+
+
+
+
 
 async function _openVector(req, res) {
   const { path } = req.body
@@ -169,57 +173,70 @@ async function _openVector(req, res) {
   }]
 
   const query = await getVector(uri, name, [0, 0], conditions)
-  
+
   response(res, 200, { data: query })
 
 }
 
+
+
+
+
+
 async function _getVector(req, res) {
   const { id, name } = req.params
-  const { token, search } = req.body
-  // const authHeader = req.headers['authorization'];
-  // const token = authHeader && authHeader.split(' ')[1];
-  const payload = await isAuth(token)
+  const { data } = req.body
 
-  if (!payload) {
-    return res.status(501).send('Not verify user')
-  }
+  try {
+    let options = []
 
-  try{
 
-    const options = [
-      { field: 'title', operator: 'LIKE', value: `%${search}%` }
-    ];
-    
+    if (data.title) {
+      options = [
+        { field: 'title', operator: 'LIKE', value: `%${data.title}%` }
+      ];
+    }else if (data.id) {
+      options = [
+        { field: 'id', operator: 'LIKE', value: `%${data.id}%` }
+      ];
+    }
+
+    console.log('options', options)
+
+
     const query = await getVector(id, name, [0, 0], options)
+    // const query = await getVector(id, name, [0, 0])
 
-    console.log('query1', query)
-
-    if(!query.length){
+    if (!query.length) {
       // response(res, 200, { data: [] })
       return res.status(200).send([])
     }
-    
+
     // response(res, 200, { data: query })
-    return res.status(200).send(query)
-    
-  }catch(err){
+    if(options.length > 0){
+      return res.status(200).send(query[0])
+    }else{
+      return res.status(200).send(query)
+    }
+
+  } catch (err) {
     // response(res, 200, { data: [] })
     return res.status(200).send([])
   }
-
-
 }
 
 
-async function _loadVector(req, res){
+
+
+
+async function _loadVector(req, res) {
   const { id, name } = req.params
   const { workspaceId, projectId } = decodeVector(id)
-  
+
   const uri = 'data/vector/' + workspaceId + '/' + projectId
   const file = req.file
   const path = uri + '/' + name + '/' + file.originalname
-  
+
   try {
     let type
     if (name === 'records') {
@@ -230,7 +247,7 @@ async function _loadVector(req, res){
 
     const db = await lancedb.connect(uri)
     const tbl = await db.openTable(name)
- 
+
     const message = [
       {
         currentDate: new Date().toISOString(),
@@ -241,14 +258,8 @@ async function _loadVector(req, res){
       }
     ]
 
-    // // not exist table
-    // if (tbl === 404) {
-    //   await db.createTable(name, message)
-    // } else {
-    //   await tbl.add(message)
-    // }
-    addVector(id, name, message)
 
+    addVector(id, name, message)
 
     response(res, 200, { data: path })
   } catch (error) {
@@ -259,10 +270,6 @@ async function _loadVector(req, res){
 
 
 
-
-
-
-// ----------------------------------------------------------------------------------------------
 
 async function _getAllVector(req, res) {
   const db = await lancedb.connect('data/vector')
@@ -290,12 +297,14 @@ async function _getAllVector(req, res) {
 
 
 module.exports = {
-  loadVector: catchedAsync(_loadVector),
   addVector: catchedAsync(_addVector),
+  updateVector: catchedAsync(_updateVector),
+  addVectorData: catchedAsync(addVectorData),
+
+  loadVector: catchedAsync(_loadVector),
   deleteVector: catchedAsync(_deleteVector),
   removeVector: catchedAsync(_removeVector),
   openVector: catchedAsync(_openVector),
   getVector: catchedAsync(_getVector),
   getAllVector: catchedAsync(_getAllVector),
-  updateVector: catchedAsync(_updateVector)
 }

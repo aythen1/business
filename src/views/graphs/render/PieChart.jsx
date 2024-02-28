@@ -6,15 +6,18 @@ import './BarChart.css'
 
 
 
-const PieChart = () => {
+var datainitialData = {
+  labels: ['Bananas', 'Apples', 'Grapes'],
+  series: [20, 15, 40]
+};
+
+
+
+
+const PieChart = ({ value = initialData }) => {
     const [id] = useState(generateID())
 
     useEffect(() => {
-        
-              var data = {
-                labels: ['Bananas', 'Apples', 'Grapes'],
-                series: [20, 15, 40]
-              };
               
               var options = {
                 labelInterpolationFnc: function(value) {
@@ -37,7 +40,7 @@ const PieChart = () => {
                 }]
               ];
               
-              new Chartist.Pie(`#chart-${id}`, data, options, responsiveOptions);
+              new Chartist.Pie(`#chart-${id}`, value, options, responsiveOptions);
           
           
     }, [])

@@ -1,13 +1,15 @@
 svg{
-  width: 10px;
+  width: 25px;
+  /* fill: var(--text-color); */
 }
+
 .modal{
   max-width: 500px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
-  max-width: 450px;
+  max-width: 350px;
   .maxHeight{
     display: flex;
     flex-direction: column;
@@ -17,6 +19,9 @@ svg{
     overflow-y: scroll;
     &::-webkit-scrollbar{
       display: none;
+    }
+    &._400{
+      max-height: 400px;
     }
   }
 
@@ -43,7 +48,7 @@ svg{
     display: flex;
     align-items: center;
     gap: 4px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     width: 100%;
   }
 
@@ -77,7 +82,7 @@ svg{
         width: 6px;
         height: 6px;
         border-radius: 10px;
-        background: #000fff;
+        background: var(--color-primary-0);
       }
     }
   }
@@ -97,7 +102,7 @@ svg{
     font-weight: 500;
   }
   .textarea{
-    background-color: rgb(255, 255, 255);
+    background-color: var(--background-secondary);
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: rgb(63, 66, 80);
@@ -108,6 +113,7 @@ svg{
     line-height: 24px;
     padding: 8px calc(32px) 8px 8px;
     height: 55px;
+    min-height: 100px;
     resize: vertical;
     width: 100%;
     &::-webkit-scrollbar{
@@ -125,6 +131,11 @@ svg{
     gap: 2px;
     font-size: 8px;
     margin: 6px 0px;
+    svg{
+      min-width: 14px;
+      width: 14px;
+      fill: var(--text-color);
+    }
   }
 
   .buttons{
@@ -172,15 +183,16 @@ svg{
       letter-spacing: 0px;
       line-height: 24px;
       border: none;
-      background: rgb(229, 219, 253);
+      background: var(--color-primary-2);
       color: rgb(255, 255, 255);
       
       /* &.desactive{
         
       } */
       &.active{
-        background: #000fff;
+        background: var(--color-primary-0);
         color: rgb(255, 255, 255);
+        cursor: pointer;
       }
 
       &.delete{
@@ -202,7 +214,7 @@ svg{
     justify-content: center;
     align-items: center;
     color: rgb(63, 66, 80);
-    background: rgb(255, 255, 255);
+    background: var(--background-secondary);
     border: 1px solid var(--border-color);
     width: 26px;
     height: 26px;
@@ -225,7 +237,7 @@ svg{
   justify-content: space-between;
   min-height: 40px;
   position: relative;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--background-secondary);
   border-color: var(--border-color);
   border-radius: 4px;
   border-style: solid;
@@ -260,13 +272,17 @@ svg{
     position: absolute;
     top: 0px;
     right: 0px;
-    border-left: 1px solid rgb(224 224 224);
-    width: 40px;
-    height: 40px;
+    border-left: 1px solid var(--border-color);
+    width: 50px;
+    height: 49px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 0px;
+    svg{
+      fill: var(--text-color);
+      width: 20px;
+    }
   }
 }
 
@@ -286,40 +302,6 @@ svg{
 
 
 
-.labelsTag{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  label{
-    padding: 2px 8px;
-    border:1px solid rgb(215, 215, 215);
-    border-radius: 8px;
-  }
-}
-
-.addTag{
-  display: inline-flex;
-  height: 38px;
-  padding: 0px 16px;
-  flex-direction: row;
-  gap: 8px;
-  border-radius: 4px;
-  width: auto;
-  align-items: center;
-  cursor: pointer;
-  justify-content: center;
-  outline-offset: 2px;
-  white-space: nowrap;
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0px;
-  line-height: 24px;
-  background: rgb(233, 234, 235);
-  border: none;
-  color: rgb(34, 38, 56);
-  margin: 12px 0px;
-}
-
 
 .box{
   width: 100%;
@@ -331,15 +313,15 @@ svg{
 
 
 
-.buttonItem{
+/* .buttonItem{
   display: flex;
   align-items: center;
   gap: 4px;
 
   &.active{
     .save{
-      border: 1px solid #000fff;
-      color: #000fff;
+      border: 1px solid var(--color-primary-0);
+      color: var(--color-primary-0);
     }
     .delete{
       border: 1px solid rgb(179, 20, 77);
@@ -381,7 +363,7 @@ svg{
       height: 22px;
       
       svg{
-        width: 10px !important;
+        min-width: 10px !important;
       }
     }
 
@@ -390,7 +372,7 @@ svg{
       color: rgb(179, 20, 77);
     }
   }
-}
+} */
 
 
 
@@ -402,7 +384,7 @@ svg{
 .ancle{
   border: none;
   padding: 0px;
-  color: rgb(0, 93, 163);
+  color: var(--color-primary-0);
   text-underline-offset: 2px;
   display: inline-flex;
   flex-direction: row;
@@ -426,7 +408,7 @@ svg{
 }
 
 .rule{
-  border-top: 1px solid #dedede;
+  border-top: 1px solid var(--border-color);
   margin-top: 10px;
   padding: 6px 4px 2px;
   .headerRule{
@@ -444,7 +426,7 @@ svg{
     align-items: center;
     gap: 4px;
     label{
-      border: 1px solid #bcbcbc;
+      border: 1px solid var(--border-color);
       padding: 2px 4px;
       border-radius: 2px;
     }
@@ -456,9 +438,9 @@ svg{
 
 /**/
 .logo{
-  width: 112px;
-  min-width: 112px;
-  height: 112px;
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
   margin-top: 4px;
   border-radius: 12px;
   background: #f2f2f2;
@@ -498,7 +480,7 @@ code
   align-items: center;
   justify-content: space-between;
   padding: 12px;
-  background: #f0f0f0;
+  background: var(--background-secondary);
   width: 100%;
   border-radius: 8px;
   div{
@@ -523,14 +505,20 @@ alert
   display: flex;
   justify-content: flex-start;
   gap: 22px;
-  background: #d0d3ff;
+  background: var(--color-primary-1);
   border-radius: 6px;
-  border-left: 6px solid #000fff;
+  border-left: 6px solid var(--color-primary-0);
   padding: 12px 4px 12px 16px;
   /* padding-left: 18px; */
-  fill: #000fff;
+  fill: var(--color-primary-0);
   svg{
     width: 20px;
-    color: #000fff;
+    color: var(--color-primary-0);
   }
 }
+
+
+
+
+
+

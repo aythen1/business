@@ -19,7 +19,9 @@ import Billing from './billing'
 import Contract from './contract'
 // import Support from './support'
 import Drive from './drive'
-import Dashboard from '../DashBoard'
+// import Dashboard from '../DashBoard'
+
+import Vector from '../Vector'
 
 
 
@@ -33,12 +35,12 @@ const SettingsPath = ({}) => {
     content = <Billing />;
   } else if (settingsTag === 'contracts') {
     content = <Contract />;
-  } else if (settingsTag === 'board') {
-    content = <Dashboard />;
-  } else if (settingsTag === 'support') {
+  }  else if (settingsTag === 'support') {
     content = <Support />;
   } else if (settingsTag === 'home') {
     content = <Home />;
+  } else if (settingsTag === 'vector') {
+    content = <Vector />;
   } else {
     content = <Drive />;
   }
@@ -62,7 +64,9 @@ const Settings = ({  }) => {
       setTag(value);
 
       if(value == 'support'){
-        navigate(`/${'es'}/app/${value}`);
+        navigate(`/${'es'}/app/support`);
+      }else if(value == 'vector'){
+        navigate(`/${'es'}/app/vector`);
       }else if(value == 'board'){
         dispatch(setDashboard(null))
         navigate(`/${'es'}/app/settings/${value}`);
@@ -86,13 +90,20 @@ const Settings = ({  }) => {
                     className={tag === 'drive' ? styles.selected : ''}
                     onClick={() => selectTag('drive')}
                 >
-                    Drive
+                    Mis documentos
                 </button>
                 <button 
-                    className={tag === 'board' ? styles.selected : ''}
-                    onClick={() => selectTag('board')}
+                    className={tag === 'test' ? styles.selected : ''}
+                    onClick={() => selectTag('vector')}
                 >
-                    Dashboards
+                    Aythen DB
+                </button>
+                <button
+                    style={{marginLeft: 'auto'}} 
+                    className={tag === 'support' ? styles.selected : ''}
+                    onClick={() => selectTag('support')}
+                >
+                    Support
                 </button>
                 <button 
                     className={tag === 'billing' ? styles.selected : ''}
@@ -105,12 +116,6 @@ const Settings = ({  }) => {
                     onClick={() => selectTag('contracts')}
                 >
                     Contracts
-                </button>
-                <button 
-                    className={tag === 'support' ? styles.selected : ''}
-                    onClick={() => selectTag('support')}
-                >
-                    Support
                 </button>
             </div>
             <div>

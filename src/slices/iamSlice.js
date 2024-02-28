@@ -4,6 +4,7 @@ import {
   setOpenMenuLeft,
   setOpenMenuRight,
   setOpenChatBot,
+  setOpenModal,
 
   fetchsDefault, 
   updateDefault, 
@@ -42,16 +43,22 @@ import {
 
   addLog,
   deleteLog,
+  deleteLogs,
   fetchsLog
 } from '@/actions/iam'
 // import { fetchsUser } from '../actions/iam';
 
+
+
 const iamSlice = createSlice({
   name: 'iam',
   initialState: {
+    themeColor: '#fff',
+
     user: null,
     billing: null,
     token:  null,
+    
     
     vector: {},
     vectors: [],
@@ -98,9 +105,12 @@ const iamSlice = createSlice({
     },
     setVectors: (state, action) => {
       state.vectors = action.payload
-    }
+    },
 
     // otras acciones...
+    setThemeColor: (state, action) => {
+      state.themeColor = action.payload
+    }
   },
   extraReducers: (builder) => {
     // Manejar las acciones generadas por createAsyncThunk
@@ -113,6 +123,15 @@ const iamSlice = createSlice({
       })
       .addCase(setOpenChatBot.fulfilled, (state, action) => {
         state.openChatBot = action.payload
+      })
+      .addCase(setOpenModal.fulfilled, (state, action) => {
+        console.log('einderunfur')
+        if(action.payload){
+          state.openModal = true;
+          state.modal = action.payload;
+        }else{
+          state.openModal = false;
+        }
       })
 
 
@@ -144,6 +163,8 @@ const iamSlice = createSlice({
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {
         // state.billing = action.payload
+        console.log('fetchsBillingfetchsBilling,', action.payload)
+        state.billing = action.payload
       })
       .addCase(updateBilling.fulfilled, (state, action) => {
         state.billing = action.payload
@@ -188,9 +209,12 @@ const iamSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(upgrade.fulfilled, (state, action) => {
-        localStorage.setItem('token', action.payload)
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        // localStorage.setItem('token', action.payload)
+        // state.token = action.payload.token;
+        // state.user = action.payload.user;
+      })
+      .addCase(upgrade.pending, (state, action) => {
+        state.status = 'loading'
       })
       .addCase(upgrade.rejected, (state, action) => {
         state.error = action.error.message;
@@ -255,8 +279,9 @@ const iamSlice = createSlice({
 
 
       .addCase(addUser.fulfilled, (state, action) => {
-        console.log('payload', action.payload)
-        state.users = { ...state.users, ...action.payload.user};
+        state.users = action.payload.concat(
+          state.users.filter((user2) => !action.payload.find((user1) => user1.id === user2.id))
+        );
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         const indexToDelete = state.users.findIndex(user => user.id === action.payload);
@@ -271,7 +296,9 @@ const iamSlice = createSlice({
 
       .addCase(addApplication.fulfilled, (state, action) => {
         console.log('payload', action.payload)
-        state.applications = { ...state.applications, ...action.payload};
+        state.applications = action.payload.concat(
+          state.applications.filter((app2) => !action.payload.find((app1) => app1.id === app2.id))
+        );
         // state.applications.push(action.payload;
       })
       .addCase(deleteApplication.fulfilled, (state, action) => {
@@ -285,7 +312,10 @@ const iamSlice = createSlice({
       })
       
       .addCase(addPolice.fulfilled, (state, action) => {
-        state.polices.push(action.payload);
+        // state.polices.push(action.payload);
+        state.polices = action.payload.concat(
+          state.polices.filter((police2) => !action.payload.find((police1) => police1.id === police2.id))
+        );
       })
       .addCase(deletePolice.fulfilled, (state, action) => {
         const indexToDelete = state.polices.findIndex(police => police.id === action.payload);
@@ -298,7 +328,12 @@ const iamSlice = createSlice({
       })
 
       .addCase(addApi.fulfilled, (state, action) => {
-        state.apis.push(action.payload);
+        // state.apis.push(action.payload);
+
+        state.apis = action.payload.concat(
+          state.apis.filter((api2) => !action.payload.find((api1) => api1.id === api2.id))
+        );
+
       })
       .addCase(deleteApi.fulfilled, (state, action) => {
         const indexToDelete = state.apis.findIndex(api => api.id === action.payload);
@@ -319,6 +354,9 @@ const iamSlice = createSlice({
           state.logs = [...state.logs.slice(0, indexToDelete), ...state.logs.slice(indexToDelete + 1)];
         }
       })
+      .addCase(deleteLogs.fulfilled, (state, action) => {
+        state.logs = []
+      })
       .addCase(fetchsLog.fulfilled, (state, action) => {
         state.logs = action.payload;
       })
@@ -330,6 +368,7 @@ export const {
   setModal,
   setVector,
   setVectors,
+  setThemeColor
 } = iamSlice.actions;
 
 

@@ -29,7 +29,7 @@ export const initialComponent = {
 const addonSlice = createSlice({
   name: 'addons',
   initialState: {
-    status: 'pending',
+    status: null,
     loading: false,
 
     code: null,
@@ -43,8 +43,12 @@ const addonSlice = createSlice({
     vectors: []
   },
   reducers: {
+    setStatus: (state, action) => {
+      state.status = action.payload
+    },
+
     setAddon: (state, action) => {
-      // lógica para manejar la acción 'setUser'
+      state.addon = action.payload
     },
     setCode: (state, action) => {
       state.code = action.payload
@@ -83,7 +87,10 @@ const addonSlice = createSlice({
 
       .addCase(addAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        // state.components = action.payload;
+        state.addons = action.payload.concat(
+          state.addons.filter((addon2) => !action.payload.find((addon1) => addon1.id === addon2.id))
+        );
       })
       .addCase(addAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -102,7 +109,8 @@ const addonSlice = createSlice({
 
 
       .addCase(deleteAddon.fulfilled, (state, action) => {
-        state.addons = state.addons.filter(addon => addon.id !== action.payload.id);
+        console.log('action', action.payload)
+        state.addons = state.addons.filter(addon => addon.id !== action.payload);
       })
 
 
@@ -145,6 +153,8 @@ const addonSlice = createSlice({
 });
 
 export const {
+  setStatus,
+
   setAddon,
   setCode,
   setVision,

@@ -31,17 +31,20 @@ export const fetchsAddon =
 
 export const fetchAddon =
   createAsyncThunk('addon/fetchAddon',
-    async (addonId, { dispatch }) => {
+    async (id, { dispatch }) => {
       try {
+        console.log('id', id)
         const token = localStorage.getItem('token')
         const resp = await apiBackend.get(
-          `/addon/${addonId}`,
+          `/addon/${id}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`
             },
           }
         );
+
+        console.log('resp', resp)
 
         return resp.data;
       } catch (error) {
@@ -66,7 +69,7 @@ export const addAddon =
         );
 
         console.log('respeeeee', resp)
-        return 'eee';
+        return resp.data;
       } catch (error) {
         throw error;
       }
@@ -194,6 +197,8 @@ export const codeAddon =
             },
           }
         );
+
+        console.log('eee', resp)
 
         return resp.data;
       } catch (error) {

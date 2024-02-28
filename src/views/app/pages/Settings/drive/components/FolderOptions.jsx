@@ -103,10 +103,10 @@ const FolderOptions = ({
         onClick={handlePaste}
       >
         Paste
-        <IoSettingsOutline
-          size={17}
+        {/* <IoSettingsOutline */}
+        {/* size={17}
           color={isCopyActive ? "#00f" : "#525252"}
-        />
+        /> */}
       </div>
       <div
         className={styles.option}
@@ -140,7 +140,7 @@ const FolderOptions = ({
         className={styles.option}
       >
         Delete Folder
-        <IoTrashOutline size={17} color="#D0342C" />
+        {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>
   );

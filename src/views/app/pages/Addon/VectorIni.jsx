@@ -18,7 +18,10 @@ import {
     setCode
 } from '@/slices/addonSlice'
 
-import AddTag from '../Settings/iam/AddTag'
+
+
+
+import AddTag from '@/views/app/pages/shared/AddTag'
 
 
 
@@ -40,6 +43,7 @@ const VectorCustom = ({ setModal, vector }) => {
     const textareaRef = useRef(null);
 
     // const [isNewVector, setIsNewVector] = useState(vector?.id ? true : false);
+    const [isLoading, setIsLoading] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
     const [state, setState] = useState({
@@ -55,6 +59,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
     useEffect(() => {
         if (code) {
+            setIsLoading(false)
             handleInputChange(code, 'code')
         }
     }, [code])
@@ -67,7 +72,6 @@ const VectorCustom = ({ setModal, vector }) => {
 
     const handleInputChange = (e, property) => {
         let value = e;
-        console.log('ee', property)
         if (e.target) {
             value = e.target.value;
         }
@@ -80,7 +84,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
             setState((prevState) => ({
                 ...prevState,
-                [property]: isValidText ? [value.trim()] : [],  // Asegura que el valor sea un array
+                [property]: isValidText ? value.trim() : '',
             }));
         } else {
             setState((prevState) => ({
@@ -92,6 +96,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
 
     const handleNewVector = () => {
+        setIsLoading(true)
         dispatch(codeAddon({
             user: state.description
         }))
@@ -122,42 +127,51 @@ const VectorCustom = ({ setModal, vector }) => {
     return (
         <div className={styles.modal}>
             <div className={styles.left}>
-            {code ? (
-                    <div className={styles.button}>
-                        <button
-                            className={styles.active}
-                            onClick={() => handleNewVector()}
-                            style={{
-                                minWidth: 45,
-                                width: 45,
-                                padding: 4
-                            }}
-                        >
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path></g></g></svg>
-                        </button>
-                        <button
-                            onClick={() => handleAddVector()}
-                            className={styles.active}
-                        >
-                            Save Vector
-                        </button>
-                        <button
-                            onClick={() => handleDeleteVector()}
-                            className={styles.delete}
-                        >
-                            Delete 
-                        </button>
+                {isLoading ? (
+                    <div className={styles.bar}>
+                        <div className={styles.progress}></div>
                     </div>
                 ) : (
-                    <div className={styles.button}>
-                        <button
-                            onClick={() => handleNewVector()}
-                            className={`${styles.desactive} ${isActive ? styles.active : ''}`}
-                        >
-                            Create a New Vector
-                        </button>
+                    <div>
+                        {code ? (
+                            <div className={styles.button}>
+                                <button
+                                    className={styles.active}
+                                    onClick={() => handleNewVector()}
+                                    style={{
+                                        minWidth: 45,
+                                        width: 45,
+                                        padding: 4
+                                    }}
+                                >
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path></g></g></svg>
+                                </button>
+                                <button
+                                    onClick={() => handleAddVector()}
+                                    className={styles.active}
+                                >
+                                    Save Vector
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteVector()}
+                                    className={styles.delete}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        ) : (
+                            <div className={styles.button}>
+                                <button
+                                    onClick={() => handleNewVector()}
+                                    className={`${styles.desactive} ${isActive ? styles.active : ''}`}
+                                >
+                                    Create a New Vector
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
+
                 <p className={styles.textBold}>
                     Enter the title for addon.
                 </p>
@@ -213,7 +227,7 @@ const VectorCustom = ({ setModal, vector }) => {
                 <p className={styles.text}>
                     Un vector lo puedes recuperar facilmente en tu addon vector
                 </p>
-                
+
             </div>
         </div>
     )

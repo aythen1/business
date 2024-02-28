@@ -1,72 +1,49 @@
-
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 import styles from '../../Settings/iam/modal.module.css'
-
-
-import {
-    addVectorAddon,
-    addAddon,
-    codeAddon
-} from '@/actions/addon'
-
-
-import {
-    setCode
-} from '@/slices/addonSlice'
-
-import AddTag from '../../Settings/iam/AddTag'
-
-
-
-const initialDescription = `Crea una landing page para una pagina comercial de un negocio, que tenga la marca coorporativa de colores verdes, crea los siguientes componentes.
-
-1. Header: Las 4 anclas de esta landingpage.
-2. Formulario: Teléfono, nombre, términos.
-3. Newsletter: Poner tu email.
-4. About Us: Un carousel con una foto y un texto.`
+import style from './index.module.css'
+// import AddTag from '../../Settings/iam/AddTag'
+import AddTag from '@/views/app/pages/shared/AddTag'
 
 
 
 
-const VectorCustom = ({ setModal, vector }) => {
+const AddonCustom = ({ addon }) => {
+
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { addon, code } = useSelector((state) => state.addon)
 
-    const textareaRef = useRef(null);
-
-    // const [isNewVector, setIsNewVector] = useState(vector?.id ? true : false);
+    const [isNewAddon, setIsNewAddon] = useState(addon?.id ? true : false);
     const [isActive, setIsActive] = useState(false)
 
+
+    // ---
     const [state, setState] = useState({
-        id: vector?.id || '',
-        version: vector?.version || '0',
-        title: vector?.title || '',
-        description: vector?.description || initialDescription,
-        code: vector?.code || '',
-        updatedAt: vector?.updatedAt || new Date(),
-        createdAt: vector?.createdAt || new Date(),
+        id: addon?.id || '',
+
+        tag: addon?.tag || [],
+        createdAt: addon?.createdAt || '',
+
+        image: addon?.image || '',
+        title: addon?.title || '',
+        href: addon?.href || '',
+        description: addon?.description || '',
+
+        components: addon?.components || [],
+
+        available: addon?.available || false,
+        public: addon?.public || false
     });
 
 
-    useEffect(() => {
-        if(code){
-            handleInputChange(code, 'code')
-        }
-    }, [code])
 
-
-
-
-
-    // ---------------------------------------------------------------
 
     const handleInputChange = (e, property) => {
         let value = e;
-        console.log('ee', property)
         if (e.target) {
             value = e.target.value;
         }
@@ -79,7 +56,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
             setState((prevState) => ({
                 ...prevState,
-                [property]: isValidText ? [value.trim()] : [],  // Asegura que el valor sea un array
+                [property]: isValidText ? value.trim() : '',  // Asegura que el valor sea un array
             }));
         } else {
             setState((prevState) => ({
@@ -90,59 +67,186 @@ const VectorCustom = ({ setModal, vector }) => {
     };
 
 
-    const handleNewVector = () => {
-        dispatch(codeAddon({
-            user: state.description
-        }))
-    }
 
-    const handleAddVector = async () => {
-        dispatch(addVectorAddon({
-            addon,
-            vector: state,
-        }))
+
+    const handleAddAddon = () => {
+        const data = {
+            // owner: user?.id || '3r3',
+            available: true,
+            public: true,
+
+            title: 'hello',
+            href: 'hello',
+            description: '33r',
+            tags: state.tags || [],
+
+            updatedAt: new Date(),
+            createdAt: new Date(),
+        }
+
+        dispatch(addAddon(data))
         dispatch(setModal(null))
     }
 
-    const handleDeleteVector = () => {
-        dispatch(setCode(null))
+
+    const handleDeleteAddon = () => {
+        dispatch(deleteAddon(state.id))
+        dispatch(setModal(null))
     }
 
 
-    useEffect(() => {
-        if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto'; // Restablecer la altura para recalcular
-            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        }
-    }, [state.description]);
+    const handleEditAddon = () => {
+        navigate(`/${'es'}/app/addon/${state.id}`)
+        dispatch(setModal(null))
+    }
+
+
+
+    // -------------------------------------z
+    // -------------------------------------z
+    const imgRef = useRef(null);
+    const [imageError, setImageError] = useState(false);
+    const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/addon/logo/${state.id}`)
+
+
+    const handleImageError = () => {
+        setImageError(true);
+    };
+
+
+    const handleSaveImage = () => {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const img = new Image();
+            img.src = e.target.result;
+
+            img.onload = () => {
+
+                // Escala la imagen a 400 píxeles
+                const scaleFactor = 400 / Math.max(img.width, img.height);
+                const scaledWidth = img.width * scaleFactor;
+                const scaledHeight = img.height * scaleFactor;
+
+                // Crea un canvas para renderizar la imagen escalada
+                const canvas = document.createElement('canvas');
+                canvas.width = scaledWidth;
+                canvas.height = scaledHeight;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+
+                const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+                // console.log('base62', base64Image)
+                setImageSrc(base64Image)
+                setImageError(false)
+
+                handleInputChange({
+                    target: {
+                        name: 'avatar',
+                        value: base64Image,
+                    },
+                });
+            };
+        };
+
+        reader.readAsDataURL(file);
+    };
+
 
 
 
     return (
         <div className={styles.modal}>
-            <div className={styles.maxHeight}>
-                <div className={styles.gird2}>
+            {!state.id && (
+                <div>
                     <h2 className={styles.title} style={{ marginTop: -10 }}>
-                        New Vector {state.title}
+                        Nuevo Addon
                     </h2>
                 </div>
-                <div style={{width: '100%'}}>
-                    <div className={styles.dropPhoto}>
-                        {code ? (
+            )}
+            <div className={`${styles.maxHeight} ${styles._400}`}>
+                <div className={style.userAddon}>
+                    <div className={style.avatarAddon}>
+                        -
+                    </div>
+                    <label className={style.name}>
+                        user12345
+                    </label>
+                    <span className={style.timeAgo}>
+                        creado -
+                        hace 2s
+                    </span>
+                    <button
+                        className={style.buttonEdit}
+                        onClick={() => handleEditAddon()}
+                    >
+                        edit
+                    </button>
+                </div>
+                <div className={style.gird2} style={{ gap: 20 }}>
+                    <div
+                        className={style.logo}
+                        onClick={handleSaveImage}
+                        onDrop={handleSaveImage}
+                        onDragOver={(e) => e.preventDefault()}
+                    >
+                        {imageError ? (
                             <div
-                                className={styles.zoom}
-                                dangerouslySetInnerHTML={{ __html: code }}
-                            />
+                                className={styles.initial}
+                            >
+                                {state.title?.charAt(0).toUpperCase() || '-'}
+                            </div>
                         ) : (
-                            <label>
-                                AI AVAILABLE
-                            </label>
+                            <img
+                                ref={imgRef}
+                                src={imageSrc}
+                                onError={handleImageError}
+                            />
                         )}
+                        <input
+                            type="file"
+                            id="fileInput"
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                        />
+                    </div>
+                    <div style={{ width: '100%' }}>
+
+                        <div className={`${styles.textBold} ${styles.gird2}`}>
+                            Select type public addons.
+                            <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
+                        </div>
+                        <div style={{ marginTop: '10px' }}>
+                            <div className={styles.checkbox}>
+                                <input
+                                    type="checkbox"
+                                    name="available"
+                                    checked={state.available}
+                                    onChange={(e) => handleInputChange(e.target.name, 'available')}
+                                />
+                                Available addon applications.
+                            </div>
+                            <div className={styles.checkbox}>
+                                <input
+                                    type="checkbox"
+                                    name="public"
+                                    checked={state.public}
+                                    onChange={(e) => handleInputChange(e.target.name, 'public')}
+                                />
+                                Public addon for applications.
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-                <p className={styles.text1}>
-                    Un vector lo puedes recuperar facilmente en tu addon vector
-                </p>
                 <p className={styles.textBold}>
                     Enter the title for addon.
                 </p>
@@ -155,62 +259,65 @@ const VectorCustom = ({ setModal, vector }) => {
                         onChange={(e) => handleInputChange(e, 'title')}
                     />
                 </div>
-                <p className={styles.textBold}>
-                    Add to an existing group (optional)
+                <p className={styles.textBold} style={{ marginTop: 8 }}>
+                    Enter the href for addon.
                 </p>
-                <div style={{ width: '100%' }}>
-                    <textarea
+                <div className={styles.input}>
+                    <input
+                        type="text"
                         spellCheck="false"
-                        ref={textareaRef}
-                        value={state.description}
-                        className={styles.textarea}
-                        onChange={(e) => handleInputChange(e, 'description')}
+                        value={state.href}
+                        placeholder={'Select href of addon'}
+                        onChange={(e) => handleInputChange(e, 'href')}
+                    />
+                </div>
+                <div>
+                    <AddTag
+                        handleInputChange={handleInputChange}
                     />
                 </div>
                 <h2 className={styles.title}>
                     Enter key value tags
                 </h2>
                 <p className={styles.text1}>
-                    Key value tags helps you organize your users.
+                    Key value tags helps you organize your users. You can assign up to 10 tags per addons.
                 </p>
-                <div>
-                    <AddTag
-                        handleInputChange={handleInputChange}
-                    />
-                </div>
+
+                <p className={styles.textBold}>
+                    Add to an existing group (optional)
+                </p>
+                <textarea
+                    placeholder={'Description Addon..'}
+                    spellCheck="false"
+                    value={state.description}
+                    className={styles.textarea}
+                    onChange={(e) => handleInputChange(e, 'description')}
+                />
+
+
             </div>
-            {code ? (
+            {isNewAddon ? (
                 <div className={styles.button}>
                     <button
-                        className={styles.active}
-                        onClick={() => handleNewVector()}
-                        style={{
-                            width: 100,
-                            padding: 4
-                        }}
-                    >
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path></g></g></svg>
-                    </button>
-                    <button
-                        onClick={() => handleAddVector()}
+                        onClick={() => handleAddAddon()}
                         className={styles.active}
                     >
-                        Save Vector
+                        Save Addon
                     </button>
                     <button
-                        onClick={() => handleDeleteVector()}
+                        onClick={() => handleDeleteAddon()}
                         className={styles.delete}
                     >
-                        Delete Vector
+                        Delete Addon
                     </button>
                 </div>
             ) : (
                 <div className={styles.button}>
                     <button
-                        onClick={() => handleNewVector()}
+                        onClick={() => handleAddAddon()}
                         className={`${styles.desactive} ${isActive ? styles.active : ''}`}
                     >
-                        Create a New Vector
+                        Create a New Addon
                     </button>
                 </div>
             )}
@@ -220,4 +327,4 @@ const VectorCustom = ({ setModal, vector }) => {
 
 
 
-export default VectorCustom
+export default AddonCustom
