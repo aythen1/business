@@ -12,42 +12,58 @@ const FolderOptions = ({
   setShowFolderOption,
   handleDeleteFolder,
   folderName,
-  directory
+  directory,
+  position,
 }) => {
-  const dispatch = useDispatch()
-  const { fileToCopy } = useSelector((state) => state.assets)
-  const isCopyActive = fileToCopy !== ''
-  const componentRef = useRef(null)
+  const dispatch = useDispatch();
+  const { fileToCopy } = useSelector((state) => state.assets);
+  const isCopyActive = fileToCopy !== "";
+  const componentRef = useRef(null);
+  const { x, y } = position;
+
   const handlePasteFile = () => {
-    const { directoryCopied, folderNameCopied, file } = fileToCopy
-    const destinationKey = directory + folderNameCopied
-    dispatch(copyFile({ sourceKey: directoryCopied, destinationKey, file }))
-    dispatch(obtainFileData(''))
-    setShowFolderOption(false)
-  }
+    if (isCopyActive) {
+      const { directoryCopied, folderNameCopied, file } = fileToCopy;
+      const destinationKey = directory + folderNameCopied;
+      dispatch(copyFile({ sourceKey: directoryCopied, destinationKey, file }));
+      dispatch(obtainFileData(""));
+      setShowFolderOption(false);
+    }
+  };
   useEffect(() => {
     const handleClickOutside = (event) => {
+      event.stopPropagation();
       if (componentRef.current && !componentRef.current.contains(event.target))
-        setShowFolderOption(false)
-    }
-    document.addEventListener('mousedown', handleClickOutside)
+        setShowFolderOption(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const style = {
+    position: "fixed",
+    top: `${y}px`,
+    left: `${x}px`,
+    zIndex: 1000, // Asegúrate de que sea suficientemente alto para estar por encima de otros elementos.
+  };
   return (
-    <div ref={componentRef} className={styles.folderOptionsContainer}>
+    <div
+      ref={componentRef}
+      className={styles.folderOptionsContainer}
+      style={style}
+    >
       <div
         className={isCopyActive ? styles.option : styles.optionDisabled}
-        onClick={isCopyActive && handlePasteFile}
+        onClick={handlePasteFile}
       >
         Paste
-        {/* <IoSettingsOutline size={17} color="#00f" /> */}
+        <IoSettingsOutline size={17} color="#00f" />
       </div>
       <div
         onClick={() => {
-          handleDeleteFolder(directory)
-          setShowFolderOption(false)
+          handleDeleteFolder(directory);
+          setShowFolderOption(false);
         }}
         className={styles.option}
       >
@@ -55,7 +71,7 @@ const FolderOptions = ({
         {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FolderOptions
+export default FolderOptions;
