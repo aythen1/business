@@ -1,12 +1,9 @@
-'use client'
-import { useEffect, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import styles from './FolderOptions.module.css'
-// import { IoTrashOutline, IoSettingsOutline } from 'react-icons/io5'
-import {
-  copyFile,
-  obtainFileData
-} from '@/actions/assets'
+"use client";
+import { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import styles from "./FolderOptions.module.css";
+import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
+import { copyFile, obtainFileData } from "@/actions/assets";
 
 const FolderOptions = ({
   setShowFolderOption,
@@ -58,7 +55,10 @@ const FolderOptions = ({
         onClick={handlePasteFile}
       >
         Paste
-        <IoSettingsOutline size={17} color="#00f" />
+        {/* <IoSettingsOutline */}
+        {/* size={17}
+          color={isCopyActive ? "#00f" : "#525252"}
+        /> */}
       </div>
       <div
         onClick={() => {
