@@ -1,5 +1,6 @@
 "use client";
 import style from "./my-files.module.css";
+import styles from "../left-panel/left-panel.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Filters,
@@ -11,7 +12,8 @@ import Chevron from "../../assets/Vector 161 (Stroke).svg";
 import ArrowDropDown from "../../assets/arrow-drop-down.svg";
 import Info from "../../assets/Info.svg";
 import Star from "../../assets/Star.svg";
-
+import Modal from "react-modal";
+import shareFiles from "../shareFiles/shareFiles";
 import { useState, useEffect } from "react";
 import {
   directoriesDB,
@@ -73,6 +75,7 @@ export default function Page({
   const [selectAll, setSelectAll] = useState(false);
   const [filterIsActive, setFilterIsActive] = useState(false);
   const [activeExtensions, setActiveExtensions] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [filtersData, setFiltersData] = useState([
     { name: "Filter by:", type: "filter", view: false },
@@ -655,7 +658,12 @@ export default function Page({
                   </button>
                 </>
               )}
-            <button onClick={handleDB} className={style.buttonDB}>
+            <button
+              onClick={() => {
+                setModalIsOpen(true);
+              }}
+              className={style.buttonDB}
+            >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599">
                 <g>
                   <g>
@@ -676,6 +684,13 @@ export default function Page({
           </div>
         </div>
       )}
+      <Modal
+        className={styles.modalContainer}
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+      >
+        <shareFiles selectedFolders={selectedFolders} />
+      </Modal>
     </div>
   );
 }

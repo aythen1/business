@@ -26,7 +26,7 @@ export default generateColors;
 
 const hexToRgb = (hex) => {
   // Asignar #222 si hex es undefined
-  hex = hex || "#fffff";
+  hex = hex || "#2222";
 
   const bigint = parseInt(hex.slice(1), 16);
   const r = (bigint >> 16) & 255;

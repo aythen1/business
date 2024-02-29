@@ -473,13 +473,13 @@
     width: 12px;
     color: rgb(213, 213, 213);
   }
-  &.top{
-    .bottom{
+  &.top {
+    .bottom {
       color: var(--color-primary-0);
     }
   }
-  &.bottom{
-    .top{
+  &.bottom {
+    .top {
       color: var(--color-primary-0);
     }
   }
