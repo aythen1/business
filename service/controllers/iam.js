@@ -672,7 +672,13 @@ const updatePasswordUser = async (req, res, next) => {
 
 
 // --------------------------------------
+const shareFile = async (req, res) => {
+  const { user } = req
 
+
+  const resp = await addVector(path, 'users', [0, 0], data, false)
+
+}
 
 const addUser = async (req, res) => {
   try {
@@ -688,7 +694,7 @@ const addUser = async (req, res) => {
         isverified: true
       }
 
-      const resp = await addVector(path, 'users', [0, 0, 0, 0, 0, 0, 0], data, false)
+      const resp = await addVector(path, 'users', [0, 0], data, false)
       console.log('re', resp)
       arr.push(resp)
     }

@@ -386,22 +386,40 @@ export default function App({ }) {
         if (dimension) {
             // Encuentra el índice del nodo que coincide con el id
             const nodeIndex = nodes.findIndex((node) => node.id === dimension.id);
-            console.log('1111', nodeIndex)
             // Verifica si se encontró el nodo
             if (nodeIndex !== -1) {
                 // Copia los nodos actuales
-                const updatedNodes = [...nodes];
+                // let updatedNodes = [...nodes];
 
-                // Actualiza el estado del nodo encontrando el nodo y modificando data.status
-                updatedNodes[nodeIndex] = {
-                    ...updatedNodes[nodeIndex],
-                    data: {
-                        ...updatedNodes[nodeIndex].data,
-                        status: 'info', // Reemplaza 'tu_nuevo_estado_aqui' con el nuevo estado
-                    },
-                };
-                console.log('updatedNodes[nodeIndex]', updatedNodes[nodeIndex])
+                const updatedNodes = nodes.map((node) => {
+
+                    let status = undefined
+                    console.log('node', node)
+                    if (node.id === dimension.id) {
+                        status = 'info';
+                    }
+
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            status
+                        },
+                    }
+
+                });
+
+
                 // Establece el nuevo estado de los nodos
+                setNodes(updatedNodes);
+
+
+                // Update nodes with status undefined
+              
+
+                console.log('uopd', updatedNodes)
+
+                // Use setNodes to update the state with the modified nodes
                 setNodes(updatedNodes);
             }
         }
