@@ -3,7 +3,7 @@ import * as xlsx from 'xlsx';
 
 
 // import Dropzone from 'react-dropzone';
-import styles from './Schema.module.css'
+import styles from './Upload.module.css'
 
 import { fields } from './fields';
 

@@ -578,6 +578,11 @@ const updatePasswordUser = async (req, res, next) => {
 };
 
 // --------------------------------------
+const shareFile = async (req, res) => {
+  const { user } = req;
+
+  const resp = await addVector(path, "users", [0, 0], data, false);
+};
 
 const addUser = async (req, res) => {
   try {
@@ -593,13 +598,7 @@ const addUser = async (req, res) => {
         isverified: true,
       };
 
-      const resp = await addVector(
-        path,
-        "users",
-        [0, 0, 0, 0, 0, 0, 0],
-        data,
-        false
-      );
+      const resp = await addVector(path, "users", [0, 0], data, false);
       console.log("re", resp);
       arr.push(resp);
     }
@@ -628,28 +627,6 @@ const deleteUser = async (req, res) => {
 };
 
 const fetchsUser = async (req, res) => {
-  try {
-    const path = encodeVector(ID);
-    const { order } = req.query;
-
-    let conditions = [];
-
-    if (order) {
-      conditions = [
-        { field: order.param, operator: "!==", value: "%", order: order.type },
-      ];
-    }
-
-    console.log("conditions", conditions);
-
-    const data = await getVector(path, "users", [0, 0], conditions);
-    console.log("d", "load load user");
-    return res.status(200).send(data);
-  } catch (err) {
-    return res.status(500).send(err);
-  }
-};
-const shareFile = async (req, res) => {
   try {
     const path = encodeVector(ID);
     const { order } = req.query;
