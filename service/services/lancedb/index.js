@@ -674,4 +674,31 @@ module.exports = {
     getVector,
     deleteVector,
     removeVector,
+
+    generateEmptyObjectFromSchema,
+    validateAgainstSchema,
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

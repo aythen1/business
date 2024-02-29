@@ -10,6 +10,7 @@ const {
   addVector,
   updateVector,
   addVectorData,
+  shareFileVector,
 
   loadVector,
   deleteVector,
@@ -23,6 +24,7 @@ routerVector
   .post('/', authenticateToken, addVector)
   .post('/update/:id/:name', authenticateToken, updateVector)
   .post('/data', authenticateToken, addVectorData)
+  .post('/share/:id', authenticateToken, shareFileVector)
 
   .post('/file', authenticateToken, openVector)
   .post('/load/:id/:name', authenticateToken, loadVector)

@@ -1,7 +1,7 @@
 .App{
     border-radius: 10px;
-    padding: 4px 10px 4px;
-    background: #e8eaed;
+    padding: 8px 10px 10px;
+    background: #f8f8f8;
     zoom: 0.8;
     position: relative;
     margin-top: 10px;
@@ -13,13 +13,29 @@
     left: 10px;
     background: var(--color-primary-0);
     color: #fff;
-    width: 50px;
+    width: 60px;
     height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
-    border-radius: 12px;
+    border-radius: 8px;
+}
+
+
+.upload{
+    position: absolute;
+    top: 10px;
+    left: 74px;
+    background: var(--color-primary-0);
+    color: #fff;
+    width: 60px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    border-radius: 8px;
 }
 
 :global(.dgxl-component){
@@ -56,10 +72,13 @@
 }
 
 :global(.dgxl-inputWrapper){
-    margin-left: 48px;
+    margin-left: 125px;
     border-color: rgb(198 198 198) !important;
 }
 
 :global(.dgxl-topbar.dgxl-bar){
     padding: 6px 0px;
 }
+
+
+

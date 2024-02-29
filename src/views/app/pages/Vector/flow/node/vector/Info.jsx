@@ -9,11 +9,11 @@ import IconOther from '../assets/icon-other.svg'
 
 export default ({ data, setFilter }) => {
     const handleClickData = () => {
-        setFilter('data')
+        setFilter('table')
     }
 
-    const handleClickSchema = () => {
-        setFilter('schema')
+    const handleClickAgent = () => {
+        setFilter('agent')
     }
     return (
         <>
@@ -81,9 +81,9 @@ export default ({ data, setFilter }) => {
                     </button>
                     <button
                         className={styles.bot}
-                        onClick={() => handleClickSchema()}
+                        onClick={() => handleClickAgent()}
                     >
-                        View Schema
+                        Crear Agente
                     </button>
                 </div>
             </div>

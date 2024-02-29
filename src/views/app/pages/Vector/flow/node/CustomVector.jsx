@@ -13,9 +13,10 @@ import styles from './CustomVector.module.css'
 
 import { useGraph } from '../index';
 
-import VectorData from './vector/Data'
+import VectorTable from './vector/Table'
 import VectorInfo from './vector/Info'
-import VectorSchema from './vector/Schema'
+import VectorAgent from './vector/Agent'
+// import VectorSchema from './vector/Schema'
 import VectorSQL from './vector/SQL'
 
 
@@ -28,7 +29,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
   const {
     dimension
-} = useSelector((state) => state.vector)
+  } = useSelector((state) => state.vector)
 
 
   const { nodes, edges, setNodes, setEdges } = useGraph();
@@ -55,7 +56,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
   }, [data])
 
 
-  
+
   useEffect(() => {
     console.log('dimension')
     if (dimension) {
@@ -68,16 +69,18 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
       // Hace scroll al nodo dentro de react-flow
       if (reactFlowElement) {
-        const x = nodePosition.x 
-        const y = nodePosition.y
+        const x = nodePosition.x + 300
+        const y = nodePosition.y + 200
 
-        const zoom = 1
+        const zoom = 0.9
 
-        setCenter(x, y, { zoom, duration: 1000 });
+        setCenter(x, y, { zoom, duration: 2000 });
+
+       
 
       }
     }
-  }, [data, dimension]);
+  }, [dimension]);
 
 
 
@@ -85,7 +88,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
   const handleDuplicate = () => {
     setShowContextMenu(false)
-    
+
 
     const node = nodes.filter((node) => node.id === id)[0]
 
@@ -166,14 +169,14 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         </div>
       </div>
       <div>
-        {filter == 'data' ? (
-          <VectorData id={id} data={data} setFilter={setFilter} />
+        {filter == 'table' ? (
+          <VectorTable id={id} data={data} setFilter={setFilter} />
         ) : filter == 'sql' ? (
           <VectorSQL id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'schema' ? (
-          <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes} />
-        ) : filter == 'info' && (
+        )  : filter == 'info' ? (
           <VectorInfo id={id} data={data} setFilter={setFilter} />
+        )  : filter == 'agent' && (
+          <VectorAgent id={id} data={data} setFilter={setFilter} />
         )}
       </div>
     </>
