@@ -1,0 +1,28 @@
+.editor{
+
+
+
+}
+
+
+
+.modal{
+    width: 500px;
+    p{
+        font-size: 16px;
+        font-weight: 600;
+
+    }
+
+    .code{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        input{
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 2px solid red;
+            background: var(--background);
+        }
+    }
+}

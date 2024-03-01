@@ -7,7 +7,7 @@ import Table from './table'
 import styles from './index.module.css'
 import stylesModal from './modal.module.css'
 
-import AddTag from './AddTag'
+import AddTag from '@/views/app/pages/shared/AddTag'
 
 
 import {
@@ -19,37 +19,44 @@ import {
 import {
     setModal
 } from '@/slices/iamSlice'
+import { useNavigate } from 'react-router-dom';
 // import { getEmail } from '../../../../../../service/services/email';
 
 
 
 const TableUsers = ({
-
+    users
 }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const { users } = useSelector((state) => state.iam)
 
+    // const [selectedItems, setSelectedItems] = useState()
     const [stateTable, setStateTable] = useState('')
 
     useEffect(() => {
-      if(stateTable.startsWith('edit-item:')){
-        const id = stateTable.split(':')[1]
-        const index = users.findIndex(user => user.id === id);
-        const user = users[index]
-        console.log('user', user)
+        if (stateTable.startsWith('edit-item:')) {
+            const id = stateTable.split(':')[1]
+            const index = users.findIndex(user => user.id === id);
+            const user = users[index]
+            console.log('user', user)
 
-        dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
-      }else if(stateTable.startsWith('delete-item:')){
-        const id = stateTable.split(':')[1]
-        const token = localStorage.getItem('token')
-        dispatch(deleteUser({token, id}))
-      }
+            dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
+        } else if (stateTable.startsWith('delete-item:')) {
+            const id = stateTable.split(':')[1]
+            dispatch(deleteUser({ id }))
+        } else if (stateTable.startsWith('checkbox-item')) {
+            console.log('selected checkbox')
+        }
     }, [stateTable])
 
 
-    
 
+
+
+    const handleClickSupport = () => {
+        navigate(`/${'es'}/app/support`)
+    }
 
 
     return (
@@ -57,7 +64,7 @@ const TableUsers = ({
             <div className={styles.grid2}>
                 <p className={styles.text}>
                     Below is a list of users in this Organization. You can view more information about each user.
-                    <a>
+                    <a onClick={() => handleClickSupport()}>
                         What are users?
                         <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
                     </a>
@@ -72,30 +79,31 @@ const TableUsers = ({
             </div>
             <div>
 
-                <Table 
+                <Table
                     fetchs={fetchsUser}
                     items={users}
                     setStateTable={setStateTable}
+                    handleAdd={() => dispatch(setModal(<PopupModalAddUser styles={stylesModal} />))}
                 >
                     <header>
                         Users
                     </header>
-                    <item>
-                        User
+                    <item filter="checkbox" size="50">
+
                     </item>
-                    <item>
-                        Email
+                    <item filter="user-email">
+                        User
                     </item>
                     <item>
                         Is Verified
                     </item>
-                    <item>
+                    <item filter="date" name="upgradedat">
                         Last Login
                     </item>
-                    <item>
+                    <item filter="date" name="upgradedat">
                         Joined On
                     </item>
-                    <item>
+                    <item filter="options">
                         Options
                     </item>
                 </Table>
@@ -122,45 +130,43 @@ const PopupModalAddUser = ({ styles }) => {
         email: [],
         tags: [],
         group: '',
-      });
+    });
 
-      
 
-      
-      const handleInputChange = (e, property) => {
+
+
+    const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
-          value = e.target.value;
+            value = e.target.value;
         }
-      
+
         if (property === 'email') {
-          // Dividir los correos electrónicos por comas y quitar los espacios en blanco
-          const emailArray = value.split(',').map(email => email.trim());
-      
-          // Verificar si al menos hay un correo electrónico válido
-          const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
-      
-          setIsActive(isValidEmail);
-      
-          setState((prevState) => ({
-            ...prevState,
-            [property]: isValidEmail ? emailArray : [value],
-          }));
+            // Dividir los correos electrónicos por comas y quitar los espacios en blanco
+            const emailArray = value.split(',').map(email => email.trim());
+
+            // Verificar si al menos hay un correo electrónico válido
+            const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+
+            setIsActive(isValidEmail);
+
+            setState((prevState) => ({
+                ...prevState,
+                [property]: isValidEmail ? emailArray : [value],
+            }));
         } else {
-          setState((prevState) => ({
-            ...prevState,
-            [property]: value,
-          }));
+            setState((prevState) => ({
+                ...prevState,
+                [property]: value,
+            }));
         }
-      };
+    };
 
 
 
 
-     const handleAddUser = () => {
-        const token = localStorage.getItem('token')
+    const handleAddUser = () => {
         const data = {
-            token: token,
             user: state.email,
             tags: state.tags,
             group: state.group
@@ -191,21 +197,21 @@ const PopupModalAddUser = ({ styles }) => {
             <p className={styles.text1}>
                 Key value tags helps you organize your users. You can assign up to 10 tags per user.
             </p>
-            <AddTag 
+            <AddTag
                 handleInputChange={handleInputChange}
-                />
+            />
             <p className={styles.textBold}>
                 Add to an existing group (optional)
             </p>
             <div className={styles.input}>
-                <input 
+                <input
                     type="text"
                     value={state.group || 'Select or type group'}
                     onChange={(e) => handleInputChange(e, 'group')}
                 />
             </div>
             <div className={styles.button}>
-                <button 
+                <button
                     onClick={() => handleAddUser()}
                     className={`${styles.desactive} ${isActive ? styles.active : ''}`}
                 >
@@ -222,8 +228,7 @@ const PopupModalUser = ({ styles, user }) => {
 
     const handleClickRemoveUser = () => {
         const id = user.id
-        const token = localStorage.getItem('token')
-        dispatch(deleteUser({token, id}))   
+        dispatch(deleteUser({ id }))
         dispatch(setModal(null))
     }
 
@@ -300,7 +305,7 @@ const PopupModalUser = ({ styles, user }) => {
                         Removing a user from this Organization automatically deletes their API keys, and any policies directly attached to them will be left orphaned.
                     </p>
                     <div className={styles.button}>
-                        <button 
+                        <button
                             onClick={() => handleClickRemoveUser()}
                             className={styles.delete}
                         >

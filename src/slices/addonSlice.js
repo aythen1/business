@@ -1,70 +1,72 @@
 // userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-import { 
+import {
   fetchsAddon,
   fetchAddon,
-  addAddon, 
-  updateAddon, 
-  
+  addAddon,
+  updateAddon,
+  deleteAddon,
+
+  addVectorAddon,
+
   visionAddon,
   codeAddon,
-
-  ayAddon,
   rpaAddon,
-  dataAddon
 } from '@/actions/addon'
 
 export const initialComponent = {
   id: '',
-  version: '',
   owner: '',
-
-  public: true,
+  version: '',
   title: '',
   description: '',
-  type: 'graph|html|form',
-
-  styles: {
-    columnSize: 6
-  },
-
-  filter: '',
-  filterSQL: '',
-  filterGraph: '',
-
-  promptId: '',
-  sharedId: '',
-  dataId: '',
-
+  data: '',
   updatedAt: '',
   createdAt: ''
 }
 
 const addonSlice = createSlice({
-  name: 'addon',
+  name: 'addons',
   initialState: {
-    status: 'pending',
+    status: null,
     loading: false,
 
-    component: initialComponent,
-    components: [
-      initialComponent
-    ]
+    code: null,
+    vision: null,
+    rpa: null,
+
+    addon: {},
+    addons: [],
+
+    vector: {},
+    vectors: []
   },
   reducers: {
-    setAddon: (state, action) => {
-      // lógica para manejar la acción 'setUser'
+    setStatus: (state, action) => {
+      state.status = action.payload
     },
-    // otras acciones...
+
+    setAddon: (state, action) => {
+      state.addon = action.payload
+    },
+    setCode: (state, action) => {
+      state.code = action.payload
+    },
+    setVision: (state, action) => {
+      state.vision = action.payload
+    },
+    setRpa: (state, action) => {
+      state.rpa = action.payload
+    }
   },
   extraReducers: (builder) => {
     // Manejar las acciones generadas por createAsyncThunk
     builder
-      
+
       .addCase(fetchsAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.addons = action.payload;
       })
       .addCase(fetchsAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -74,7 +76,8 @@ const addonSlice = createSlice({
 
       .addCase(fetchAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.addon = action.payload.addon;
+        state.vectors = action.payload.vectors;
       })
       .addCase(fetchAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -84,7 +87,10 @@ const addonSlice = createSlice({
 
       .addCase(addAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        // state.components = action.payload;
+        state.addons = action.payload.concat(
+          state.addons.filter((addon2) => !action.payload.find((addon1) => addon1.id === addon2.id))
+        );
       })
       .addCase(addAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -102,9 +108,20 @@ const addonSlice = createSlice({
       })
 
 
+      .addCase(deleteAddon.fulfilled, (state, action) => {
+        console.log('action', action.payload)
+        state.addons = state.addons.filter(addon => addon.id !== action.payload);
+      })
+
+
+      .addCase(addVectorAddon.fulfilled, (state, action) => {
+        state.vectors.push(action.payload)
+      })
+
+
       .addCase(visionAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.vision = action.payload;
       })
       .addCase(visionAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -114,7 +131,7 @@ const addonSlice = createSlice({
 
       .addCase(codeAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.code = action.payload;
       })
       .addCase(codeAddon.rejected, (state, action) => {
         state.status = 'rejected';
@@ -122,31 +139,11 @@ const addonSlice = createSlice({
       })
 
 
-      .addCase(ayAddon.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
-        state.components = action.payload;
-      })
-      .addCase(ayAddon.rejected, (state, action) => {
-        state.status = 'rejected';
-        state.error = action.error.message;
-      })
-
-
       .addCase(rpaAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload;
+        state.rpa = action.payload;
       })
       .addCase(rpaAddon.rejected, (state, action) => {
-        state.status = 'rejected';
-        state.error = action.error.message;
-      })
-
-
-      .addCase(dataAddon.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
-        state.components = action.payload;
-      })
-      .addCase(dataAddon.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.error.message;
       })
@@ -155,5 +152,112 @@ const addonSlice = createSlice({
   },
 });
 
-export const { setAddon } = addonSlice.actions;
+export const {
+  setStatus,
+
+  setAddon,
+  setCode,
+  setVision,
+  setRpa,
+} = addonSlice.actions;
+
 export default addonSlice.reducer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const initial = [
+//   {
+//       image: IconInstance,
+//       title: 'user',
+//       structure: {
+//           id: {},
+//           name: '',
+//           email: '',
+//           address: {
+//               street: '',
+//               city: '',
+//               zipCode: ''
+//           },
+//           phone: '',
+//           availableAt: '',
+//           lastAccessAt: '',
+//           createAt: ''
+//       }
+//   },
+//   {
+//       image: IconInstance,
+//       title: 'shop',
+//       structure: {
+//           id: {},
+//           name: '',
+//           email: '',
+//           address: {
+//               street: '',
+//               city: '',
+//               zipCode: ''
+//           },
+//           pin: '',
+//           phone: '',
+//           availableAt: '',
+//           lastAccess: '',
+//           createAt: ''
+//       }
+//   },
+//   {
+//       image: IconInstance,
+//       title: 'employeer',
+//       structure: {
+//           id: {},
+//           name: '',
+//           email: '',
+//           address: {
+//               street: '',
+//               city: '',
+//               zipCode: ''
+//           },
+//           phone: '',
+//           availableAt: '',
+//           lastAccessAT: '',
+//           createAt: ''
+//       }
+//   },
+//   {
+//       image: IconInstance,
+//       title: 'product',
+//       structure: {
+//           id: {},
+//           name: '',
+//           description: '',
+//           price: 0,
+//           availableAt: ''
+//           // Otros campos específicos para productos
+//       }
+//   },
+//   {
+//       image: IconInstance,
+//       title: 'invoice',
+//       structure: {
+//           id: {},
+//           customer: '',
+//           products: [],
+//           totalAmount: 0,
+//           // Otros campos específicos para facturas
+//           address: {},
+//           tax: {},
+//           title: {}
+//       }
+//   }
+// ];

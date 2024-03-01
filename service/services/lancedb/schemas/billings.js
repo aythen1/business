@@ -2,8 +2,12 @@ const schemaBillings =  {
     type: 'object',
     properties: {
         id: { type: 'string', format: 'uuid' },
-        limit: { type: 'number', default: 0 },
+        type: { type: 'string' },
+        name: { type: 'string' },
         email: { type: 'string' },
+        limit: { type: 'number', default: 0 },
+        iban: { type: 'string' },
+        currency: { type: 'string' },
         vat: { type: 'string' },
         paymentmethod: { type: 'string', enum: ['credit', 'sepa'] },
         address: { 
@@ -20,12 +24,9 @@ const schemaBillings =  {
             // },
         },
         upgradedat: { type: 'string', format: 'date-time' },
-        vector: { type: 'array', items: { type: 'number' } },
         createdat: { type: 'string', format: 'date-time' }
-        // relations: { type: 'object' }
-        // data: { type: "object" }
     },
-    required: ['email']
+    required: ['id']
 }
 
 module.exports = schemaBillings;

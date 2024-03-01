@@ -25,22 +25,29 @@
 .search{
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin: 0 100px;
+    gap: 6px;
+    margin: 0 auto;
     margin-top: 10px;
     width: 80%;
-    border: 1px solid #bfbfbf;
-    padding: 10px;
+    max-width: 500px;
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
     border-radius: 8px;
     .icon{
+        svg{
+            width: 20px;
+            fill: var(--text-color);
+        }
 
     }
     .input{
         background: transparent;
         border: none;
         outline: none;
-        font-size: 30px;
-        color: var(--text-color)
+        font-size: 24px;
+        height: 40px;
+        color: var(--text-color);
+        margin-top: -4px;
     }
 }
 
@@ -53,6 +60,7 @@
         margin: 0 auto;
         margin-top: 10px;
         .item{
+            text-transform: uppercase;
             cursor: pointer;
             &:hover{
                 border-bottom: 2px solid #000;
@@ -77,6 +85,7 @@
     .title{
         margin-bottom: 0px;
         font-size: 26px;
+        
     }
     .text{
         margin-top: 0px;
@@ -179,9 +188,35 @@
             border-left: 1px solid var(--border-color);
             padding-left: 10px;
             cursor: pointer;
+            
             .title{
                 text-transform: uppercase;
                 font-size: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                .buttonFav {
+                    display: flex;
+                    align-items: center;
+                    button{
+                        outline: none;
+                    }
+                    .active{
+                        color: var(--color-primary-0);
+                        &:hover{
+                            color: #c0c0c0;
+                        }
+                    }
+                    .desactive{
+                        color: #c6c6c6;
+                        &:hover{
+                            color: var(--color-primary-0);
+                        }
+                    }
+                    svg{
+                        width: 14px;
+                    }
+                  }
             }
             .description{
                 margin: 0px;

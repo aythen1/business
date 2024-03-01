@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import styles from './record-viewer.module.css'
 
-import { openFile } from '@/utils/vector'
+import { openFile } from '@/actions/vector'
 
 export const RecordViewer = ({ file, click }) => {
   const [volumeArray, setVolumeArray] = useState([])

@@ -7,12 +7,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: red;
   cursor: pointer;
   .iconMicrophone {
     color: #54656f !important;
+    
   }
 }
-
+.iconMicrophone {
+  width: 24px;
+  /* Ajusta el ancho del icono según sea necesario */
+  height: 24px;
+  /* Ajusta la altura del icono según sea necesario */
+  fill: #ffffff;
+  /* Ajusta el color del icono según sea necesario */
+}
 .bar {
   display: flex;
   align-items: center;
@@ -58,7 +67,8 @@
 }
 
 .boxBar {
-  background: #f8f8f8;
+  background: #eae4e4;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -117,20 +127,21 @@
   justify-content: center;
   cursor: pointer;
   .iconPlay {
-    width: 20px;
+    width: 35px;
     color: #54656f;
   }
 }
 
 .buttonEnd {
-  width: 35px;
-  height: 35px;
+width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   .iconEnd {
-    color: #000fff;
+    width: 25px;
+    color: var(--color-primary-0);
   }
 }
 
@@ -141,6 +152,8 @@
   align-items: center;
   justify-content: center;
   .iconPause {
+      width: 25px;
+      
   }
 }
 
@@ -154,5 +167,7 @@
   /* display: hidden; */
   .iconRestart {
     color: #ff3b30 !important;
+    width: 25px;
   }
+ 
 }

@@ -1,18 +1,23 @@
 const { Router } = require('express')
 const routesRouter = Router()
 
+const { authenticateToken } = require('../middlewares/auth/auth');
+
 
 const {
-    routerScaleway,
-    routerLangchain,
-    routerDashboard,
-    routerOpenai
-} = require('./*')
+    fetchsDashboard,
+    fetchDashboard,
+    deleteDashboard,
+    addDashboard,
+    updateDashboard
+} = require('../controllers/dashboard')
 
 
-routesRouter.post('/scaleway/*', routerScaleway)
-routesRouter.post('/langchain/*', routerLangchain)
-routesRouter.post('/dashboard/*', routerDashboard)
-routesRouter.post('/openai/*', routerOpenai)
+routesRouter.get('/', authenticateToken, fetchsDashboard)
+routesRouter.get('/:id', authenticateToken, fetchDashboard)
+
+routesRouter.delete('/', authenticateToken, deleteDashboard)
+routesRouter.put('/', authenticateToken, updateDashboard)
+routesRouter.post('/', authenticateToken, addDashboard)
 
 module.exports = routesRouter

@@ -24,9 +24,9 @@
               type: 'object',
               properties: {
                   email: { type: 'string' },
-                  userId: { type: 'string', format: 'uuid' },
+                  userId: { type: 'string' },
               },
-              required: ['key', 'value'],
+              required: ['email', 'userId'],
           },
         },
         createdAt: { type: 'string', format: 'date-time' },

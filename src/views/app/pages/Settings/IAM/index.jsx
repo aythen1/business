@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+// import { useNavigate } from 'react-dom'
+import { useNavigate } from 'react-router-dom';
 
-import { v4 as uuidv4 } from 'uuid'// import React, { useEffect, useRef, useState } from 'react'import styles from './index.module.css'// import IconServer from './assets/IconServer'// import IconArrowDown from './assets/IconArrowDown'// import IconArrowUp from './assets/IconArrowUp'// import IconCopy from './assets/IconCopy'// import IconImportant from './assets/IconImportant'// import IconSettings from './assets/IconSettings'// import NoneInstance from './assets/NoneInstance.webp'// import {  //   // postInstance,//   // getServersZone,//   deleteInstance,//   getProjectInstance// } from '@/store/redux/actions/instances'// import { useParams } from 'next/navigation'// import {  //   addDashboard// } from '@/actions/dashboard'import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './index.module.css'
 
@@ -14,86 +16,115 @@ const IAM = ({
 
 }) => {
 
+  const {
+    users,
+    applications,
+    polices,
+    apis,
+    logs
+  } = useSelector((state) => state.iam)
 
-  /*
-  1. Coje un ID de workspaceID para guardar
-  2. Coje un ID del tabs con el inisitalFormat para guardar
-  3. Guarda/Update/Elimina a través de lanceDB
-  4. Guarda en el actions/slice de IAM y muestra con la tabla
-  */
+
+  const navigate = useNavigate()
+
 
 
   const [selectedTab, setSelectedTab] = useState('users')
 
+
+  const handleClickHome = () => {
+    navigate(`/${'es'}/app/settings/home`)
+  }
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>
-        Identity and Access Managmenet (IAM)
-      </h2>
+      <div>
+        <div
+          className={styles.back}
+          onClick={() => handleClickHome()}
+        > 
+          <svg viewBox="0 0 16 16" ><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
+          Back to home
+        </div>
+        <h2 className={styles.title}>
+          Identity and Access Managmenet (IAM)
+        </h2>
+
+      </div>
 
       <div className={styles.tabs}>
         <ul className={styles.container}>
           <li
-            onClick={() => setSelectedTab('users')} 
+            onClick={() => setSelectedTab('users')}
             className={`${styles.tab} ${selectedTab === 'users' ? styles.selected : ''}`}
           >
             Users
-            <label>
-              10
-            </label>
+            {users.length > 0 && (
+              <label>
+                {users.length}
+              </label>
+            )}
           </li>
           <li
-            onClick={() => setSelectedTab('applications')}  
+            onClick={() => setSelectedTab('applications')}
             className={`${styles.tab} ${selectedTab === 'applications' ? styles.selected : ''}`}
           >
             Applications
-            <label>
-              10
-            </label>
+            {applications.length > 0 && (
+              <label>
+                {applications.length}
+              </label>
+            )}
           </li>
-          <li 
-            onClick={() => setSelectedTab('polices')} 
+          <li
+            onClick={() => setSelectedTab('polices')}
             className={`${styles.tab} ${selectedTab === 'polices' ? styles.selected : ''}`}
           >
-            Policies
-            <label>
-              10
-            </label>
+            Polices
+            {polices.length > 0 && (
+              <label>
+                {polices.length}
+              </label>
+            )}
           </li>
-          <li 
-            onClick={() => setSelectedTab('apis')} 
+          <li
+            onClick={() => setSelectedTab('apis')}
             className={`${styles.tab} ${selectedTab === 'apis' ? styles.selected : ''}`}
           >
             API Keys
-            <label>
-              10
-            </label>
+            {apis.length > 0 && (
+              <label>
+                {apis.length}
+              </label>
+            )}
           </li>
-          <li 
-            onClick={() => setSelectedTab('logs')} 
+          <li
+            onClick={() => setSelectedTab('logs')}
             className={`${styles.tab} ${selectedTab === 'logs' ? styles.selected : ''}`}
           >
             Logs
-            <label>
-              10
-            </label>
+            {logs.length > 0 && (
+              <label>
+                {logs.length}
+              </label>
+            )}
           </li>
         </ul>
       </div>
 
       <div className={styles.table}>
         {selectedTab == 'users' ? (
-          <TableUsers />
+          <TableUsers users={users} />
         ) : selectedTab == 'applications' ? (
-          <TableApplications />
+          <TableApplications applications={applications} />
         ) : selectedTab == 'polices' ? (
-          <TablePolices />
+          <TablePolices polices={polices} />
         ) : selectedTab == 'apis' ? (
-          <TableAPIs />
+          <TableAPIs apis={apis} />
         ) : selectedTab == 'logs' ? (
-          <TableLogs />
-        ): (
-          <TableUsers />
+          <TableLogs logs={logs} />
+        ) : (
+          <TableUsers users={users} />
         )}
       </div>
     </div>

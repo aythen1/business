@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-// import 'chartist/dist/index.css';
-import BarChart from './BarChart'
+import { useNavigate } from 'react-router-dom';
 
+// import 'chartist/dist/index.css';
+import { BarChart } from '@/views/graphs/render'
 
 
 import styles from './settingsCurrentConsumption.module.css'
@@ -12,10 +13,15 @@ import styles from './settingsCurrentConsumption.module.css'
 
 
 const SettingsCurrentConsumption = () => {
+    const navigate = useNavigate()
+
+    const value = {
+        series: [20, 10, 30, 40],
+        label: ['1', '2']
+    }
+
+
     const [listPricing, setListPricing] = useState([])
-
-
-
     
     const initialList = [{
         color: 'red',
@@ -43,11 +49,23 @@ const SettingsCurrentConsumption = () => {
         setListPricing(initialList)
     }, [])
 
+
+    // --------------------------------------------------------
+    const handleBilling = () => {
+        navigate(`/${'es'}/app/settings/billing`)
+    }
+    
+    const handleInvoice = () => {
+        navigate(`/${'es'}/app/settings/billing#invoice`)
+    }
+
+
+
     return (
         <div className={styles["boxConsumption1"]}>
             <div className={styles["grid2"]}>
                 <div className={styles["bar"]}>
-                    <BarChart className={styles["image"]} />
+                    <BarChart className={styles["image"]} value={value} />
                     {/* <img src={GraphDonut}  /> */}
                     <div className={styles["box"]}>
                         <b className={styles["pricing"]}>
@@ -83,11 +101,11 @@ const SettingsCurrentConsumption = () => {
             </div>
             <div className={styles["footer"]}>
                 <div className={styles["buttons"]}>
-                    <button>
+                    <button onClick={handleBilling}>
                         <svg viewBox="0 0 24 24" ><path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"></path></svg>
                         0 Billing
                     </button>
-                    <button>
+                    <button onClick={handleInvoice}>
                         <svg viewBox="0 0 24 24" ><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"></path></svg>
                         0 Invoice
                     </button>

@@ -6,7 +6,7 @@
 .frame-1342{
     color: var(--text-color);
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -28,6 +28,7 @@
   position: relative;
 }
 .frame-15477550881{
+  color: var(--text-color-secondary);
   max-width: 400px;
   margin: auto;
   display: flex;
@@ -167,6 +168,12 @@
   height: 0px;
   position: relative;
 }
+.frame-1547755145{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 .frame-1547755111 {
   display: flex;
   flex-direction: column;
@@ -245,6 +252,7 @@
   position: relative;
   overflow: visible;
   cursor: pointer;
+  margin-top: -10px;
 }
 .frame-1547755086 {
   display: flex;
@@ -279,7 +287,7 @@
   position: relative;
 }
 .forgot-password {
-  color: var(--text-primary, #0000ff);
+  color:  var(--color-primary-0);
   text-align: left;
   font-size: 14px;
   font-weight: 400;
@@ -287,7 +295,7 @@
   cursor: pointer;
 }
 .frame-1547755110 {
-  background: var(--azul-electrico, #0000ff);
+  background: var(--color-primary-0);
   border-radius: 4px;
   padding: 11px 2px;
   display: flex;
@@ -318,6 +326,9 @@
   flex-shrink: 0;
   position: relative;
 }
+.frame-error{
+  color: var(--text-color);
+}
 .don-t-have-an-account {
   color: var(--text-color);
   text-align: left;
@@ -326,15 +337,15 @@
   position: relative;
 }
 .sign-up {
-  color: #f0f0ff;
+  color: var(--color-primary-0);
   text-align: left;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   position: relative;
   cursor: pointer;
 }
 
 .sign-up:hover{
   color: #5f5fe2;
-  text-shadow: 2px 2px 4px #333333;
+  text-shadow: 1px 1px 2px #2150fa;
 }

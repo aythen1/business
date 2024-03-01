@@ -1,0 +1,45 @@
+.modal{
+    width: 350px;
+    margin: 0 auto;
+
+    .header{
+        h3{
+
+        }
+        p{
+            font-size: 16px;
+        }
+    }
+    .type{
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        label{
+            display: flex;
+            gap: 4px;
+            justify-content: flex-start;
+            align-items: center;
+            input{
+
+            }
+        }
+    }
+    .adjunt{
+        margin-top: 10px;
+        p{
+            font-size: 14px;
+        }
+        ul{
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            li{
+                padding: 10px;
+                background: var(--border-color);
+            }
+        }
+    }
+}

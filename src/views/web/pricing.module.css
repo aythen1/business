@@ -1,4 +1,20 @@
 
+
+.svg-success-active{
+  width: 15px;
+  height: 17px;
+  min-height: 10px;
+  fill: var(--color-primary-0);
+}
+
+.svg-success{
+  width: 15px;
+  height: 17px;
+  min-height: 10px;
+  fill: var(--color-primary-3);
+}
+
+
 .index {
   background-color: transparent;
   display: flex;
@@ -71,7 +87,7 @@
 }
 
 .index .rectangle {
-  background-color: #0000ff;
+  background-color:  var(--color-primary-0);
   border-radius: 24px;
   height: 47px;
   left: 0;
@@ -79,10 +95,14 @@
   position: absolute;
   top: 0;
   width: 209px;
+  cursor: pointer;
+  &:hover{
+    background-color:  var(--color-primary-1);
+  }
 }
 
 .index .choose-plan {
-  color: #0000ff;
+  color:  var(--color-primary-0);
   font-family: "Inter", Helvetica;
   font-size: 15px;
   font-weight: 700;
@@ -142,7 +162,7 @@
 
 .index .choose-plan-wrapper {
   align-items: center;
-  background-color: #0000ff;
+  background-color:  var(--color-primary-0);
   border-radius: 24px;
   display: inline-flex;
   gap: 10px;
@@ -150,6 +170,10 @@
   padding: 14px 68px;
   position: absolute;
   top: 526px;
+  cursor: pointer;
+  &:hover{
+    background-color:  var(--color-primary-1);
+  }
 }
 
 .index .text-wrapper {
@@ -167,7 +191,7 @@
 
 .index .div-wrapper {
   align-items: center;
-  background-color: #0000ff;
+  background-color:  var(--color-primary-0);
   border-radius: 13.5px;
   display: inline-flex;
   gap: 10px;
@@ -236,6 +260,7 @@
 
 .index .pro {
   font-family: "Inter", Helvetica;
+  color: var(--color-primary-0);
   font-size: 28px;
   font-weight: 700;
   letter-spacing: 0;
@@ -268,15 +293,6 @@
   width: 209px;
 }
 
-.index .path-wrapper {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .path {
   height: 10px;
@@ -306,14 +322,17 @@
   width: 209px;
 }
 
-.index .img-wrapper {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-1.svg);
-  background-size: 100% 100%;
-  height: 21px;
+.img-wrapper {
+  background: var(--color-primary-4);
+  border-radius: 50%;
+  height: 22px;
   left: 0;
   position: absolute;
   top: 0;
   width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .index .group-5 {
@@ -324,15 +343,7 @@
   width: 209px;
 }
 
-.index .overlap-2 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-2.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .img {
   height: 9px;
@@ -362,15 +373,6 @@
   width: 209px;
 }
 
-.index .overlap-3 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-3.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .group-7 {
   height: 21px;
@@ -380,15 +382,7 @@
   width: 209px;
 }
 
-.index .overlap-4 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-4.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-8 {
   height: 21px;
@@ -398,15 +392,7 @@
   width: 209px;
 }
 
-.index .overlap-5 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-5.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-9 {
   height: 21px;
@@ -416,15 +402,7 @@
   width: 209px;
 }
 
-.index .overlap-6 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-6.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-10 {
   height: 21px;
@@ -434,15 +412,6 @@
   width: 209px;
 }
 
-.index .overlap-7 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-7.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .frame-6 {
   align-items: flex-start;
@@ -498,7 +467,8 @@
 }
 
 .index .base {
-  color: #221c4e;
+  color: var(--color-primary-0);
+  opacity: 0.4;
   font-family: "Inter", Helvetica;
   font-size: 28px;
   font-weight: 700;
@@ -539,15 +509,6 @@
   width: 209px;
 }
 
-.index .overlap-group-2 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-8.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .path-2 {
   height: 8px;
@@ -570,15 +531,7 @@
   width: 177px;
 }
 
-.index .overlap-8 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-9.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .path-3 {
   height: 8px;
@@ -588,45 +541,7 @@
   width: 11px;
 }
 
-.index .overlap-9 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-10.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
-.index .overlap-10 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-11.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
-
-.index .overlap-11 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-12.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
-
-.index .overlap-12 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-13.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .group-13 {
   height: 20px;
@@ -635,15 +550,7 @@
   width: 209px;
 }
 
-.index .overlap-13 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-14.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .path-4 {
   height: 7px;
@@ -667,7 +574,7 @@
 }
 
 .index .choose-plan-2 {
-  color: #0000ff;
+  color:  var(--color-primary-0);
   font-family: "Inter", Helvetica;
   font-size: 15px;
   font-weight: 400;
@@ -706,7 +613,8 @@
 }
 
 .index .enterprise {
-  color: #221c4e;
+  color: var(--color-primary-0);
+  opacity: 0.4;
   font-family: "Inter", Helvetica;
   font-size: 28px;
   font-weight: 700;
@@ -738,15 +646,6 @@
   width: 209px;
 }
 
-.index .overlap-group-3 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-15.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .text-wrapper-6 {
   color: #838099;
@@ -827,7 +726,7 @@
 }
 
 .index .choose-plan-3 {
-  color: #0000ff;
+  color:  var(--color-primary-0);
   font-family: "Inter", Helvetica;
   font-size: 15px;
   font-weight: 400;
@@ -867,7 +766,6 @@
 }
 
 .index .intro {
-  color: #221c4e;
   font-family: "Inter", Helvetica;
   font-size: 28px;
   font-weight: 700;
@@ -876,6 +774,8 @@
   line-height: normal;
   position: absolute;
   top: 123px;
+  color: var(--color-primary-0);
+  opacity: 0.4;
 }
 
 .index .for-most-businesses-3 {
@@ -986,7 +886,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
-  width: 142px;
+  width: auto;
   position: relative;
 }
 .capacidades-y-accesos {
@@ -1212,7 +1112,7 @@
   gap: 12px;
   align-items: center;
   justify-content: center;
-  width: 115px;
+  width: 120px;
   position: absolute;
   left: 625px;
   top: 12px;
@@ -1235,9 +1135,9 @@
   gap: 12px;
   align-items: center;
   justify-content: center;
-  width: 115px;
+  width: 130px;
   position: absolute;
-  left: 955px;
+  left: 950px;
   top: 14px;
 }
 .hasta-100-g-bs {

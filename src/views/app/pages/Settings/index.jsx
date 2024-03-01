@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-router-dom';
 
 // import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -8,34 +9,40 @@ import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-route
 
 import styles from './index.module.css'
 
+import {
+  setDashboard
+} from '@/slices/dashboardSlice'
 
 
 import Home from './home'
 import Billing from './billing'
 import Contract from './contract'
-import Support from './support'
+// import Support from './support'
 import Drive from './drive'
+// import Dashboard from '../DashBoard'
+
+import Vector from '../Vector'
 
 
 
 
-
-const SettingsPath = () => {
+const SettingsPath = ({}) => {
   const { settingsTag } = useParams();
 
-  console.log('edwdw', settingsTag)
   let content;
 
   if (settingsTag === 'billing') {
     content = <Billing />;
   } else if (settingsTag === 'contracts') {
     content = <Contract />;
-  } else if (settingsTag === 'support') {
+  }  else if (settingsTag === 'support') {
     content = <Support />;
-  } else if (settingsTag === 'drive') {
-    content = <Drive />;
-  } else {
+  } else if (settingsTag === 'home') {
     content = <Home />;
+  } else if (settingsTag === 'vector') {
+    content = <Vector />;
+  } else {
+    content = <Drive />;
   }
 
   return content
@@ -44,18 +51,29 @@ const SettingsPath = () => {
 
 
 
-const Settings = ({ }) => {
+const Settings = ({  }) => {
+    const dispatch = useDispatch()
     const { settingsTag } = useParams();
 
 
     const navigate = useNavigate();
-    const [tag, setTag] = useState(settingsTag || 'home');
+    const [tag, setTag] = useState(settingsTag || 'drive');
 
   
     const selectTag = (value) => {
       setTag(value);
-      // Realiza la navegación según la tag seleccionada
-      navigate(`/${'es'}/app/settings/${value}`);
+
+      if(value == 'support'){
+        navigate(`/${'es'}/app/support`);
+      }else if(value == 'vector'){
+        navigate(`/${'es'}/app/vector`);
+      }else if(value == 'board'){
+        dispatch(setDashboard(null))
+        navigate(`/${'es'}/app/settings/${value}`);
+      }else{
+        // Realiza la navegación según la tag seleccionada
+        navigate(`/${'es'}/app/settings/${value}`);
+      }
     };
 
 
@@ -72,7 +90,20 @@ const Settings = ({ }) => {
                     className={tag === 'drive' ? styles.selected : ''}
                     onClick={() => selectTag('drive')}
                 >
-                    Drive
+                    Mis documentos
+                </button>
+                <button 
+                    className={tag === 'test' ? styles.selected : ''}
+                    onClick={() => selectTag('vector')}
+                >
+                    Aythen DB
+                </button>
+                <button
+                    style={{marginLeft: 'auto'}} 
+                    className={tag === 'support' ? styles.selected : ''}
+                    onClick={() => selectTag('support')}
+                >
+                    Support
                 </button>
                 <button 
                     className={tag === 'billing' ? styles.selected : ''}
@@ -86,17 +117,11 @@ const Settings = ({ }) => {
                 >
                     Contracts
                 </button>
-                <button 
-                    className={tag === 'support' ? styles.selected : ''}
-                    onClick={() => selectTag('support')}
-                >
-                    Support
-                </button>
             </div>
             <div>
                 <Routes>
                   {/* <Route path="hello" element={<Drive />} /> */}
-                  <Route path="*" element={<SettingsPath />} />
+                  <Route path="*" element={<SettingsPath  />} />
                   {/* <Route path="" element={<SettingsPath />} /> */}
                 </Routes>
             </div>

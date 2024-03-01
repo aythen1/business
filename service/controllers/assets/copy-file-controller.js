@@ -11,7 +11,6 @@ const { catchedAsync, response } = require('../../utils/err')
 const { ClientError } = require('../../utils/err/errors')
 
 const copyFile = async (req, res) => {
-  console.log('COPY FILEEE')
   const { sourceBucket, sourceKey, destinationBucket, destinationKey, userId } =
     req.body
 

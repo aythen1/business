@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+
 import * as XLSX from 'xlsx';
 
 import { v4 as uuidv4 } from 'uuid'
@@ -8,8 +12,8 @@ import styles from './table.module.css'
 
 
 import {
-  renderModule
-} from '../utils/table'
+  TableRender
+} from '../utils/TableRender'
 
 
 
@@ -28,19 +32,23 @@ import {
 // } from '@/actions/iam'
 
 
-import { useDispatch, useSelector } from 'react-redux'
-
 const Table = ({
   fetchs,
   children,
   items,
-  setStateTable
+  setStateTable,
+  handleAdd
 }) => {
   // --------------------------------------------------------------------------------------------------------------
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+
   // --------------------------------------------------------------------------------------------------------------
   // const [editMode, setEditMode] = useState(false)
-  const [listItems, setListItems] = useState([])
+  const [table, setTable] = useState(null)
+  const [tableInfo, setTableInfo] = useState({
+    name: 'default'
+  })
 
   const [textToolTip, setTextToolTip] = useState(null)
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
@@ -80,28 +88,6 @@ const Table = ({
   // --------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
-
-  const handleAddDashboard = (uuid) => {
-    const newUUID = uuidv4()
-
-    // setDashboardId(newUUID)
-
-    const newDashboard = {
-      name: 'new Dashboard'
-    }
-
-    dispatch(addDashboard(newDashboard))
-
-    // // Actualizar la URL con el nuevo UUID
-    const newURL = `?dashboard=${encodeURIComponent(newUUID)}`
-    window.history.pushState(null, null, newURL)
-  }
-
-
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
@@ -119,87 +105,89 @@ const Table = ({
 
   // --------------------------------------------------------------------------------------------------------------
 
-  // --------------------------------------
- 
+  // ---------------------------------------
+  const onFilter = async (type) => {
+    console.log('type filter', type)
+
+    await dispatch(fetchs({ order: 'desc' }))
+  }
+
 
   useEffect(() => {
     const fetchItems = () => {
       const filteredItems = React.Children.toArray(children)
         .filter((child) => child.type === 'item')
         .map((item) => {
-          const title = item.props.children;
-          const tag = camelCase(title).toLowerCase();
+          // const tag = camelCase(title).toLowerCase();
+          const filterAttribute = item.props.filter; // Obtén el valor del atributo filter si existe
+          const nameAttribute = item.props.name; // Obtén el valor del atributo filter si existe
+          const title = item.props.children
+          const tag = filterAttribute || camelCase(title).toLowerCase(); // Usa el valor de filterAttribute si existe, de lo contrario, utiliza el título
+          const name = nameAttribute || item.props.children
+          const size = item.props.size || null
+          const component = item.props.component || null
 
-          const data = {
-            tag: tag, // Asegúrate de haber definido la función renderModule
-            render: renderModule({tag, items, setStateTable}) // Asegúrate de haber definido la función renderModule
+          return {
+            tag,
+            title,
+            name,
+            size,
+            component
           };
-
-          return data;
         });
 
-      setListItems(filteredItems)
+      setTable(<TableRender 
+        items={items} 
+        filteredItems={filteredItems} 
+        setStateTable={setStateTable} 
+        onFilter={onFilter} 
+      />)
     }
-
-    if (items) fetchItems()
+    if (items && items.length > 0) fetchItems()
 
   }, [items])
 
 
 
-  
 
 
 
 
- // ----------------
+
+  // ----------------
 
 
 
-useEffect( () => {
-  // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
-  // const dataTable = JSON.parse(tokenRoomTable)
+  useEffect(() => {
+    // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
+    // const dataTable = JSON.parse(tokenRoomTable)
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchs({}))
 
-  const fetchData = async () => {
-    try {
-      const token = localStorage.getItem('token')
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-      await dispatch(fetchs({token}))
-
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
 
+
+  const handleClickSupport = () => {
+    navigate(`/${'es'}/app/support`)
+  }
 
 
 
   return (
     <div
-      className={styles.boxTable + ' ' + styles.mdNone}
+      className={styles.boxTable}
     >
-      {items.length !== 0 ? (
+      {table ? (
         <div >
-          <ul className={styles.listTable}>
-            {listItems.map((item, index) => {
-              if (typeof item.render === 'object') {
-                return (
-                  <li
-                    className={styles.containerTable}
-                    key={index}
-                  >
-                    {item.render}
-                  </li>
-                );
-              }
-
-              return null; // Si item.render no es un objeto, no renderizamos nada
-            })}
-          </ul>
+          {table}
           {isToolTipHovered && (
             <div
               className={styles.popupToolTip}
@@ -216,13 +204,13 @@ useEffect( () => {
             <p>
               Un texto más sencillos
             </p>
-            <button onClick={handleAddDashboard}>
+            <button onClick={handleAdd}>
               <svg viewBox="0 0 24 24">
                 <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
               </svg>
-              Create Dashboard
+              Create {title}
             </button>
-            <a >
+            <a onClick={() => handleClickSupport()}>
               Instance Quickstart Documentation
               <svg viewBox="0 0 24 24">
                 <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>

@@ -3,6 +3,9 @@ import { Route, Routes, Outlet, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useDarkMode from 'use-dark-mode';
 
+import generateColors from '@/utils/colors'
+
+
 
 import styles from "./index.module.css";
 
@@ -19,13 +22,18 @@ import NotFound from '../pages/NotFound'
 
 // import Pivot from './pivot'
 // import Home from './views/web/home'
-// import Dashboard from './pivot/components/DashBoard'
+// import Dashboard from './pivot/DashBoard'
 
 
 import DashBoard from './pages/DashBoard'
-import Pivot from './pages/DashBoard/Pivot'
+
+import Support from './pages/Support'
+import Tickets from './pages/Support/tickets'
+import Ticket from './pages/Support/ticket'
+
 
 import Settings from './pages/Settings'
+
 import SettingsIAM from './pages/Settings/iam'
 // import SettingsBilling from './pages/Settings/billing'
 // import SettingsContract from './pages/Settings/contract'
@@ -33,6 +41,7 @@ import SettingsIAM from './pages/Settings/iam'
 import Addon from './pages/Addon'
 import GPTs from './pages/OpenAi'
 import LangChain from './pages/LangChain'
+import Vector from './pages/Vector'
 
 
 // import useDarkMode from 'use-dark-mode';
@@ -40,6 +49,12 @@ import LangChain from './pages/LangChain'
 // import DragAndDrop from './Component/DragAndDrop';
 // import Home from './pivot/components/DashBoard/home'
 
+
+import {
+  setOpenMenuLeft,
+  setOpenMenuRight,
+  setOpenChatBot,
+} from '@/actions/iam'
 
 
 
@@ -65,11 +80,18 @@ export const App = ({ }) => {
 
   const dispatch = useDispatch();
   const [selectedComponent, setSelectedComponent] = useState(null)
-  const [openMenuRight, setOpenMenuRight] = useState(null)
-  const [openChatBot, setOpenChatBot] = useState(null)
-  const [openMenuLeft, setOpenMenuLeft] = useState(null)
+  // const [openMenuRight, setOpenMenuRight] = useState(null)
+  // const [openChatBot, setOpenChatBot] = useState(null)
+  // const [openMenuLeft, setOpenMenuLeft] = useState(null)
 
-  const [dashboardId, setDashboardId] = useState(null)
+
+  const {
+    themeColor,
+    openMenuLeft,
+    openMenuRight,
+    openChatBot
+  } = useSelector((state) => state.iam)
+
 
   // Estado para controlar el modo oscuro o claro
   const [themeMode, setThemeMode] = useState(() => {
@@ -108,49 +130,31 @@ export const App = ({ }) => {
 
 
 
-  // Efecto secundario para establecer el modo inicial al cargar la aplicación
-  useEffect(() => {
-    // Obtener la URL actual
-    const urlParams = new URLSearchParams(window.location.search);
-    // Obtener el valor del parámetro 'dashboard'
-    const dashboardParam = urlParams.get('dashboard');
-
-    if (dashboardParam) {
-      setDashboardId(dashboardParam)
-    }
-
-  }, []);
 
 
+  // useEffect(() => {
+  //   // Ejemplo de cómo dispatch una acción al montar el componente
+  //   const user = { id: 1, name: 'John Doe' };
+  //   // dispatch(setUser(user));
+
+  //   // También puedes realizar acciones asíncronas utilizando Thunk, Saga, etc.
+  //   // dispatch(fetchUserData());
+  // }, [dispatch]);
 
 
-  useEffect(() => {
-    // Ejemplo de cómo dispatch una acción al montar el componente
-    const user = { id: 1, name: 'John Doe' };
-    // dispatch(setUser(user));
-
-    // También puedes realizar acciones asíncronas utilizando Thunk, Saga, etc.
-    // dispatch(fetchUserData());
-  }, [dispatch]);
-
-
-  const {
-    component,
-    components
-  } = useSelector((state) => state.pivot);
 
 
   const _selectedComponent = (index) => {
     setSelectedComponent(index)
     if (index) {
-      setOpenMenuLeft('data')
+      dispatch(setOpenMenuLeft('data'))
       scrollToComponent(index)
     } else {
-      setOpenMenuLeft(null)
+      dispatch(setOpenMenuLeft(null))
     }
 
-    setOpenMenuRight(null)
-    setOpenChatBot(null)
+    dispatch(setOpenMenuRight(null))
+    dispatch(setOpenChatBot(null))
 
   }
 
@@ -177,55 +181,77 @@ export const App = ({ }) => {
 
   //
 
+  const [colorsLight, setColorsLight] = useState([])
+  const [colorsDark, setColorsDark] = useState([])
+
+  useEffect(() => {
+    const color = localStorage.getItem('themeColor')
+    const colors = generateColors(color)
+    setColorsLight(colors.light)
+    setColorsDark(colors.dark)
+  }, [themeColor])
 
 
   return (
-    <div >
+    <div>
+      {themeColor && (
+        <style>
+          {`
+          :root {
+            ${colorsLight.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          }
+          body.dark-mode {
+            ${colorsDark.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
+          }
+        `}
+        </style>
+      )}
       <Modal />
-      <div className={styles["TopBar"]}>
+      <div 
+        className={styles["TopBar"]}
+        onClick={() => {
+          dispatch(setOpenChatBot(null))
+          // dispatch(setOpenMenuRight(null))
+          dispatch(setOpenMenuLeft(null))
+          // _selectedComponent(null)
+        }}
+      >
         <TopBar
           themeMode={themeMode}
           setThemeMode={setThemeMode}
-          setOpenMenuLeft={setOpenMenuLeft}
-          setOpenChatBot={setOpenChatBot}
         />
       </div>
       <div className={styles["Container"]}>
         <div
-          onClick={() => {
-            setOpenChatBot(null)
-            setOpenMenuRight(null)
-            _selectedComponent(null)
-          }
-          }
+          className={styles["Board"]}
+          onClick={() => _selectedComponent(null)}
         >
+          <Routes>
+            <Route path="board/*" element={<DashBoard />} />
+            <Route path="/*" element={<Outlet />}>
+              {/* Ruta dinámica que carga el componente correspondiente según el path */}
+              <Route path="iam" element={<SettingsIAM />} />
 
+              <Route path="" element={<Settings />} />
+              <Route path="settings/:settingsTag/*" element={<Settings />} />
+              
+              <Route path="vector" element={<Vector />} />
+              <Route path="vector/:vectorId" element={<Vector />} />
 
-          <div>
-            <Routes>
-              <Route path="home" element={<DashBoard />} />
-              <Route path="/*" element={<Outlet />}>
-                {/* Ruta dinámica que carga el componente correspondiente según el path */}
-                <Route path="iam" element={<SettingsIAM />} />
+              <Route path="support" element={<Support />} />
+              <Route path="support/tickets" element={<Tickets />} />
+              <Route path="support/ticket/:ticketId" element={<Ticket />} />
 
-                <Route path="" element={<Settings />} />
-                <Route path="settings/:settingsTag/*" element={<Settings />} />
-                {/* <Route path="settings/:settingsTag" element={<Settings />} /> */}
-                {/* <Route path="billing" element={<SettingsBilling />} /> */}
-                {/* <Route path="contract" element={<SettingsContract />} /> */}
-                <Route path="addon/*" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot} />} />
-                <Route path="addon" element={<Addon setOpenMenuRight={setOpenMenuRight} setOpenChatBot={setOpenChatBot}/>} />
-                {/* <Route path="drive/:id" element={<Drive />} /> */}
-                <Route path="gpt" element={<GPTs />} />
-                <Route path="langchain" element={<LangChain />} />
-                {/* <Route path=":id" element={<Pivot />} /> */}
-                <Route path="*" element={<NotFound />} />
-                {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
-              </Route>
-            </Routes>
-          </div>
-
-
+              {/* <Route path="contract" element={<SettingsContract />} /> */}
+              <Route path="addon/*" element={<Addon />} />
+              <Route path="addon" element={<Addon />} />
+              {/* <Route path="drive/:id" element={<Drive />} /> */}
+              <Route path="gpt" element={<GPTs />} />
+              <Route path="langchain" element={<LangChain />} />
+              <Route path="*" element={<NotFound />} />
+              {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
+            </Route>
+          </Routes>
         </div>
         {openMenuLeft && (
           <div
@@ -233,14 +259,13 @@ export const App = ({ }) => {
             style={{ display: 'block' }}
           >
             {openMenuLeft == 'user' ? (
-              <MenuLeftUser
-                setOpenMenuLeft={setOpenMenuLeft}
-              />
+              <div className={styles["MenuLeftUser"]}>
+                <MenuLeftUser />
+              </div>
             ) : (
-              <MenuLeftData
-                components={components}
-                setRef={setRef}
-              />
+              <div className={styles["MenuLeftData"]}>
+                <MenuLeftData setRef={setRef} />
+              </div>
             )}
             {/* <MenuLeftUser /> */}
           </div>
@@ -251,23 +276,17 @@ export const App = ({ }) => {
               <div className={styles["MenuRightGraph"]}
                 style={{ display: 'block' }}
               >
-                <MenuRightGraph
-                  setOpenMenuRight={setOpenMenuRight}
-                />
+                <MenuRightGraph />
               </div>
             ) : openMenuRight == 'data' ? (
               <div className={styles["MenuRightData"]}
                 style={{ display: 'block' }}
               >
-                <MenuRightData
-                  setOpenMenuRight={setOpenMenuRight}
-                  />
+                <MenuRightData />
               </div>
-            ): openMenuRight == 'component' && (
+            ) : openMenuRight == 'component' && (
               <div className={styles["MenuRightComponent"]}>
-                <MenuRightComponent 
-                  setOpenMenuRight={setOpenMenuRight}
-                />
+                <MenuRightComponent />
               </div>
             )}
           </div>
@@ -275,7 +294,7 @@ export const App = ({ }) => {
       </div>
       {openChatBot && (
         <div className={styles["ChatBot"]}>
-          <ChatBot setOpenChatBot={setOpenChatBot} />
+          <ChatBot />
         </div>
       )}
     </div>
