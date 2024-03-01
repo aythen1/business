@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const NFCReaderWriter = () => {
   const [nfcData, setNfcData] = useState(null);
+  const [nfcSupported, setNfcSupported] = useState(true);
 
   useEffect(() => {
     const handleNFCReading = async (event) => {
@@ -17,6 +18,9 @@ const NFCReaderWriter = () => {
         });
 
         setNfcData(records);
+
+        // Mostrar alerta cuando se detecta una etiqueta
+        alert('¡Etiqueta NFC detectada!');
       } catch (error) {
         console.error('Error al leer datos NFC:', error);
       }
@@ -41,6 +45,7 @@ const NFCReaderWriter = () => {
       };
     } else {
       console.error('La API Web NFC no está soportada en este navegador.');
+      setNfcSupported(false);
     }
   }, []);
 
@@ -53,6 +58,8 @@ const NFCReaderWriter = () => {
 
       await writer.write(message);
 
+      // Mostrar alerta cuando se escriben datos en la etiqueta
+      alert('¡Datos escritos en la etiqueta NFC!');
       console.log('Datos escritos en la etiqueta NFC.');
     } catch (error) {
       console.error('Error al escribir datos NFC:', error);
@@ -63,16 +70,22 @@ const NFCReaderWriter = () => {
     <div>
       <h2>Lectura y Escritura NFC</h2>
 
-      <div>
-        <h3>Datos NFC Leídos:</h3>
-        {nfcData ? (
-          <pre>{JSON.stringify(nfcData, null, 2)}</pre>
-        ) : (
-          <p>Esperando la lectura de una etiqueta NFC...</p>
-        )}
-      </div>
+      {nfcSupported ? (
+        <div>
+          <div>
+            <h3>Datos NFC Leídos:</h3>
+            {nfcData ? (
+              <pre>{JSON.stringify(nfcData, null, 2)}</pre>
+            ) : (
+              <p>Esperando la lectura de una etiqueta NFC...</p>
+            )}
+          </div>
 
-      <button onClick={handleNFCWrite}>Escribir en la Etiqueta NFC</button>
+          <button onClick={handleNFCWrite}>Escribir en la Etiqueta NFC</button>
+        </div>
+      ) : (
+        <p>La API Web NFC no está soportada en este navegador.</p>
+      )}
     </div>
   );
 };

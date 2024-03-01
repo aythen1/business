@@ -78,7 +78,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
       if (res.payload?.user?.name) {
         document.title = 'AY > ' + res.payload.user.name
-      }else{
+      } else {
         document.title = 'AythenDB'
       }
 
@@ -157,17 +157,19 @@ const Layout = () => {
 
   useEffect(() => {
     const color = localStorage.getItem('themeColor')
-    const colors = generateColors(color)
+    if (color) {
+      const colors = generateColors(color)
 
-    setColorsLight(colors.light)
-    setColorsDark(colors.dark)
+      setColorsLight(colors.light)
+      setColorsDark(colors.dark)
+    }
   }, [])
 
   return (
     <div>
       {colorsLight.length > 0 && (
-      <style>
-        {`
+        <style>
+          {`
           :root{
             ${colorsLight.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
           }
@@ -175,54 +177,54 @@ const Layout = () => {
             ${colorsDark.map((color, index) => `--color-primary-${index}: ${color};`).join('\n')}
           }
         `}
-      </style>
+        </style>
       )}
 
-    <I18nextProvider i18n={i18n}>
-      <DndProvider backend={HTML5Backend}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/:lng/test"
-                element={<Test />}
-              />
-              
-              <Route
-                path="/:lng/vector/:vectorId"
-                element={<Test />}
-              />
+      <I18nextProvider i18n={i18n}>
+        <DndProvider backend={HTML5Backend}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <Routes>
+                <Route
+                  path="/:lng/test"
+                  element={<Test />}
+                />
 
-              <Route
-                path="/:lng/*"
-                element={<DynamicRoute />}
-              />
+                <Route
+                  path="/:lng/vector/:vectorId"
+                  element={<Test />}
+                />
 
-              <Route
-                path="/:lng/app/register"
-                element={isAuth ? <App /> : <Register />}
-              />
-              <Route
-                path="/:lng/app/login"
-                element={isAuth ? <App /> : <Login />}
-              />
-              <Route
-                path="/:lng/app/recover-password"
-                element={isAuth ? <App /> : <RecoverPassword />}
-              />
-              <Route
-                path="/:lng/app/*"
-                element={<ProtectedRoute element={<App />} setIsAuth={setIsAuth} />}
-              />
-              <Route
-                index
-                element={<NotFound />}
-              />
-            </Routes>
-          </BrowserRouter>
-        </Provider>
-      </DndProvider>
-    </I18nextProvider>
+                <Route
+                  path="/:lng/*"
+                  element={<DynamicRoute />}
+                />
+
+                <Route
+                  path="/:lng/app/register"
+                  element={isAuth ? <App /> : <Register />}
+                />
+                <Route
+                  path="/:lng/app/login"
+                  element={isAuth ? <App /> : <Login />}
+                />
+                <Route
+                  path="/:lng/app/recover-password"
+                  element={isAuth ? <App /> : <RecoverPassword />}
+                />
+                <Route
+                  path="/:lng/app/*"
+                  element={<ProtectedRoute element={<App />} setIsAuth={setIsAuth} />}
+                />
+                <Route
+                  index
+                  element={<NotFound />}
+                />
+              </Routes>
+            </BrowserRouter>
+          </Provider>
+        </DndProvider>
+      </I18nextProvider>
     </div>
   );
 };
