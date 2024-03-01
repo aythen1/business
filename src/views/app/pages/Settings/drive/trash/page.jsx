@@ -1,5 +1,5 @@
-'use client'
-import style from '../components/my-files/my-files.module.css'
+"use client";
+import style from "../components/my-files/my-files.module.css";
 // import Image from 'next/image'
 
 // import Folder from '@/public/assets/Folder-figma.svg'
@@ -8,70 +8,70 @@ import style from '../components/my-files/my-files.module.css'
 // import Chevron from '../../../../../../../../assets/Vector 161 (Stroke).svg'
 // import ArrowUpWard from '../../../../../../../../assets/arrow-upward.svg'
 
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import {
   getDirectoriesVersions,
-  deleteFile
+  deleteFile,
   // deleteFolder
-} from '@/actions/assets'
+} from "@/actions/assets";
 // import FolderOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FolderOptions'
 // import FileTrashOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FileTrashOptions'
 
 export default function Page({ params }) {
-  const dispatch = useDispatch()
-  const { driveId } = params
+  const dispatch = useDispatch();
+  const { driveId } = params;
 
   const { directoriesTrash, loading, searchFiles } = useSelector(
     (state) => state.assets
-  )
-  const isGettingFolder = loading?.GET_DIRECTORIES_VERSIONS === true
+  );
+  const isGettingFolder = loading?.GET_DIRECTORIES_VERSIONS === true;
 
-  const [currentPath, setCurrentPath] = useState(driveId + '/')
-  const [filteredFolders, setFilteredFolders] = useState([])
-  const [folderOptions, setFolderOptions] = useState({})
+  const [currentPath, setCurrentPath] = useState(driveId + "/");
+  const [filteredFolders, setFilteredFolders] = useState([]);
+  const [folderOptions, setFolderOptions] = useState({});
 
   // / / / / / / / / / / /    F U N C T I O N S    / / / / / / / / / / / / / / / / /
 
   const handleFolderClick = (folderName) => {
-    setCurrentPath(folderName)
-  }
+    setCurrentPath(folderName);
+  };
 
   const handleToggleFolderOption = (index) => {
     setFolderOptions((prevOptions) => {
-      const newOptions = { ...prevOptions }
-      newOptions[index] = !newOptions[index]
-      return newOptions
-    })
-  }
+      const newOptions = { ...prevOptions };
+      newOptions[index] = !newOptions[index];
+      return newOptions;
+    });
+  };
   // const handleRestoreFolder = (path) => {
   //   dispatch(deleteFolder(path))
   // }
   const handleDeleteFile = (path) => {
     directoriesTrash?.Versions?.forEach((element) => {
       if (element.Key === path)
-        dispatch(deleteFile({ path, VersionId: element.VersionId }))
-    })
+        dispatch(deleteFile({ path, VersionId: element.VersionId }));
+    });
     directoriesTrash?.DeleteMarkers?.forEach((element) => {
       if (element.Key === path)
-        dispatch(deleteFile({ path, VersionId: element.VersionId }))
-    })
-  }
+        dispatch(deleteFile({ path, VersionId: element.VersionId }));
+    });
+  };
   const handleRestoreFile = (path, VersionId) => {
-    dispatch(deleteFile({ path, VersionId }))
-  }
+    dispatch(deleteFile({ path, VersionId }));
+  };
   const handleFolderClickBack = (folderName) => {
-    if (folderName === driveId + '/') {
-      setCurrentPath(folderName)
-      return
+    if (folderName === driveId + "/") {
+      setCurrentPath(folderName);
+      return;
     }
-    const arr = currentPath.split('/')
-    const index = arr.indexOf(folderName)
+    const arr = currentPath.split("/");
+    const index = arr.indexOf(folderName);
     if (index !== -1) {
-      const newPath = arr.slice(0, index + 1)
-      setCurrentPath(newPath.join('/') + '/')
+      const newPath = arr.slice(0, index + 1);
+      setCurrentPath(newPath.join("/") + "/");
     }
-  }
+  };
 
   // / / / / / / / / / / / /    M E T O D O S    / / / / / / / / / / / / / / / / /
 
@@ -79,14 +79,16 @@ export default function Page({ params }) {
     if (isGettingFolder && folders?.length === 0) {
       return (
         <p className={style.emptyFolderMessage}>Un momento, por favor...</p>
-      )
+      );
     }
     if (folders?.length === 0) {
-      return <p className={style.emptyFolderMessage}>Esta carpeta está vacía</p>
+      return (
+        <p className={style.emptyFolderMessage}>Esta carpeta está vacía</p>
+      );
     }
     return folders?.map((directory, index) => {
-      const folderName = directory.Key.split('/').filter(Boolean).pop()
-      const isFile = /\.(png|jpg|txt|jfif)$/i.test(folderName)
+      const folderName = directory.Key.split("/").filter(Boolean).pop();
+      const isFile = /\.(png|jpg|txt|jfif)$/i.test(folderName);
 
       return (
         <div key={index} className={style.drive_folder_container}>
@@ -116,7 +118,6 @@ export default function Page({ params }) {
           {folderOptions[index] &&
             (isFile ? (
               <div>
-
                 {/* <FileTrashOptions
                   setShowFolderOption={(value) =>
                     setFolderOptions((prevOptions) => ({
@@ -132,7 +133,7 @@ export default function Page({ params }) {
               </div>
             ) : (
               <div>
-              {/* // <FolderOptions
+                {/* // <FolderOptions
               //   setShowFolderOption={(value) =>
               //     setFolderOptions((prevOptions) => ({
               //       ...prevOptions,
@@ -146,28 +147,28 @@ export default function Page({ params }) {
               </div>
             ))}
         </div>
-      )
-    })
-  }
+      );
+    });
+  };
 
   // / / / / / / / / / / /    U S E E F F E C T    / / / / / / / / / / / / / / / / /
   useEffect(() => {
-    if (searchFiles !== '' && searchFiles !== undefined) {
+    if (searchFiles !== "" && searchFiles !== undefined) {
       const filtered = directoriesTrash?.DeleteMarkers?.filter(
         (folder) =>
           folder.Key.startsWith(currentPath) &&
           folder.Key !== currentPath &&
           folder.Key.toLowerCase().includes(searchFiles.toLowerCase())
-      )
+      );
 
       // Ensure strict order based on the search string
       const sortedFiltered = filtered.sort((a, b) => {
-        const indexA = a.Key.toLowerCase().indexOf(searchFiles.toLowerCase())
-        const indexB = b.Key.toLowerCase().indexOf(searchFiles.toLowerCase())
-        return indexA - indexB
-      })
+        const indexA = a.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
+        const indexB = b.Key.toLowerCase().indexOf(searchFiles.toLowerCase());
+        return indexA - indexB;
+      });
 
-      setFilteredFolders(sortedFiltered)
+      setFilteredFolders(sortedFiltered);
     } else {
       // Reset filteredFolders when uploadSearch is empty
       setFilteredFolders(
@@ -176,17 +177,17 @@ export default function Page({ params }) {
             folder.Key.startsWith(currentPath) &&
             folder.Key !== currentPath &&
             (folder.Size === 0
-              ? folder.Key.split('/').length ===
-                currentPath.split('/').length + 1
-              : folder.Key.split('/').length === currentPath.split('/').length)
+              ? folder.Key.split("/").length ===
+                currentPath.split("/").length + 1
+              : folder.Key.split("/").length === currentPath.split("/").length)
         )
-      )
+      );
     }
-  }, [currentPath, directoriesTrash, searchFiles])
+  }, [currentPath, directoriesTrash, searchFiles]);
 
   useEffect(() => {
-    dispatch(getDirectoriesVersions({ Prefix: driveId }))
-  }, [])
+    dispatch(getDirectoriesVersions({ Prefix: driveId }));
+  }, []);
 
   return (
     <div className={style.main_drive_page}>
@@ -208,15 +209,15 @@ export default function Page({ params }) {
             Project
           </span>
           {currentPath
-            .split('/')
+            .split("/")
             .slice(1, -1)
             .map((folder, index) => (
               <div
                 key={index}
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '9px'
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "9px",
                 }}
               >
                 {/* <Image
@@ -255,5 +256,5 @@ export default function Page({ params }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

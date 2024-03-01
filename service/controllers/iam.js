@@ -154,7 +154,7 @@ const fetchsBilling = async (req, res, next) => {
     }
   }`;
 
-  // console.log('res', options)
+    // console.log('res', options)
 
     const resp = await getVector(path, options, [0, 0]);
 
@@ -292,7 +292,6 @@ const confirmUser = async (req, res, next) => {
   } catch (err) {
     // const _resp = await addVector(path, 'users', [0, 0], data, false)
 
-
     return res.status(301).send({ message: 301 });
   }
 };
@@ -312,7 +311,7 @@ const avatarUser = async (req, res) => {
   const { id } = req.params;
   const path = encodeVector(ID);
 
-  console.log('iddd', id)
+  console.log("iddd", id);
 
   // const options = `
   //   query {
@@ -322,13 +321,9 @@ const avatarUser = async (req, res) => {
 
   // const resp = await getVector(path, 'users', [0, 0], options)
 
-  const conditions = [
-    { field: 'id', operator: '==', value: id }
-  ];
+  const conditions = [{ field: "id", operator: "==", value: id }];
 
-
-  const resp = await getVector(path, 'users', [0, 0], conditions, false)
-
+  const resp = await getVector(path, "users", [0, 0], conditions, false);
 
   if (resp.length == 0) {
     throw "Not exist user";
@@ -411,7 +406,7 @@ const decoderUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { path, user, password } = req.body;
-    console.log({ path, user, password });
+
     const options = [
       { field: "user", operator: "==", value: user },
       { field: "password", operator: "==", value: password },
@@ -431,10 +426,10 @@ const loginUser = async (req, res, next) => {
     delete data.avatar;
 
     const token = await generateToken(data);
-    console.log({ token });
+
     if (data.isverified !== true) {
       // resend email confirm email
-      // const email = sendEmail("info@aythen.com", "confirm-email", { token });
+      // const email = sendEmail('info@aythen.com', 'confirm-email', { token })
       return res.status(301).send({ message: 301 });
     } else {
       return res.status(200).send({
@@ -636,9 +631,9 @@ const deleteUser = async (req, res) => {
 const fetchsUser = async (req, res) => {
   try {
     const path = encodeVector(ID);
-    const { order } = req.query;
+    const order = req.query.order;
 
-    let conditions = [];
+    let condition = [];
 
     if (order) {
       conditions = [
@@ -853,28 +848,19 @@ const fetchsLog = async (req, res) => {
   }
 };
 
-
-
 const sendMail = async (req, res, next) => {
   try {
     // const { path, user, password } = req.body
 
-    console.log('senddd email')
-   
-    const email = sendEmail('info@aythen.com', 'confirm-email', { token: '1234' })
+    console.log("senddd email");
+
+    const email = sendEmail("info@aythen.com", "confirm-email", {
+      token: "1234",
+    });
   } catch (err) {
-    return res.status(500).send(err)
+    return res.status(500).send(err);
   }
-
-}
-
-
-
-
-
-
-
-
+};
 
 module.exports = {
   fetchsDefault: catchedAsync(fetchsDefault),
@@ -920,11 +906,6 @@ module.exports = {
   deleteLog: catchedAsync(deleteLog),
   deleteLogs: catchedAsync(deleteLogs),
   fetchsLog: catchedAsync(fetchsLog),
-<<<<<<< HEAD
-};
-=======
-  
 
   sendMail: catchedAsync(sendMail),
-}
->>>>>>> 744d6c5d0ff14be4a22154949b0b5da069a211c8
+};

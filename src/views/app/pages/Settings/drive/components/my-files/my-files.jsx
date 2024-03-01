@@ -10,10 +10,10 @@ import {
 } from "./methods/Methods";
 import Chevron from "../../assets/Vector 161 (Stroke).svg";
 import ArrowDropDown from "../../assets/arrow-drop-down.svg";
-import Info from "../../assets/Info.svg";
-import Star from "../../assets/Star.svg";
+import Info from "../../assets/IconDashboard.svg";
+import Star from "../../assets/IconStar.svg";
 import Modal from "react-modal";
-import shareFiles from "../shareFiles/shareFiles";
+import ShareFiles from "../shareFiles/shareFiles";
 import { useState, useEffect } from "react";
 import {
   directoriesDB,
@@ -569,7 +569,7 @@ export default function Page({
                 filters={filters}
                 sortOrder={sortOrder}
                 setFilters={setFilters}
-                handleSelectFilter={handleSelectFilter}
+                handleSelectFilter={handleSelectSort}
               />
             </div>
             <div className={style.drive_folder_size_container}>
@@ -579,7 +579,7 @@ export default function Page({
                 filters={filters}
                 sortOrder={sortOrder}
                 setFilters={setFilters}
-                handleSelectFilter={handleSelectFilter}
+                handleSelectFilter={handleSelectSort}
               />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
@@ -591,7 +591,7 @@ export default function Page({
                 filters={filters}
                 sortOrder={sortOrder}
                 setFilters={setFilters}
-                handleSelectFilter={handleSelectFilter}
+                handleSelectFilter={handleSelectSort}
               />
             </div>
           </div>
@@ -689,7 +689,10 @@ export default function Page({
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       >
-        <shareFiles selectedFolders={selectedFolders} />
+        <ShareFiles
+          selectedFolders={selectedFolders}
+          setModalIsOpen={setModalIsOpen}
+        />
       </Modal>
     </div>
   );

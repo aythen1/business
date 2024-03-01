@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "@/actions/iam";
 import styles from "../left-panel/left-panel.module.css";
 
-function shareFiles({ selectedFolders }) {
+function ShareFiles({ selectedFolders, setModalIsOpen }) {
   const dispatch = useDispatch();
   const [selectedUsers, setSelectedUsers] = useState([]);
-
+  console.log("soy share files");
   useEffect(() => {
     dispatch(fetchUser());
   }, []);
@@ -37,4 +37,4 @@ function shareFiles({ selectedFolders }) {
   );
 }
 
-export default shareFiles;
+export default ShareFiles;

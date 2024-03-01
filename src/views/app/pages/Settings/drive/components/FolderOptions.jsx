@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./FolderOptions.module.css";
-import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
+// import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { copyFile, obtainFileData, moveFile } from "@/actions/assets";
 
 const FolderOptions = ({
@@ -113,14 +113,14 @@ const FolderOptions = ({
         onClick={() => handleCopyFolder("copyFolder")}
       >
         Copy
-        <IoSettingsOutline size={17} color={"#00f"} />
+        {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
         className={styles.option}
         onClick={() => handleCopyFolder("cutFolder")}
       >
         Cut
-        <IoSettingsOutline size={17} color={"#00f"} />
+        {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
         className={styles.option}
@@ -130,7 +130,7 @@ const FolderOptions = ({
         }}
       >
         Duplicate
-        <IoSettingsOutline size={17} color={"#00f"} />
+        {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
         onClick={() => {

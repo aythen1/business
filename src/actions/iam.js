@@ -87,22 +87,6 @@ export const fetchUser = createAsyncThunk(
 );
 
 // Acción asincrónica
-export const fetchUsers = createAsyncThunk(
-  "iam/fetchUsers",
-  async (userId, { dispatch }) => {
-    try {
-      const { data } = await apiBackend.get("/iam/user/all-user");
-      console.log({ data });
-      return data;
-    } catch (error) {
-      // Disparar la acción 'rejected' con el error
-      dispatch(setUserRejected(error.message));
-      throw error;
-    }
-  }
-);
-
-// Acción asincrónica
 export const fetchsInvoice = createAsyncThunk(
   "iam/fetchsInvoice",
   async ({ dispatch }) => {
@@ -137,8 +121,6 @@ export const fetchInvoice = createAsyncThunk(
         },
         // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
       });
-
-      console.log("res", response);
 
       return response.data;
     } catch (error) {
@@ -680,8 +662,6 @@ export const fetchsUser = createAsyncThunk(
         // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
       });
 
-      console.log("res", response);
-
       return response.data;
     } catch (error) {
       console.log("err", error);
@@ -708,8 +688,6 @@ export const addApplication = createAsyncThunk(
           },
         }
       );
-
-      console.log("res", response);
 
       return response.data;
     } catch (error) {
@@ -1030,6 +1008,35 @@ export const fetchsLog = createAsyncThunk(
       });
 
       console.log("fetchsLoG", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el police";
+      }
+    }
+  }
+);
+
+export const sendMail = createAsyncThunk(
+  "iam/sendMail",
+  async ({ email }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/send/mail",
+        {
+          email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("send email", response);
 
       return response.data;
     } catch (error) {

@@ -89,11 +89,11 @@ const FileOptions = ({
       </div>
       <div className={styles.option} onClick={() => handleCopyFile("cut")}>
         Cut
-        <IoSettingsOutline size={17} color="#00f" />
+        {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div className={styles.option} onClick={handleDuplicateFile}>
         Duplicate
-        <IoSettingsOutline size={17} color="#00f" />
+        {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div
         onClick={() => {
