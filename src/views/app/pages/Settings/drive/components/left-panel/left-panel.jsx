@@ -14,17 +14,21 @@ import {
 import style from "./left-panel.module.css";
 // import Image from 'next/image'
 // import Chevron from '../../../../../../../assets/Vector 161 (Stroke).svg'
+import IconGroup from "../../assets/IconGroup.svg";
 import Search from "../../assets/search.svg";
-import Info from "../../assets/Info.svg";
-import Group from "../../assets/Group.svg";
-import Star from "../../assets/Star.svg";
-import Trash from "../../assets/Trash.svg";
-import Time from "../../assets/Time.svg";
+// import Info from "../../assets/Info.svg";
+import IconStar from "../../assets/IconStar.svg";
+import IconGlaciar from "../../assets/IconGlaciar.svg";
+import IconTrash from "../../assets/IconTrash.svg";
+import IconTime from "../../assets/IconTime.svg";
 
 import Folder from "../../assets/FolderFigma.svg";
 import file1 from "../../assets/File-to-upload.svg";
 
 import MyDocs from "../../assets/MyDocs.svg";
+import IconAddon from "../../assets/IconAddon.svg";
+import IconPriority from '../../assets/IconDashboard.svg'
+
 import { setSearchFiles } from "@/slices/assetsSlice";
 import Modal from "react-modal";
 // import { listMvps } from './listMvps';
@@ -272,61 +276,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("addon"));
           }}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            class="css-yaskf e1wwql4e0"
-          >
-            <g class="Serverless">
-              <path
-                fill="#A365F6"
-                d="M11.59 3.72a.526.526 0 0 0-.96-.422l-4.056 8.02c-.154.288-.064.536.228.536l2.271-.015c.38 0 .38.194.248.684l-.94 3.858c-.13.64.69.863 1.001.287l4.071-8.06a.301.301 0 0 0-.252-.462l-2.36.01a.236.236 0 0 1-.243-.309z"
-                class="fillStrong"
-              ></path>
-              <path
-                fill="#4F0599"
-                d="M17.5 14.5A1.5 1.5 0 0 1 16 16h-2.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 13.89 14h1.61V6h-1.616a.3.3 0 0 1-.29-.373l.311-1.248A.5.5 0 0 1 14.39 4H16a1.5 1.5 0 0 1 1.5 1.5zm-15-9A1.5 1.5 0 0 1 4 4h3.116a.3.3 0 0 1 .29.373l-.31 1.247A.5.5 0 0 1 6.61 6H4.5v8h1.616a.3.3 0 0 1 .29.373l-.311 1.248A.5.5 0 0 1 5.61 16H4a1.5 1.5 0 0 1-1.5-1.5z"
-                class="fill"
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-              ></path>
-            </g>
-          </svg>
+          <img src={IconAddon} />
           <p className={style.drive_option_text}>Addons</p>
-          <label className={style.drive_option_label}>Soon</label>
-        </div>
-        <div
-          className={style.drive_option}
-          onClick={() => {
-            handleNavigate("dashboard");
-            dispatch(selectCategory("dashboard"));
-          }}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            class="css-yaskf e1wwql4e0"
-          >
-            <g class="Containers">
-              <path
-                fill="#4F0599"
-                d="M3 5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm12 0H5v10h10z"
-                class="fill"
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-              ></path>
-              <path
-                fill="#A365F6"
-                d="M8 7a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v4a1 1 0 0 1-2 0V8a1 1 0 0 1 1-1"
-                class="fillStrong"
-                clip-rule="evenodd"
-                fill-rule="evenodd"
-              ></path>
-            </g>
-          </svg>
-          <p className={style.drive_option_text}>Dashboards</p>
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
@@ -336,7 +287,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("priority"));
           }}
         >
-          <img src={Info} />
+          <img src={IconPriority} />
           <p className={style.drive_option_text}>Prioritarios</p>
         </div>
         <div
@@ -346,7 +297,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("shared"));
           }}
         >
-          <img src={Group} />
+          <img src={IconGroup} />
           <p className={style.drive_option_text}>Compartidos</p>
         </div>
         <div
@@ -356,7 +307,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("recent"));
           }}
         >
-          <img src={Time} />
+          <img src={IconTime} />
           <p className={style.drive_option_text}>Recientes</p>
         </div>
         <div
@@ -366,7 +317,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("featured"));
           }}
         >
-          <img src={Star} />
+          <img src={IconStar} />
           <p className={style.drive_option_text}>Destacados</p>
         </div>
         <div
@@ -376,27 +327,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("glaciar"));
           }}
         >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            class="css-yaskf e1wwql4e0"
-          >
-            <g class="Database">
-              <g class="DB">
-                <path
-                  fill="#A365F6"
-                  d="M10.024 12.797c-2.89 0-6-.841-6-2.69h1.444c.084.32 1.612 1.187 4.556 1.187s4.473-.867 4.557-1.196l1.443.01c0 1.848-3.11 2.69-6 2.69Z"
-                  class="fillStrong"
-                ></path>
-                <path
-                  fill="#4F0599"
-                  d="M16.497 5.532c0-.01.003-.018.003-.028C16.5 3.44 13.13 2.5 10 2.5s-6.5.94-6.5 3.004c0 .02.005.037.006.057v8.952h.003c.018 2.052 3.373 2.987 6.493 2.987 3.114 0 6.461-.932 6.49-2.977h.005zM10 4.5c2.576 0 4.085.65 4.444 1.004-.359.353-1.868 1.003-4.444 1.003-2.576 0-4.085-.65-4.444-1.003C5.915 5.15 7.425 4.5 10 4.5m.002 11c-2.797 0-4.335-.768-4.489-1.003h-.002V7.75c1.242.512 2.895.757 4.489.757 1.595 0 3.25-.246 4.492-.758v6.679c-.207.328-1.734 1.072-4.49 1.072"
-                  class="fill"
-                ></path>
-              </g>
-            </g>
-          </svg>
+          <img src={IconGlaciar} />
           <p className={style.drive_option_text}>Glaciar</p>
           <label className={style.drive_option_label}>Soon</label>
         </div>
@@ -407,7 +338,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(selectCategory("trash"));
           }}
         >
-          <img src={Trash} />
+          <img src={IconTrash} />
           <p className={style.drive_option_text}>Eliminados</p>
         </div>
       </div>

@@ -230,7 +230,7 @@ const FilterItem = ({ item }) => {
                                     <div className={styles.chat}>
                                         <textarea
                                             placeholder={'Escribe'}
-                                            spellcheck="false"
+                                            spellCheck="false"
                                             value={messageCodeAddon}
                                             onChange={handleTextareaChange}
                                         />

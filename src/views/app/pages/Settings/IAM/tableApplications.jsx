@@ -49,7 +49,34 @@ const TableApplications = ({
 
   const handleClickSupport = () => {
     navigate(`/${'es'}/app/support`)
-}
+  }
+
+  // ---------------------------------------------------------------
+
+  // const component = ({ ...props }) => {
+  //   return <ComponentTable {...props} />
+  // }
+
+  const component = ({ ...props }) => {
+    let content
+    let tag = props.tag
+
+    if(tag == 'status'){
+      content = <ComponentStatus {...props} />
+    } else if(tag == 'tags') {
+      content = <ComponentTags {...props} />
+    } else if(tag == 'polices') {
+      content = <ComponentPolices {...props} />
+    } else if(tag == 'table') {
+      content = <ComponentTable {...props} />
+    }
+
+
+    return content
+  }
+
+
+
 
   return (
     <div className={styles.container}>
@@ -83,7 +110,18 @@ const TableApplications = ({
           <item>
             Name
           </item>
-          
+          <item component={(props) => <ComponentStatus {...props} />} >
+            status
+          </item>
+          <item component={(props) => <ComponentTags {...props} />} >
+            tags
+          </item>
+          <item component={(props) => <ComponentPolices {...props} />} >
+            polices
+          </item>
+          <item component={component('table')} >
+            table
+          </item>
         </Table>
       </div>
     </div>
@@ -93,10 +131,61 @@ const TableApplications = ({
 export default TableApplications
 
 
+
+
+
+
+
+
+
+
+const ComponentStatus = (props) => {
+  console.log('prorps', props)
+  return (
+    <div className={styles.view}>
+      Tagsss eliminited
+    </div>
+  )
+}
+
+
+const ComponentTags = (props) => {
+
+
+  return (
+    <div className={styles.view}>
+      Tagsss eliminited
+    </div>
+  )
+}
+
+
+
+const ComponentPolices = (props) => {
+  // const handleViewTicket = () => {
+  //     props.setStateTable(`view-ticket:${props.item.id}`)
+  // }
+
+  return (
+    <div className={styles.view}>
+      Tagsss eliminited
+    </div>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
 const PopupModalApp = ({ styles }) => {
-
   const dispatch = useDispatch()
-
   // const [email, setEmail] = useState()
   const [isActive, setIsActive] = useState(false)
 
@@ -150,7 +239,7 @@ const PopupModalApp = ({ styles }) => {
       // polices: state.polices,
     }
 
-    dispatch(addApplication({application: data}))
+    dispatch(addApplication({ application: data }))
     dispatch(setModal(null))
   }
 
@@ -166,7 +255,7 @@ const PopupModalApp = ({ styles }) => {
             1
           </label>
         </div>
-        <div style={{width: '100%'}}>
+        <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
             Enter a name and optional description
           </h2>
@@ -207,7 +296,7 @@ const PopupModalApp = ({ styles }) => {
             2
           </label>
         </div>
-        <div style={{width: '100%'}}>
+        <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
             Enter key value tags (optional)
           </h2>
@@ -225,7 +314,7 @@ const PopupModalApp = ({ styles }) => {
             3
           </label>
         </div>
-        <div style={{width: '100%'}}>
+        <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
             Enter key value tags (optional)
           </h2>

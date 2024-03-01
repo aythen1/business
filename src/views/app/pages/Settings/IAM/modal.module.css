@@ -1,8 +1,3 @@
-svg{
-  width: 25px;
-  /* fill: var(--text-color); */
-}
-
 .modal{
   max-width: 500px;
   display: flex;
@@ -10,6 +5,12 @@ svg{
   align-items: flex-start;
   gap: 8px;
   max-width: 350px;
+
+  svg{
+    width: 14px;
+  }
+
+
   .maxHeight{
     display: flex;
     flex-direction: column;
@@ -51,11 +52,6 @@ svg{
     /* justify-content: space-between; */
     width: 100%;
   }
-
-
-  
-
- 
 
   .girdBox2{
     width: 100%;

@@ -223,7 +223,6 @@ const Dashboard = ({ }) => {
                   <IconImportant width={'20'} fill={'var(--color-primary-0)'} />
                 </div>
                 <div className={styles.alertBoardText}>
-                  <b>Requirements for moving to routed IP</b>
                   <p>
                     Before moving to a ROUTED IP, ensure no static network
                     configuration is in use, and your ‘scaleway-ecosystem’ and

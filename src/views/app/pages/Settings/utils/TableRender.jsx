@@ -62,17 +62,17 @@ export const TableRender = ({
 
     const selectAll = () => {
         setSelectedItems((prev) => {
-          const allItemIds = items.map(item => item.id);
-          const allSelected = allItemIds.every(id => prev[id]);
-    
-          const newSelectedItems = allItemIds.reduce((acc, id) => {
-            acc[id] = !allSelected;
-            return acc;
-          }, {});
-    
-          return newSelectedItems;
+            const allItemIds = items.map(item => item.id);
+            const allSelected = allItemIds.every(id => prev[id]);
+
+            const newSelectedItems = allItemIds.reduce((acc, id) => {
+                acc[id] = !allSelected;
+                return acc;
+            }, {});
+
+            return newSelectedItems;
         });
-      };
+    };
 
     const renderCell = (item, filter) => {
         if (filter.component) {
@@ -109,9 +109,9 @@ export const TableRender = ({
                 <tr className={styles.header}>
                     {filteredItems.map((filter) => (
                         <th key={filter.tag}>
-                            {filter.tag == 'checkbox' ? (
+                            {(filter.tag == 'checkbox' || filter.tag == 'options') ? (
                                 <div
-                                className={`${styles.inputCheckbox} ${Object.values(selectedItems).some(Boolean) ? styles.active : ''}`}
+                                    className={`${styles.inputCheckbox} ${Object.values(selectedItems).some(Boolean) ? styles.active : ''}`}
                                 >
                                     <input
                                         type="checkbox"
@@ -151,8 +151,8 @@ export const TableRender = ({
 const RenderCheckbox = ({ item, filter, setStateTable, selectedItems, selectedItem }) => {
     return (
         <div
-        className={`${styles.inputCheckbox} ${Object.values(selectedItems).some(Boolean) ? styles.active : ''}`}
-        onClick={() => setStateTable(`checkbox-item:${item[filter] || item.id}`)}
+            className={`${styles.inputCheckbox} ${Object.values(selectedItems).some(Boolean) ? styles.active : ''}`}
+            onClick={() => setStateTable(`checkbox-item:${item[filter] || item.id}`)}
         >
             {/* <input
                 type="checkbox"
@@ -259,7 +259,9 @@ const RenderUser = ({ item, filter, setStateTable }) => {
             <div className={styles.avatar}>
                 {imageError ? (
                     <div className={styles.initial}>
-                        {item.user.charAt(0)}
+                        <span>
+                            {item.user.charAt(0)}
+                        </span>
                     </div>
                 ) : (
                     <img src={`http://localhost:3001/service/v1/iam/user/${item.id}`} onError={handleImageError} />

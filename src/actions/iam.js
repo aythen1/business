@@ -128,7 +128,6 @@ createAsyncThunk('iam/fetchInvoice', async ({id}, { dispatch }) => {
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
 
-    console.log('res', response)
 
     return response.data
   } catch (error) {
@@ -679,7 +678,6 @@ createAsyncThunk('iam/fetchsUser', async ({}, { dispatch }) => {
       // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
     });
 
-    console.log('res', response)
 
     return response.data
   } catch (error) {
@@ -707,8 +705,6 @@ createAsyncThunk('iam/addApplication', async ({application}, { dispatch }) => {
           'Authorization': `Bearer ${token}`
         },
       })
-
-      console.log('res', response)
 
     return response.data
   } catch (error) {
@@ -1034,3 +1030,34 @@ createAsyncThunk('iam/fetchsLog', async ({}, { dispatch }) => {
     }
   }
 })
+
+
+
+
+
+
+export const sendMail = 
+createAsyncThunk('iam/sendMail', async ({email}, { dispatch }) => {
+  try {
+    const token = localStorage.getItem('token')
+    const response = await apiBackend.post(
+      '/iam/send/mail',
+      {
+        email
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      })
+
+    console.log('send email', response)
+
+    return response.data
+  } catch (error) {
+    console.log('err', error)
+    if(error.response.status == 400){
+      throw 'Ya existe el police'
+    }
+  }
+})
+

@@ -560,7 +560,6 @@
             /* background-color: rgb(224, 242, 255); */
             border-radius: 4px;
             border: 1px solid var(--border-color);
-            height: 232px;
             .icon{
                 display: flex;
                 gap: 0px;
@@ -570,13 +569,13 @@
                 -webkit-box-pack: center;
                 justify-content: center;
                 border-radius: 50%;
-                background-color: rgb(255, 255, 255);
+                background-color: var(--color-primary-4);
                 min-width: 48px;
                 max-width: 48px;
                 min-height: 48px;
                 svg{
                     width: 22px;
-                    fill: #1f689d;
+                    fill: var(--color-primary-0);
                 }
             }
 

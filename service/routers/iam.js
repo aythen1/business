@@ -49,6 +49,8 @@ const {
   deleteLog,
   deleteLogs,
   fetchsLog,
+
+  sendMail
 } = require('../controllers/iam')
 
 
@@ -99,5 +101,7 @@ routerIAM
 .post('/log/delete-log', authenticateToken, deleteLog)
 .post('/log/delete-logs', authenticateToken, deleteLogs)
 .get('/log/all-log', authenticateToken, fetchsLog)
+
+.post('/send/mail', authenticateToken, sendMail)
   
 module.exports = routerIAM
