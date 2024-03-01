@@ -1,0 +1,226 @@
+.alertInstance {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    border-left: 3px solid var(--color-primary-0);
+    background: #ebebff;
+    border-radius: 4px;
+    padding: 12px 10px;
+  
+    .alertInstanceText {
+      b {
+        font-size: 15px;
+        color: var(--color-primary-0);
+      }
+      p {
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 400;
+      }
+      a {
+        gap: 2px;
+        color: #5661ff;
+        margin-left: 2px;
+        cursor: pointer;
+     
+        svg {
+          fill: #5661ff;
+          width: 10px;
+          margin-left: 2px;
+        }
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  
+  /**/
+  .boxTable {
+    max-width: 900px;
+    width: 100%;
+    margin: 10px auto;
+  }
+  
+  .header {
+    display: flex;
+    padding: 10px 15px;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 400;
+    
+    .filters {
+      display: flex;
+      flex-direction: column;
+      svg {
+        height: 10px;
+        width: 10px;
+      }
+    }
+  }
+  
+  /**/
+  
+  .listTable {
+    display: flex;
+    gap: 4px;
+    /* padding-bottom: 150px; */
+    list-style: none;
+
+    .containerTable{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  .tableList {
+    display: flex;
+    border: 1px solid var(--border-color);
+    padding: 10px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    &:hover {
+      border: 1px solid var(--color-primary-0);
+    }
+  }
+  
+  
+  .instanceSettings {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: transparent;
+      color: var(--color-primary-0);
+      border-radius: 4px;
+      height: 30px;
+      width: 30px;
+      font-weight: 600;
+      border: none;
+      svg {
+        width: 20px;
+        fill: #8b8b8b;
+      }
+      &:hover {
+        background: #fafafa;
+      }
+    }
+  
+    .popupSettings {
+      width: 100px;
+      list-style: none;
+      background: var(--background);
+      position: absolute;
+      overflow:hidden;
+      top: 10px;
+      left: -5px;
+      z-index: 99;
+      box-shadow: 0px 0px 6px -3px black;
+      border-radius: 4px;
+      li{
+        padding: 6px 8px;
+        font-size: 10px;
+        &:hover{
+          background: #f8f8f8;
+        }
+      }
+      li.hr {
+        border-bottom: 1px solid #f2f2f2;
+      }
+    }
+  }
+  
+  /**/
+  .noneTable {
+    h2 {
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 0px;
+      line-height: 32px;
+      text-transform: none;
+      text-decoration: none;
+    }
+    .boxNoneTable {
+      margin-top: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      padding: 20px 20%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 300px;
+      }
+      p {
+        text-align: center;
+        font-weight: 400;
+        font-size: 16px;
+      }
+      button {
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: none;
+        border-radius: 6px;
+        color: #fff;
+        background: var(--color-primary-0);
+        font-size: 14px;
+        cursor:pointer;
+        svg {
+          width: 12px;
+          fill: #fff;
+        }
+        &:hover{
+          background: var(--color-primary-1);
+        }
+      }
+      a {
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--color-primary-0);
+     
+        svg {
+          fill: var(--color-primary-0);
+          width: 10px;
+        }
+        &:hover{
+          color: var(--color-primary-1);
+          svg{
+            fill: var(--color-primary-1);
+          }
+        }
+      }
+    }
+  }
+  
+  .popupToolTip {
+    position: fixed;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
+    /* Puedes ajustar otros estilos según tus necesidades */
+  }
+  
+  @media (max-width: 1200px) {
+    .mdNone {
+      padding: 10px;
+      .headerCreated,
+      .tableCreatedAt {
+        display: none;
+      }
+    }
+  }
+  

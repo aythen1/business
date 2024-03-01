@@ -1,0 +1,283 @@
+
+.container{
+  color: var(--text-color);
+  max-width: 800px;
+  margin: 10px auto;
+  .back{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--color-primary-0);
+    fill: var(--color-primary-0);
+    cursor: pointer;
+    font-weight: 600;
+    svg{
+      fill: var(--color-primary-0);
+      width: 12px;
+    }
+  }
+  .title{
+    letter-spacing: 0px;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0px;
+    line-height: 32px;
+    text-transform: none;
+    text-decoration: none;
+  }
+  .tabs{
+    .container{
+      display: flex;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    position: relative;
+    z-index: 0;
+    &:after{
+      z-index: -1;
+      content: "";
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+      height: 2px;
+      background: var(--border-color);
+    }
+    &::-webkit-scrollbar{
+      display: none;
+    }
+      .tab{
+        display: flex;
+        flex-direction: row;
+        padding: 8px 16px;
+        cursor: pointer;
+        -webkit-box-pack: center;
+        justify-content: center;
+        -webkit-box-align: baseline;
+        align-items: baseline;
+        white-space: nowrap;
+        color: var(--text-color-secondary);
+        text-decoration: none;
+        user-select: none;
+        touch-action: manipulation;
+        transition: color 0.2s ease 0s;
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-image: initial;
+        background: none;
+        border-bottom: 2px solid var(--border-color);
+        outline: none;
+        font-size: 16px;;
+        font-weight: 500;
+        letter-spacing: 0px;
+        line-height: 24px;
+        &:hover{
+          color: var(--color-primary-0);
+          border-bottom-color: var(--color-primary-0);
+        }
+        
+        label{
+          font-weight: 500;
+          letter-spacing: 0px;
+          line-height: 24px;
+          text-decoration: none;
+          display: inline-flex;
+          -webkit-box-align: center;
+          align-items: center;
+          justify-content: center;
+          white-space: nowrap;
+          border-radius: 16px;
+          gap: 8px;
+          width: fit-content;
+          height: 24px;
+          text-transform: uppercase;
+          font-size: 12px;
+          color: rgb(63, 66, 80);
+          background: var(--background);
+          padding: 0px 8px;
+          margin-left: 8px;
+        }
+        
+        &.selected{
+          color: var(--color-primary-0);
+          border-bottom-color: var(--color-primary-0);
+
+          label{
+            color: rgb(255, 255, 255);
+            background: var(--color-primary-0);
+            border: 1px solid var(--color-primary-0);
+          }
+        }
+        
+      }
+    }
+  }
+
+  .table{
+
+  }
+}
+
+
+
+
+
+/*
+  Tables
+*/
+
+
+.grid2{
+  display: flex;
+  justify-content: space-between;
+  .text{
+    color: var(--text-color-secondary);
+    a{
+      background-color: transparent;
+      border: none;
+      padding: 0px;
+      color: var(--color-primary-0);
+      text-decoration: underline 1px transparent;
+      text-underline-offset: 2px;
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      cursor: pointer;
+      width: fit-content;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      line-height: 20px;
+      svg{
+        vertical-align: middle;
+        fill: currentcolor;
+        height: 14px;
+        width: 14px;
+        min-width: 14px;
+        min-height: 14px;
+      }
+    }
+  }
+
+  .button{
+    display: inline-flex;
+    height: 40px;
+    padding: 0px 12px;
+    flex-direction: row;
+    gap: 8px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    outline-offset: 2px;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 20px;
+    background: var(--color-primary-0);
+    border: none;
+    color: rgb(255, 255, 255);
+
+    svg{
+      vertical-align: middle;
+      fill: currentcolor;
+      height: 16px;
+      width: 16px;
+      min-width: 16px;
+      min-height: 16px;
+    }
+  }
+}
+
+.boxForm{
+  margin-top: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  .input{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    background-image: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: rgb(63, 66, 80);
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    font-size: 16px;
+    line-height: 24px;
+    height: 42px;
+    padding: 8px;
+    label{
+      font-size: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: -5px;
+      margin-left: -2px;
+      line-height: 12px;
+    }
+    input{
+      height: 100%;
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-color);
+      
+      input::placeholder {
+        color: var(--text-color);
+      }
+    }
+  }
+  .button{
+    button{
+      display: inline-flex;
+      height: 40px;
+      padding: 0px 16px;
+      flex-direction: row;
+      gap: 8px;
+      border-radius: 4px;
+      box-sizing: border-box;
+      width: auto;
+      -webkit-box-align: center;
+      align-items: center;
+      cursor: pointer;
+      -webkit-box-pack: center;
+      justify-content: center;
+      outline-offset: 2px;
+      white-space: nowrap;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0px;
+      line-height: 24px;
+      border: none;
+    }
+    .reset{
+      background: rgb(233, 234, 235);
+      color: rgb(34, 38, 56);
+    }
+    .filter{
+      background: var(--color-primary-0);
+      color: rgb(255, 255, 255);
+    }
+  }
+}
+
+
+
+
+
+
+

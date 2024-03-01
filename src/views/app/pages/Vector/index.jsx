@@ -22,6 +22,7 @@ import IconSettings from './assets/IconSettings'
 import NoneVector from './assets/NoneVector.webp'
 
 
+import BackgroundVector from './assets/background-vector'
 // import {
 //   // postBoard,
 //   // getServersZone,
@@ -243,8 +244,9 @@ const Vector = ({ }) => {
   }
 
 
-  const handleSupport = () => {
-    navigate(`/${'es'}/app/support`)
+  const handleVector = () => {
+    // navigate(`/${'es'}/app/support`)
+    dispatch(setModal(<ModalAddVector />))
   }
 
 
@@ -253,14 +255,14 @@ const Vector = ({ }) => {
 
   useEffect(() => {
     console.log('vectorId', vectorId)
-    if(vectorId){
+    if (vectorId) {
       let id = iniVector({
         workspaceId: user.id,
         projectId: 'vector'
       })
 
       dispatch(fetchVector({
-        id, 
+        id,
         name: 'vectors',
         data: {
           id: vectorId
@@ -284,20 +286,25 @@ const Vector = ({ }) => {
                   <IconImportant width={'20'} fill={'var(--color-primary-0)'} />
                 </div>
                 <div className={styles.alertBoardText}>
-                  <b>Requirements for moving to routed IP</b>
+                  <b>
+                    Crear un nuevo vector para tu proyecto
+                  </b>
                   <p>
-                    Before moving to a ROUTED IP, ensure no static network
-                    configuration is in use, and your ‘scaleway-ecosystem’ and
-                    ‘cloud-init’ packages are updated. Note that Boards with a
-                    bootscript are not compatible with routed IPs.
-                    <a onClick={() => handleSupport()}>
-                      Using routed IPs
-                      <svg viewBox="0 0 24 24">
-                        <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
+                    Un vector permite guardar datos locales, conectarlos en la nube, con serverless
+                    poderlos entender y crear de una forma más personalizada nunca antes imaginada.
+                    <a onClick={() => handleVector()}>
+                      Nuevo vector
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
                       </svg>
                     </a>
                   </p>
                 </div>
+                <div className={styles.background}>
+                  <BackgroundVector />
+                </div>
+                {/* {BackgroundVector} */}
+                {/* <img src={BackgroundVector.default} className={styles.background} /> */}
               </div>
               <div
                 className={
@@ -400,11 +407,15 @@ const Vector = ({ }) => {
                             <li onClick={() => handleMoreInfo()} className={styles.hr}>
                               More info
                             </li>
-                            <li onClick={() => handlePowerOff()}>Power off</li>
-                            <li onClick={() => handleReboot()}>Reboot</li>
-                            <li onClick={() => handleStandby()}>Standby</li>
-                            <li onClick={() => handleDetachIP()}>Detach IP(s)</li>
-                            <li onClick={() => handleDeleteBoard(board.id)}>Delete</li>
+                            <li onClick={() => handlePowerOff()}>
+                              Resume
+                            </li>
+                            <li onClick={() => handleReboot()}>
+                              Reboot
+                            </li>
+                            <li onClick={() => handleDeleteBoard(board.id)}>
+                              Delete
+                            </li>
                           </ul>
                         )}
                       </div>

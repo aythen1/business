@@ -37,7 +37,7 @@ import {
 
 
 
-export const ModalAddVector = ({}) => {
+export const ModalAddVector = ({ }) => {
 
 
     const dispatch = useDispatch()
@@ -49,7 +49,7 @@ export const ModalAddVector = ({}) => {
 
 
     const { user } = useSelector((state) => state.iam)
-    
+
     // ---
     const [state, setState] = useState({
         title: '',
@@ -94,16 +94,16 @@ export const ModalAddVector = ({}) => {
             // tags: state.tags,
             // group: state.group,
 
-             id: uuidv4(),
-             version: '',
-             title: '',
-             description: '',
+            id: uuidv4(),
+            version: '',
+            title: '',
+            description: '',
 
-             code: '',
-             data: '',
-             
-             nodes: [],
-             edges: []
+            code: '',
+            data: '',
+
+            nodes: [],
+            edges: []
         }
 
         await dispatch(addVector({
@@ -126,35 +126,40 @@ export const ModalAddVector = ({}) => {
             <h2 className={styles.title} style={{ marginTop: -10 }}>
                 Create a New Vector
             </h2>
-            <p className={styles.textBold}>
-                Añade un titulo para tu vector.
-            </p>
-            <div className={styles.input}>
-                <input
-                    type="text"
-                    placeholder={'Escribe el titulo'}
-                    value={state.title}
-                    onChange={(e) => handleInputChange(e, 'title')}
+            <div className={styles.maxHeight}>
+                <p className={styles.textBold}>
+                    Añade un titulo para tu vector.
+                </p>
+                <div className={styles.input}>
+                    <input
+                        type="text"
+                        spellCheck="false"
+                        placeholder={'Escribe el titulo'}
+                        value={state.title}
+                        onChange={(e) => handleInputChange(e, 'title')}
+                    />
+                </div>
+                <p className={styles.textBold}>
+                    Añade una descripción para tu vector.
+                </p>
+                <textarea
+                    spellCheck="false"
+                    placeholder={'Escribe la descripción'}
+                    className={styles.textarea}
+                    value={state.description}
+                    onChange={(e) => handleInputChange(e, 'description')}
+                />
+                <h2 className={styles.title}>
+                    Enter key value tags
+                </h2>
+                <p className={styles.text1}>
+                    Key value tags helps you organize your vectors. You can assign up to 10 tags per user.
+                </p>
+                <AddTag
+                    handleInputChange={handleInputChange}
                 />
             </div>
-            <p className={styles.textBold}>
-                Añade una descripción para tu vector.
-            </p>
-            <textarea
-                placeholder={'Escribe la descripción'}
-                className={styles.textarea}
-                value={state.description}
-                onChange={(e) => handleInputChange(e, 'description')}
-            />
-            <h2 className={styles.title}>
-                Enter key value tags
-            </h2>
-            <p className={styles.text1}>
-                Key value tags helps you organize your vectors. You can assign up to 10 tags per user.
-            </p>
-            <AddTag
-                handleInputChange={handleInputChange}
-            />
+
             <div className={styles.button}>
                 <button
                     onClick={() => handleNewVector()}
@@ -182,22 +187,22 @@ export const ModalVector = ({ vector }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {user} = useSelector((state) => state.iam)
+    const { user } = useSelector((state) => state.iam)
 
     const handleDeleteVector = () => {
         // const id = vector.id
         const id = iniVector({
             workspaceId: user.id,
             projectId: 'vector',
-          })
+        })
 
-        dispatch(deleteVector({ 
+        dispatch(deleteVector({
             id,
             name: 'vectors',
             data: {
                 id: vector.id
             }
-         }))
+        }))
 
 
         dispatch(setModal(null))

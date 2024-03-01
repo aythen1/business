@@ -25,7 +25,14 @@ import IconWord from './assets/icon-word.svg'
 import IconOther from './assets/icon-other.svg'
 
 
+import {
+  setDimension
+} from '@/slices/vectorSlice'
+
+
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
+
+  const dispatch = useDispatch()
 
   const {
     dimension
@@ -46,26 +53,26 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
     } else {
       setFilter('info')
     }
+
+
+    const node = nodes.filter((node) => node.id === id)[0]
+    dispatch(setDimension(node))
   }
 
 
   useEffect(() => {
-    console.log('Hello world', data)
+    // console.log('Hello world', data)
     setFilter(data.status)
-
   }, [data])
 
 
 
   useEffect(() => {
-    console.log('dimension')
     if (dimension) {
       const nodePosition = dimension.position;
 
       // Encuentra el elemento con la clase "react-flow"
       const reactFlowElement = document.querySelector('.react-flow');
-      console.log('reactFlowElement', reactFlowElement.clientWidth)
-      console.log('nodePosition', nodePosition)
 
       // Hace scroll al nodo dentro de react-flow
       if (reactFlowElement) {
@@ -75,9 +82,6 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         const zoom = 0.9
 
         setCenter(x, y, { zoom, duration: 2000 });
-
-       
-
       }
     }
   }, [dimension]);

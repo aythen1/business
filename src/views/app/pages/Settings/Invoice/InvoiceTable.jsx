@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const InvoiceTableContainer = styled.table`
-  margin: 70px 0;
+  margin: 10px 0;
   font-size: 0.875em;
 
   th {
@@ -25,7 +25,7 @@ const InvoiceTableContainer = styled.table`
   }
 
   tbody tr:first-child td {
-    padding-top: 25px;
+    padding-top: 15px;
   }
 
   &.has-bottom-border {

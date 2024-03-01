@@ -5,10 +5,9 @@ import GlobalStyle from './GlobalStyle'
 
 const PageCounterContainer = styled.div`
   display: block;
-  position: running(pageContainer);
-  margin-top: -25px;
+  margin-bottom: -10px;
   font-size: 12px;
-  text-align: right;
+  text-align: left;
   color: #999;
 `
 

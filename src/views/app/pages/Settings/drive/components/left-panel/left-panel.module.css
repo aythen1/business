@@ -16,7 +16,7 @@
     flex-shrink: 0;
     border-radius: 8px;
     padding: 8px;
-    background: linear-gradient(177deg, rgba(203, 203, 255, 0.85) 2.55%, #f9f9ff00 98.34%);
+    background: linear-gradient(177deg, var(--color-primary-4) 2.55%, #f9f9ff00 98.34%);
 }
 
 .drive_transformers_title_container {
@@ -89,9 +89,12 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: blue;
+    background-color: var(--color-primary-0);
     border-radius: 4px;
     position: relative;
+    &:hover{
+        background-color: var(--color-primary-1);
+    }
 }
 
 .drive_create_new {

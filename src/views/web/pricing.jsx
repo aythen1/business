@@ -48,7 +48,7 @@ const pricing = ({
                   </div>
                   <div className={styles["group-2"]}>
                     <div className={styles["group-3"]}>
-                      <div className={styles["path-wrapper"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -64,7 +64,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-3"]}>Integraciones ilimitadas</div>
                     </div>
                     <div className={styles["group-5"]}>
-                      <div className={styles["overlap-2"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -72,7 +72,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-4"]}>Hasta 20GBs de datos</div>
                     </div>
                     <div className={styles["group-6"]}>
-                      <div className={styles["overlap-3"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -80,7 +80,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-4"]}>Hasta 10 Dashboards</div>
                     </div>
                     <div className={styles["group-7"]}>
-                      <div className={styles["overlap-4"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -88,7 +88,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-4"]}>Gráficas ilimitadas</div>
                     </div>
                     <div className={styles["group-8"]}>
-                      <div className={styles["overlap-5"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -96,7 +96,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-4"]}>Descargar informes</div>
                     </div>
                     <div className={styles["group-9"]}>
-                      <div className={styles["overlap-6"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -104,7 +104,7 @@ const pricing = ({
                       <div className={styles["text-wrapper-3"]}>Soporte prioritario</div>
                     </div>
                     <div className={styles["group-10"]}>
-                      <div className={styles["overlap-7"]}>
+                      <div className={styles["img-wrapper"]}>
                         <svg className={styles["svg-success-active"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                           <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                         </svg>
@@ -129,7 +129,7 @@ const pricing = ({
                 </div>
                 <div className={styles["frame-8"]}>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-group-2"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -137,7 +137,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Usuarios iilimitados</div>
                   </div>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-8"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -145,7 +145,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Integraciones ilimitadas</div>
                   </div>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-9"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -153,7 +153,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Hasta 2GBs de datos</div>
                   </div>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-10"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -161,7 +161,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Hasta 2 Dashboards</div>
                   </div>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-11"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -169,7 +169,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Hasta 10 gráficas</div>
                   </div>
                   <div className={styles["group-12"]}>
-                    <div className={styles["overlap-12"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -177,7 +177,7 @@ const pricing = ({
                     <div className={styles["text-wrapper-5"]}>Soporte por email</div>
                   </div>
                   <div className={styles["group-13"]}>
-                    <div className={styles["overlap-13"]}>
+                    <div className={styles["img-wrapper"]}>
                       <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                         <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                       </svg>
@@ -203,7 +203,7 @@ const pricing = ({
               Para equipos de Data Science dispuestos a crear sus propios análisis a medida.
             </p>
             <div className={styles["group-14"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -211,7 +211,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Usuarios ilimitados</div>
             </div>
             <div className={styles["group-15"]}>
-              <div className="overlap-group-3">
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -219,7 +219,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Integraciones ilimitadas</div>
             </div>
             <div className={styles["group-16"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -227,7 +227,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Hasta 100GBs de datos</div>
             </div>
             <div className={styles["group-17"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -235,7 +235,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Dashboards ilimitados</div>
             </div>
             <div className={styles["group-18"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -243,7 +243,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Gráficas ilimitadas</div>
             </div>
             <div className={styles["group-19"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -251,7 +251,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Descargar informes</div>
             </div>
             <div className={styles["group-20"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -259,7 +259,7 @@ const pricing = ({
               <div className={styles["text-wrapper-6"]}>Soporte personalizado</div>
             </div>
             <div className={styles["group-21"]}>
-              <div className={styles["overlap-group-3"]}>
+              <div className={styles["img-wrapper"]}>
                 <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                   <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                 </svg>
@@ -281,7 +281,7 @@ const pricing = ({
             </p>
             <div className={styles["frame-9"]}>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -289,7 +289,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>1 usuario</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -297,7 +297,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>1 integración</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -305,7 +305,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>1 Gráfica</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -313,7 +313,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>MIT License</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -321,7 +321,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>Sin soporte</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -329,7 +329,7 @@ const pricing = ({
                 <div className={styles["text-wrapper-6"]}>Self Hosted</div>
               </div>
               <div className={styles["group-13"]}>
-                <div className={styles["overlap-group-3"]}>
+                <div className={styles["img-wrapper"]}>
                   <svg className={styles["svg-success"]} xmlns="http://www.w3.org/2000/svg" width="12" height="11" viewBox="0 0 12 11">
                     <path d="M11.2741 2.28198L5.56996 10.5304C5.43392 10.7227 5.23107 10.8488 5.00698 10.8801C4.78289 10.9115 4.55636 10.8457 4.3783 10.6973L0.304962 7.22713C-0.0544831 6.92062 -0.112686 6.36165 0.174962 5.97863C0.462611 5.59562 0.987184 5.5336 1.34663 5.84011L4.7433 8.7358L9.93246 1.2315C10.1026 0.959416 10.3993 0.808986 10.7048 0.839936C11.0103 0.870887 11.2751 1.07821 11.3941 1.37959C11.513 1.68097 11.467 2.02765 11.2741 2.28198Z" fill="currentFill" />
                   </svg>
@@ -3252,13 +3252,13 @@ const pricing = ({
                   width="115"
                   height="19"
                   viewBox="0 0 115 19"
-                  fill="red"
+                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <g filter="url(#filter0_d_1859_46339)">
                     <path
                       d="M50 11.2308L55.1923 17L65 2"
-                      stroke="fillCurrent"
+                      stroke="strokeCurrent"
                       strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
