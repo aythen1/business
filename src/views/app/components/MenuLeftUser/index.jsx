@@ -272,6 +272,7 @@ export const MenuLeftUser = ({
             <p>
               {user?.user.charAt(0) || 'A'}
             </p>
+            
           </div>
         ) : (
           <img

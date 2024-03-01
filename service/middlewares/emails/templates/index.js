@@ -21,7 +21,7 @@ const dataStartPremium = require("./start-premium");
 
 
 
-const getData = (input) => {
+const getData = (input, lan = 'es') => {
   const words = input
     .split("-")
     .map((word, index) =>
@@ -38,10 +38,12 @@ const getData = (input) => {
   // Verificar si la variable existe
   if (typeof eval(camelCaseResult) !== "undefined") {
     // La variable existe, puedes usarla
-    return eval(camelCaseResult);
+    const data = eval(camelCaseResult)
+    return data[lan];
   } else {
     // La variable no existe
-    return dataConfirmEmail; // Devolver dataConfirmEmail en caso de error
+    // return dataConfirmEmail; // Devolver dataConfirmEmail en caso de error
+    return null
   }
 };
 

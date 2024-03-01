@@ -124,7 +124,7 @@ const Table = ({
           const title = item.props.children
           const tag = filterAttribute || camelCase(title).toLowerCase(); // Usa el valor de filterAttribute si existe, de lo contrario, utiliza el título
           const name = nameAttribute || item.props.children
-          const size = item.props.size || 200
+          const size = item.props.size || null
           const component = item.props.component || null
 
           return {

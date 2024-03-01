@@ -11,7 +11,7 @@ const PaymentInfo = styled.td`
 `
 
 const Total = styled.td`
-  color: #fb7578;
+  color: var(--color-primary-0);
 `
 
 const Large = styled.span`

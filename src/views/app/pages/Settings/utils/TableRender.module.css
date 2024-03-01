@@ -113,6 +113,9 @@
 .table{
   color: var(--text-primary);
   margin: 0 auto;
+  svg{
+    width: 14px;
+  }
   .header{
     padding: 2px;
     th{
@@ -124,7 +127,7 @@
       .thFilters{
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         gap: 10px;
         .filters{
           >div{
@@ -148,7 +151,7 @@
     position: relative;
     z-index: 1;
     td{
-      padding: 10px 4px;
+      padding: 10px 10px;
 
     }
     &:after{
@@ -161,7 +164,6 @@
       border: 1px solid var(--border-color);
       border-radius: 6px;
       margin-top: 0px;
-      margin-left: -14px;
       z-index: -1;
     }
     &:hover{
@@ -189,9 +191,11 @@
 /* RENDER USER */
 
 .renderUser{
+  min-width: 140px;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: 0px !important;
   .dot{
     min-width: 10px;
     width: 10px;
@@ -204,13 +208,18 @@
   }
   .avatar{
     .initial{
-      width: 26px;
-      height: 26px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 6px;
-      background: red;
+      background: var(--color-primary-4);
+      font-size: 20px;
+      span{
+        color: var(--color-primary-0);
+        margin-top: -4px;
+      }
     }
 
     img{

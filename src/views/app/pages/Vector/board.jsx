@@ -92,7 +92,6 @@ const Board = ({ }) => {
 
 
     const handleLoadData = (item) => {
-        console.log('data', item)
         setDataSheet(item)
         setShow('flow')
         dispatch(setDimension(item))
@@ -347,7 +346,7 @@ const Board = ({ }) => {
                 {dataSheets.map((data, index) => (
                     <div
                         key={index}
-                        className={`${styles.vector} ${dataSheet.id == data.id && styles.active}`}
+                        className={`${styles.vector} ${data.id == dimension.id && styles.active}`}
                         onClick={() => handleLoadData(data)}
                     >
                         <label className={styles.title}>

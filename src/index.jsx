@@ -184,7 +184,7 @@ const Layout = () => {
           <BrowserRouter>
             <Routes>
               <Route
-                path="/:lng/vector/:vectorId"
+                path="/:lng/test"
                 element={<Test />}
               />
               

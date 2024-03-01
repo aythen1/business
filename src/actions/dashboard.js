@@ -44,9 +44,7 @@ export const fetchDashboard =
           },
           // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
         });
-    
-        console.log('res', res)
-    
+        
         return res.data
       } catch (error) {
         console.log('err', error)

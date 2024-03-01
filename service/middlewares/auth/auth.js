@@ -40,7 +40,6 @@ const authenticateToken = async (req, res, next) => {
       const resp = await getVector(path, 'users', [0, 0], options)
       
       delete resp[0].avatar
-      console.log('11111', resp)
 
     if (resp.length == 0) {
       throw new ClientError('User not found', 404)
