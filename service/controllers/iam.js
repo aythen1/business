@@ -632,8 +632,8 @@ const fetchsUser = async (req, res) => {
   try {
     const path = encodeVector(ID);
     const order = req.query.order;
-
-    let condition = [];
+    console.log("controller", { path, order });
+    let conditions = [];
 
     if (order) {
       conditions = [
@@ -641,10 +641,10 @@ const fetchsUser = async (req, res) => {
       ];
     }
 
-    console.log("conditions", conditions);
+    console.log("controller", { conditions });
 
     const data = await getVector(path, "users", [0, 0], conditions);
-    console.log("d", "load load user");
+    console.log("controller", { data });
     return res.status(200).send(data);
   } catch (err) {
     return res.status(500).send(err);
@@ -889,6 +889,7 @@ module.exports = {
   addUser: catchedAsync(addUser),
   deleteUser: catchedAsync(deleteUser),
   fetchsUser: catchedAsync(fetchsUser),
+  shareFile: catchedAsync(shareFile),
 
   addApplication: catchedAsync(addApplication),
   deleteApplication: catchedAsync(deleteApplication),

@@ -1,398 +1,372 @@
-const lancedb = require('vectordb')
-const err = require('../../utils/err')
-const fs = require('fs').promises
-const { v4: uuidv4 } = require('uuid');
+const lancedb = require("vectordb");
+const err = require("../../utils/err");
+const fs = require("fs").promises;
+const { v4: uuidv4 } = require("uuid");
 
 const {
-    generateSchemaFromObject,
-    generateSearchString,
-    generateGraphSql
-} = require('./sql')
+  generateSchemaFromObject,
+  generateSearchString,
+  generateGraphSql,
+} = require("./sql");
 
-
-const allSchemas = require('./schema')
-
-
-
+const allSchemas = require("./schema");
 
 const decodeVector = (base64Str) => {
-    const str = atob(base64Str)
+  const str = atob(base64Str);
 
-    const [path0, path1, path2, path3] = str.split('/')
-    return { path0, path1, path2, path3 }
-}
-
-
-
-
-
-
+  const [path0, path1, path2, path3] = str.split("/");
+  return { path0, path1, path2, path3 };
+};
 
 const addRelationsToSchema = (schema) => {
-    schema.properties.vector = {
-        type: 'array',
-        items: { type: 'number' }
-    }
+  schema.properties.vector = {
+    type: "array",
+    items: { type: "number" },
+  };
 
-    schema.properties.relations = {
-        type: 'string',
-        default: '{}'
-    }
+  schema.properties.relations = {
+    type: "string",
+    default: "{}",
+  };
 
-    return schema
-}
-
+  return schema;
+};
 
 // Función para agregar identificadores al objeto relations en data
 const addRelationsToData = (data, relations) => {
-    if (relations) {
-        data = {};
-        Object.keys(relations).forEach((tableName) => {
-            // Convertir el nombre a singular y agregar _id al final
-            const key = `${tableName}_id`;
+  if (relations) {
+    data = {};
+    Object.keys(relations).forEach((tableName) => {
+      // Convertir el nombre a singular y agregar _id al final
+      const key = `${tableName}_id`;
 
-            // Verificar si el objeto en el relations tiene la propiedad 'id'
-            const idValue = relations[tableName].id || null;
+      // Verificar si el objeto en el relations tiene la propiedad 'id'
+      const idValue = relations[tableName].id || null;
 
-            if (idValue) {
-                data[key] = idValue;
-            }
-        });
-    }
-    return data;
+      if (idValue) {
+        data[key] = idValue;
+      }
+    });
+  }
+  return data;
 };
 
-
-// id 
+// id
 
 // name
 
-// vector 
+// vector
 
 // data [{}, {}, {}], {}
 
 // relations
 
 const validateAgainstSchema = (obj, schema) => {
-    const Validator = require('jsonschema').Validator;
-    const v = new Validator();
+  const Validator = require("jsonschema").Validator;
+  const v = new Validator();
 
-    // console.log('!!!!!!!!!!!!!!!!!!!!!', obj, schema)
+  // console.log('!!!!!!!!!!!!!!!!!!!!!', obj, schema)
 
-    // const parseObject = (value) => {
-    //     try {
-    //         return JSON.parse(value);
-    //     } catch (error) {
-    //         // Si no se puede analizar, simplemente devuelve el valor original
-    //         return value;
-    //     }
-    // };
+  // const parseObject = (value) => {
+  //     try {
+  //         return JSON.parse(value);
+  //     } catch (error) {
+  //         // Si no se puede analizar, simplemente devuelve el valor original
+  //         return value;
+  //     }
+  // };
 
-    // const parseProperties = (properties) => {
-    //     const result = {};
-    //     for (const prop in properties) {
-    //         if (properties[prop].type === 'array' && properties[prop].items.type === 'object') {
-    //             // Tratar el caso especial de arrays de objetos
-    //             const arrayValue = obj[prop];
-    //             result[prop] = Array.isArray(arrayValue)
-    //                 ? arrayValue.map(item => parseObject(item))
-    //                 : parseObject(arrayValue);
-    //         } else if (properties[prop].type === 'object') {
-    //             // Tratar el caso de propiedades de tipo 'object'
-    //             result[prop] = parseObject(obj[prop]);
-    //         } else {
-    //             result[prop] = obj[prop];
-    //         }
-    //     }
-    //     return result;
-    // };
+  // const parseProperties = (properties) => {
+  //     const result = {};
+  //     for (const prop in properties) {
+  //         if (properties[prop].type === 'array' && properties[prop].items.type === 'object') {
+  //             // Tratar el caso especial de arrays de objetos
+  //             const arrayValue = obj[prop];
+  //             result[prop] = Array.isArray(arrayValue)
+  //                 ? arrayValue.map(item => parseObject(item))
+  //                 : parseObject(arrayValue);
+  //         } else if (properties[prop].type === 'object') {
+  //             // Tratar el caso de propiedades de tipo 'object'
+  //             result[prop] = parseObject(obj[prop]);
+  //         } else {
+  //             result[prop] = obj[prop];
+  //         }
+  //     }
+  //     return result;
+  // };
 
-    // const parsedObj = parseProperties(schema.properties);
+  // const parsedObj = parseProperties(schema.properties);
 
-    const result = v.validate(obj, schema);
+  const result = v.validate(obj, schema);
 
-    return {
-        isValid: result.valid,
-        data: obj,
-        errors: result.errors
-    };
+  return {
+    isValid: result.valid,
+    data: obj,
+    errors: result.errors,
+  };
 };
-
-
 
 const generateEmptyObjectFromSchema = (schema, data = {}) => {
-    const emptyObject = {};
+  const emptyObject = {};
 
-    const processProperty = (prop, propSchema, obj) => {
-        // console.log('prop', prop, propSchema.type)
-        if (data.hasOwnProperty(prop)) {
-            obj[prop] = data[prop];
-        } else if (propSchema.hasOwnProperty('default')) {
-            obj[prop] = propSchema.default;
-        } else {
-            if (propSchema.enum) {
-                obj[prop] = propSchema.enum[0];
+  const processProperty = (prop, propSchema, obj) => {
+    // console.log('prop', prop, propSchema.type)
+    if (data.hasOwnProperty(prop)) {
+      obj[prop] = data[prop];
+    } else if (propSchema.hasOwnProperty("default")) {
+      obj[prop] = propSchema.default;
+    } else {
+      if (propSchema.enum) {
+        obj[prop] = propSchema.enum[0];
+      } else {
+        // console.log('arrrray', propSchema.type)
+        switch (propSchema.type) {
+          case "string":
+            if (
+              propSchema.format === "date-time" ||
+              propSchema.format === "date"
+            ) {
+              obj[prop] = new Date().toISOString();
             } else {
-                // console.log('arrrray', propSchema.type)
-                switch (propSchema.type) {
-                    case 'string':
-                        if (propSchema.format === 'date-time' || propSchema.format === 'date') {
-                            obj[prop] = new Date().toISOString();
-                        } else {
-                            obj[prop] = '';
-                        }
-                        break;
-                    case 'number':
-                        obj[prop] = 0;
-                        break;
-                    case 'object':
-                        obj[prop] = generateEmptyObjectFromSchema({ properties: propSchema.properties });
-                        break;
-                    case 'array':
-                        if (propSchema.items && propSchema.items.type === 'object') {
-                            // Aplicar JSON.stringify a arrays de objetos
-                            obj[prop] = JSON.stringify([generateEmptyObjectFromSchema(propSchema.items)]);
-                        } else {
-                            obj[prop] = JSON.stringify([]);
-                        }
-                        break;
-                }
+              obj[prop] = "";
             }
+            break;
+          case "number":
+            obj[prop] = 0;
+            break;
+          case "object":
+            obj[prop] = generateEmptyObjectFromSchema({
+              properties: propSchema.properties,
+            });
+            break;
+          case "array":
+            if (propSchema.items && propSchema.items.type === "object") {
+              // Aplicar JSON.stringify a arrays de objetos
+              obj[prop] = JSON.stringify([
+                generateEmptyObjectFromSchema(propSchema.items),
+              ]);
+            } else {
+              obj[prop] = JSON.stringify([]);
+            }
+            break;
         }
-
-        // if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
-        if (typeof obj[prop] === 'object' || typeof obj[prop] === 'array') {
-            obj[prop] = JSON.stringify(obj[prop]);
-        }
-    };
-
-    for (const prop in schema.properties) {
-        processProperty(prop, schema.properties[prop], emptyObject);
+      }
     }
 
-    return emptyObject;
+    // if (typeof obj[prop] === 'object' && obj[prop] !== null && !Array.isArray(obj[prop])) {
+    if (typeof obj[prop] === "object" || typeof obj[prop] === "array") {
+      obj[prop] = JSON.stringify(obj[prop]);
+    }
+  };
+
+  for (const prop in schema.properties) {
+    processProperty(prop, schema.properties[prop], emptyObject);
+  }
+
+  return emptyObject;
 };
 
-
-
-
 async function addVector(id, name, vector = [0, 0], data, relations) {
-    // id base64
-    const { path0, path1 } = decodeVector(id)
-    const uri = 'data/vector/' + path0 + '/' + path1
+  // id base64
+  const { path0, path1 } = decodeVector(id);
+  const uri = "data/vector/" + path0 + "/" + path1;
+  console.log({ uri });
+  let schema;
 
-    let schema
-
-    if (path0 == 'chatbot' || path0 == 'addon' || path0 == 'ticket') {
-        schema = addRelationsToSchema(allSchemas['vectors'])
+  if (path0 == "chatbot" || path0 == "addon" || path0 == "ticket") {
+    schema = addRelationsToSchema(allSchemas["vectors"]);
+  } else {
+    const schemaExists = allSchemas.hasOwnProperty(name);
+    if (vector.length == 2 && !schemaExists) {
+      return "El esquema no existe";
+    } else if (vector.length > 2) {
+      if (!data.id) data.id = uuidv4();
+      schema = addRelationsToSchema(generateSchemaFromObject(data));
+      console.log("vector 3 data vector: ", JSON.stringify(schema));
     } else {
-        const schemaExists = allSchemas.hasOwnProperty(name);
-        if (vector.length == 2 && !schemaExists) {
-            return "El esquema no existe";
-        } else if (vector.length > 2) {
-            if(!data.id) data.id = uuidv4()
-            schema = addRelationsToSchema(generateSchemaFromObject(data))
-            console.log('vector 3 data vector: ', JSON.stringify(schema))
-        } else {
-            schema = addRelationsToSchema(allSchemas[name])
-        }
+      schema = addRelationsToSchema(allSchemas[name]);
+    }
+  }
+
+  try {
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
+  } catch (err) {
+    const db = await lancedb.connect(uri);
+    let emptyData;
+    if (vector.length == 2) {
+      emptyData = generateEmptyObjectFromSchema(schema);
+    } else {
+      emptyData = data.length ? data[0] : data;
     }
 
+    emptyData.vector = vector;
+    emptyData.id = uuidv4();
+    // console.log('w2222', emptyData, schema)
+
+    const validObj = validateAgainstSchema(emptyData, schema);
+    // console.log('vvvvvvvvvalir', emptyData, validObj)
+
+    if (!validObj.isValid) {
+      return {
+        message: "El objeto no cumple con el esquema",
+        data: emptyData,
+        error: validObj.errors[0],
+      };
+    }
+
+    // emptyData.data = []
+    // emptyData.header = []
+    // if(name == 'test_name'){
+    //     // emptyData.header = [1]
+    //     emptyData.data = [1]
+    // }
+    // console.log('schema', name, emptyData, JSON.stringify(schema))
+    try {
+      await db.createTable(name, [emptyData], {
+        schema: schema,
+        writeMode: "overwrite",
+      });
+
+      const tbl = await db.openTable(name);
+      await tbl.delete(`id = '${emptyData.id}'`);
+    } catch (err) {
+      console.log("errrr", err);
+    }
+  }
+
+  const db = await lancedb.connect(uri);
+  const tbl = await db.openTable(name);
+
+  const processSingleData = async (singleData) => {
+    const validObj = validateAgainstSchema(singleData, schema);
+    if (!validObj.isValid) {
+      return {
+        message: "El objeto no cumple con el esquema1",
+        data: singleData,
+        error: validObj.errors[0],
+      };
+    }
 
     try {
-        const db = await lancedb.connect(uri);
-        const tbl = await db.openTable(name);
-    } catch (err) {
-        const db = await lancedb.connect(uri);
-        let emptyData
-        if (vector.length == 2) {
-            emptyData = generateEmptyObjectFromSchema(schema)
-        } else {
-            emptyData = data.length ? data[0] : data
-        }
-        
-        emptyData.vector = vector
-        emptyData.id = uuidv4()
-        // console.log('w2222', emptyData, schema)
+      await tbl.add([singleData]);
+      // console.log('resultresultresult', result)
+      return singleData;
+    } catch (error) {
+      console.log("error add vector", error);
+      return [];
+    }
+  };
 
-        const validObj = validateAgainstSchema(emptyData, schema);
-        // console.log('vvvvvvvvvalir', emptyData, validObj)
-        
-        if (!validObj.isValid) {
-            return {
-                message: 'El objeto no cumple con el esquema',
-                data: emptyData,
-                error: validObj.errors[0]
-            };
-        }
-        
-        // emptyData.data = []
-        // emptyData.header = []
-        // if(name == 'test_name'){
-        //     // emptyData.header = [1]
-        //     emptyData.data = [1]
-        // }
-        // console.log('schema', name, emptyData, JSON.stringify(schema))
-        try {
-            await db.createTable(name, [emptyData], {
-                schema: schema,
-                writeMode: 'overwrite'
-            });
-    
-            const tbl = await db.openTable(name)
-            await tbl.delete(`id = '${emptyData.id}'`)
+  const results = [];
 
-        } catch(err) {
-            console.log('errrr', err)
-        }
+  const arr = Array.isArray(data) ? data : [data];
+  // Si data es un array, procesa cada elemento individualmente
+  for (const singleData of arr) {
+    let data;
+    if (vector.length == 2) {
+      data = generateEmptyObjectFromSchema(schema, singleData);
+    } else {
+      data = singleData;
     }
 
+    if (!data.id) data.id = uuidv4();
+    data.vector = vector;
 
-    const db = await lancedb.connect(uri);
-    const tbl = await db.openTable(name)
-
-    const processSingleData = async (singleData) => {
-        const validObj = validateAgainstSchema(singleData, schema);
-        if (!validObj.isValid) {
-            return {
-                message: 'El objeto no cumple con el esquema1',
-                data: singleData,
-                error: validObj.errors[0]
-            };
-        }
-
-        try {
-            await tbl.add([singleData]);
-            // console.log('resultresultresult', result)
-            return singleData;
-        } catch (error) {
-            console.log('error add vector', error)
-            return [];
-        }
-    };
-
-    const results = []
-
-
-    const arr = Array.isArray(data) ? data : [data];
-    // Si data es un array, procesa cada elemento individualmente
-    for (const singleData of arr) {
-        let data
-        if (vector.length == 2) {
-            data = generateEmptyObjectFromSchema(schema, singleData)
-        } else {
-            data = singleData
-        }
-
-        if (!data.id) data.id = uuidv4();
-        data.vector = vector
-
-        if (relations) {
-            data.relations = {}
-            data.relations = JSON.stringify(addRelationsToData(data.relations, relations))
-        }
-
-        const result = await processSingleData(data);
-        results.push(result);
+    if (relations) {
+      data.relations = {};
+      data.relations = JSON.stringify(
+        addRelationsToData(data.relations, relations)
+      );
     }
 
+    const result = await processSingleData(data);
+    results.push(result);
+  }
 
-    // Desconecta después de que el bucle haya terminado
-    // await db.disconnect();
+  // Desconecta después de que el bucle haya terminado
+  // await db.disconnect();
 
-    return results;
+  return results;
 }
-
-
 
 async function updateVector(id, name, vector = [0, 0], data) {
-    const { path0, path1 } = decodeVector(id);
-    const uri = 'data/vector/' + path0 + '/' + path1;
+  const { path0, path1 } = decodeVector(id);
+  const uri = "data/vector/" + path0 + "/" + path1;
 
+  try {
+    let schema;
 
-    try {
-        let schema
-
-        const schemaExists = allSchemas.hasOwnProperty(name);
-        if (schemaExists) {
-            schema = allSchemas[name]
-        }else{
-            console.log('103k349j4ij')
-            // return "El esquema no existe";
-            if(!data.id) data.id = uuidv4()
-            schema = addRelationsToSchema(generateSchemaFromObject(data))
-
-        }
-
-        // Valida el objeto 'data' contra el esquema correspondiente
-        const validObj = validateAgainstSchema(data, schema);
-
-        // console.log('calid', validObj, data)
-        if (!validObj) {
-            return "El objeto 'data' no cumple con el esquema";
-        }
-
-        if (!data.id) {
-            return "Debe existir el ID";
-        }
-
-        const conditions = [
-            { field: 'id', operator: '==', value: data.id }
-        ];
-
-        const searchString = generateSearchString(conditions);
-
-        const db = await lancedb.connect(uri);
-        const tbl = await db.openTable(name);
-
-        // Busca el usuario que coincida con el nombre y realiza la actualización
-        const query = await tbl
-            .search(vector)
-            .where(searchString)
-            .execute();
-
-        // console.log('query', query)
-
-        if (query.length > 0) {
-            // query[0].isverified = true
-
-            let updatedRecord = { ...query[0], ...data };
-            // if(updatedRecord._distance) delete query[0]._distance;
-            if ('_distance' in updatedRecord) delete updatedRecord._distance;
-            updatedRecord = generateEmptyObjectFromSchema(allSchemas[name], updatedRecord)
-            updatedRecord.vector = vector
-
-            await tbl.update({ where: searchString, values: updatedRecord })
-            // console.log('updated', updatedRecord)
-
-            // const updatedQuery = await tbl
-            // .search(vector)
-            // .where(searchString)
-            // .execute();
-
-            // console.log('updatedQuery', updatedQuery)
-
-            return updatedRecord;
-        } else {
-            // No se encontró ningún usuario para actualizar
-            return 400;
-        }
-    } catch (error) {
-        console.log('ERROR', error)
-        // Not exist table
-        const resp = await addVector(id, name, vector = [0, 0], data)
-        console.log('rrerr', resp)
-        // console.log('respresprespresprespresp', resp)
-        return resp[0];
+    const schemaExists = allSchemas.hasOwnProperty(name);
+    if (schemaExists) {
+      schema = allSchemas[name];
+    } else {
+      console.log("103k349j4ij");
+      // return "El esquema no existe";
+      if (!data.id) data.id = uuidv4();
+      schema = addRelationsToSchema(generateSchemaFromObject(data));
     }
+
+    // Valida el objeto 'data' contra el esquema correspondiente
+    const validObj = validateAgainstSchema(data, schema);
+
+    // console.log('calid', validObj, data)
+    if (!validObj) {
+      return "El objeto 'data' no cumple con el esquema";
+    }
+
+    if (!data.id) {
+      return "Debe existir el ID";
+    }
+
+    const conditions = [{ field: "id", operator: "==", value: data.id }];
+
+    const searchString = generateSearchString(conditions);
+
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
+
+    // Busca el usuario que coincida con el nombre y realiza la actualización
+    const query = await tbl.search(vector).where(searchString).execute();
+
+    // console.log('query', query)
+
+    if (query.length > 0) {
+      // query[0].isverified = true
+
+      let updatedRecord = { ...query[0], ...data };
+      // if(updatedRecord._distance) delete query[0]._distance;
+      if ("_distance" in updatedRecord) delete updatedRecord._distance;
+      updatedRecord = generateEmptyObjectFromSchema(
+        allSchemas[name],
+        updatedRecord
+      );
+      updatedRecord.vector = vector;
+
+      await tbl.update({ where: searchString, values: updatedRecord });
+      // console.log('updated', updatedRecord)
+
+      // const updatedQuery = await tbl
+      // .search(vector)
+      // .where(searchString)
+      // .execute();
+
+      // console.log('updatedQuery', updatedQuery)
+
+      return updatedRecord;
+    } else {
+      // No se encontró ningún usuario para actualizar
+      return 400;
+    }
+  } catch (error) {
+    console.log("ERROR", error);
+    // Not exist table
+    const resp = await addVector(id, name, (vector = [0, 0]), data);
+    console.log("rrerr", resp);
+    // console.log('respresprespresprespresp', resp)
+    return resp[0];
+  }
 }
-
-
-
-
-
-
-
 
 // const validateAgainstSchema = (input, schema) => {
 //     const Validator = require('jsonschema').Validator;
@@ -456,249 +430,194 @@ async function updateVector(id, name, vector = [0, 0], data) {
 //     }
 // };
 
-
-
-
-
 const getGraphVector = async (uri, conditions, _vector) => {
-    const dbs = generateGraphSql(conditions)
+  const dbs = generateGraphSql(conditions);
 
+  // console.log('result', dbs)
 
+  let vector = _vector;
+  let current = [];
+  let data = {};
 
-    // console.log('result', dbs)
+  let filter = null;
 
-    let vector = _vector
-    let current = []
-    let data = {}
+  for (var i = 0; i < dbs.length; i++) {
+    try {
+      const db = await lancedb.connect(uri);
+      const name = dbs[i].table;
+      const variable = dbs[i].variable;
 
-    let filter = null
+      filter = dbs[i].filter ? dbs[i].filter : filter;
 
-    for (var i = 0; i < dbs.length; i++) {
+      current.push(name);
 
-        try {
+      const tbl = await db.openTable(name);
 
-            const db = await lancedb.connect(uri)
-            const name = dbs[i].table
-            const variable = dbs[i].variable
+      const query = await tbl.search([0, 0]).where(filter).execute();
 
-            filter = dbs[i].filter ? dbs[i].filter : filter
+      const resp = variable.reduce(
+        (obj, key) => ({ ...obj, [key]: query[0][key] }),
+        {}
+      );
 
-            current.push(name)
+      vector = query[0].vector;
+      filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`;
 
-            const tbl = await db.openTable(name)
+      if (Object.keys(data).length === 0) {
+        // console.log('query', resp)
+        // when not exist
+        data = resp;
+      } else {
+        //when exist
 
-            const query = await tbl
-                .search([0, 0])
-                .where(filter)
-                .execute()
+        path = current.slice(1).join(".");
 
-            const resp = variable.reduce((obj, key) => ({ ...obj, [key]: query[0][key] }), {});
+        console.log("path", data, path, resp);
 
-            vector = query[0].vector
-            filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`
+        eval(`data.${path} = resp`);
 
-            if (Object.keys(data).length === 0) {
-                // console.log('query', resp)
-                // when not exist
-                data = resp
-            } else {
-                //when exist
-
-                path = current.slice(1).join('.');
-
-
-                console.log('path', data, path, resp)
-
-                eval(`data.${path} = resp`);
-
-                // data[path][name] = resp
-                // console.log('query', resp)
-            }
-
-        } catch (err) {
-            console.log('er', err)
-        }
-
+        // data[path][name] = resp
+        // console.log('query', resp)
+      }
+    } catch (err) {
+      console.log("er", err);
     }
+  }
 
-
-    return data
-}
-
-
+  return data;
+};
 
 async function getVector(id, name, vector = [0, 0], conditions = []) {
-    const { path0, path1 } = decodeVector(id)
-    const uri = 'data/vector/' + path0 + '/' + path1
+  const { path0, path1 } = decodeVector(id);
+  const uri = "data/vector/" + path0 + "/" + path1;
 
+  console.log("service", { path0, path1, uri });
 
+  // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
+  const regex = /query\s*{\s*([\s\S]*?)\s*}/;
+  if (regex.test(name)) {
+    console.log("=================", name);
+    const resp = await getGraphVector(uri, name, vector);
+    return resp;
+  }
 
-    // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
-    const regex = /query\s*{\s*([\s\S]*?)\s*}/;
-    if (regex.test(name)) {
-        console.log('=================', name)
-        const resp = await getGraphVector(uri, name, vector)
-        return resp
+  try {
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
+
+    console.log("13455");
+    const searchQuery = generateSearchString(conditions);
+
+    console.log("searchQuery", searchQuery);
+
+    if (searchQuery.error) {
+      return searchQuery;
     }
 
-    console.log('uri', uri)
-    try {
-        const db = await lancedb.connect(uri)
-        const tbl = await db.openTable(name)
-
-        console.log('13455')
-        const searchQuery = generateSearchString(conditions);
-
-        console.log('searchQuery', searchQuery)
-
-        if (searchQuery.error) {
-            return searchQuery
-        }
-
-
-        const query = await tbl
-            .search(vector)
-            .where(searchQuery)
-            .execute()
-        return query
-    } catch (error) {
-        return error
-    }
+    const query = await tbl.search(vector).where(searchQuery).execute();
+    return query;
+  } catch (error) {
+    return error;
+  }
 }
-
 
 async function getFile(path, vector = [2, 2]) {
-    const pathSegments = path.split('/')
-    const uri =
-        pathSegments[0] +
-        '/' +
-        pathSegments[1] +
-        '/' +
-        pathSegments[2] +
-        '/' +
-        pathSegments[3]
+  const pathSegments = path.split("/");
+  const uri =
+    pathSegments[0] +
+    "/" +
+    pathSegments[1] +
+    "/" +
+    pathSegments[2] +
+    "/" +
+    pathSegments[3];
 
-    const name = pathSegments[4]
-    const fileName = pathSegments[5]
+  const name = pathSegments[4];
+  const fileName = pathSegments[5];
 
-    try {
-        const db = await lancedb.connect(uri)
-        const tbl = await db.openTable(name)
+  try {
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
 
-        const query = await tbl
-            .search(vector)
-            .where(
-                `(
+    const query = await tbl
+      .search(vector)
+      .where(
+        `(
         message = '${fileName}'
       )`
-            )
-            .execute()
-        return query
-    } catch (error) {
-        return error
-    }
+      )
+      .execute();
+    return query;
+  } catch (error) {
+    return error;
+  }
 }
-
-
 
 async function deleteVector(id, name, data) {
-    const { path0, path1 } = decodeVector(id)
-    const uri = 'data/vector/' + path0 + '/' + path1
+  const { path0, path1 } = decodeVector(id);
+  const uri = "data/vector/" + path0 + "/" + path1;
 
-    const db = await lancedb.connect(uri)
-    const tbl = await db.openTable(name)
-    //   await tbl.delete()
-    await tbl.delete(`id = '${data.id}'`)
+  const db = await lancedb.connect(uri);
+  const tbl = await db.openTable(name);
+  //   await tbl.delete()
+  await tbl.delete(`id = '${data.id}'`);
 
-    return 200
+  return 200;
 }
-
 
 async function removeVector(id, name) {
-    const { path0, path1 } = decodeVector(id)
+  const { path0, path1 } = decodeVector(id);
 
-    const uri =
-        'data/vector/' + path0 + '/' + path1 + '/' + name + '.lance/'
+  const uri = "data/vector/" + path0 + "/" + path1 + "/" + name + ".lance/";
 
-    //   const tablePath = path.join(uri, `${name}.ldb`)
+  //   const tablePath = path.join(uri, `${name}.ldb`)
 
-    try {
-        // Verificar si la tabla existe antes de intentar eliminarla
-        // await fs.access(uri)
+  try {
+    // Verificar si la tabla existe antes de intentar eliminarla
+    // await fs.access(uri)
 
-        // Eliminar la tabla
-        // await fs.removeSync(uri)
+    // Eliminar la tabla
+    // await fs.removeSync(uri)
 
-        await removePathname(uri)
+    await removePathname(uri);
 
-        console.log(`La tabla ${name} ha sido eliminada.`)
-    } catch (error) {
-        console.error(`Errors al eliminar la tabla ${name}: ${error.message}`)
-    }
+    console.log(`La tabla ${name} ha sido eliminada.`);
+  } catch (error) {
+    console.error(`Errors al eliminar la tabla ${name}: ${error.message}`);
+  }
 
-    response(res, 200, { data: 200 })
+  response(res, 200, { data: 200 });
 }
-
-
 
 function removePathname(path) {
-    try {
-        const folder = fs.readdirSync(path)
+  try {
+    const folder = fs.readdirSync(path);
 
-        folder.forEach((file) => {
-            const pathname = path.join(path, file)
-            const stats = fs.statSync(pathname)
+    folder.forEach((file) => {
+      const pathname = path.join(path, file);
+      const stats = fs.statSync(pathname);
 
-            if (stats.isDirectory()) {
-                eliminarDirectorioSync(pathname) // Recursivamente eliminar directorios internos
-            } else {
-                fs.unlinkSync(pathname) // Eliminar archivo
-            }
-        })
+      if (stats.isDirectory()) {
+        eliminarDirectorioSync(pathname); // Recursivamente eliminar directorios internos
+      } else {
+        fs.unlinkSync(pathname); // Eliminar archivo
+      }
+    });
 
-        fs.rmdirSync(path) // Eliminar el directorio vacío
-        //   console.log(`Directorio ${directorio} eliminado exitosamente.`)
-    } catch (err) {
-        //   console.error(`Error al eliminar el directorio ${directorio}: ${err}`)
-    }
+    fs.rmdirSync(path); // Eliminar el directorio vacío
+    //   console.log(`Directorio ${directorio} eliminado exitosamente.`)
+  } catch (err) {
+    //   console.error(`Error al eliminar el directorio ${directorio}: ${err}`)
+  }
 }
-
-
-
-
-
 
 module.exports = {
-    addVector,
-    updateVector,
-    getVector,
-    deleteVector,
-    removeVector,
+  addVector,
+  updateVector,
+  getVector,
+  deleteVector,
+  removeVector,
 
-    generateEmptyObjectFromSchema,
-    validateAgainstSchema,
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  generateEmptyObjectFromSchema,
+  validateAgainstSchema,
+};

@@ -74,13 +74,39 @@ export const fetchUser = createAsyncThunk(
   "iam/fetchUser",
   async (userId, { dispatch }) => {
     try {
-      const user = await fetchUserFromApi(userId);
+      // const user = await fetchUserFromApi(userId);
       // Disparar la acción 'fulfilled' con el usuario obtenido
-      dispatch(setUserFulfilled(user));
+      // dispatch(setUserFulfilled(user));
+      const { data } = await apiBackend.get(`/iam/user/all-uuser`);
+      // const { data } = await apiBackend.get(`/assets/directories?${query}`);
+      dispatch(setAssets(data.data));
+      return data.data.body;
       return user;
     } catch (error) {
       // Disparar la acción 'rejected' con el error
       dispatch(setUserRejected(error.message));
+      throw error;
+    }
+  }
+);
+// Acción asincrónica
+export const fetchUser2 = createAsyncThunk(
+  "iam/fetchUser2",
+  async (token, { dispatch }) => {
+    try {
+      // Configura los headers para incluir el token de autorización
+      const config = {
+        headers: {
+          // Asume que el token es un Bearer token
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log({ config });
+      // Incluye la configuración en la petición GET
+      const { data } = await apiBackend.get(`/iam/user/all-user`, config);
+      console.log({ data });
+      return data;
+    } catch (error) {
       throw error;
     }
   }
