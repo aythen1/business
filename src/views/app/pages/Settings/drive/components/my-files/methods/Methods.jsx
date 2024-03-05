@@ -125,7 +125,9 @@ export const renderFolders = (
     const originalFolderName = directory.Key.split("/").filter(Boolean).pop();
     const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
     // usamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía
-    const folderName = originalFolderName.replace(prefixRegex, "");
+    let folderName = originalFolderName.replace(prefixRegex, "");
+    // cambio la extensión .json por .ay si existe
+    folderName = folderName.replace(/\.json$/, ".ay");
     const isFile = regexExtensiones.test(folderName);
     const fileExtension = folderName.toLowerCase().match(regexExtensiones)?.[1];
     const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
