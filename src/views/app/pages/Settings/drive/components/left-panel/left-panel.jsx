@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 // import { useRouter, useParams } from 'next/navigation'
 import { useNavigate, useParams } from "react-router-dom";
-
+import jsonPivot from "../../../../../../../utils/addon.json";
 // import { updateUser } from '../../../../../../store/redux/actions/user.js'
 import {
   createNewFolder,
@@ -106,16 +106,40 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       }
       const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
       const pathDepured = path.replace(/\/\/+/g, "/");
-      console.log({ pathDepured });
-      dispatch(
-        uploadFile({
-          file,
-          pathDepured,
-        })
-      );
+      console.log({
+        file,
+        pathDepured,
+      });
+      // dispatch(
+      //   uploadFile({
+      //     file,
+      //     pathDepured,
+      //   })
+      // );
     }
     setNewPopup(false);
     event.target.value = "";
+  };
+  const handleCreateNewMvp = async () => {
+    const response = await fetch(jsonPivot);
+    const blob = await response.blob();
+
+    // Crear un objeto File a partir del Blob si es necesario
+    const file = new File([blob], "addon.json", { type: "application/json" });
+
+    let currentFolderTrim = currentFolder;
+    if (currentFolderTrim.endsWith("/")) {
+      currentFolderTrim = currentFolderTrim.slice(0, -1);
+    }
+    const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
+    const pathDepured = path.replace(/\/\/+/g, "/");
+
+    dispatch(
+      uploadFile({
+        file,
+        pathDepured,
+      })
+    );
   };
   const handleFolderInputChange = (event) => {
     const files = event.target.files;
@@ -349,6 +373,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
               <div className={`${style.drive_create_new_subpopup_container}`}>
                 {listMvps.map((item, index) => (
                   <div
+                    onClick={() => handleCreateNewMvp(item)}
                     key={index}
                     className={`${style.drive_create_new_mvp} ${
                       item.lock ? style.active : ""
