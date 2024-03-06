@@ -25,6 +25,7 @@ const { directoriesDB } = require("../controllers/assets/directories-db");
 const { deleteFolder } = require("../controllers/assets/delete-folder");
 const { deleteFolders } = require("../controllers/assets/delete-folders");
 const { deleteFile } = require("../controllers/assets/delete-file");
+const { deleteFiles } = require("../controllers/assets/delete-files");
 const { addTag } = require("../controllers/assets/add-tag");
 const { getFile } = require("../controllers/assets/get-file");
 const { getFileData } = require("../controllers/assets/get-file-data");
@@ -47,10 +48,11 @@ routerEditor
   .put("/update-storage", logicDelete)
   .put("/restore-storage", restoreFile)
   .put("/add-tag", addTag)
+  .put("/delete-folders", deleteFolders)
+  .put("/files", deleteFiles)
   .get("/file", getFile)
   .get("/file-data", getFileData)
   .get("/file-tags", getFileTags)
-  .delete("/delete-folders", deleteFolders)
   .delete("/delete-folder", deleteFolder)
   .delete("/file", deleteFile);
 

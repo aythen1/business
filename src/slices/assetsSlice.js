@@ -8,6 +8,7 @@ import {
   deleteFolders,
   deleteFolder,
   deleteFile,
+  deleteFiles,
   createNewFolder,
   getFile,
   copyFile,
@@ -15,7 +16,24 @@ import {
   // getIconsByFolder,
   // getIconByQuery
 } from "@/actions/assets";
+import {} from "../views/app/pages/Settings/drive/assetsAux";
 import * as types from "./types";
+
+// Función auxiliar para actualizar el estado de los objetos en directoriesTrash.Versions
+const updateVersionsIsLatest = (state, Key, shouldBeIsLatest) => {
+  const index = state.directoriesTrash.Versions.findIndex(
+    (marker) => marker.Key === Key && marker.IsLatest !== shouldBeIsLatest
+  );
+  if (index !== -1) {
+    state.directoriesTrash.Versions[index].IsLatest = shouldBeIsLatest;
+  }
+};
+
+// Función auxiliar para filtrar DeleteMarkers por Key
+const filterDeleteMarkersByKey = (state, Key) => {
+  state.directoriesTrash.DeleteMarkers =
+    state.directoriesTrash.DeleteMarkers.filter((f) => f.Key !== Key);
+};
 
 export const assetsSlice = createSlice({
   name: "assets",
@@ -56,7 +74,6 @@ export const assetsSlice = createSlice({
       state.searchFiles = actions.payload;
     },
     setCurrentFolder(state, actions) {
-      console.log({ actions });
       state.currentFolder = actions.payload;
     },
     filterFolder(state, actions) {
@@ -139,7 +156,6 @@ export const assetsSlice = createSlice({
 
       .addCase(directoriesDB.fulfilled, (state, action) => {
         const dbKeys = action.payload.map((dbFolder) => dbFolder.Key);
-        console.log("dbKeys", dbKeys);
         // Filtrar el array de assets para excluir los elementos con las claves eliminadas
         // state.directoriesData = state.directoriesData.filter((asset) => !dbKeys.includes(asset.Key));
       })
@@ -147,9 +163,7 @@ export const assetsSlice = createSlice({
       .addCase(deleteFolders.fulfilled, (state, action) => {
         const { payload } = action;
 
-        const deletedKeys = action.payload.map(
-          (deletedFolder) => deletedFolder.Key
-        );
+        const deletedKeys = payload.map((deletedFolder) => deletedFolder.Key);
 
         // Actualizar las propiedades IsLatest de los archivos coincidentes sin filtrarlos fuera
         state.directoriesTrash.Versions.forEach((file) => {
@@ -182,42 +196,73 @@ export const assetsSlice = createSlice({
         state.error = { ...state.error, [types.DELETE_FILE]: "" };
       })
       .addCase(deleteFile.fulfilled, (state, action) => {
-        const { Key, VersionId, Size, act } = action.payload;
+        const { Key, VersionId } = action.payload;
         state.loading = { ...state.loading, [types.DELETE_FILE]: false };
-        if (act === "restore") {
-          // encontramos el índice del objeto que queremos restaurar
-          const index = state.directoriesTrash.Versions.findIndex(
-            (marker) => marker.Key === Key && marker.IsLatest === false
-          );
-          // si encontramos el objeto (index !== -1) actualizamos su propiedad IsLatest
-          if (index !== -1) {
-            // actualizamos la propiedad IsLatest del objeto encontrado
-            state.directoriesTrash.Versions[index].IsLatest = true;
-          }
-          // eliminamos el objeto de la papelera
-          state.directoriesTrash.DeleteMarkers =
-            state.directoriesTrash.DeleteMarkers.filter((f) => f.Key !== Key);
-        } else {
-          const index = state.directoriesTrash.Versions.findIndex(
-            (marker) => marker.Key === Key && marker.IsLatest === true
-          );
-          if (index !== -1) {
-            // actualizamos la propiedad IsLatest del objeto encontrado
-            state.directoriesTrash.Versions[index].IsLatest = false;
-          }
-
-          const deletedObject = { Key, VersionId };
-          state.directoriesTrash.DeleteMarkers = [
-            ...state.directoriesTrash.DeleteMarkers,
-            deletedObject,
-          ];
+        const index = state.directoriesTrash.Versions.findIndex(
+          (marker) => marker.Key === Key && marker.IsLatest === true
+        );
+        console.log(index);
+        if (index !== -1) {
+          // actualizamos la propiedad IsLatest del objeto encontrado
+          state.directoriesTrash.Versions[index].IsLatest = false;
+          console.log(state.directoriesTrash.Versions[index].IsLatest);
         }
+
+        const deletedObject = { Key, VersionId };
+        state.directoriesTrash.DeleteMarkers = [
+          ...state.directoriesTrash.DeleteMarkers,
+          deletedObject,
+        ];
       })
       .addCase(deleteFile.rejected, (state, action) => {
         state.loading = { ...state.loading, [types.DELETE_FILE]: false };
         state.error = {
           ...state.error,
           [types.DELETE_FILE]: action.payload,
+        };
+      })
+      .addCase(deleteFiles.pending, (state) => {
+        state.loading = { ...state.loading, [types.DELETE_FILES]: true };
+        state.error = { ...state.error, [types.DELETE_FILES]: "" };
+      })
+      .addCase(deleteFiles.fulfilled, (state, action) => {
+        const { folders, act } = action.payload;
+        state.loading = { ...state.loading, [types.DELETE_FILES]: false };
+
+        switch (act) {
+          case "restore":
+            folders.forEach((f) => {
+              const { Key } = f;
+              updateVersionsIsLatest(state, Key, true);
+              filterDeleteMarkersByKey(state, Key);
+            });
+            break;
+          case "delete":
+          case "trash":
+            folders.forEach((f) => {
+              const { Key, VersionId } = f;
+              updateVersionsIsLatest(state, Key, false);
+
+              if (act === "trash") {
+                const deletedObject = { Key, VersionId, IsLatest: true };
+                console.log({ deletedObject });
+                state.directoriesTrash.DeleteMarkers.push(deletedObject);
+                console.log(state.directoriesTrash.DeleteMarkers);
+              } else {
+                filterDeleteMarkersByKey(state, Key);
+              }
+            });
+            break;
+          default:
+            // Manejar cualquier otro caso si es necesario
+            break;
+        }
+      })
+      .addCase(deleteFiles.rejected, (state, action) => {
+        state.loading = { ...state.loading, [types.DELETE_FILES]: false };
+        state.error = {
+          ...state.error,
+          [types.DELETE_FILES]: action.payload,
         };
       })
       .addCase(getRootDirectories.pending, (state) => {

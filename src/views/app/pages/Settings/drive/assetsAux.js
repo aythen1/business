@@ -202,12 +202,14 @@ export const iterateElementsToCut = (
   const itemsInDirectory = directoriesData.filter((item) =>
     item.Key.startsWith(directory)
   );
+  console.log({ directory, itemsInDirectory });
 
   // copiar archivos y carpetas y llamar recursivamente para carpetas
 
   itemsInDirectory.forEach((item) => {
     const relativePath = item.Key.substring(directory.length);
     let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    console.log({ relativePath, destinationKey });
     if (destinationKey.endsWith("/")) {
       destinationKey = destinationKey.slice(0, -1);
     }

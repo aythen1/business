@@ -18,6 +18,7 @@ import { useState, useEffect } from "react";
 import {
   directoriesDB,
   deleteFolders,
+  deleteFiles,
   deleteFolder,
   deleteFile,
   getFile,
@@ -61,6 +62,7 @@ export default function Page({
     searchFiles,
     category,
     currentFolder,
+    directoriesTrash,
   } = useSelector((state) => state.assets);
   const title = categoryTitles[category] || "Documentos";
   const [currentPath, setCurrentPath] = useState(driveId + "/");
@@ -256,6 +258,51 @@ export default function Page({
     setSelectedFolders([]);
     setSelectAll(false);
   };
+  // funcion aux para buscar y agregar elementos coincidentes a arrayToDelete
+  const addMatchingElements = (sourceArray, selectedFolder, arrayToDelete) => {
+    sourceArray.forEach((element) => {
+      if (element.Key === selectedFolder.Key) {
+        arrayToDelete.push(element);
+      }
+    });
+  };
+
+  const iterateFilesToDelete = () => {
+    let filesToDelete = [];
+    let folderToDelete = [];
+
+    selectedFolders.forEach((selectedFolder) => {
+      const elementName = selectedFolder.Key.split("/").filter(Boolean).pop();
+      const isFile = regexExtensiones.test(elementName);
+      // utilizamos la misma función auxiliar para añadir a los arrays correspondientes
+      addMatchingElements(
+        directoriesTrash.Versions,
+        selectedFolder,
+        isFile ? filesToDelete : folderToDelete
+      );
+    });
+
+    // antes del dispatch, modificar cada objeto para que VersionId sea ""
+    const modifiedFilesToDelete = filesToDelete.map((item) => ({
+      ...item,
+      VersionId: "",
+    }));
+    const modifiedFolderToDelete = folderToDelete.map((item) => ({
+      ...item,
+      VersionId: "",
+    }));
+    console.log({ modifiedFilesToDelete, modifiedFolderToDelete });
+
+    // ahora podemos hacer el dispatch con los objetos modificados
+    if (modifiedFilesToDelete.length) {
+      dispatch(
+        deleteFiles({ folders: modifiedFilesToDelete, action: "trash" })
+      );
+    }
+    if (modifiedFolderToDelete.length) {
+      dispatch(deleteFolders(modifiedFolderToDelete));
+    }
+  };
 
   const handleDB = async () => {
     await dispatch(directoriesDB(selectedFolders));
@@ -314,11 +361,9 @@ export default function Page({
 
         // Extraer la extensión del archivo de la propiedad Key.
         const itemExtension = item.Key.split(".").pop().toLowerCase();
-        console.log({ newActiveExtensions, categoryFiles });
         // Comparar la extensión del archivo con las extensiones activas.
         return newActiveExtensions.includes(itemExtension);
       });
-      console.log({ filtered });
       // Actualizar el estado con los archivos filtrados basado en las nuevas extensiones activas.
       setFilteredFolders(
         newActiveExtensions.length > 0
@@ -342,6 +387,24 @@ export default function Page({
   };
 
   // / / / / / / / / / / / / / / / D R A G & D R O P / / / / / / / / / / / / / / / /
+
+  const handleDropFolderTitle = (path) => {
+    if (path === "main") {
+      console.log("HANDLE DROPP");
+      const { directoryCopied, folderNameCopied } = fileToCopy;
+
+      iterateElementsToCut(
+        directoryCopied,
+        moveElement,
+        categoryFiles,
+        "1234/",
+        createFolder,
+        folderNameCopied,
+        handleDeleteDirectory
+      );
+      dispatch(obtainFileData({ action: "reset" }));
+    }
+  };
 
   const dropAndUpload = (directory, e, isFile) => {
     if (!isFile && isDragginFile) {
@@ -390,6 +453,95 @@ export default function Page({
       // );
     }
   };
+
+  const handleDropFiles = (e) => {
+    e.preventDefault(); // Prevenir el comportamiento por defecto
+
+    const items = e.dataTransfer.items; // Obtener los items arrastrados
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i].webkitGetAsEntry(); // Intentar obtener como una entrada del sistema de archivos
+
+      if (item) {
+        if (item.isFile) {
+          // Si es un archivo, manejar como archivo
+          item.file((file) => {
+            console.log("Subiendo archivo:", file);
+            let currentFolderTrim = currentFolder;
+            if (currentFolderTrim.endsWith("/")) {
+              currentFolderTrim = currentFolderTrim.slice(0, -1);
+            }
+            const path = currentFolderTrim === "" ? driveId : currentFolderTrim;
+            const pathDepured = path.replace(/\/\/+/g, "/");
+
+            // Ahora 'file' es un objeto File que puedes subir
+            dispatch(
+              uploadFile({
+                file, // Usa 'file' aquí en lugar de 'item'
+                pathDepured,
+              })
+            );
+          });
+        } else if (item.isDirectory) {
+          const directoryReader = item.createReader();
+
+          // Función recursiva para leer las entradas de un directorio
+          const readEntries = (reader, callback) => {
+            reader.readEntries(
+              (entries) => {
+                if (entries.length > 0) {
+                  callback(entries);
+                  readEntries(reader, callback); // Llamar recursivamente hasta que no haya más entradas
+                }
+              },
+              (error) => console.log(error)
+            );
+          };
+
+          let files = [];
+
+          readEntries(directoryReader, (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isFile) {
+                entry.file((file) => {
+                  files.push(file);
+                  // Una vez que tienes el archivo, puedes hacer algo con él
+                  // Aquí necesitas ajustar la lógica para construir la ruta correcta basada en webkitRelativePath o alguna otra estrategia
+                  const folderPathParts = file.webkitRelativePath.split("/");
+                  folderPathParts.pop(); // Remover el nombre del archivo para quedarse solo con la ruta de la carpeta
+
+                  const folderPath = folderPathParts.join("/");
+                  let path =
+                    currentFolder === ""
+                      ? driveId + "/" + folderPath
+                      : currentFolder + "/" + folderPath;
+                  if (path.endsWith("/")) {
+                    path = path.slice(0, -1);
+                  }
+                  const pathDepured = path.replace(/\/\/+/g, "/");
+
+                  dispatch(
+                    uploadFile({
+                      file,
+                      pathDepured,
+                    })
+                  );
+                });
+              }
+            });
+          });
+
+          // Nota: Puede que necesites ajustar el código para manejar la creación de carpetas y el envío de archivos de manera adecuada,
+          // ya que este proceso es asíncrono y necesitarás esperar a que todos los archivos sean leídos.
+        }
+      }
+    }
+  };
+
+  // const handleDropFiles = () => {
+  // };
+
+  const handleFolderInputChange = (event) => {};
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
@@ -515,9 +667,15 @@ export default function Page({
             : renderFilesDB(filteredFolders, handleDragStart)}
         </div>
       </div>
-      <div className={style.drive_folders_main_container}>
+      <div
+        className={style.drive_folders_main_container}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => handleDropFiles(e)}
+      >
         <div className={style.drive_folders_title_container}>
           <span
+            onDrop={() => handleDropFolderTitle("main")}
+            onDragOver={(e) => e.preventDefault()}
             onClick={() => handleFolderClickBack(driveId)}
             className={style.drive_folders_title}
           >
@@ -543,12 +701,7 @@ export default function Page({
                 >
                   {folder}
                 </span>
-                <p>
-                  {index !== currentPath.split("/").length && (
-                    // <Image src={Chevron} priority />
-                    <div></div>
-                  )}
-                </p>
+                <p>{index !== currentPath.split("/").length && <div></div>}</p>
               </div>
             ))}
         </div>
@@ -676,7 +829,10 @@ export default function Page({
                 </g>
               </svg>
             </button>
-            <button onClick={handleDelete} className={style.buttonDelete}>
+            <button
+              onClick={iterateFilesToDelete}
+              className={style.buttonDelete}
+            >
               <svg viewBox="0 0 24 24">
                 <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path>
               </svg>

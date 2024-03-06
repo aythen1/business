@@ -111,7 +111,6 @@ export const uploadFile = createAsyncThunk(
       formData.append("userId", userId);
       formData.append("path", pathDepured);
       formData.append("image", file);
-      console.log({ formData });
       const { data } = await apiBackend.post("/assets/add-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -218,10 +217,10 @@ export const deleteFolder = createAsyncThunk(
 export const deleteFile = createAsyncThunk(
   "assets/deleteFile",
   async ({ path, VersionId, Size, act }, { dispatch }) => {
+    console.log("SOY DELETE FILE");
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-      console.log({ path, VersionId });
       const query = buildQueryString({
         userId,
         path,
@@ -238,19 +237,35 @@ export const deleteFile = createAsyncThunk(
   }
 );
 // Borrar un archivo en scaleway
+export const deleteFiles = createAsyncThunk(
+  "assets/deleteFiles",
+  async ({ folders, action }, { dispatch }) => {
+    try {
+      // const userId = JSON.parse(localStorage.getItem('user')).user.id
+      const userId = "1234";
+      const body = { folders, userId };
+      const { data } = await apiBackend.put(`/assets/files`, body);
+      // dispatch(filterFolder(path));
+      const objectData = { folders, act: action };
+
+      return objectData;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un archivo en scaleway
 export const deletePermanentFile = createAsyncThunk(
   "assets/deleteFile",
   async ({ path, VersionId }, { dispatch }) => {
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-      console.log({ path, VersionId });
       const query = buildQueryString({
         userId,
         path,
         VersionId,
       });
-      console.log({ userId, path, VersionId });
       const { data } = await apiBackend.delete(`/assets/file?${query}`);
       dispatch(filterFolder(path));
       return data.data.body;
@@ -267,14 +282,11 @@ export const deleteFolders = createAsyncThunk(
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-
-      const { data } = await apiBackend.delete(`/assets/delete-folders`, {
-        data: {
-          id: userId,
-          folders,
-        },
+      console.log(folders);
+      const { data } = await apiBackend.put(`/assets/delete-folders`, {
+        id: userId,
+        folders,
       });
-      // console.log('data', data)
       // dispatch(filterFolder(path))
       return folders;
     } catch (error) {
@@ -347,7 +359,6 @@ export const duplicateFileLocal = (newFile) => (dispatch) => {
 // Agregar una carpeta en redux
 export const setFileDragging = (src) => (dispatch) => {
   try {
-    console.log({ src });
     dispatch(setFile(src));
   } catch (error) {
     console.error("Ha ocurrido un error al crear la carpeta:", error);

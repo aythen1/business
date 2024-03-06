@@ -13,10 +13,8 @@ function ShareFiles({ selectedFolders, setModalIsOpen }) {
       // Verificar si el usuario ya está seleccionado
       if (prevSelectedUsers.includes(newId)) {
         // Usuario ya seleccionado, lo quitamos del arreglo
-        console.log(prevSelectedUsers.filter((id) => id !== newId));
         return prevSelectedUsers.filter((id) => id !== newId);
       } else {
-        console.log(prevSelectedUsers.filter((id) => id !== newId));
         // Usuario no seleccionado, lo añadimos al arreglo
         return [...prevSelectedUsers, newId];
       }

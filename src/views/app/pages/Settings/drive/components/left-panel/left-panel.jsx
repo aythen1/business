@@ -98,7 +98,6 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   };
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
-    // console.log({ path: currentFolder === "" ? draveId : currentFolder });
     if (file) {
       let currentFolderTrim = currentFolder;
       if (currentFolderTrim.endsWith("/")) {
@@ -106,16 +105,13 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       }
       const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
       const pathDepured = path.replace(/\/\/+/g, "/");
-      console.log({
-        file,
-        pathDepured,
-      });
-      // dispatch(
-      //   uploadFile({
-      //     file,
-      //     pathDepured,
-      //   })
-      // );
+
+      dispatch(
+        uploadFile({
+          file,
+          pathDepured,
+        })
+      );
     }
     setNewPopup(false);
     event.target.value = "";
@@ -416,6 +412,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
+          onDrop={handleSetPriority}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("priority");

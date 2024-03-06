@@ -9,22 +9,22 @@ const deleteS3Folder = async (bucketName, folderPath, VersionId) => {
       Prefix: folderPath,
     };
 
-    const objects = await s3.listObjectVersions(listParams).promise();
-    console.log({ objects });
-    if (objects.Versions.length > 0) {
+    const objects = await s3.listObjectsV2(listParams).promise();
+
+    if (objects.Contents.length > 0) {
       const deleteParams = {
         Bucket: bucketName,
         Delete: { Objects: [] },
       };
 
-      objects.Versions.forEach((obj) => {
+      objects.Contents.forEach((obj) => {
         deleteParams.Delete.Objects.push({ Key: obj.Key });
       });
-      console.log({ objects: deleteParams.Delete.Objects });
+
       await s3.deleteObjects(deleteParams).promise();
     }
 
-    // await s3.deleteObject({ Bucket: bucketName, Key: folderPath }).promise();
+    await s3.deleteObject({ Bucket: bucketName, Key: folderPath }).promise();
 
     return `Folder "${folderPath}" successfully deleted`;
   } catch (err) {

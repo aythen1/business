@@ -86,7 +86,6 @@ export const renderFolders = (
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
-  console.log({ folders });
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -130,7 +129,10 @@ export const renderFolders = (
     folderName = folderName.replace(/\.json$/, ".ay");
     const isFile = regexExtensiones.test(folderName);
     const fileExtension = folderName.toLowerCase().match(regexExtensiones)?.[1];
-    const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
+    let icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
+    if (fileExtension === "ay") {
+      icon = icons["json"];
+    }
     const size = isFile
       ? convertToMegabytes(directory.Size)
       : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
@@ -305,9 +307,14 @@ export const renderRecentFiles = (
     const originalFolderName = file.Key.split("/").filter(Boolean).pop();
     const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
     // utilizamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía.
-    const fileName = originalFolderName.replace(prefixRegex, "");
+    let fileName = originalFolderName.replace(prefixRegex, "");
+    fileName = fileName.replace(/\.json$/, ".ay");
+
     const fileExtension = fileName.toLowerCase().match(regexExtensiones)?.[1];
-    const icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
+    let icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
+    if (fileExtension === "ay") {
+      icon = icons["json"];
+    }
     const size = convertToMegabytes(file.Size);
     const handleContextMenu = (e) => {
       e.preventDefault();

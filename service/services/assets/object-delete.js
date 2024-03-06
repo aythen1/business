@@ -18,7 +18,8 @@ const deleteObjectToS3 = async ({ path, userId, VersionId }) => {
     VersionId,
   };
 
-  const params = VersionId === "" ? regularObject : deleteMarker;
+  const params =
+    VersionId === "" || VersionId === undefined ? regularObject : deleteMarker;
   return new Promise((resolve, reject) => {
     s3.deleteObject(params, (err, data) => {
       if (err) {
