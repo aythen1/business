@@ -47,6 +47,7 @@ const [fetchsItemCompleted, setFetchsItemCompleted] = useState(false);
 
 
 
+
   
 useEffect(() => {
   const fetchsItem = async () => {
@@ -62,6 +63,8 @@ useEffect(() => {
 }, [])
 
 
+
+
 useEffect(() => {
   console.log('vv', vectors)
   
@@ -70,8 +73,6 @@ useEffect(() => {
     setHtml(vectors[0].code)
     // dispatch(setStatus('active'))
   }
-  
-  
 }, [vectors])
 
 

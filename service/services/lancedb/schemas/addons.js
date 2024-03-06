@@ -5,8 +5,8 @@ const schemaAddons = {
         bearer: { type: 'string' },
         owner: { type: 'string' },
 
-        available: { type: 'boolean' },
-        public: { type: 'boolean' },
+        ispublic: { type: 'boolean', default: true },
+        isavailable: { type: 'boolean', default: true },
 
         image: { type: 'string' },
         title: { type: 'string' },

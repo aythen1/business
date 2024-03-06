@@ -46,20 +46,6 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
   const { zoomIn, zoomOut, setCenter } = useReactFlow();
 
-
-  const handleSelectVector = () => {
-    if (filter) {
-      setFilter(null)
-    } else {
-      setFilter('info')
-    }
-
-
-    const node = nodes.filter((node) => node.id === id)[0]
-    dispatch(setDimension(node))
-  }
-
-
   useEffect(() => {
     // console.log('Hello world', data)
     setFilter(data.status)
@@ -81,19 +67,44 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
         const zoom = 0.9
 
-        setCenter(x, y, { zoom, duration: 2000 });
+        setCenter(x, y, { zoom, duration: 400 });
       }
     }
   }, [dimension]);
 
 
 
+  const handleSelectVector =  (e) => {
+    // Eliminar la clase 'selected' de todos los elementos
+    const selectedElements = document.querySelectorAll(`.${styles.selected}`);
+    selectedElements.forEach((element) => {
+      element.classList.remove(styles.selected);
+    });
+
+    if (filter) {
+      setFilter(null)
+    } else {
+      setFilter('info')
+    }
+
+    const node = nodes.filter((node) => node.id === id)[0]
+    dispatch(setDimension(node))
+
+    console.log('wfoinhfeubv', e)
+    // Acceder al elemento del evento (e.target)
+    const selectedVector = e.target.closest(`.${styles.boxVector}`);
+    // const selectedVector = e.target;
+    if (selectedVector) {
+      console.log('31oinfe2ujbnfu')
+      selectedVector.classList.add(styles.selected);
+    }
+  }
+
+
 
 
   const handleDuplicate = () => {
     setShowContextMenu(false)
-
-
     const node = nodes.filter((node) => node.id === id)[0]
 
     const newNode = {
@@ -142,44 +153,47 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       {showContextMenu && (
         <ContextMenu onDuplicate={handleDuplicate} onDelete={handleDelete} />
       )}
-      <div
-        className={styles.customVector}
-        onClick={() => handleSelectVector()}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          setShowContextMenu(true);
-        }}
-      >
-        <div className={styles.logo}>
-          <img src={IconExcel} />
-        </div>
-        <div className={styles.info}>
-          <div className={styles.top}>
-            <p>
-              {data.title ? data.title : 'Not found'}
-            </p>
-            <label>
-              {data.size ? data.size : '0kb'}
-            </label>
+      <div className={styles.customVector}>
+        <div
+          className={styles.boxVector}
+          onClick={(e) => handleSelectVector(e)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            setShowContextMenu(true);
+          }}
+        >
+          <div className={styles.logo}>
+            <img src={IconExcel} />
           </div>
-          <div className={styles.bottom}>
-            <span>
-              {data.date ? JSON.stringify(data.date) : '-'}
-            </span>
-            <b>
-              IN OUT
-            </b>
+          <div className={styles.info}>
+            <div className={styles.top}>
+              <p>
+                {data.title ? data.title : 'Not found'}
+              </p>
+              <label>
+                {data.size ? data.size : '0kb'}
+              </label>
+            </div>
+            <div className={styles.bottom}>
+              <span>
+                {data.date ? JSON.stringify(data.date) : '-'}
+              </span>
+              <b>
+                IN OUT
+              </b>
+            </div>
           </div>
         </div>
       </div>
+
       <div>
         {filter == 'table' ? (
           <VectorTable id={id} data={data} setFilter={setFilter} />
         ) : filter == 'sql' ? (
           <VectorSQL id={id} data={data} setFilter={setFilter} />
-        )  : filter == 'info' ? (
+        ) : filter == 'info' ? (
           <VectorInfo id={id} data={data} setFilter={setFilter} />
-        )  : filter == 'agent' && (
+        ) : filter == 'agent' && (
           <VectorAgent id={id} data={data} setFilter={setFilter} />
         )}
       </div>

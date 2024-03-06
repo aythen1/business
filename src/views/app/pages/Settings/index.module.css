@@ -26,9 +26,14 @@
         border: none;
         outline: none;
         color: var(--text-primary);
+        font-size: 12px;
         &.selected{
             background: var(--color-primary-0);
             color: #fff;
+            &:hover{
+                background: var(--color-primary-1);
+                color: #fff;
+            }
         }
         &:hover{
             background: var(--background-secondary);

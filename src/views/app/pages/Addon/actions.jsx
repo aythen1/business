@@ -1,6 +1,6 @@
 
 
-import styles from './Component.module.css'
+import styles from './Editor/index.module.css'
 
 
 
@@ -340,7 +340,8 @@ export const handleGPT = async ({ prompt = false }) => {
             return accumulatedText
 
         } catch (err) {
-            console.log('err', err)
+            // console.log('err', err)
+            throw err
         }
     }
 
@@ -369,22 +370,28 @@ export const handleRefresh = async (hoveredElement) => {
     // Implementa lógica para refrescar el componente
     console.log('Refreshing component...');
 
-    const tokenItem = insertLoading(hoveredElement, findInstructionsByKey('alt+a'))
+    try{
+        const tokenItem = insertLoading(hoveredElement, findInstructionsByKey('alt+a'))
+    
+        document.querySelectorAll('.customButtons').forEach((buttonsDiv) => { buttonsDiv.remove() });
+        document.querySelectorAll('.selectedComponent').forEach(element => element.classList.remove('selectedComponent'));
+        const prompt =
+            `Quiero que transformes este GPT manteniendo su esencia pero con algun cambio
+    \n${hoveredElement.outerHTML}`
+    
+        console.log('========', prompt)
+        const content = await handleGPT({ prompt })
+        const code = obtainContent(content)
+    
+        hoveredElement.outerHTML = code;
+    
+        // Remove the relativeClass
+        deleteLoading(tokenItem)
+    }catch(e){
+        // console.log('e', e)
+        throw e
+    }
 
-    document.querySelectorAll('.customButtons').forEach((buttonsDiv) => { buttonsDiv.remove() });
-    document.querySelectorAll('.selectedComponent').forEach(element => element.classList.remove('selectedComponent'));
-    const prompt =
-        `Quiero que transformes este GPT manteniendo su esencia pero con algun cambio
-\n${hoveredElement.outerHTML}`
-
-    console.log('========', prompt)
-    const content = await handleGPT({ prompt })
-    const code = obtainContent(content)
-
-    hoveredElement.outerHTML = code;
-
-    // Remove the relativeClass
-    deleteLoading(tokenItem)
 };
 
 

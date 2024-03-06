@@ -1,11 +1,11 @@
 // Login.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import styles from './index.module.css'
 
-import IconLogo from './assets/IconLogo.svg'
+import IconLogo from './assets/IconLogo'
 
 // import { login } from './auth';
 
@@ -125,12 +125,33 @@ const Login = ({ onLogin }) => {
   }
 
 
+    // -------------------------------------z
+    const imgRef = useRef(null);
+    const [imageError, setImageError] = useState(false);
+
+    const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/iam/user/${localStorage.id}`)
+  
+  
+    const handleImageError = () => {
+      setImageError(true);
+    };
+  
+
 
   return (
     <div className={styles["frame-1547755088"]}>
       <div className={styles["frame-15477550881"]}>
         <div className={styles["frame-1342324"]}>
-          <img src={IconLogo} />
+          {imageError ? (
+            <IconLogo />
+          ) : (
+            <img
+              ref={imgRef}
+              src={imageSrc}
+              className={styles.logo}
+              onError={handleImageError}
+            />
+          )}
         </div>
         <div>
           <h2 className={styles["frame-1342"]}>

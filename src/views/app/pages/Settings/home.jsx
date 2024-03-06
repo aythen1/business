@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 
+import 'intro.js/introjs.css';
+import { Steps, Hints } from 'intro.js-react';
 
 
 // import stylesModal from './iam/modal.module.css'
@@ -46,6 +48,12 @@ import {
 //     fetchsDashboard
 // } from '@/actions/dashboard'
 
+import {
+    iniVector,
+    addVector,
+    fetchsVector,
+} from '@/actions/vector'
+
 
 
 
@@ -56,16 +64,21 @@ const Home = ({
 }) => {
     const { t } = useTranslation();
 
-    
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
     const {
+        user,
         dashboards,
         changelogs,
         news
     } = useSelector((state) => state.iam)
+
+    const {
+        vectors,
+    } = useSelector((state) => state.vector)
 
     const [stateTable, setStateTable] = useState('')
 
@@ -197,17 +210,13 @@ const Home = ({
 
     // --------------------------------
 
-    const handleClickBilling = () => {
-        navigate('/es/app/settings/billing')
+    const handleClickBank = () => {
+        navigate('/es/app/settings/bank')
     }
 
 
     const handleClickIAM = () => {
         navigate('/es/app/iam')
-    }
-
-    const handleClickApplyNow = () => {
-        navigate('/es/app/settings/drive')
     }
 
 
@@ -241,6 +250,64 @@ const Home = ({
 
 
 
+    // ---------------------- intro
+    // Define el conjunto de pasos
+    const steps = [
+        { element: '#step1', intro: 'Paso 1' },
+        { element: '#step2', intro: 'Paso 2' },
+        // ... otros pasos
+    ];
+
+    // Otras variables necesarias
+    const stepsEnabled = false;
+    const initialStep = 0;
+
+    // Función que se ejecutará al salir de la introducción
+    const onExit = () => {
+        // Lógica que se ejecutará al salir de la introducción
+    };
+
+
+
+    // -------------------------------------------------
+    const [listVector, setListVector] = useState([])
+
+    const handleAddVector = () => {
+        navigate('/es/app/settings/drive')
+    }
+
+    const handleClickVector = () => {
+        navigate('/es/app/settings/drive')
+    }
+
+
+    useEffect(() => {
+        console.log('eiuceu=======', vectors)
+        setListVector(vectors)
+    }, [vectors])
+
+
+    useEffect(() => {
+        const fetchsItems = async () => {
+            let id = iniVector({
+                workspaceId: user.id,
+                projectId: 'vector',
+            })
+            try {
+                await dispatch(fetchsVector({
+                    id,
+                    name: 'vectors'
+                }))
+            } catch (err) {
+                console.log('Err', err)
+            }
+        }
+
+        if (vectors.length == 0) fetchsItems()
+    }, [])
+
+
+
 
     return (
         <div className={styles["main"]}>
@@ -248,11 +315,11 @@ const Home = ({
                 <div className={styles["title"]}>
                     Organization: Aythen
                 </div>
-                <div className={styles["containerButton"]}>
-                    <button onClick={() => handleClickBilling()}>
+                <div id="step1" className={styles["containerButton"]}>
+                    <button onClick={() => handleClickBank()}>
                         Banca
                     </button>
-                    <button onClick={() => handleClickIAM()} className={styles["xs-hidden"]}>
+                    <button id="step2" onClick={() => handleClickIAM()} className={styles["xs-hidden"]}>
                         <svg viewBox="0 0 16 10" ><path d="M8,0 C9.2886644,0 10.3333334,1.080692 10.3333334,2.41379308 C10.3333334,3.74689425 9.2886644,4.82758617 8,4.82758617 C6.71133558,4.82758617 5.66666666,3.74689425 5.66666666,2.41379308 C5.66666666,1.080692 6.71133558,0 8,0 M3.33333334,1.72413792 C3.70666666,1.72413792 4.05333334,1.82758617 4.35333334,2.01379308 C4.25333334,3 4.53333334,3.97931033 5.10666666,4.74482758 C4.77333334,5.40689658 4.10666666,5.862069 3.33333334,5.862069 C2.22876383,5.862069 1.33333334,4.93576158 1.33333334,3.79310342 C1.33333334,2.65044533 2.22876383,1.72413792 3.33333334,1.72413792 M12.6666666,1.72413792 C13.7712362,1.72413792 14.6666666,2.65044533 14.6666666,3.79310342 C14.6666666,4.93576158 13.7712362,5.862069 12.6666666,5.862069 C11.8933334,5.862069 11.2266666,5.40689658 10.8933334,4.74482758 C11.4666666,3.97931033 11.7466666,3 11.6466666,2.01379308 C11.9466666,1.82758617 12.2933334,1.72413792 12.6666666,1.72413792 M3.66666666,8.79310342 C3.66666666,7.36551725 5.60666666,6.20689658 8,6.20689658 C10.3933334,6.20689658 12.3333334,7.36551725 12.3333334,8.79310342 L12.3333334,10 L3.66666666,10 L3.66666666,8.79310342 M0,10 L0,8.96551725 C0,8.00689658 1.26,7.2 2.96666666,6.96551725 C2.57333334,7.43448275 2.33333334,8.08275858 2.33333334,8.79310342 L2.33333334,10 L0,10 M16,10 L13.6666666,10 L13.6666666,8.79310342 C13.6666666,8.08275858 13.4266666,7.43448275 13.0333334,6.96551725 C14.74,7.2 16,8.00689658 16,8.96551725 L16,10 Z"></path></svg>
                         Identificación y acceso de manager (IAM)
                     </button>
@@ -270,12 +337,22 @@ const Home = ({
                     <p className={styles["paragraph"]}>
                         {t('home')}
                     </p>
-                    <button
-                        onClick={() => handleClickApplyNow()}
-                        className={styles["applyNow"]}
-                    >
-                        Apply now
-                    </button>
+                    <div className={styles['buttons']}>
+                        <button
+                            onClick={() => handleAddVector()}
+                            className={styles["applyNow"]}
+                        >
+                            Add Vector
+                        </button>
+                        {listVector.map((vector, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleClickVector(vector)}
+                            >
+                                {vector?.name || 'Not found'}
+                            </button>
+                        ))}
+                    </div>
                     <BackgroundBanner className={styles["backgroundBanner"]} />
                     {/* <img  src={BackgroundBanner} /> */}
                 </div>
@@ -309,7 +386,9 @@ const Home = ({
                                         <div className={styles["IconPlus"]}>
                                             <IconPlus />
                                         </div>
-                                        Añadir nuevo
+                                        <span>
+                                            Añadir nuevo
+                                        </span>
                                     </div>
                                     <b className={styles["LabelNew"]}>
                                         New
@@ -457,8 +536,13 @@ const Home = ({
                         </a>
                     </div>
                 </div>
-
             </div>
+            <Steps
+                enabled={stepsEnabled}
+                steps={steps}
+                initialStep={initialStep}
+                onExit={onExit}
+            />
         </div>
     )
 }
