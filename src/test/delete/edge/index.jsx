@@ -1,4 +1,5 @@
-import { createContext, useContext, useCallback, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useCallback, useState, useEffect, useRef, useCallback, useLayoutEffec } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom';
 
@@ -74,6 +75,59 @@ const nodeTypes = {
 //     { id: uuidv4(), source: initialNodes[0].id, target: initialNodes[1].id },
 // ];
 
+
+
+
+
+
+
+
+const elk = new ELK();
+
+// Elk has a *huge* amount of options to configure. To see everything you can
+// tweak check out:
+//
+// - https://www.eclipse.org/elk/reference/algorithms.html
+// - https://www.eclipse.org/elk/reference/options.html
+const elkOptions = {
+    'elk.algorithm': 'layered',
+    'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+    'elk.spacing.nodeNode': '80',
+};
+
+const getLayoutedElements = (nodes, edges, options = {}) => {
+    const isHorizontal = options?.['elk.direction'] === 'RIGHT';
+    const graph = {
+        id: 'root',
+        layoutOptions: options,
+        children: nodes.map((node) => ({
+            ...node,
+            // Adjust the target and source handle positions based on the layout
+            // direction.
+            targetPosition: isHorizontal ? 'left' : 'top',
+            sourcePosition: isHorizontal ? 'right' : 'bottom',
+
+            // Hardcode a width and height for elk to use when layouting.
+            width: 150,
+            height: 50,
+        })),
+        edges: edges,
+    };
+
+    return elk
+        .layout(graph)
+        .then((layoutedGraph) => ({
+            nodes: layoutedGraph.children.map((node) => ({
+                ...node,
+                // React Flow expects a position property on the node instead of `x`
+                // and `y` fields.
+                position: { x: node.x, y: node.y },
+            })),
+
+            edges: layoutedGraph.edges,
+        }))
+        .catch(console.error);
+};
 
 
 
@@ -231,6 +285,46 @@ export default function App() {
         }))
     }
 
+    // -------------------------------
+
+    const leftPosition = () => {
+
+    }
+
+
+    const rightPosition = () => {
+
+    }
+
+
+
+    const onLayout = useCallback(
+        ({ direction, useInitialNodes = false }) => {
+            const opts = { 'elk.direction': direction, ...elkOptions };
+            const ns = useInitialNodes ? initialNodes : nodes;
+            const es = useInitialNodes ? initialEdges : edges;
+
+            getLayoutedElements(ns, es, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+                setNodes(layoutedNodes);
+                setEdges(layoutedEdges);
+
+                window.requestAnimationFrame(() => fitView());
+            });
+        },
+        [nodes, edges]
+    );
+
+    // Calculate the initial layout on mount.
+    useLayoutEffect(() => {
+        onLayout({ direction: 'DOWN', useInitialNodes: true });
+    }, []);
+
+
+
+
+
+
+
 
     // ------------------------------
 
@@ -346,36 +440,36 @@ export default function App() {
                 const { type: sourceType } = sourceNode;
                 const { type: targetType } = targetNode;
 
-                if(sourceType == 'selectorVector'){
-                    
-                }else{
+                if (sourceType == 'selectorVector') {
 
-                // Determinar si el handle es top o bottom
-                const isTopHandle = sourceHandle.endsWith('_top')
+                } else {
 
-                // Obtener el nombre del handle
-                const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
+                    // Determinar si el handle es top o bottom
+                    const isTopHandle = sourceHandle.endsWith('_top')
 
-                // Actualizar connectedNodeIds dependiendo del tipo de nodo
-                if (sourceType === 'selectorGPT') {
-                    setNodes((prevNodes) => {
-                        const updatedNodes = [...prevNodes];
-                        const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
-                        if (sourceNodeIndex !== -1) {
-                            updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
-                        }
-                        return updatedNodes;
-                    });
-                } else if (targetType === 'selectorGPT') {
-                    setNodes((prevNodes) => {
-                        const updatedNodes = [...prevNodes];
-                        const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
-                        if (targetNodeIndex !== -1) {
-                            updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
-                        }
-                        return updatedNodes;
-                    });
-                }
+                    // Obtener el nombre del handle
+                    const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
+
+                    // Actualizar connectedNodeIds dependiendo del tipo de nodo
+                    if (sourceType === 'selectorGPT') {
+                        setNodes((prevNodes) => {
+                            const updatedNodes = [...prevNodes];
+                            const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
+                            if (sourceNodeIndex !== -1) {
+                                updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
+                            }
+                            return updatedNodes;
+                        });
+                    } else if (targetType === 'selectorGPT') {
+                        setNodes((prevNodes) => {
+                            const updatedNodes = [...prevNodes];
+                            const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
+                            if (targetNodeIndex !== -1) {
+                                updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
+                            }
+                            return updatedNodes;
+                        });
+                    }
                 }
             }
 
@@ -479,6 +573,30 @@ export default function App() {
                             }}
                         >
                             Create node
+                        </button>
+                        <button
+                            onClick={leftPosition}
+                            style={{
+                                marginTop: '8px',
+                                position: 'relative',
+                                width: '300px',
+                                height: '50px',
+                                zIndex: 1000
+                            }}
+                        >
+                            Left
+                        </button>
+                        <button
+                            onClick={rightPosition}
+                            style={{
+                                marginTop: '8px',
+                                position: 'relative',
+                                width: '300px',
+                                height: '50px',
+                                zIndex: 1000
+                            }}
+                        >
+                            Right
                         </button>
                         {/* <button
                             onClick={generateNodes}

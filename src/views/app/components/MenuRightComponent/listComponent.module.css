@@ -26,9 +26,14 @@
 
 
 
+:global(.pressAlt) {
+  :global(.selectedComponent){
+    cursor: url('./assets/icon-throw.png') 16 16, auto;
+    }
+}
+
 :global(.selectedComponent) {
 outline: 2px dashed var(--color-primary-0);
-  cursor: pointer;
   position: relative;
 }
 

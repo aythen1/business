@@ -15,7 +15,7 @@ import {
 
     addInvoice,
     fetchsInvoice,
-    
+
     sendMail
 } from '@/actions/iam'
 
@@ -184,9 +184,9 @@ const Billing = ({ }) => {
         // const item = {
         //     invoiceDate: new Date()
         // }
-        
+
         // dispatch(addInvoice(item))
-        
+
         dispatch(setModal(<ModalInvoice />))
     }
 
@@ -194,7 +194,8 @@ const Billing = ({ }) => {
 
     const sendEmail = () => {
         dispatch(sendMail({
-            email: 'confirm-email'
+            // email: 'confirm-email'
+            email: 'new-account'
         }))
 
         alert(1)
@@ -235,7 +236,7 @@ const Billing = ({ }) => {
 
 
 
-    
+
 
 
     return (
@@ -305,10 +306,6 @@ const Billing = ({ }) => {
                 </div>
             </div>
 
-
-
-
-
             <div className={styles.containerContact}>
                 <h2 className={styles.title}>
                     Email de contacto
@@ -325,6 +322,36 @@ const Billing = ({ }) => {
                             <input
                                 type='text'
                                 placeholder={'placeholder@demo.com'}
+                                value={state.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                        </div>
+                        <div className={styles.button}>
+                            <button >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className={styles.containerContact}>
+                <h2 className={styles.title}>
+                    Token de GPT
+                </h2>
+                <div className={styles.boxContact}>
+                    <span className={styles.text}>
+                        You can create a GPT token to uniquely identify and authenticate your API requests.
+                    </span>
+                    <div className={styles.grid2}>
+                        <div className={styles.input}>
+                            <label>
+                                Token
+                            </label>
+                            <input
+                                type='text'
+                                placeholder={'sk-***'}
                                 value={state.email}
                                 onChange={(e) => handleInputChange(e, 'email')}
                             />
@@ -411,7 +438,7 @@ const Billing = ({ }) => {
                         </div>
                         <div className={styles.button}>
                             <button onClick={() => sendEmail()}>
-                                Save
+                                Save (send email)
                             </button>
                         </div>
                     </div>

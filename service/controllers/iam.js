@@ -1017,10 +1017,11 @@ const fetchsLog = async (req, res) => {
 const sendMail = async (req, res, next) => {
   try {
     // const { path, user, password } = req.body
-
+    const { email } = req.body
     console.log('senddd email')
+    let template = email || 'confirm-email'
    
-    const email = sendEmail('info@aythen.com', 'confirm-email', { token: '1234' })
+    const resp = sendEmail('info@aythen.com', template, { token: '1234' })
   } catch (err) {
     return res.status(500).send(err)
   }

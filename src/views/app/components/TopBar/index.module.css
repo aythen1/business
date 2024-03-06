@@ -284,6 +284,12 @@
   display: none;
 }
 
+@media only screen and (min-width: 1201px) {
+    .reScale{
+    zoom: 0.8 !important;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .noneMobile{
     display: none;

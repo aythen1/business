@@ -8,11 +8,11 @@ import AddonData from './Data'
 import AddonCustom from './Custom'
 import AddonVersion from './Version'
 
-const Vector = ({ modal: _modal }) => {
-    const [vector, setVector] = useState(null)
+const ModalVector = ({ modal: _modal, addon }) => {
+    // const [vector, setVector] = useState(null)
     const [modal, setModal] = useState(_modal || 'custom')
 
-    const { addon, vectors } = useSelector((state) => state.addon)
+    // const { addon, vectors } = useSelector((state) => state.addon)
 
 
 
@@ -39,7 +39,7 @@ const Vector = ({ modal: _modal }) => {
     return (
         <div>
             <div className={styles.header}>
-                {addon.id && (
+                {addon?.id && (
                     <div className={styles.gird2}>
                         <div
                             className={styles.filter}
@@ -86,7 +86,7 @@ const Vector = ({ modal: _modal }) => {
 }
 
 
-export default Vector
+export default ModalVector
 
 
 

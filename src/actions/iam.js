@@ -298,6 +298,8 @@ createAsyncThunk('iam/login', async ({user, password}, { dispatch }) => {
       }
     )
 
+    localStorage.setItem('id', response.data.user.id)
+
     return {
       user: response.data.user, 
       token: response.data.token

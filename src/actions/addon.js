@@ -184,24 +184,32 @@ export const visionAddon =
 
 export const codeAddon =
   createAsyncThunk('addon/codeAddon',
-    async ({code = null, user}, { dispatch }) => {
+    async ({components}, { dispatch }) => {
       try {
-        console.log('edwed')
         const token = localStorage.getItem('token')
+        const tokenGPT = localStorage.getItem('token-gpt')
+
+        const arrComponents = components.map(component => component.text);
+
         const resp = await apiBackend.post(
           '/addon/code',
-          { code, user },
-          {
+          { 
+            token: tokenGPT, 
+            components: arrComponents 
+          },{
             headers: {
               'Authorization': `Bearer ${token}`
             },
           }
         );
 
-        console.log('eee', resp)
 
-        return resp.data;
+        return {
+          components: resp.data,
+          code: resp.data.join('\n')
+        }
       } catch (error) {
+        console.log('error', error)
         throw error;
       }
     }

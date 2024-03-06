@@ -105,7 +105,7 @@
 }
 
 .containerContact {
-  grid-column: span 2;
+  /* grid-column: span 2; */
   width: inherit;
 
   .boxContact {
@@ -186,7 +186,7 @@
 }
 
 .containerAlerts {
-  /* grid-column: span 2; */
+  grid-column: span 2;
   width: inherit;
 
   .boxAlerts {
@@ -394,6 +394,8 @@
   }
 }
 
+
+
 .containerContact {
   width: inherit;
 
@@ -410,6 +412,27 @@
     }
   }
 }
+
+
+.containerToken {
+  width: inherit;
+
+  .boxContact {
+    .text {
+    }
+
+    .grid2 {
+      .input {
+      }
+
+      .button {
+      }
+    }
+  }
+}
+
+
+
 
 .containerVat {
   width: inherit;

@@ -8,6 +8,8 @@
     flex-flow: column;
     align-items: normal;
     justify-content: normal;
+    position: relative;
+    overflow: hidden;
     background: linear-gradient(
       151deg,
       var(--color-primary-2) 0%,
@@ -16,6 +18,15 @@
     );
     border-radius: 4px;
     padding: 32px;
+    z-index: 1;
+
+    .background{
+      position: absolute;
+      width: 550px;
+      bottom: 0px;
+      right: 0px;
+      z-index: 0;
+    }
 
     .containerBoxQuery {
       width: 100%;
@@ -67,6 +78,10 @@
     }
 
     .input {
+      z-index: 1;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
       input {
         transition: border-color 0.2s ease 0s, box-shadow 0.2s ease 0s;
         appearance: none;
@@ -83,14 +98,12 @@
         font-size: 16px;
         line-height: 24px;
         height: 48px;
-        padding: 8px;
+        padding: 8px 16px;
       }
     }
   }
 
   .title {
-    font-size: 14px;
-    font-weight: 600;
     letter-spacing: 0px;
     line-height: 24px;
     margin-bottom: 6px;
@@ -114,19 +127,17 @@
         gap: 16px;
         flex-flow: row;
         align-items: center;
-        justify-content: normal;
         flex: 1 1;
         text-align: left;
-        padding: 20px;
+        padding: 10px;
         color: rgb(63, 66, 80);
         text-decoration: none;
         border: 1px solid var(--border-color);
         background: var(--background);
-
         border-radius: 4px;
-        /* background: rgb(255, 255, 255); */
         overflow-wrap: break-word;
-        color: rgb(63, 66, 80);
+        font-size: 14px;
+        cursor: pointer;
 
         &:hover {
           background: var(--background-secondary);
@@ -135,22 +146,19 @@
         & > div {
           color: var(--text-color);
           display: flex;
-          gap: 16px;
+          gap: 10px;
           flex-flow: row;
-          align-items: normal;
-          justify-content: normal;
+          align-items: center;
           height: fit-content;
         }
 
-        .icon {
+        /* .icon {
           width: 30px;
-        }
-
+        } */
         svg {
-          width: 20px;
+          width: 35px;
           fill: var(--text-color);
         }
-
         button {
           background: var(--background-secondary);
           display: flex;
@@ -160,10 +168,14 @@
           align-items: center;
           padding: 8px;
           border-radius: 4px;
-          height: 40px;
-          width: 40px;
+          height: 30px;
+          width: 30px;
           border: none;
           margin-left: auto;
+          svg {
+            width: 14px;
+            fill: var(--text-color-secondary);
+          }
         }
       }
     }
@@ -246,7 +258,8 @@
             padding: 8px;
             border-radius: 4px;
             svg {
-              fill: var(--text-color);
+              width: 14px;
+              fill: var(--text-color-secondary);
             }
           }
         }
@@ -380,6 +393,10 @@
 
             padding: 8px;
             border-radius: 4px;
+            svg{
+              width: 14px;
+              fill: var(--text-color-secondary);
+            }
           }
         }
       }
@@ -430,8 +447,11 @@
   }
 }
 
+
+
+
 .modal {
-  width: 300px;
+  width: 500px;
   .search {
     border: 1px solid var(--border-color);
     padding: 4px 10px;
@@ -453,7 +473,9 @@
   .list {
     max-height: 400px;
     overflow-y: scroll;
+    
     .topic {
+      display: grid;
       .title {
         font-size: 14px;
         font-weight: 600;
@@ -465,21 +487,26 @@
         margin: 6px 0px;
         padding: 6px 2px;
       }
-      .item {
-        b {
-          padding: 2px 6px;
-          font-size: 8px;
-          background: var(--color-primary-4);
-          color: var(--color-primary-0);
-          font-weight: 500;
-          margin: 4px 0px;
-          border-radius: 4px;
-        }
-        p {
-          float: left;
-          width: 100%;
-          margin: 5px 0px;
-          font-size: 14px;
+      .grid2{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        .item {
+          b {
+            padding: 2px 6px;
+            font-size: 8px;
+            background: var(--color-primary-4);
+            color: var(--color-primary-0);
+            font-weight: 500;
+            margin: 4px 0px;
+            border-radius: 4px;
+          }
+          p {
+            float: left;
+            width: 100%;
+            margin: 5px 0px;
+            font-size: 12px;
+          }
         }
       }
     }

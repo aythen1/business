@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 // var token = "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"
-var token = "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"
+// var token = "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"
 
 
 // const systemPromptjsx = `You are an expert in creating JSX code for web 
@@ -27,8 +27,84 @@ If it does not detect any element to create an html, it returns an element not f
 
 
 
-const codeGPT = async (code, user) => {
+const addonGPT = async (token, components) => {
     const systemPromptTailwind = `
+You are a skilled Tailwind CSS developer. 
+
+Users will provide you with low-fidelity wireframes of applications, 
+and your task is to return a single HTML file without header tags or the 
+<!DOCTYPE html> or body declaration. 
+
+Focus on the content within the body and use Tailwind CSS to enhance the website. 
+
+Use the corporate color in the response in style="[color/backgorund]:var(--color-primary-0)" 
+from 0 to 4 depending on the intensity. Create all designs with this corporate color.
+
+If the wireframe includes an image, use placehold.co to generate a placeholder image. 
+In case no specific elements are detected, return an "element not found" HTML, 
+but always include the HTML structure. Respond only with the HTML content inside the body.
+
+Follow the following order to structure the code:
+    `;
+
+
+    const assistantResponses = [];
+    const conversation = []
+
+
+    for (let i = 0; i<components.length; i++) {
+        const component = components[i]
+        conversation.push({
+            role: 'user',
+            content: systemPromptTailwind + '\n\nMake code that represents:\n' + component.text
+            // content: [textMessage, systemPromptTailwind],
+        });
+    }
+
+    try {
+        for (const [index, userMessage] of conversation.entries()) {
+            const body = {
+                model: "gpt-3.5-turbo", // GPT-3.5 model
+                temperature: 0.7,
+                max_tokens: 2096,
+                messages: [userMessage]
+            }
+
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(body),
+            });
+
+            const result = await response.json();
+
+            if (result && result.choices && result.choices.length > 0) {
+                const assistantResponse = result.choices[0].message.content;
+                const html = await extractCodeBlocks(assistantResponse)
+                assistantResponses[index] = html[1]
+            }
+        }
+
+        return assistantResponses
+    } catch (e) {
+        console.log(e);
+    }
+
+    return new Response(JSON.stringify(assistantResponses), {
+        headers: {
+            "content-type": "application/json; charset=UTF-8",
+        },
+    });
+}
+
+
+
+
+const codeGPT = async (token, code, user) => {
+    const systemPromptTailwind1 = `
     You are a skilled Tailwind CSS developer. 
     Users will provide you with low-fidelity wireframes of applications, 
     and your task is to return a single HTML file without header tags or the <!DOCTYPE html> or body declaration. 
@@ -36,7 +112,27 @@ const codeGPT = async (code, user) => {
     If the wireframe includes an image, use placehold.co to generate a placeholder image. 
     In case no specific elements are detected, return an "element not found" HTML, 
     but always include the HTML structure. Respond only with the HTML content inside the body.
-`;
+    `;
+
+
+    const systemPromptTailwind = `
+You are a skilled Tailwind CSS developer. 
+
+Users will provide you with low-fidelity wireframes of applications, 
+and your task is to return a single HTML file without header tags or the 
+<!DOCTYPE html> or body declaration. 
+
+Focus on the content within the body and use Tailwind CSS to enhance the website. 
+
+Use the corporate color in the response in style="[color/backgorund]:var(--color-primary-0)" 
+from 0 to 4 depending on the intensity. Create all designs with this corporate color.
+
+If the wireframe includes an image, use placehold.co to generate a placeholder image. 
+In case no specific elements are detected, return an "element not found" HTML, 
+but always include the HTML structure. Respond only with the HTML content inside the body.
+
+Follow the following order to structure the code:
+    `;
 
 
     const systemPromptjsx = `You are an expert in creating JSX code for web 
@@ -65,19 +161,19 @@ const codeGPT = async (code, user) => {
     const assistantResponses = [];
 
     const conversation = []
-    
-    if(code){
+
+    if (code) {
         conversation.push({
-                role: 'user',
-                content: systemPromptTailwind + '\n\nWith this code:\n' + code + '\n\nMake this change\n\n' + user
-                // content: [textMessage, systemPromptTailwind],
-            });
-    }else{
+            role: 'user',
+            content: systemPromptTailwind + '\n\nWith this code:\n' + code + '\n\nMake this change\n\n' + user
+            // content: [textMessage, systemPromptTailwind],
+        });
+    } else {
         conversation.push({
-                role: 'user',
-                content: systemPromptTailwind + '\n\nMake code that represents:\n' + user
-                // content: [textMessage, systemPromptTailwind],
-            });
+            role: 'user',
+            content: systemPromptTailwind + '\n\nMake code that represents:\n' + user
+            // content: [textMessage, systemPromptTailwind],
+        });
     }
 
 
@@ -116,7 +212,7 @@ const codeGPT = async (code, user) => {
 
             }
         }
-        
+
         console.log('res======', assistantResponses)
         return assistantResponses
 
@@ -300,6 +396,7 @@ const rpaGPT = async () => {
 
 
 module.exports = {
+    addonGPT: addonGPT,
     codeGPT: codeGPT,
     visionGPT: visionGPT,
     rpaGPT: rpaGPT
