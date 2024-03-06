@@ -3,6 +3,8 @@ import styles from "./home.module.css";
 import TopBar from './components/TopBar'
 
 
+
+
 import ArrowLine from './assets/home/arrow-line.png'
 import Avatar1 from './assets/home/avatar-1.png'
 import Avatar2 from './assets/home/avatar-2.png'

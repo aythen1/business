@@ -37,6 +37,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  .logo{
+    width: 50px;
+  }
 }
 .frame-1547755085 {
   display: flex;

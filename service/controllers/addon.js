@@ -8,9 +8,10 @@ const path = require('path')
 
 
 const {
-  codeGPT,
-  visionGPT,
-  rpaGPT
+  addonGPT,
+  // codeGPT,
+  // visionGPT,
+  // rpaGPT
 } = require('../services/gpt')
 
 
@@ -139,10 +140,7 @@ const deleteAddon = async (req, res) => {
     const { id } = req.body
     const path = encodeVector(ID)
 
-    console.log('deleteeeeeee', id)
-
-    const resp = await deleteVector(path, 'addons', id)
-
+    const resp = await deleteVector(path, 'addons', {id})
 
     return res.status(200).send(id)
   } catch (err) {
@@ -161,7 +159,11 @@ const addAddon = async (req, res) => {
     const path = encodeVector(ID)
     // const result = await isAuth(token)
 
-    const resp = await addVector(path, 'addons', [0, 0], addon, { users: user })
+    console.log('addndhufuf', addon)
+
+    const resp = await updateVector(path, 'addons', [0, 0], addon, { users: user })
+
+    console.log('resp', resp)
 
     return res.status(200).send(resp)
 
@@ -242,18 +244,17 @@ const visionAddon = async (req, res) => {
 
 const codeAddon = async (req, res) => {
   try {
-    const { code, user } = req.body
+    const { token, components } = req.body
     const path = encodeVector(ID)
 
-    console.log('wuijduwjiduwjeji', code)
+    console.log('components', components)
 
-    const resp = await codeGPT(code, user)
+    const resp = await addonGPT(token, components)
     // const resp = await updateVector(path, 'addons', [0, 0], addon)
     // const resp = []
 
- 
 
-    return res.status(200).send(resp[0])
+    return res.status(200).send(resp)
 
   } catch (err) {
     return res.status(500).send('Not verify user')

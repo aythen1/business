@@ -36,6 +36,8 @@ const addonSlice = createSlice({
     vision: null,
     rpa: null,
 
+    components: [],
+
     addon: {},
     addons: [],
 
@@ -87,11 +89,21 @@ const addonSlice = createSlice({
 
       .addCase(addAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        // state.components = action.payload;
-        state.addons = action.payload.concat(
-          state.addons.filter((addon2) => !action.payload.find((addon1) => addon1.id === addon2.id))
-        );
+
+        console.log('aaaction', action.payload)
+      
+        const newAddon = action.payload;
+        const existingAddonIndex = state.addons.findIndex((existingAddon) => existingAddon.id === newAddon.id);
+      
+        if (existingAddonIndex !== -1) {
+          // El addon ya existe, actualízalo
+          state.addons[existingAddonIndex] = { ...state.addons[existingAddonIndex], ...newAddon };
+        } else {
+          // El addon no existe, agrégalo
+          state.addons.push(newAddon);
+        }
       })
+
       .addCase(addAddon.rejected, (state, action) => {
         state.status = 'rejected';
         state.error = action.error.message;
@@ -131,12 +143,13 @@ const addonSlice = createSlice({
 
       .addCase(codeAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.code = action.payload;
+        state.components = action.payload.components;
+        state.code = action.payload.components;
       })
-      .addCase(codeAddon.rejected, (state, action) => {
-        state.status = 'rejected';
-        state.error = action.error.message;
-      })
+      // .addCase(codeAddon.rejected, (state, action) => {
+      //   state.status = 'rejected';
+      //   // state.error = action.error.message;
+      // })
 
 
       .addCase(rpaAddon.fulfilled, (state, action) => {

@@ -1,0 +1,26 @@
+<svg width="116" height="103" viewBox="0 0 116 103" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M115.178 25.75H30.5117V5.61818C30.5117 2.50945 33.0212 0 36.1299 0H109.56C112.668 0 115.178 2.50945 115.178 5.61818V25.75Z" fill="#4AA1D9"/>
+<path d="M115.178 25.75H30.5117V51.5H115.178V25.75Z" fill="#3278BD"/>
+<path d="M115.178 51.5H30.5117V77.25H115.178V51.5Z" fill="#2A5CA7"/>
+<path d="M30.5117 77.25H115.178V97.3818C115.178 100.491 112.668 103 109.56 103H36.1299C33.0212 103 30.5117 100.491 30.5117 97.3818V77.25Z" fill="#16428B"/>
+<g filter="url(#filter0_d_622_17142)">
+<path d="M57.3916 79.592H4.69304C3.66304 79.592 2.82031 78.7492 2.82031 77.7192V25.2829C2.82031 24.2529 3.66304 23.4102 4.69304 23.4102H57.3916C58.4216 23.4102 59.2643 24.2529 59.2643 25.2829V77.7192C59.2643 78.7492 58.4216 79.592 57.3916 79.592Z" fill="url(#paint0_linear_622_17142)"/>
+</g>
+<path d="M20.5196 65.7916L12.2422 37.7007H17.7479L22.5047 57.7576L29.2091 37.7007H32.8796L39.584 57.7576L44.3406 37.7007H49.8465L41.569 65.7916H37.5801L31.0256 46.3902L24.471 65.7916H20.5196Z" fill="white"/>
+<defs>
+<filter id="filter0_d_622_17142" x="0.820312" y="19.4102" width="64.4453" height="64.1816" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_622_17142"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_622_17142" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_622_17142" x1="-26.6527" y1="8.01353" x2="59.0059" y2="72.5772" gradientUnits="userSpaceOnUse">
+<stop offset="0.1123" stop-color="#2E7FC2"/>
+<stop offset="0.8823" stop-color="#2964AE"/>
+</linearGradient>
+</defs>
+</svg>

@@ -309,7 +309,6 @@ async function updateVector(id, name, vector = [0, 0], data) {
     const { path0, path1 } = decodeVector(id);
     const uri = 'data/vector/' + path0 + '/' + path1;
 
-
     try {
         let schema
 
@@ -342,6 +341,8 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
         const searchString = generateSearchString(conditions);
 
+        // console.log('searchString', searchString)
+
         const db = await lancedb.connect(uri);
         const tbl = await db.openTable(name);
 
@@ -359,29 +360,24 @@ async function updateVector(id, name, vector = [0, 0], data) {
             let updatedRecord = { ...query[0], ...data };
             // if(updatedRecord._distance) delete query[0]._distance;
             if ('_distance' in updatedRecord) delete updatedRecord._distance;
+            
             updatedRecord = generateEmptyObjectFromSchema(allSchemas[name], updatedRecord)
             updatedRecord.vector = vector
+            // console.log('udpatedRecord', updatedRecord)
 
             await tbl.update({ where: searchString, values: updatedRecord })
-            // console.log('updated', updatedRecord)
-
-            // const updatedQuery = await tbl
-            // .search(vector)
-            // .where(searchString)
-            // .execute();
-
-            // console.log('updatedQuery', updatedQuery)
 
             return updatedRecord;
         } else {
-            // No se encontró ningún usuario para actualizar
-            return 400;
+            console.log('no se encontro')
+            const resp = await addVector(id, name, vector = [0, 0], data)
+
+            return resp[0];
         }
     } catch (error) {
-        console.log('ERROR', error)
-        // Not exist table
+        // console.log('ERROR', error)
         const resp = await addVector(id, name, vector = [0, 0], data)
-        console.log('rrerr', resp)
+        // console.log('rrerr', resp)
         // console.log('respresprespresprespresp', resp)
         return resp[0];
     }

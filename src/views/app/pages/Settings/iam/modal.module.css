@@ -192,6 +192,7 @@
       }
 
       &.delete{
+        cursor: pointer;
         background: rgb(229, 25, 99);
         color: rgb(255, 255, 255);
       }
