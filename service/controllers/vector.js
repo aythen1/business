@@ -265,7 +265,7 @@ const shareFileVector2 = async (req, res) => {
   const base64File = fileBuffer.toString("base64");
 
   // Generar el nombre del vector
-  const vectorName = `shared-${user2}`;
+  const vectorName = `shared-${user1}-${user2}`;
 
   try {
     // Asumiendo que tienes una función que pueda buscar un vector por su nombre
