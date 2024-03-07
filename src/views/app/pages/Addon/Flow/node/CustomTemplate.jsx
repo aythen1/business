@@ -21,11 +21,13 @@ import { useGraph } from '../index';
 
 import { useOpenAI } from '../openai'
 
-
 import Template from './Template'
+import Vector from './Vector'
+
+
 
 import {
-  parseChartString, 
+  parseChartString,
 
   generateDefault,
 
@@ -43,10 +45,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   const { fitView, setCenter } = useReactFlow();
 
-
-
-
-  const { prompt, value, error, handles } = data;
+  const { prompt, value, error, handles, components } = data;
 
 
   const [isError, setIsError] = useState(error);
@@ -55,6 +54,43 @@ export default memo(({ id, data, isConnectable, }) => {
 
   const [gptActive, setGptActive] = useState(false);
   const [gptValue, setGptValue] = useState('')
+
+
+  const [listComponents, setListComponents] = useState([]);
+  const [internalUpdate, setInternalUpdate] = useState(false);
+
+
+  useEffect(() => {
+    if (!internalUpdate) {
+      // Buscar el nodo con el id específico
+      const selectedNodeIndex = nodes.findIndex((node) => node.id === id);
+
+      // Verificar si se encontró el nodo
+      if (selectedNodeIndex !== -1) {
+        // Clonar el array de nodos para no modificar el original directamente
+        const updatedNodes = [...nodes];
+
+        // Modificar la propiedad nodes.data.components del nodo con el id específico
+        updatedNodes[selectedNodeIndex].data.components = listComponents;
+
+        // Actualizar nodes con el nuevo array de nodos
+        setNodes(updatedNodes);
+      }
+    }
+
+    setInternalUpdate(false);
+  }, [listComponents])
+
+
+  useEffect(() => {
+    if (components.length > 0) {
+
+      console.log('components', components)
+      setListComponents(components)
+
+      setInternalUpdate(true);
+    }
+  }, [components])
 
 
 
@@ -153,7 +189,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
         if (type == 'graph') {
           let accumulatedGraph = parseChartString(accumulatedText)
-          console.log('=============graph', accumulatedGraph)
+
           setNodes((prevNodes) => {
             return prevNodes.map((node) => {
               if (node.id === id) {
@@ -183,14 +219,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   // ----------------------------------------------------------
   const addTemplate = async () => {
-    const resp = await handleGenerateTree()
-
-    console.log('resp', resp)
-
-    // -------------------------------
-    addNode(setCenter)
-
-
+    addNode()
   }
 
 
@@ -256,7 +285,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   return (
     <>
-      {id}
+      {/* {id} */}
       <Handle
         id={`${id}_top`}
         type="target"
@@ -271,12 +300,13 @@ export default memo(({ id, data, isConnectable, }) => {
         style={{ bottom: -10, top: "auto", background: "#555" }}
         isConnectable={isConnectable}
       />
-      |{JSON.stringify(isError)}|
-
       <div className={styles.box}>
+        <Vector />
         <Template
           template={data}
           addTemplate={() => addTemplate()}
+          listComponents={listComponents}
+          setListComponents={setListComponents}
         />
       </div>
     </>

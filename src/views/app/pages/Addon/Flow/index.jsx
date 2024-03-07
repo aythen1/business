@@ -44,14 +44,26 @@ import {
 } from './prompt'
 
 
-import {
-    fetchsVector,
-    iniVector,
+// import {
+//     fetchsVector,
+//     iniVector,
 
-    addVectorData,
-    updateVector,
-    addVector
-} from '@/actions/vector'
+//     addVectorData,
+//     updateVector,
+//     addVector
+// } from '@/actions/vector'
+
+
+import {
+    fetchAddon,
+    updateAddon,
+
+    iniVector,
+    fetchsVectorAddon,
+    addVectorAddon
+} from '@/actions/addon'
+
+
 import { UnexpectedResponseException } from 'pdfjs-dist';
 
 
@@ -68,97 +80,228 @@ const nodeTypes = {
 
 export const AddonFlow = ({ }) => {
     const dispatch = useDispatch()
-
+    const { id: addonId } = useParams()
 
 
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
     const [selectedEdge, setSelectedEdge] = useState(false);
 
-    const [dataVector, setDataVector] = useState([])
+    // const [dataVector, setDataVector] = useState([])
+    const [miniMapVisible, setMiniMapVisible] = useState(false);
+    const [zoomInitial, setZoomInitial] = useState(false);
 
 
     // ------------------------------
     const { user } = useSelector((state) => state.iam)
+
+    // const {
+    //     vector,
+    // } = useSelector((state) => state.vector)
     const {
-        vector,
-    } = useSelector((state) => state.vector)
+        addon,
+    } = useSelector((state) => state.addon)
 
     // ------------------------------
     useEffect(() => {
-        const fetchItems = async () => {
-            let workspace = user.id
-            let project = 'addon' //template
+        // const fetchItems = async () => {
+        //     let workspace = user.id
+        //     let project = 'addon' //template
 
-            let page = 'home'
+        //     let page = 'home'
 
-            let addon = 'user' //addon
-            let title = 'user' // href
+        //     let addon = 'user' //addon
+        //     let title = 'user' // href
 
-            const id = iniVector({
-                workspaceId: workspace,
-                projectId: project,
-            })
+        //     const id = iniVector({
+        //         workspaceId: workspace,
+        //         projectId: project,
+        //     })
 
-            dispatch(fetchsVector({
-                id,
+        //     dispatch(fetchsVector({
+        //         id,
 
-                name: addon,
-                title
-            }))
-        }
+        //         name: addon,
+        //         title
+        //     }))
+        // }
 
-        if (!vector) {
-            console.log('search addon')
-            fetchItems()
+        // const fetchItem = async () => {
+
+        //     const id = iniVector({
+        //         workspaceId: workspace,
+        //         projectId: project,
+        //     })
+
+        //     dispatch(fetchsVector({
+        //         id,
+
+        //         name: addon,
+        //         title
+        //     }))
+
+        // }
+
+        console.log('adddon fetch', addonId)
+
+        if (addonId) {
+            // console.log('search addon')
+            dispatch(fetchAddon(addonId))
         } else {
-            console.log('existe vector', vector)
-            setNodes(JSON.parse(vector.nodes))
-            setEdges(JSON.parse(vector.edges))
+            // console.log('existe vector', vector)
+            // setNodes(JSON.parse(vector.nodes))
+            // setEdges(JSON.parse(vector.edges))
         }
 
-    }, [vector])
+    }, [addonId])
 
 
-    // ------------------------------
+    useEffect(() => {
+        const fetchItem = async () => {
+            const nodes = JSON.parse(addon.nodes)
+            console.log('addon nodes', nodes)
+            setNodes(nodes)
+            setEdges(JSON.parse(addon.edges))
 
+            for (var i = 0; i < nodes.length; i++) {
+                const node = nodes[i]
+
+                let id = iniVector({
+                    path0: 'addon',
+                    path1: addonId,
+                    path2: node.id
+                })
+
+                const resp = await dispatch(fetchsVectorAddon({
+                    id: id,
+                    name: 'templates'
+                }))
+
+                console.log('resp', resp.payload[0])
+
+                if (resp.payload.length > 0) {
+                    setNodes((prevNodes) =>
+                        prevNodes.map((node) =>
+                            node.id === resp.payload[0].id
+                                ? { ...node, data: { ...node.data, components: JSON.parse(resp.payload[0].components) } }
+                                : node
+                        )
+                    );
+                }
+            }
+        }
+
+        if (addon.id) {
+            fetchItem()
+        }
+    }, [addon])
 
 
 
     // ---------------------------------
 
     const saveNode = async () => {
-
         let id = iniVector({
             workspaceId: user.id,
-            projectId: 'vector',
+            // projectId: 'vector',
+            projectId: addonId,
         })
 
+
+        // const data = []
+
+        for (var i = 0; i < nodes.length; i++) {
+            const node = nodes[i]
+            const components = node.data.components
+
+            nodes[i].data.components = []
+
+            const arr = []
+
+            for (var j = 0; j < components.length; j++) {
+                const component = components[j]
+
+                arr.push({
+                    id: component.id,
+                    text: component.text,
+                    code: component.code,
+                    // image: component.image
+                })
+            }
+
+            await dispatch(addVectorAddon({
+                addon: { id: addon.id },
+                // vector: data 
+                vector: {
+                    id: node.id,
+                    components: arr
+                }
+            }));
+            // delete components of node
+
+
+            // const vector = {
+            //     id: node.id,
+            //     components
+            // }
+            // data.push()
+
+            // console.log('vectors addon', vector)
+
+
+            // console.log('eeeeeeeeeeeeeeeeee', resp)
+        }
+
+
         const data = {
-            id: vector?.id || uuidv4(),
-            title: '1111',
+            id: addon.id,
+            // title: '1111',
             nodes: nodes,
             edges: edges
         }
 
-        for (var i = 0; i < dataVector.length; i++) {
-            console.log('data vector', vector, '\n\n', dataVector[i])
 
-            await dispatch(addVectorData({
-                id,
-                title: dataVector[i].title,
-                data: dataVector[i].data,
-                vector
-            }))
-        }
+        // console.log('addon addon addon', data)
+        // // Realizar un map sobre los nodos y agregar los componentes utilizando addVectorData
+        // data.nodes.map(async (node) => {
+        //     const { components, id } = node.data; // Ajusta según la estructura de tus nodos
 
-        setDataVector([])
+        //     // Utilizar dispatch para agregar los componentes utilizando addVectorData
+        //     await dispatch(addVectorData({
+        //         id: `${id}_${uuidv4()}`, 
+        //         title: data.title, 
+        //         data: components, 
+        //         vector: 'addons' 
+        //     }));
+        // });
 
-        await dispatch(updateVector({
-            id,
-            name: 'vectors',
-            data
-        }))
+        // console.log('save', data)
+
+
+        // await dispatch(addVectorData({
+        //     id,
+        //     title: dataVector[i].title,
+        //     data: dataVector[i].data,
+        //     vector
+        // }))
+
+
+        // for (var i = 0; i < dataVector.length; i++) {
+        // console.log('data vector', vector, '\n\n', dataVector[i])
+
+        // }
+
+        // setDataVector([])
+
+        // await dispatch(updateVector({
+        //     id,
+        //     name: 'addons',
+        //     data
+        // }))
+
+        dispatch(updateAddon(data))
+
+
     }
 
 
@@ -230,140 +373,24 @@ export const AddonFlow = ({ }) => {
 
     // -------------------------------------------------------
 
-    const addTree = async () => {
-        const messages = [{
-            role: 'user',
-            content: generatePromptTree('calders web')
-        }];
-
-        console.log('mess', messages);
-        let accumulatedText = '';
-
-        try {
-            const openai = await useOpenAI();
-            const resp = await openai.chat.completions.create({
-                model: 'gpt-4',
-                messages,
-                // stream: true,
-            });
-
-
-            const response = resp.choices[0].message.content
-            console.log('response', response)
-
-            const json = parseChartString(response)
-            console.log('json', json)
-
-            json.nodes = json.nodes.map(node => ({
-                ...node,
-                type: 'selectorTemplate'
-            }));
 
 
 
-            setNodes((prevNodes) => [...prevNodes, ...json.nodes]);
-            setEdges((prevEdges) => [...prevEdges, ...json.edges]);
-        } catch (err) {
-            console.log('err', err);
-        }
-
-        console.log('accumulatedText', accumulatedText);
-    };
-
-
-
-    const value = {
-        nodes,
-        edges,
-        setNodes,
-        setEdges,
-        selectedEdge,
-        setSelectedEdge,
-
-    };
-
-    const onDragStart = () => {
-        // Desactivar el arrastre en React Flow
-        return false;
-      };
-    
-
-    return (
-        <GraphContext.Provider value={value}>
-            <div
-                style={{ width: '100%', height: 'calc(100vh - 55px)' }}
-            >
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    fitView
-                    fitViewOptions={{
-                        maxZoom: 0.1,
-                    }}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    edgeTypes={edgeTypes}
-                    nodeTypes={nodeTypes}
-                    onConnect={handleConnect}
-                    onDragStart={onDragStart}
-                >
-                    <div className={styles.buttons} >
-                        <button onClick={saveNode} >
-                            <ButtonSave />
-                        </button>
-                        <button >
-                            <ButtonAdd nodes={nodes} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                        <button onClick={() => addTree()} >
-                            <ButtonTree />
-                        </button>
-                        <button style={{ marginLeft: 'auto' }}>
-                            <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                        <button>
-                            <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                    </div>
-                    <MiniMap />
-                </ReactFlow>
-            </div>
-        </GraphContext.Provider>
-    );
-}
-
-
-
-
-
-
-
-
-
-const ButtonAdd = ({ setNodes, nodes, setEdges }) => {
-    const { fitView, setCenter } = useReactFlow();
-
-    const addNode = () => {
-        console.log('nodes', nodes)
-        const lastNode = nodes[nodes.length - 1];
-
-        // Verificar si hay nodos existentes
+    const addNode = (lastNode = false) => {
         let newX = 0
         let newY = 0
-
         let handles = {}
 
+
         if (lastNode) {
-            // console.error('No hay nodos existentes para conectar.');
             newY = lastNode.position.y;
-            newX = lastNode.position.x + lastNode.width + 400
+            newX = lastNode.position.x + lastNode.width + 100
 
             handles = {
                 top_connectedNodeIds: [lastNode.id],
                 bottom_connectedNodeIds: [],
             }
         }
-        console.log('lastNode', lastNode)
-        // const lastNode = document.querySelector(lastNodeSelector);
 
         const newNode = {
             id: uuidv4(),
@@ -383,7 +410,6 @@ const ButtonAdd = ({ setNodes, nodes, setEdges }) => {
 
         setNodes((prevNodes) => [...prevNodes, newNode]);
 
-        // Crear una nueva conexión (edge) entre el último nodo y el nuevo nodo
         if (lastNode) {
             const newEdge = {
                 id: uuidv4(),
@@ -393,26 +419,249 @@ const ButtonAdd = ({ setNodes, nodes, setEdges }) => {
 
             setEdges((prevEdges) => [...prevEdges, newEdge]);
         }
-
-        setTimeout(function(){
-            window.requestAnimationFrame(() => {
-                setCenter(newX + 100, newY + 100, { zoom: 1.8, duration: 500 })
-            })
-        }, 0)
-        // if (setCenter) {
-        //     console.log('setcenter', setCenter)
-        // }
-
-        // window.requestAnimationFrame(() => {
-        // })
     };
 
+
+    const value = {
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        selectedEdge,
+        setSelectedEdge,
+        addNode
+    };
+
+    const onDragStart = () => {
+        // Desactivar el arrastre en React Flow
+        return false;
+    };
+
+    // ----------------------------------------------------------
+    const handleGraphLoad = (reactFlowInstance) => {
+        console.log('===========================')
+        // Realiza el setCenter u otras acciones cuando el componente se carga (onLoad)
+        const centerX = 20;
+        const centerY = 20;
+
+        reactFlowInstance.setCenter(centerX, centerY, { zoom: 1.0, duration: 500 });
+    };
+
+
+    const reactFlowWrapper = useRef(null);
+
+
+
+    useEffect(() => {
+        if (reactFlowWrapper.current) {
+            setTimeout(function () {
+                setZoomInitial(true)
+            }, 100)
+        }
+    }, [reactFlowWrapper]);
+
+
+
+
+    return (
+        <GraphContext.Provider value={value}>
+            <div
+                ref={reactFlowWrapper}
+                style={{ width: '100%', height: 'calc(100vh - 55px)' }}
+            >
+                <ReactFlow
+                    nodes={nodes}
+                    edges={edges}
+                    fitView
+                    fitViewOptions={{
+                        maxZoom: 0.1
+                    }}
+                    // defaultZoom={4}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    edgeTypes={edgeTypes}
+                    nodeTypes={nodeTypes}
+                    onConnect={handleConnect}
+                    onDragStart={onDragStart}
+                >
+                    <div className={styles.buttons} style={{ top: '18px' }} >
+                        <button onClick={saveNode} >
+                            <ButtonSave />
+                        </button>
+                        <button >
+                            <ButtonAdd addNode={addNode} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
+                        <button >
+                            <ButtonTree />
+                        </button>
+                        <button style={{ marginLeft: 'auto' }}>
+                            <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
+                        <button>
+                            <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
+                    </div>
+
+                    <div className={styles.buttons} style={{ bottom: '22px' }}>
+                        <button>
+                            <ButtonPlus />
+                        </button>
+                        <button>
+                            <ButtonLess />
+                        </button>
+                        <button style={{ marginLeft: 'auto' }}>
+                            <ButtonMap setMiniMapVisible={setMiniMapVisible} />
+                        </button>
+                    </div>
+                    {miniMapVisible && (
+                        <MiniMap />
+                    )}
+                    {zoomInitial && (
+                        <ZoomInitial nodes={nodes} />
+                    )}
+                </ReactFlow>
+            </div>
+        </GraphContext.Provider>
+    );
+}
+
+
+
+
+
+
+
+
+const ZoomInitial = ({ nodes }) => {
+    const { fitView, setCenter } = useReactFlow();
+
+    useEffect(() => {
+        const waitForLoad = async () => {
+            if (fitView && setCenter) {
+                const lastNode = nodes[nodes.length - 1];
+
+                let newX = 0
+                let newY = 0
+
+                if (lastNode) {
+                    newY = lastNode.position.y;
+                    newX = lastNode.position.x + lastNode.width + 1
+                }
+
+                setCenter(newX - 200, newY + 100, { zoom: 0.6, duration: 500 });
+            }
+        };
+
+        waitForLoad();
+    }, [fitView, setCenter]);
+}
+
+
+
+
+
+
+
+const ButtonPlus = () => {
+    const { zoomIn } = useReactFlow();
+
+    const handleButtonPlus = () => {
+        zoomIn();
+    };
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleButtonPlus}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
+            </svg>
+            <span>
+                plus
+            </span>
+        </div>
+    )
+}
+
+
+
+const ButtonLess = () => {
+    const { zoomOut } = useReactFlow();
+
+    const handleButtonLess = () => {
+        zoomOut();
+    };
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleButtonLess}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14" />
+            </svg>
+            <span>
+                less
+            </span>
+        </div>
+    )
+}
+
+
+const ButtonMap = ({ setMiniMapVisible }) => {
+    const handleButtonMap = () => {
+        setMiniMapVisible((prevVisible) => !prevVisible);
+    }
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleButtonMap}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" clipRule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            </svg>
+
+            <span>
+                map
+            </span>
+        </div>
+    )
+}
+
+
+
+
+
+const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
+    const { fitView, setCenter } = useReactFlow();
+
+
+    const handleAddNode = async () => {
+        const lastNode = nodes[nodes.length - 1];
+        let newX = 0
+        let newY = 0
+
+        await addNode(lastNode)
+
+        if (lastNode) {
+            newY = lastNode.position.y;
+            newX = lastNode.position.x + lastNode.width + 100
+        }
+
+        setTimeout(function () {
+            window.requestAnimationFrame(() => {
+                setCenter(newX + 100, newY + 160, { zoom: 1.6, duration: 500 })
+            })
+        }, 100)
+    }
 
 
     return (
         <div
             className={styles.button}
-            onClick={() => addNode()}
+            onClick={() => handleAddNode()}
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
@@ -426,11 +675,52 @@ const ButtonAdd = ({ setNodes, nodes, setEdges }) => {
 
 
 
-
 const ButtonTree = ({ save = false }) => {
-    const handleClickTree = () => {
+    const [isLoading, setIsLoading] = useState(false)
 
-    }
+    const handleClickTree = async () => {
+        if (!isLoading) {
+            setIsLoading(true)
+
+            const messages = [{
+                role: 'user',
+                content: generatePromptTree('calders web')
+            }];
+
+            console.log('mess', messages);
+            let accumulatedText = '';
+
+            try {
+                const openai = await useOpenAI();
+                const resp = await openai.chat.completions.create({
+                    model: 'gpt-4',
+                    messages,
+                    // stream: true,
+                });
+
+
+                const response = resp.choices[0].message.content
+                console.log('response', response)
+
+                const json = parseChartString(response)
+                console.log('json', json)
+
+                json.nodes = json.nodes.map(node => ({
+                    ...node,
+                    type: 'selectorTemplate'
+                }));
+
+
+
+                setNodes((prevNodes) => [...prevNodes, ...json.nodes]);
+                setEdges((prevEdges) => [...prevEdges, ...json.edges]);
+
+                setIsLoading(false)
+            } catch (err) {
+                console.log('err', err);
+            }
+        }
+    };
 
     return (
         <div
@@ -447,10 +737,6 @@ const ButtonTree = ({ save = false }) => {
         </div>
     )
 }
-
-
-
-
 
 
 
@@ -485,16 +771,8 @@ const ButtonSave = ({ save = true }) => {
 
 // --------------------------------------------------------
 
-
-
-
 const elk = new ELK();
 
-// Elk has a *huge* amount of options to configure. To see everything you can
-// tweak check out:
-//
-// - https://www.eclipse.org/elk/reference/algorithms.html
-// - https://www.eclipse.org/elk/reference/options.html
 const elkOptions = {
     'elk.algorithm': 'layered',
     'elk.layered.spacing.nodeNodeBetweenLayers': '100',
@@ -538,7 +816,7 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
     const { fitView, setCenter } = useReactFlow();
 
 
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+    // const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
     const onLayout = useCallback(
         ({ direction, useInitialNodes = false }) => {
             const opts = { 'elk.direction': direction, ...elkOptions };

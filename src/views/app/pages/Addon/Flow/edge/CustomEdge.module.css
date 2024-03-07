@@ -18,3 +18,14 @@
         stroke: transparent !important;
     }
 }
+
+
+:global(.react-flow__handle-top){
+    position: absolute;
+    border-radius: 0px;
+    border: none;
+    top: -15px !important;
+    width: 200px;
+    left: 0px;
+    transform: none;
+}

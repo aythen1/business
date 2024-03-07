@@ -53,6 +53,8 @@ const AddonCustom = ({ addon }) => {
         description: addon?.description || '',
 
         components: addon?.components || [],
+        nodes: addon?.nodes || [],
+        edges: addon?.edges || [],
 
         isavailable: addon?.isavailable || false,
         ispublic: addon?.ispublic || false
@@ -100,6 +102,9 @@ const AddonCustom = ({ addon }) => {
                 href: state.href || '',
                 description: state.description || '',
                 tags: state.tags || [],
+
+                nodes: state.nodes || [],
+                edges: state.edges || [],
 
                 updatedAt: new Date(),
                 createdAt: new Date(),

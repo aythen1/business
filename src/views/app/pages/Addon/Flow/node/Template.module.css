@@ -190,8 +190,7 @@
       width: 18px;
     }
     &:hover {
-      background: var(--background);
-      border: 1px solid var(--border-color);
+      color: var(--color-primary-0);
     }
   }
 }
@@ -221,14 +220,15 @@
       cursor: pointer;
       border-radius: 6px;
       svg {
-        width: 14px;
+        width: 18px;
       }
       &:hover {
-        background: var(--background-secondary);
-        border: 1px solid var(--border-color);
-        svg {
-          color: var(--text-color-secondary);
-        }
+        color: var(--color-primary-0);
+      }
+    }
+    .addImage{
+      &:hover{
+        color: var(--color-primary-0);
       }
     }
   }
@@ -407,41 +407,9 @@
   }
 }
 
-/* position: relative; */
-.leftTop,
-.rightTop,
-.leftBottom,
-.rightBottom {
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  cursor: pointer;
-  z-index: 0;
-  &:hover {
-    box-shadow: 0px 0px 20px -4px #2d2d2d;
-    background: var(--background-secondary);
-  }
-}
-.leftTop {
-  top: 0px;
-  left: 0px;
-  border-bottom-right-radius: 16px;
-}
-.rightTop {
-  top: 0px;
-  right: 0px;
-  border-bottom-left-radius: 16px;
-}
-.leftBottom {
-  bottom: 0px;
-  left: 0px;
-  border-top-right-radius: 16px;
-}
-.rightBottom {
-  bottom: 0px;
-  right: 0px;
-  border-top-left-radius: 16px;
-}
+
+
+
 
 /**/
 .dropPhoto {

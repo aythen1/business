@@ -178,12 +178,18 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
 
 async function addVector(id, name, vector = [0, 0], data, relations) {
     // id base64
-    const { path0, path1 } = decodeVector(id)
-    const uri = 'data/vector/' + path0 + '/' + path1
+    const { path0, path1, path2 } = decodeVector(id)
+
+    let uri 
+    if(path2){
+        uri = 'data/vector/' + path0 + '/' + path1 + '/' + path2
+    } else {
+        uri = 'data/vector/' + path0 + '/' + path1
+    }
 
     let schema
-
-    if (path0 == 'chatbot' || path0 == 'addon' || path0 == 'ticket') {
+    if (path0 == 'chatbot' || path0 == 'ticket') {
+    // if (path0 == 'chatbot' || path0 == 'addon' || path0 == 'ticket') {
         schema = addRelationsToSchema(allSchemas['vectors'])
     } else {
         const schemaExists = allSchemas.hasOwnProperty(name);
@@ -306,9 +312,17 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
 
 
 async function updateVector(id, name, vector = [0, 0], data) {
-    const { path0, path1 } = decodeVector(id);
-    const uri = 'data/vector/' + path0 + '/' + path1;
+    const { path0, path1, path2 } = decodeVector(id);
 
+    let uri = ''
+    if(path2){
+        uri = 'data/vector/' + path0 + '/' + path1 + '/' + path2;
+    }else{
+        uri = 'data/vector/' + path0 + '/' + path1;
+    }
+
+    console.log('uriririri', uri)
+    
     try {
         let schema
 
@@ -524,28 +538,29 @@ const getGraphVector = async (uri, conditions, _vector) => {
 
 
 async function getVector(id, name, vector = [0, 0], conditions = []) {
-    const { path0, path1 } = decodeVector(id)
-    const uri = 'data/vector/' + path0 + '/' + path1
-
+    const { path0, path1, path2 } = decodeVector(id)
+    
+    let uri = ''
+    if(path2){
+        uri = 'data/vector/' + path0 + '/' + path1 + '/' + path2
+    }else{
+        uri = 'data/vector/' + path0 + '/' + path1
+    }
 
 
     // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
     const regex = /query\s*{\s*([\s\S]*?)\s*}/;
     if (regex.test(name)) {
-        console.log('=================', name)
         const resp = await getGraphVector(uri, name, vector)
         return resp
     }
 
-    console.log('uri', uri)
     try {
         const db = await lancedb.connect(uri)
         const tbl = await db.openTable(name)
 
-        console.log('13455')
         const searchQuery = generateSearchString(conditions);
 
-        console.log('searchQuery', searchQuery)
 
         if (searchQuery.error) {
             return searchQuery

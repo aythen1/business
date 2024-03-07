@@ -44,7 +44,7 @@ export const fetchAddon =
           }
         );
 
-        console.log('resp', resp)
+        // console.log('resp', resp)
 
         return resp.data;
       } catch (error) {
@@ -78,29 +78,81 @@ export const addAddon =
 
 
 
+
+
+
+
+// Codificar el objeto a Base64
+const encodeVector = (obj) => {
+  const encodedString = Object.entries(obj)
+    .map(([key, value]) => value)
+    .join('/');
+
+  return btoa(encodedString);
+};
+
+//
+export const iniVector = (obj) => {
+  return encodeVector(obj)
+}
+
+
+
+export const fetchsVectorAddon =
+  createAsyncThunk('vector/fetchsVector',
+    async ({ id, name }) => {
+      try {
+        const token = localStorage.getItem('token')
+
+        const res = await apiBackend.post(
+          `/addon/${id}/${name}`, {
+
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        }
+        )
+
+        return res.data
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    })
+
+
+
+
 export const addVectorAddon =
   createAsyncThunk('addon/addVectorAddon',
     async ({ addon, vector }, { dispatch }) => {
       try {
+        // console.log('eeee', addon, vector)
         const token = localStorage.getItem('token')
         const resp = await apiBackend.post(
           '/addon/vector',
-          { addon, vector },
           {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-          }
+            addon,
+            vector
+          }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        }
         );
 
         console.log('rrr', resp)
 
-        return resp.data[0];
+        return 'hello'
+        // return resp.data[0];
       } catch (error) {
+        console.log('errr', error)
         throw error;
       }
     }
   );
+
+
 
 
 
@@ -120,7 +172,9 @@ export const updateAddon =
           }
         );
 
-        return 'user';
+        // console.log('resp', resp)
+
+        return resp.data;
       } catch (error) {
         throw error;
       }
@@ -128,7 +182,7 @@ export const updateAddon =
   );
 
 
-  export const deleteAddon =
+export const deleteAddon =
   createAsyncThunk('addon/deleteAddon',
     async (addonId, { dispatch }) => {
       try {
@@ -184,7 +238,7 @@ export const visionAddon =
 
 export const codeAddon =
   createAsyncThunk('addon/codeAddon',
-    async ({components}, { dispatch }) => {
+    async ({ components }, { dispatch }) => {
       try {
         const token = localStorage.getItem('token')
         const tokenGPT = localStorage.getItem('token-gpt')
@@ -193,14 +247,14 @@ export const codeAddon =
 
         const resp = await apiBackend.post(
           '/addon/code',
-          { 
-            token: tokenGPT, 
-            components: arrComponents 
-          },{
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-          }
+          {
+            token: tokenGPT,
+            components: arrComponents
+          }, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+        }
         );
 
 
