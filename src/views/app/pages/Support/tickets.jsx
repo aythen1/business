@@ -48,7 +48,6 @@ const Tickets = () => {
         if(stateTable){
             if(stateTable.startsWith('view-ticket:')){
                 const id = stateTable.split(':')[1]
-                console.log('id', id)
                 navigate(`/es/app/support/ticket/${id}`)
             }
 
@@ -170,18 +169,12 @@ const Tickets = () => {
                         Customer
                     </item>
                 </Table>
-
             </div>
         </div>
     )
 }
 
 export default Tickets
-
-
-
-
-
 
 
 
@@ -219,11 +212,8 @@ const ComponentTable = (props) => {
 
 
 // -----------------------------------------------------------
-
 const PopupModalAddTicket = ({ styles, ticket }) => {
-
     const dispatch = useDispatch()
-
     const [isActive, setIsActive] = useState(false)
 
 
@@ -293,12 +283,7 @@ const PopupModalAddTicket = ({ styles, ticket }) => {
       setText(newText);
     };
   
-    // const characterLimit = 100; 
-  
     const usedCharacters = text.length;
-
-
-
 
     return (
         <div className={styles.modal}>

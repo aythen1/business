@@ -1,7 +1,5 @@
-// DragAndDrop.js
 import React, { useState, useEffect } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrag, useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -28,23 +26,15 @@ import {
 
 
 
-
-
-
-
 const Board = ({
 }) => {
-
   const dispatch = useDispatch()
-
-
-
 
   const [selectedComponent, setSelectedComponent] = useState(-1)
   const [listComponents, setListComponents] = useState([]);
   const [contextMenu, setContextMenu] = useState(null);
 
-  const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
+  // const { openMenuLeft, openMenuRight, openChatBot } = useSelector((state) => state.iam)
   const { dashboards, components } = useSelector((state) => state.dashboard)
 
 
@@ -58,13 +48,9 @@ const Board = ({
       console.log('d', selectedDashboard, dashboards)
 
       if (selectedDashboard) {
-        // Establecer el dashboard utilizando dispatch
         dispatch(setDashboard(selectedDashboard));
       }
     }
-
-
-    // setListDashboards(dashboards)
   }, [dashboards])
 
 
@@ -86,8 +72,6 @@ const Board = ({
 
   const handleItemClick = async (e, action) => {
     e.stopPropagation()
-    // Aquí puedes manejar las acciones específicas para cada botón
-    console.log('SelectedComponent', action)
     switch (action) {
       case 'new':
         dispatch(setOpenMenuRight('graph'))
@@ -125,36 +109,25 @@ const Board = ({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Cierra el menú contextual si se hace clic fuera de él
       if (contextMenu && !event.target.closest('.context-menu')) {
         handleCloseContextMenu();
       }
     };
 
-    // Agrega el manejador de eventos click al documento
     document.addEventListener('click', handleClickOutside);
 
-    // Limpia el manejador de eventos al desmontar el componente
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, [contextMenu]);
 
 
-  // --------------------------------------------------------------------
-
-
-
-  console.log('components', components)
-
   const _selectedComponent = (index) => {
-    // alert(1)
     dispatch(setOpenMenuLeft('graph'))
   }
 
 
   useEffect(() => {
-    // Cuando components cambia, actualiza el estado items
     const newComponents = components.map((component, index) => {
       return {
         id: index + 1,
@@ -182,7 +155,6 @@ const Board = ({
   const handleClickGraph = (e) => {
     e.stopPropagation()
     dispatch(setOpenMenuRight('graph'))
-    // setOpenChatBot(true)
   }
 
 
@@ -232,7 +204,6 @@ const Board = ({
           </div>
         </div>
       </DropTarget>
-
       {contextMenu && (
         <ContextMenu
           x={contextMenu.x}

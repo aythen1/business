@@ -7,7 +7,7 @@ export const useOpenAI = async () => {
 try{
     
       const config = {
-        apiKey: token, // This is the default and can be omitted
+        apiKey: token, 
         dangerouslyAllowBrowser: true 
       };
       return new OpenAI(config)

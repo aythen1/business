@@ -1,4 +1,4 @@
-import React, {useState, useEffect}from 'react'
+import React, {useState} from 'react'
 
 import styles from './AddTag.module.css'
 
@@ -12,9 +12,6 @@ const AddTag = ({handleInputChange}) => {
         setIsShow(!isShow)
     }
 
-   
-    // ---------- 
-    // const [tags, setTags] = useState([{ key: '', value: '' }]);
     const [tags, setTags] = useState([]);
 
     const handleAddTag = () => {
@@ -44,7 +41,6 @@ const AddTag = ({handleInputChange}) => {
     };
 
     const handleClickSaveAddTags = () => {
-        // setIsShow(true)
         handleInputChange(tags, 'tags');
         setIsShow(true)
     }
@@ -53,7 +49,6 @@ const AddTag = ({handleInputChange}) => {
         setTags([])
         handleInputChange(tags, 'tags');
         setIsShow(true)
-        // dispatch(saveAddTags)
     }
 
     return (
@@ -150,7 +145,6 @@ const AddTag = ({handleInputChange}) => {
                 </div>
             </div>
             )}
-
         </div>
     )
 }

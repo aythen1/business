@@ -1,11 +1,8 @@
-import React, { useMemo } from 'react';
-// import { useMemo } from 'react';
+import React from 'react';
 
 import styles from "./index.module.css";
-import * as Graphs from '@/views/graphs/render';  // Importar todos los componentes desde el archivo index.js
+import * as Graphs from '@/views/graphs/render';  
 import { useDrag } from 'react-dnd';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch } from 'react-redux';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -31,7 +28,7 @@ const DraggableGraph = ({ graphType, Component }) => {
   };
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'DRAGGABLE_ITEM',  // Especifica el tipo de elemento
+    type: 'DRAGGABLE_ITEM',  
     item: component,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
@@ -81,23 +78,6 @@ const MenuRightGraph = () => {
     'GaugeChart',
     'DonutChart',
     'BarChart',
-    
-
-    // "BarChartBorderRadius",
-    // "BubbleChart",
-    // "ComboBarLine",
-    // "DoughnutChart",
-    // "FloatingBarChart",
-    // "HorizontalBarChart",
-    // "LineChart",
-    // "LineStyling",
-    // "MultiSeriesPie",
-    // "PieChart",
-    // "PolarArea",
-    // "Radar",
-    // "ScatterChart",
-    // "StackedBarChart",
-    // "SteppedLineChart"
   ];
 
 

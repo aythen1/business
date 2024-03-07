@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
-// import LanceDB from "../../Agent/LanceDB";
 import styles from "./Data.module.css";
 
 const Data = ({ }) => {
   const [dbs, setDbs] = useState([])
 
-  // Simulated data (replace this with your actual data fetching logic)
   const fetchData = () => {
     const _dbs = [{
       image: 'image puppeter',
@@ -30,14 +27,12 @@ const Data = ({ }) => {
       size: '0KB'
     }];
 
-    // Set the data to the state
     setDbs(_dbs);
   };
 
-  // useEffect to fetch data when the component mounts
   useEffect(() => {
     fetchData();
-  }, []); // Empty dependency array ensures the effect runs only once
+  }, []); 
 
 
 
@@ -46,12 +41,9 @@ const Data = ({ }) => {
     return []
   }
 
- // State to hold the input value
  const [changeData, setChangeData] = useState('');
 
- // Event handler for input change
  const handleChangeData = (event) => {
-   // Update the state with the new input value
    setChangeData(event.target.value);
  };
 
@@ -63,7 +55,6 @@ const Data = ({ }) => {
 
       <div className={styles.container}>
         <div 
-          // onClick={() => handleAddLanceDB()}
           className={styles.box}
         >
           <div className={styles.new}>
@@ -82,9 +73,6 @@ const Data = ({ }) => {
             </div>
           </div>
         </div>
-
-        
-  
         {dbs.map( (db, index) => (
           <div className={styles.box}>
             <div className={styles.image}>

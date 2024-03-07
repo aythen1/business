@@ -24,18 +24,12 @@ import {
 export const MenuLeftUser = ({
 
 }) => {
-
-
   const { user } = useSelector((state) => state.iam);
   const dispatch = useDispatch()
 
-
-
-  // const [selectedAvatar, setSelectedAvatar] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`);
   const [inputValues, setInputValues] = useState();
 
   // address ---------------------
-
   useEffect(() => {
     try {
       const parsedAddress = JSON.parse(user.address || '{}');
@@ -63,7 +57,6 @@ export const MenuLeftUser = ({
 
 
     } catch (error) {
-      // Maneja el error si user.address no es una cadena JSON válida
       console.error('Error al analizar la dirección JSON:', error);
     }
   }, [user]);
@@ -166,11 +159,9 @@ export const MenuLeftUser = ({
 
 
 
-  // 
   // -------------------------------------z
   const imgRef = useRef(null);
   const [imageError, setImageError] = useState(false);
-  // const [imageLoadAttempted, setImageLoadAttempted] = useState(false);
   const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/iam/user/${user?.id}`)
 
 
@@ -197,7 +188,6 @@ export const MenuLeftUser = ({
         const scaledWidth = img.width * scaleFactor;
         const scaledHeight = img.height * scaleFactor;
 
-        // Crea un canvas para renderizar la imagen escalada
         const canvas = document.createElement('canvas');
         canvas.width = scaledWidth;
         canvas.height = scaledHeight;
@@ -205,9 +195,7 @@ export const MenuLeftUser = ({
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
-        // Obtiene el contenido base64 del canvas
         const base64Image = canvas.toDataURL('image/jpeg', 0.8);
-        // console.log('base62', base64Image)
         setImageSrc(base64Image)
         setImageError(false)
 
@@ -322,7 +310,6 @@ export const MenuLeftUser = ({
                 <div className={styles["input-content2"]}>
                   <div className={styles["frame-4"]}>
                     <SelectFlags isLeft="true" onSelectLanguage={handleSelectLanguage} />
-                    {/* <img className={styles["ng-1"]} src="ng-10.png" /> */}
                   </div>
                   <div className={styles["iconly-light-arrow-down-2"]}>
                     <div className={styles["iconly-light-arrow-down-22"]}>
@@ -433,7 +420,6 @@ export const MenuLeftUser = ({
                 <div className={styles["input-content2"]}>
                   <div className={styles["frame-4"]}>
                     <SelectFlags isExtension={true} onSelectLanguage={handleSelectLanguage} />
-                    {/* <img className={styles["ng-1"]} src="ng-10.png" /> */}
                   </div>
                   <div className={styles["iconly-light-arrow-down-2"]}>
                     <div className={styles["iconly-light-arrow-down-22"]}>

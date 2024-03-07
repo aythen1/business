@@ -13,7 +13,6 @@ import {
   initialPrompt,
   generateDefault,
 
-  generatePromptData,
   generatePromptGraph
 } from '../prompt';
 
@@ -24,18 +23,15 @@ import styles from './CustomGPT.module.css'
 function convertToCSV(data) {
   const csvRows = [];
 
-  // Agregar encabezados CSV
-  const header = Object.keys(data.data[0]); // Obtener las claves del primer objeto como encabezados
+  const header = Object.keys(data.data[0]);
   csvRows.push(header.join(','));
 
-  // Agregar datos CSV
   data.data.forEach(row => {
-    const values = header.map(key => row[key]); // Obtener los valores correspondientes a las claves
+    const values = header.map(key => row[key]);
     const csvRow = values.join(',');
     csvRows.push(csvRow);
   });
 
-  // Combinar filas en un string CSV
   const csvContent = csvRows.join('\n');
 
   return csvContent;
@@ -76,16 +72,11 @@ export default memo(({ id, data, isConnectable, }) => {
       }else{
         setTypeGraph(data.response.type)
         setDataGraph(data.response.data)
-        // setGptValue(data.response)
-
       }
     }
   }, [data])
 
 
-  // useEffect(() => {
-  //   setInputValue(data.prompt)
-  // }, [data])
 
 
   useEffect(() => {
@@ -115,8 +106,6 @@ export default memo(({ id, data, isConnectable, }) => {
   const handleReturnGPT = () => {
     setGptActive(false)
     setGptValue('')
-
-    // textareaRef.current.focus()
   }
 
 
@@ -176,13 +165,10 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   function transposeArrays(arrays) {
-    // Obtén la longitud máxima de los arrays
     const maxLength = Math.max(...arrays.map(arr => arr.length));
 
-    // Inicializa un array de arrays vacíos
     const result = Array.from({ length: maxLength }, () => []);
 
-    // Transpone los arrays
     for (const array of arrays) {
       array.forEach((value, index) => {
         result[index].push(value);
@@ -198,8 +184,6 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   const handleGPT = async ({ id, prompt = false, type = 'text' }) => {
-
-    console.log('handlegpt type', type)
     if (prompt) {
       const messages = [{
         role: 'user',
@@ -235,14 +219,11 @@ export default memo(({ id, data, isConnectable, }) => {
               });
             });
           }
-
-          // setGptValue(accumulatedText)
         }
 
 
         if(type == 'graph'){
           let accumulatedGraph = parseChartString(accumulatedText)
-          console.log('=============graph', accumulatedGraph)
           setNodes((prevNodes) => {
             return prevNodes.map((node) => {
               if (node.id === id) {
@@ -259,26 +240,6 @@ export default memo(({ id, data, isConnectable, }) => {
             });
           });
         }
-
-
-        // setNodes((prevNodes) => {
-        //   return prevNodes.map((node) => {
-        //     if (node.id === id) {
-        //       return {
-        //         ...node,
-        //         data: {
-        //           ...node.data,
-        //           value: prompt + '\n' + accumulatedText,
-        //         },
-        //       };
-        //     }
-        //     return node;
-        //   });
-        // });
-
-
-        
-
       } catch (err) {
         console.log('err', err)
       }
@@ -294,11 +255,9 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   const inputsGPT = async (inputs) => {
-    const data = {}
     const _data = inputs.sortedPaths.map(input => input[0]);
     const dataVectors = [...new Set(_data)];
 
-    console.log('dataVectors', dataVectors)
     for await (const vector of dataVectors) {
       const currentNode = nodes.find((node) => node.id === vector);
       if (currentNode) {
@@ -323,11 +282,7 @@ export default memo(({ id, data, isConnectable, }) => {
     }
 
 
-    // All values GPT
     const values = {}
-
-    // const inSortedPaths = transposeArrays(inputs.sortedPaths.map(arr => arr.slice(1)))
-    // console.log('inputs.sortedPaths', inputs.sortedPaths, inSortedPaths)
 
     // Bucle inputs detection nodeModule
     const inputsTransposed = transposeArrays(inputs.sortedPaths);
@@ -339,11 +294,9 @@ export default memo(({ id, data, isConnectable, }) => {
       const previousColumn = inputsTransposed[col - 1];
 
       for (let i = 0; i < currentColumn.length; i++) {
-
         const input = currentColumn[i];
         const inputBack = previousColumn ? previousColumn[i] : null;
 
-        // last undefined
         const currentNode = nodes.find((node) => node.id === input);
         let prompt = currentNode.data.prompt
 
@@ -351,33 +304,21 @@ export default memo(({ id, data, isConnectable, }) => {
         inputsExecute.push(input)
 
 
-        console.log('12345', input, inputs.nodeUnion[input])
-
-        // uniones
         if (inputs.nodeUnion[input]) {
-          console.log('inputs.nodeUnion[input]', inputs.nodeUnion[input]);
-
-          // Filtra los nodos de tipo 'selectorVector'
           const selectorVectorNodes = nodes.filter(node => node.type === 'selectorVector');
 
-          // Filtra los nodos de tipo 'selectorVector' presentes en nodeUnion[input]
           const selectorVectorInUnion = inputs.nodeUnion[input]
             .map(union => selectorVectorNodes.find(node => node.id === union))
             .filter(Boolean);
 
-          console.log('selectorVectorInUnion', selectorVectorInUnion)
           if (selectorVectorInUnion.length >= 2) {
-            console.log('eejwhfuwrufwufurhnu')
             const dataObj = []
             for await (const currentNode of selectorVectorInUnion) {
-              // Aquí irán los valores de cada selectorVector en nodeUnion[input]
-              // Realiza las operaciones necesarias
               dataObj.push(currentNode.data.value)
             }
             
             
             prompt = generatePromptGraph(dataObj, prompt)      
-            console.log('generatePromptGraph', prompt)
             const gptResponse = await handleGPT({
               id: input,
               prompt: prompt,
@@ -386,7 +327,6 @@ export default memo(({ id, data, isConnectable, }) => {
             
             continue;
           } else {
-            // No hay suficientes nodos de tipo 'selectorVector'
             console.log('No hay suficientes nodos de tipo selectorVector');
           }
         }
@@ -395,14 +335,10 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
         if (i == 1) {
-          // const dataObj = [inputBack].map(key => data[key] || []);
-          // prompt = initialPrompt(dataObj, prompt)
-
           const inputBackNodes = [inputBack].map((id) => nodes.find((node) => node.id === input));
           const dataObj = inputBackNodes.map((node) => node.data.value || "");
 
           prompt = initialPrompt(dataObj, prompt)
-          console.log('dataObj', prompt)
           const gptResponse = await handleGPT({
             id: input,
             prompt: prompt
@@ -410,7 +346,6 @@ export default memo(({ id, data, isConnectable, }) => {
 
         } else {
           const prevNode = nodes.find((node) => node.id === inputBack);
-          console.log('prevNode', prevNode)
           prompt = generateDefault(prevNode.data.value, prompt)
 
           const gptResponse = await handleGPT({
@@ -422,10 +357,6 @@ export default memo(({ id, data, isConnectable, }) => {
     }
 
   }
-
-
-
-
 
 
 
@@ -533,14 +464,12 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   // --------------------------------------------------------------------------
-
-
   const obtainOutputsPaths = async (startNodeId) => {
     const pathsReverse = [];
     const visited = new Set();
 
     const stack = [];
-    stack.push([startNodeId]); // Comienza con el startNodeId proporcionado en un camino
+    stack.push([startNodeId]); 
 
     while (stack.length > 0) {
       const currentPath = stack.pop();
@@ -554,10 +483,8 @@ export default memo(({ id, data, isConnectable, }) => {
       const originNodeIds = incomingEdges.map((edge) => edge.source);
 
       if (originNodeIds.length === 0) {
-        // Fin del camino, agrega al resultado invirtiendo el orden
         const reversedPath = currentPath.slice().reverse();
 
-        // Verifica si el camino contiene al menos un nodo "selectorVector" antes de agregarlo
         if (reversedPath.some(nodeId => nodes.find(node => node.id === nodeId)?.type === 'selectorVector')) {
           pathsReverse.push(reversedPath);
         }
@@ -567,14 +494,11 @@ export default memo(({ id, data, isConnectable, }) => {
         if (!visited.has(originNodeId)) {
           const newPath = [...currentPath, originNodeId];
 
-          // Obtén el tipo del nodo actual
           const currentNodeType = nodes.find((node) => node.id === originNodeId)?.type;
 
-          // Si encuentras un nodo de tipo "selectorVector", agrega este camino al resultado
           if (currentNodeType === 'selectorVector') {
             const reversedPath = newPath.slice().reverse();
 
-            // Verifica nuevamente antes de agregar el camino si contiene al menos un nodo "selectorVector"
             if (reversedPath.some(nodeId => nodes.find(node => node.id === nodeId)?.type === 'selectorVector')) {
               pathsReverse.push(reversedPath);
             }
@@ -595,7 +519,7 @@ export default memo(({ id, data, isConnectable, }) => {
     const visited = new Set();
 
     const stack = [];
-    stack.push([startNodeId]); // Comienza con el startNodeId proporcionado en un camino
+    stack.push([startNodeId]); 
 
     while (stack.length > 0) {
       const currentPath = stack.pop();
@@ -609,29 +533,19 @@ export default memo(({ id, data, isConnectable, }) => {
       const originNodeIds = incomingEdges.map((edge) => edge.target);
 
       if (originNodeIds.length === 0) {
-        // Fin del camino, agrega al resultado invirtiendo el orden
         const reversedPath = currentPath.slice().reverse();
 
-        // Verifica si el camino contiene al menos un nodo "selectorVector" antes de agregarlo
         if (reversedPath.some(nodeId => nodes.find(node => node.id === nodeId)?.type === 'selectorVector')) {
           pathsReverse.push(reversedPath);
         }
       }
 
-      // console.log('originNodeIds', originNodeIds)
-
       for (const originNodeId of originNodeIds) {
         if (!visited.has(originNodeId)) {
           const newPath = [...currentPath, originNodeId];
-
-          // Obtén el tipo del nodo actual
           const currentNode = nodes.find((node) => node.id === originNodeId);
-          console.log('currentNodeType', currentNode.type)
 
-
-          // Verifica si es un nodo de tipo "selectorGPT" y su prompt está vacío o tiene menos de 10 caracteres
           if (currentNode.type === 'selectorGPT' && (!currentNode.data.prompt || currentNode.data.prompt.length < 10)) {
-            // Agrega el nodo al setNodes con el id y al error con el mensaje correspondiente
             const errorMessage = currentNode.data.prompt ? 'Prompt too short' : 'Prompt not found';
             setNodes((prevNodes) => {
               return prevNodes.map((node) => {
@@ -647,20 +561,15 @@ export default memo(({ id, data, isConnectable, }) => {
                 return node;
               });
             });
-            return []; // Devuelve false para no agregar al pathsReverse
+            return []; 
           }
 
-
-
-          // Resto de tu lógica aquí
           const reversedPath = newPath.slice().reverse();
           if (reversedPath.some(nodeId => nodes.find(node => node.id === nodeId)?.type === 'selectorVector')) {
             pathsReverse.push(reversedPath);
           } else {
             stack.push(newPath);
           }
-
-
         }
       }
     }
@@ -679,11 +588,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   const handleGenerateGPT = async () => {
     setIsError(false)
-    // setGptActive(true)
-    // const sourceId = handles.top_connectedNodeIds[0]
     const sourceId = id
-    // const sourceNode = nodes.find((node) => node.id === sourceId).data;
-
 
     const allOutputsPaths = await obtainOutputsPaths(sourceId);
     const allInputsPaths = await obtainInputsPaths(sourceId);
@@ -706,23 +611,12 @@ export default memo(({ id, data, isConnectable, }) => {
       console.log('inputsParts', inputsParts)
       await inputsGPT(inputsParts)
     }
-
-    // allOutputsPaths.forEach(path => insertOutputsPaths(path));
-
   };
 
 
 
-  // console.log('1112accumulatedText', accumulatedText)
-  // accumulatedText = parseChartString(accumulatedText)
-  // console.log('accumulatedText', accumulatedText)
-
-  // setTypeGraph(accumulatedText.type)
-  // setDataGraph(accumulatedText.data)
-
 
   // ------------------------------------------------------------ 
-
   const handleDuplicate = () => {
     setIsContextMenuOpen(false)
 

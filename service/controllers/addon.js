@@ -4,7 +4,6 @@ const { ClientError } = require('../utils/err/errors')
 
 const fs = require('fs').promises
 const path = require('path')
-// const crypto = require('crypto');
 
 
 const {
@@ -41,17 +40,14 @@ const encodeVector = (id) => {
 
 async function getFolderFromDirectory(directory) {
   try {
-    // Read the elements in the directory
     const elements = await fs.readdir(directory);
 
-    // Filter only folders with the .lance extension
     const folders = await Promise.all(
       elements.map(async (element) => {
         const fullPath = path.join(directory, element);
         const stats = await fs.stat(fullPath);
 
         if (stats.isDirectory() && element.endsWith('.lance')) {
-          // Remove the .lance extension and add the name to the list
           return element.slice(0, -('.lance'.length));
         }
 
@@ -59,7 +55,6 @@ async function getFolderFromDirectory(directory) {
       })
     );
 
-    // Filter out non-null folders and return the resulting array
     return folders.filter((folder) => folder !== null);
   } catch (error) {
     console.error('Error retrieving folder names:', error);
@@ -119,7 +114,6 @@ const fetchAddon = async (req, res) => {
       if (respVector.length !== 0) {
         vectors.push(respVector[0])
       }
-      // console.log('rrrs', vectors)
     }
 
 
@@ -157,13 +151,8 @@ const addAddon = async (req, res) => {
     const { user } = req
     const { addon } = req.body
     const path = encodeVector(ID)
-    // const result = await isAuth(token)
-
-    console.log('addndhufuf', addon)
 
     const resp = await updateVector(path, 'addons', [0, 0], addon, { users: user })
-
-    console.log('resp', resp)
 
     return res.status(200).send(resp)
 
@@ -180,19 +169,12 @@ const getVectorAddon = async (req, res) => {
   console.log('path', id, name)
   try {
     const query = await getVector(id, name, [0, 0])
-    // const query = await getVector(id, name, [0, 0])
-    // console.log('query', query)
     if (!query.length) {
-      // response(res, 200, { data: [] })
       return res.status(200).send([])
     }
 
-
     return res.status(200).send(query)
-
-
   } catch (err) {
-    // response(res, 200, { data: [] })
     return res.status(200).send([])
   }
 }
@@ -203,24 +185,14 @@ const getVectorAddon = async (req, res) => {
 const addVectorAddon = async (req, res) => {
   try {
     const { addon, vector } = req.body
-
-    // console.log('=====', addon, vector)
-    // console.log(`addon/${addon.id}/${vector.id}`)
-
-
-    // console.log('==============', addon, vector)
-    // const path = encodeVector(`addon/${addon.id}/${vector.id}`)
+    
     const path = encodeVector(`addon/${addon.id}/${vector.id}`)
-    // const name = vector.title || 'default'
-    // const result = await isAuth(token)
-
     const resp = await updateVector(path, 'templates', [0, 0], vector, { addons: addon })
 
     if (resp.error) {
       return res.status(500).send('Error GPT')
     }
 
-    // console.log('reess', resp)
     return res.status(200).send(resp)
 
   } catch (err) {
@@ -251,14 +223,10 @@ const updateAddon = async (req, res) => {
 
 
 // -------------------------------------------------------------------------------------------------
-
-
 const visionAddon = async (req, res) => {
   try {
     const { addon } = req.body
     const path = encodeVector(ID)
-
-    console.log('wuijduwjiduwjeji')
 
     const resp = await updateVector(path, 'addons', [0, 0], addon)
 
@@ -276,11 +244,7 @@ const codeAddon = async (req, res) => {
     const { token, components } = req.body
     const path = encodeVector(ID)
 
-    console.log('components', components)
-
     const resp = await addonGPT(token, components)
-    // const resp = await updateVector(path, 'addons', [0, 0], addon)
-    // const resp = []
 
 
     return res.status(200).send(resp)
@@ -296,7 +260,6 @@ const rpaAddon = async (req, res) => {
     const { addon } = req.body
     const path = encodeVector(ID)
 
-    console.log('wuijduwjiduwjeji')
 
     const resp = await updateVector(path, 'addons', [0, 0], addon)
 

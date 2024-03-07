@@ -7,7 +7,7 @@ import {
   convertToMegabytes,
   calculateFolderSize,
 } from "../../assetsAux";
-import { getRootDirectories } from "@/actions/assets";
+import { getRootDirectories, getDirectoriesVersions } from "@/actions/assets";
 import Trash from "../trash/trash";
 
 export const FilesContainer = ({ setIsNew }) => {
@@ -15,26 +15,34 @@ export const FilesContainer = ({ setIsNew }) => {
   const driveId = "1234";
 
   // Asume que el estado de Redux ya tiene una lista de todos los archivos
-  const { directoriesData, category } = useSelector((state) => state.assets);
+  const { directoriesTrash, category } = useSelector((state) => state.assets);
   const [filteredFiles, setFilteredFiles] = useState([]);
   const [sortOrder, setSortOrder] = useState({ name: "", order: "" });
 
   // Este efecto se dispara solo una vez, para cargar los directorios iniciales
   useEffect(() => {
-    dispatch(getRootDirectories({ Prefix: driveId }));
+    // dispatch(getRootDirectories({ Prefix: driveId }));
+    dispatch(getDirectoriesVersions({ Prefix: driveId }));
   }, [dispatch, driveId]);
 
   // Este efecto se encarga de filtrar los archivos cada vez que cambian
   // los archivos en Redux o la categoría seleccionada
   useEffect(() => {
-    let sortedFilteredFiles = filterFilesByCategory(directoriesData, category);
+    let sortedFilteredFiles = filterFilesByCategory(directoriesTrash, category);
     sortedFilteredFiles = sortFiles(sortedFilteredFiles, sortOrder);
-    console.log({ sortedFilteredFiles });
     setFilteredFiles(sortedFilteredFiles);
-  }, [directoriesData, category, sortOrder]);
+  }, [directoriesTrash, category, sortOrder]);
 
   return category === "trash" ? (
-    <Trash driveId={driveId} />
+    <Trash
+      categoryFiles={filteredFiles}
+      setFilteredFilesContainer={setFilteredFiles}
+      directoriesTrash={directoriesTrash}
+      driveId={driveId}
+      setIsNew={setIsNew}
+      setSortOrder={setSortOrder}
+      sortOrder={sortOrder}
+    />
   ) : (
     <MyFiles
       categoryFiles={filteredFiles}
@@ -42,45 +50,57 @@ export const FilesContainer = ({ setIsNew }) => {
       setIsNew={setIsNew}
       setSortOrder={setSortOrder}
       sortOrder={sortOrder}
+      setFilteredFilesContainer={setFilteredFiles}
     />
   );
 };
 
 // Función para filtrar archivos por categoría
-const filterFilesByCategory = (files, category) => {
+const filterFilesByCategory = (directoriesTrash, category) => {
   // Aquí va la lógica de filtrado basada en la categoría
   // Esto dependerá de cómo estén estructurados tus datos y qué significa cada categoría
   // Por ejemplo, esto es un pseudocódigo:
+  const { Versions, DeleteMarkers } = directoriesTrash;
+
   switch (category) {
     case "document":
-      return files;
+      return Versions;
     case "addon":
-      return files.filter((file) => {
+      return Versions.filter((file) => {
         const folderName = file.Key.split("/").filter(Boolean).pop();
-        console.log("folderName", folderName);
         // Verifica si folderName termina en '.png'
         return folderName.toLowerCase().endsWith(".ay");
       });
 
     case "dashboard":
-      return files.filter((file) => file.isShared);
+      return Versions.filter((file) => file.isShared);
     case "priority":
-      return files.filter((file) => file.isPriority);
+      return Versions.filter((file) => {
+        const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+        const isPriority = originalFolderName.includes("Priority.")
+          ? true
+          : false;
+        return isPriority;
+      });
+    case "featured":
+      return Versions.filter((file) => {
+        const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+        const isMarker = originalFolderName.includes("Marker.") ? true : false;
+        return isMarker;
+      });
     case "shared":
-      return files.filter((file) => file.isShared);
+      return Versions.filter((file) => file.isShared);
     case "recent":
-      return getFilesInDescendingOrder(files).filter((file) =>
+      return getFilesInDescendingOrder(Versions).filter((file) =>
         regexExtensiones.test(file.Key.split("/").filter(Boolean).pop())
       );
-    case "featured":
-      return files.filter((file) => file.isShared);
     case "glaciar":
-      return files.filter((file) => file.isShared);
+      return Versions.filter((file) => file.isShared);
     case "trash":
-      return files.filter((file) => file.isShared);
+      return DeleteMarkers;
     // Añade más casos según tus categorías
     default:
-      return files; // Por defecto, devuelve todos los archivos si no hay filtro
+      return Versions; // Por defecto, devuelve todos los archivos si no hay filtro
   }
 };
 
@@ -94,24 +114,27 @@ const sortFiles = (files, sortOrder) => {
       ? convertToMegabytes(file.Size)
       : convertToMegabytes(calculateFolderSize(file.Key, sortedFiles));
   };
+  const sortedFilteredFiles = sortedFiles.filter(
+    (file) => file.IsLatest === true
+  );
   switch (sortOrder.name) {
     case "Name":
-      sortedFiles.sort((a, b) =>
+      sortedFilteredFiles.sort((a, b) =>
         sortOrder.order === "asc"
           ? a.Key.localeCompare(b.Key)
           : b.Key.localeCompare(a.Key)
       );
       break;
     case "Size":
-      sortedFiles.sort((a, b) => {
-        const aSize = getSizeInMegabytes(a, sortedFiles);
-        const bSize = getSizeInMegabytes(b, sortedFiles);
+      sortedFilteredFiles.sort((a, b) => {
+        const aSize = getSizeInMegabytes(a, sortedFilteredFiles);
+        const bSize = getSizeInMegabytes(b, sortedFilteredFiles);
         // No es necesario loguear cada vez, pero si deseas hacerlo para depuración, puedes hacerlo fuera de esta función
         return sortOrder.order === "asc" ? aSize - bSize : bSize - aSize;
       });
       break;
     case "Last modified":
-      sortedFiles.sort((a, b) =>
+      sortedFilteredFiles.sort((a, b) =>
         sortOrder.order === "asc"
           ? new Date(b.LastModified) - new Date(a.LastModified)
           : new Date(a.LastModified) - new Date(b.LastModified)
@@ -119,7 +142,7 @@ const sortFiles = (files, sortOrder) => {
       break;
     case "Last modified by me":
       // Asume que tienes una forma de determinar 'LastModifiedByMe'
-      sortedFiles.sort((a, b) =>
+      sortedFilteredFiles.sort((a, b) =>
         sortOrder.order === "asc"
           ? new Date(a.LastModifiedByMe) - new Date(b.LastModifiedByMe)
           : new Date(b.LastModifiedByMe) - new Date(a.LastModifiedByMe)
@@ -127,7 +150,7 @@ const sortFiles = (files, sortOrder) => {
       break;
     case "Last opened by me":
       // Asume que tienes una forma de determinar 'LastOpenedByMe'
-      sortedFiles.sort((a, b) =>
+      sortedFilteredFiles.sort((a, b) =>
         sortOrder.order === "asc"
           ? new Date(a.LastOpenedByMe) - new Date(b.LastOpenedByMe)
           : new Date(b.LastOpenedByMe) - new Date(a.LastOpenedByMe)
@@ -138,5 +161,5 @@ const sortFiles = (files, sortOrder) => {
       break;
   }
 
-  return sortedFiles; // Retorna el array ordenado (o no, dependiendo del caso)
+  return sortedFilteredFiles; // Retorna el array ordenado (o no, dependiendo del caso)
 };

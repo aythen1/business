@@ -1,27 +1,15 @@
-// import Recorder from 'recorder-js'
 import React, { useState, useEffect } from 'react'
-
 import styles from './microphone.module.css'
-//
 
 const Microphone = ({ loadRecordVector }) => {
-  // record voice
-  //   const [recorder, setRecorder] = useState(null)
   const [record, setRecord] = useState(false)
-//   const [audioContext, setAudioContext] = useState(null)
-//   const [analyser, setAnalyser] = useState(null)
 
   const [mediaRecorder, setMediaRecorder] = useState(null)
   const [audioChunks, setAudioChunks] = useState([])
   const [volumeArray, setVolumeArray] = useState([])
-  //   const [isRecording, setIsRecording] = useState(false)
 
   const [recordPlay, setRecordPlay] = useState(false)
-  //   const [paused, setPaused] = useState(false)
   const [totalTime, setTotalTime] = useState(0)
-
-  // Nuevo estado para el valor máximo observado
-//   const [maxAmplitude, setMaxAmplitude] = useState(0)
 
   const [intervalId0, setIntervalId0] = useState(null)
   const [intervalId1, setIntervalId1] = useState(null)
@@ -41,9 +29,6 @@ const Microphone = ({ loadRecordVector }) => {
       analyser.fftSize = 256
       analyser.smoothingTimeConstant = 0.3
 
-    //   setAudioContext(audioContext)
-    //   setAnalyser(analyser)
-
       const mediaRecorder = new MediaRecorder(stream)
 
       mediaRecorder.ondataavailable = (event) => {
@@ -53,16 +38,11 @@ const Microphone = ({ loadRecordVector }) => {
       }
 
       mediaRecorder.onstop = () => {
-        // Aquí puedes realizar acciones adicionales después de detener la grabación si es necesario
         console.log('Grabación completada', audioChunks)
 
-        // Concatenar todos los fragmentos en un solo Blob
         const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
-
-        // Crear una URL del Blob
         const audioUrl = URL.createObjectURL(audioBlob)
 
-        // Puedes usar 'audioUrl' para reproducir el audio, enviarlo al servidor, etc.
         console.log('URL del audio:', audioUrl)
       }
 
@@ -73,24 +53,19 @@ const Microphone = ({ loadRecordVector }) => {
       const updateVolume = () => {
         analyser.getByteFrequencyData(dataArray)
 
-        // Tomar un conjunto específico de frecuencias que representen el rango de volumen deseado
-        const startFrequency = 20 // Puedes ajustar estos valores según sea necesario
+        const startFrequency = 20 
         const endFrequency = 2000
 
-        // Calcular el volumen promedio en el rango de frecuencias
         const relevantData = dataArray.slice(
           (startFrequency * analyser.fftSize) / audioContext.sampleRate,
           (endFrequency * analyser.fftSize) / audioContext.sampleRate
         )
 
-        // Calcular la suma de amplitudes en lugar de promedio
         const sumAmplitude = relevantData.reduce((sum, value) => sum + value, 0)
 
-        // Normalizar el valor a un rango de 0 a 100
         const normalizedVolume =
           (sumAmplitude / (255 * relevantData.length)) * 100
 
-        // console.log('Volumen actual:', normalizedVolume)
         setVolumeArray((prevVolumeArray) => [
           ...prevVolumeArray,
           normalizedVolume
@@ -109,8 +84,8 @@ const Microphone = ({ loadRecordVector }) => {
         }
       }, 300)
 
-      setIntervalId0(intervalId0) // Guarda el intervalId0 en el estado
-      setIntervalId1(intervalId1) // Guarda el intervalId1 en el estado
+      setIntervalId0(intervalId0) 
+      setIntervalId1(intervalId1) 
 
       return () => {
         clearInterval(intervalId0)
@@ -130,22 +105,8 @@ const Microphone = ({ loadRecordVector }) => {
     }
   }, [recordPlay])
 
-  //   useEffect(() => {
-  //     // Actualizar el contador de tiempo cada segundo
-  //     const intervalId = setInterval(() => {
-  //       if (recordPlay) {
-  //         setTotalTime((prevTime) => prevTime + 1)
-  //       }
-  //     }, 1000)
-
-  //     return () => clearInterval(intervalId)
-  //   }, [recordPlay])
-
+ 
   const recordStart = () => {
-    // if (!mediaRecorder) {
-    //     initializeAudio(); // Inicializar el micrófono si aún no está inicializado
-    //   }
-
     if (mediaRecorder) {
       setAudioChunks([])
       setVolumeArray([])
@@ -155,16 +116,10 @@ const Microphone = ({ loadRecordVector }) => {
       setRecord(true)
       setRecordPlay(true)
 
-      // Actualizar cada segundo
-      //   const intervalId = setInterval(() => {
-      //     analyzeVolume()
-      //   }, 1000)
-
-      // Detener la grabación después de cierto tiempo (ajusta según tus necesidades)
+   
       setTimeout(() => {
         recordEnd()
-        // clearInterval(intervalId)
-      }, 1000000) // Detener después de 1000 segundos (ajusta según tus necesidades)
+      }, 1000000) 
     }
   }
 
@@ -173,43 +128,22 @@ const Microphone = ({ loadRecordVector }) => {
       mediaRecorder.stop()
       setRecord(false)
       setTotalTime(0)
-
-    //   const audioBlob = new Blob(audioChunks, { type: 'audio/wav' })
-
-    //   const isoTime = new Date().toISOString()
-    //   const formattedTime = isoTime.replace(/\.\d{3}Z$/, '')
-    //   const fileName = `record-${formattedTime}.wav`
-
-    //   const arrayBuffer = await audioBlob.arrayBuffer()
-    //   const formData = new FormData()
-    //   formData.append(
-    //     'image',
-    //     new Blob([arrayBuffer], { type: 'audio/wav' }),
-    //     fileName
-    //   )
-
-    //   console.log('acc', audioChunks)
-    //   loadRecordVector(formData, volumeArray)
     }
   }
 
   const recordPause = () => {
-    // Puedes implementar la pausa deteniendo la grabación y manteniendo los datos existentes
     console.log('interval 1')
 
-    // clearInterval(intervalId1)
     mediaRecorder.stop()
     setRecordPlay(false)
   }
 
   const recordRestart = () => {
-    // Puedes implementar la reanudación iniciando una nueva grabación
     mediaRecorder.start()
     setRecordPlay(true)
   }
 
   const recordDelete = () => {
-    // Puedes implementar la reanudación iniciando una nueva grabación
     mediaRecorder.stop()
     setRecordPlay(false)
     setRecord(false)
@@ -308,7 +242,7 @@ const Microphone = ({ loadRecordVector }) => {
                       key={index}
                       className={styles.splot}
                       style={{
-                        height: `${volume || 1}%` // Asegurar que tenga al menos 1% para ser visible
+                        height: `${volume || 1}%` 
                       }}
                     ></div>
                   ))}
@@ -338,7 +272,7 @@ const Microphone = ({ loadRecordVector }) => {
                       key={index}
                       className={styles.splot}
                       style={{
-                        height: `${volume || 1}%` // Asegurar que tenga al menos 1% para ser visible
+                        height: `${volume || 1}%` 
                       }}
                     ></div>
                   ))}

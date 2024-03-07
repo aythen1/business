@@ -7,7 +7,6 @@ import styles from './index.module.css'
 
 import IconLogo from './assets/IconLogo'
 
-// import { login } from './auth';
 
 import { useTranslation } from 'react-i18next';
 import useDarkMode from 'use-dark-mode';
@@ -42,7 +41,6 @@ const Login = ({ onLogin }) => {
   });
 
   const [themeMode, setThemeMode] = useState(() => {
-    // Intentar obtener el modo desde localStorage al cargar la aplicación
     const storedMode = localStorage.getItem('darkMode');
 
     return storedMode ? storedMode : 'light';
@@ -54,19 +52,15 @@ const Login = ({ onLogin }) => {
     } else {
       darkMode.disable()
     }
-    // darkMode.toggle();
   }, [themeMode])
 
 
-  // Obtener la URL actual
   // ------------------------------
   const url = new URL(window.location.href);
   const urlToken = url.searchParams.get('token');
 
   useEffect(() => {
-
     if (urlToken) {
-      // Si el token existe, puedes enviarlo a la lógica de verificación
       dispatch(confirm({ token: urlToken }));
     }
   }, [urlToken])
@@ -83,10 +77,10 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPasswords] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
-  //Evento para darle click enter
+
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleLogin(); // Llama a la función de login cuando se presiona Enter
+      handleLogin(); 
     }
   };
 
@@ -104,7 +98,7 @@ const Login = ({ onLogin }) => {
       setErrorMessage("Invalid credentials");
       return;
     }
-    // Realizar redirección a la ruta /app
+
     dispatch(login({ user: username, password }))
   };
 
@@ -327,20 +321,11 @@ const Login = ({ onLogin }) => {
             LOGIN
           </div>
         </div>
-
-
-        {/* {error && (
-        <div>
-          {error}
-        </div>
-        )} */}
-
         <div className={styles["frame-1547755080"]}>
           <div className={styles["don-t-have-an-account"]}>Don’t have an account? </div>
           <div
-            onClick={() => handleSignUp()}
-
             className={styles["sign-up"]}
+            onClick={() => handleSignUp()}
           >
             Sign up
           </div>

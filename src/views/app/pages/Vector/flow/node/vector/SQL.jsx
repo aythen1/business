@@ -1,13 +1,10 @@
-import React, { memo } from "react";
-import { Handle } from "reactflow";
-
-
+import React from "react";
 
 import { useState } from 'react';
 import { QueryBuilderDnD } from '@react-querybuilder/dnd';
 import * as ReactDnD from 'react-dnd';
 import * as ReactDndHtml5Backend from 'react-dnd-html5-backend';
-// import type { RuleGroupType } from 'react-querybuilder';
+
 import { QueryBuilder } from 'react-querybuilder';
 import { fields } from './fields';
 import 'react-querybuilder/dist/query-builder.css';

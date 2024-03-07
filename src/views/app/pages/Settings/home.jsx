@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-// import { useHistory } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
 
 
 import 'intro.js/introjs.css';
-import { Steps, Hints } from 'intro.js-react';
+import { Steps } from 'intro.js-react';
 
-
-// import stylesModal from './iam/modal.module.css'
 import styles from './home.module.css'
 
 import ModalAddon from '../Addon/Vector'
 import DashBoard from '../DashBoard'
 
 import BackgroundBanner from './assets/backgroundBanner.jsx'
-import IconDNS from './assets/IconDNS.svg'
 import ChangelogKubernetes from './assets/changelogKubernetes.webp'
 
 import IconInstance from './assets/IconInstance'
@@ -35,22 +31,17 @@ import {
 } from '@/slices/iamSlice'
 
 import {
-    fetchsAddon,
-    addAddon,
-    deleteAddon,
+    fetchsAddon
 } from '@/actions/addon'
 
 import {
     setAddon
 } from '@/slices/addonSlice'
 
-// import {
-//     fetchsDashboard
-// } from '@/actions/dashboard'
+
 
 import {
     iniVector,
-    addVector,
     fetchsVector,
 } from '@/actions/vector'
 
@@ -71,7 +62,6 @@ const Home = ({
 
     const {
         user,
-        dashboards,
         changelogs,
         news
     } = useSelector((state) => state.iam)
@@ -79,29 +69,6 @@ const Home = ({
     const {
         vectors,
     } = useSelector((state) => state.vector)
-
-    const [stateTable, setStateTable] = useState('')
-
-
-    useEffect(() => {
-        // console.log('click dashboard', stateTable)
-        // if(stateTable.startsWith('edit-item:')){
-        //   const id = stateTable.split(':')[1]
-        //   const index = users.findIndex(user => user.id === id);
-        //   const user = users[index]
-        //   console.log('user', user)
-
-        //   dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
-        // }else if(stateTable.startsWith('delete-item:')){
-        //   const id = stateTable.split(':')[1]
-        //   const token = localStorage.getItem('token')
-        //   dispatch(deleteUser({token, id}))
-        // }
-    }, [stateTable])
-
-
-
-
 
     const [organization, setOrganization] = useState({
         title: 'Tu interfaz de ojos para tu tienda',
@@ -123,7 +90,6 @@ const Home = ({
 
 
     const handleClickAddon = async (item) => {
-        // console.log('handleClickAddon', item)
         await dispatch(setAddon(item))
         navigate(`/${'es'}/app/addon/${item.id}`)
     }
@@ -147,7 +113,6 @@ const Home = ({
         setFilteredAddons(listAddons.slice(startIndex, endIndex));
     }, [pageAddons, listAddons]);
 
-    // Nuevo useEffect para reflejar cambios en addons
     useEffect(() => {
         setListAddons(addons);
     }, [addons]);
@@ -167,7 +132,6 @@ const Home = ({
 
 
     // ------------------------------------------
-
     const [indexChangelog, setIndexChangelog] = useState(0)
     const [itemChangelog, setItemChangelog] = useState([])
     const [listChangelogs, setListChangelogs] = useState([])
@@ -209,16 +173,13 @@ const Home = ({
 
 
     // --------------------------------
-
     const handleClickBank = () => {
         navigate('/es/app/settings/bank')
     }
 
-
     const handleClickIAM = () => {
         navigate('/es/app/iam')
     }
-
 
     const handleToggleChangeLog = (type) => {
         switch (type) {
@@ -239,8 +200,6 @@ const Home = ({
     }
 
 
-
-
     // -------------------------------------
     const handleClickFirstAddon = () => {
         if (filteredAddons.length > 0) {
@@ -248,21 +207,14 @@ const Home = ({
         }
     }
 
-
-
-    // ---------------------- intro
-    // Define el conjunto de pasos
     const steps = [
         { element: '#step1', intro: 'Paso 1' },
         { element: '#step2', intro: 'Paso 2' },
-        // ... otros pasos
     ];
 
-    // Otras variables necesarias
     const stepsEnabled = false;
     const initialStep = 0;
 
-    // Función que se ejecutará al salir de la introducción
     const onExit = () => {
         // Lógica que se ejecutará al salir de la introducción
     };
@@ -354,7 +306,6 @@ const Home = ({
                         ))}
                     </div>
                     <BackgroundBanner className={styles["backgroundBanner"]} />
-                    {/* <img  src={BackgroundBanner} /> */}
                 </div>
             </div>
             <div className={styles["gird2"]}>

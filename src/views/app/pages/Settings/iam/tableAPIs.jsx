@@ -9,7 +9,6 @@ import styles from './index.module.css'
 import stylesModal from './modal.module.css'
 
 
-
 import {
   addApi,
   deleteApi,
@@ -27,8 +26,6 @@ const TableAPIs = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // const { apis } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
 

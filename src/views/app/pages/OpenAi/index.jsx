@@ -5,14 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./index.module.css";
 
 
-// import IconSearch from 
 import { ReactComponent as IconSearch } from './assets/IconSearch.svg'
-
-// import {
-//   listGPT,
-//   listTools
-// } from './utilsGPT'
-
 
 import {
   updateDefault,
@@ -20,7 +13,6 @@ import {
 } from '@/actions/iam'
 
 const OpenAI = ({ }) => {
-
   const dispatch = useDispatch()
 
   const {
@@ -35,7 +27,6 @@ const OpenAI = ({ }) => {
   function getRandomItemsFromArray(array, numItems) {
     const randomIndices = [];
 
-    // Generate unique random indices
     while (randomIndices.length < numItems) {
       const index = Math.floor(Math.random() * array.length);
       if (!randomIndices.includes(index)) {
@@ -94,7 +85,7 @@ const OpenAI = ({ }) => {
 
 
   const handleInputSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase(); // Convertir a minúsculas
+    const searchTerm = e.target.value.toLowerCase(); 
     setSearchGPT(searchTerm);
 
 
@@ -102,7 +93,6 @@ const OpenAI = ({ }) => {
       const filteredGPTResults = listGPT.filter(item => item.title.toLowerCase().includes(searchTerm));
       setFilteredGPT(filteredGPTResults);
 
-      // Filtrar listTools
       const filteredToolsResults = listTools.filter(item => item.title.toLowerCase().includes(searchTerm));
       setFilteredTools(filteredToolsResults);
     } else {
@@ -116,7 +106,6 @@ const OpenAI = ({ }) => {
     if(category){
       const filteredData = listTools.filter(item => {
         const itemTags = JSON.parse(item.tags);
-        console.log('itemsTags', itemTags, category)
         return itemTags.includes(category);
       });
   
@@ -158,7 +147,6 @@ const OpenAI = ({ }) => {
         </div>
         <div className={styles["search"]}>
           <div className={styles["icon"]}>
-            {/* <img src={IconSearch} /> */}
             <IconSearch />
           </div>
           <input

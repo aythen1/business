@@ -35,7 +35,6 @@ const encodeVector = (obj) => {
   return base64Str
 }
 
-// Decodificar la cadena Base64 a objeto
 export const decodeVector = (base64Str) => {
   const str = atob(base64Str)
 
@@ -51,9 +50,6 @@ export const iniVector = (obj) => {
 
 
 // -------------------------------------------------------------------
-
-
-
 export const openVector = 
 createAsyncThunk('vector/openVector',
 async ({path}) => {
@@ -72,26 +68,17 @@ async ({path}) => {
     )
 
     const file = JSON.parse(res.data.data.data[0].data)
-
-
-    // // Supongamos que buffer contiene los datos del archivo test.eps
-
-    // Convertir el buffer a Blob
     const blob = new Blob([file.buffer.data], { type: file.mimetype })
 
-    // Crear un enlace de descarga
     const downloadLink = document.createElement('a')
     downloadLink.href = URL.createObjectURL(blob)
     downloadLink.download = file.originalname
 
-    // Agregar el enlace al cuerpo del documento (invisible)
     downloadLink.style.display = 'none'
     document.body.appendChild(downloadLink)
 
-    // Simular clic en el enlace para iniciar la descarga
     downloadLink.click()
 
-    // Eliminar el enlace después de la descarga
     document.body.removeChild(downloadLink)
 
     return 200
@@ -126,13 +113,6 @@ createAsyncThunk('vector/openFile', async ({data}) => {
 
     const dataURI = `data:${type};base64,${base64Content}`;
 
-    // const file = JSON.parse(res.data.data.data[0].data)
-    // console.log('ffdddd   ddddd', file)
-
-    // const blob = new Blob([file.buffer.data], { type: file.mimetype })
-    // const href = URL.createObjectURL(blob)
-    // console.log('rr', href)
-
     return dataURI
   } catch (error) {
     console.error('Error:', error)
@@ -146,7 +126,6 @@ createAsyncThunk('vector/loadVector',
 async ({id, name, file}) => {
   try {
     const token = localStorage.getItem('token')
-    // console.log('loadVector', vectorId, name, file)
     const res = await apiBackend.post(
       `/vector/load/${id}/${name}`,
       {
@@ -188,8 +167,6 @@ async ({id, name, data}) => {
         },
       }
     )
-
-    console.log('resspso', res)
     
     return res.data[0]
   } catch (error) {
@@ -248,8 +225,6 @@ async ({id, name, data}) => {
       }
     )
 
-    console.log('res update', res)
-
     return res.data
   } catch (error) {
     console.error('Error:', error)
@@ -275,7 +250,6 @@ async ({id, name, data}) => {
       }
     )
     
-    console.log('dd', res)
     return res.data
   } catch (error) {
     console.error('Error:', error)
@@ -299,7 +273,7 @@ async ({path}) => {
         },
       }
     )
-    console.log('dd', res)
+
     return res.data.data.slice(0, 4)
   } catch (error) {
     console.error('Error:', error)
@@ -322,7 +296,6 @@ async ({id, name, data = false}) => {
         },
       }
     )
-
 
     return res.data
   } catch (error) {
@@ -348,8 +321,6 @@ async ({id, name, data = false}) => {
       }
     )
 
-    console.log('res fetchHHHH', res)
-
     return res.data
   } catch (error) {
     console.error('Error:', error)
@@ -370,7 +341,7 @@ async () => {
       Authorization: `Bearer ${token}`,
     }
     })
-    // console.log('dd', res.data.data.data)
+
     return res.data.data.data.slice(0, 4)
   } catch (error) {
     console.error('Error:', error)

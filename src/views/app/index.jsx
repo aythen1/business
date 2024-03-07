@@ -15,39 +15,27 @@ import MenuLeftData from './components/MenuLeftData';
 import MenuRightData from './components/MenuRightData';
 import MenuRightGraph from './components/MenuRightGraph';
 import MenuRightComponent from './components/MenuRightComponent';
+
 import ChatBot from './components/ChatBot';
 import Modal from './components/Modal';
 import NotFound from '../pages/NotFound'
 
-
-// import Pivot from './pivot'
-// import Home from './views/web/home'
-// import Dashboard from './pivot/DashBoard'
-
-
 import DashBoard from './pages/DashBoard'
 
 import Support from './pages/Support'
-import Tickets from './pages/Support/tickets'
+
 import Ticket from './pages/Support/ticket'
+import Tickets from './pages/Support/tickets'
 
 
 import Settings from './pages/Settings'
-
 import SettingsIAM from './pages/Settings/iam'
-// import SettingsBilling from './pages/Settings/billing'
-// import SettingsContract from './pages/Settings/contract'
-// import Drive from './pages/Drive'
+
 import Addon from './pages/Addon'
 import GPTs from './pages/OpenAi'
 import LangChain from './pages/LangChain'
 import Vector from './pages/Vector'
 
-
-// import useDarkMode from 'use-dark-mode';
-// import Component from './Dashboard/Component'
-// import DragAndDrop from './Component/DragAndDrop';
-// import Home from './pivot/components/DashBoard/home'
 
 
 import {
@@ -59,11 +47,8 @@ import {
 
 
 export const App = ({ }) => {
-
-  // const darkMode = useDarkMode(false);
-
   const darkMode = useDarkMode(false, {
-    storageKey: 'prefered-theme', // Cambiar esto según tus necesidades
+    storageKey: 'prefered-theme', 
     onChange: (value) => {
       const appElement = document.getElementById('app');
 
@@ -80,10 +65,6 @@ export const App = ({ }) => {
 
   const dispatch = useDispatch();
   const [selectedComponent, setSelectedComponent] = useState(null)
-  // const [openMenuRight, setOpenMenuRight] = useState(null)
-  // const [openChatBot, setOpenChatBot] = useState(null)
-  // const [openMenuLeft, setOpenMenuLeft] = useState(null)
-
 
   const {
     themeColor,
@@ -93,20 +74,12 @@ export const App = ({ }) => {
   } = useSelector((state) => state.iam)
 
 
-  // Estado para controlar el modo oscuro o claro
   const [themeMode, setThemeMode] = useState(() => {
-    // Intentar obtener el modo desde localStorage al cargar la aplicación
     const storedMode = localStorage.getItem('darkMode');
 
     return storedMode ? storedMode : 'light';
   });
 
-  // Función para cambiar entre modos oscuro y claro
-  // const setThemeMode = (theme) => {
-  //   setIsDarkMode(theme);
-  //   // Guardar la preferencia en localStorage
-  //   localStorage.setItem('themeMode', theme);
-  // };
 
   useEffect(() => {
     if (themeMode == 'dark') {
@@ -116,30 +89,7 @@ export const App = ({ }) => {
       localStorage.setItem('darkMode', 'light')
       darkMode.disable()
     }
-    // darkMode.toggle();
   }, [themeMode])
-
-
-  // useEffect(() => {
-  //   const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  //   console.log('prefers', prefersDarkMode)
-  //   if (prefersDarkMode && !darkMode.value) {
-  //     darkMode.enable();
-  //   }
-  // }, [darkMode]);
-
-
-
-
-
-  // useEffect(() => {
-  //   // Ejemplo de cómo dispatch una acción al montar el componente
-  //   const user = { id: 1, name: 'John Doe' };
-  //   // dispatch(setUser(user));
-
-  //   // También puedes realizar acciones asíncronas utilizando Thunk, Saga, etc.
-  //   // dispatch(fetchUserData());
-  // }, [dispatch]);
 
 
 
@@ -160,26 +110,21 @@ export const App = ({ }) => {
 
 
 
-  // const [lists, setLists] = useState([])
   const componentRefs = useRef([]);
 
 
-  // Función para asignar una referencia a un elemento en el índice dado
   const setRef = (index, component) => {
-    console.log('set', index)
     componentRefs.current[index] = component;
   };
 
 
-  // Función para hacer scroll hacia un elemento en el índice dado
   const scrollToComponent = (index) => {
-    console.log('cooeoe', componentRefs, index)
     if (componentRefs[index]) {
       componentRefs[index].scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  //
+
 
   const [colorsLight, setColorsLight] = useState([])
   const [colorsDark, setColorsDark] = useState([])
@@ -231,7 +176,6 @@ export const App = ({ }) => {
           <Routes>
             <Route path="board/*" element={<DashBoard />} />
             <Route path="/*" element={<Outlet />}>
-              {/* Ruta dinámica que carga el componente correspondiente según el path */}
               <Route path="iam" element={<SettingsIAM />} />
 
               <Route path="" element={<Settings />} />
@@ -244,14 +188,11 @@ export const App = ({ }) => {
               <Route path="support/tickets" element={<Tickets />} />
               <Route path="support/ticket/:ticketId" element={<Ticket />} />
 
-              {/* <Route path="contract" element={<SettingsContract />} /> */}
               <Route path="addon/*" element={<Addon />} />
               <Route path="addon" element={<Addon />} />
-              {/* <Route path="drive/:id" element={<Drive />} /> */}
               <Route path="gpt" element={<GPTs />} />
               <Route path="langchain" element={<LangChain />} />
               <Route path="*" element={<NotFound />} />
-              {/* <Route path=":segmentName/:componentName" element={<DynamicComponentLoader />} /> */}
             </Route>
           </Routes>
         </div>
@@ -269,7 +210,6 @@ export const App = ({ }) => {
                 <MenuLeftData setRef={setRef} />
               </div>
             )}
-            {/* <MenuLeftUser /> */}
           </div>
         )}
         {openMenuRight && (
@@ -306,31 +246,4 @@ export const App = ({ }) => {
 export default App;
 
 
-
-
-
-// DynamicRoute.js
-
-
-
-// const DynamicComponentLoader = () => {
-//   // Obtiene los parámetros de la ruta (nombre del segmento y del componente)
-//   const { segmentName, componentName } = useParams();
-
-//   // Importa y renderiza el componente correspondiente según los parámetros de la subruta
-//   try {
-//     const DynamicComponent = lazy(() =>
-//       import(`./views/${'web'}/${componentName}.jsx`)
-//       // import(`./views/${segmentName}/${componentName}.jsx`)
-//     );
-//     return (
-//       <Suspense fallback={<div>Cargando...</div>}>
-//         <DynamicComponent />
-//       </Suspense>
-//     );
-//   } catch (error) {
-//     // Si no se encuentra un componente específico, renderiza el NotFound genérico
-//     return <NotFound />;
-//   }
-// };
 

@@ -22,7 +22,6 @@ const MenuRightComponent = ({ setOpenMenuRight }) => {
     setFilteredComponents(filteredList);
   };
 
-  // Agrupar componentes por categoría
   const groupedComponents = filteredComponents.reduce((acc, item) => {
     const category = item.category;
 
@@ -53,7 +52,6 @@ const MenuRightComponent = ({ setOpenMenuRight }) => {
         />
       </div>
       <div>
-        {/* Renderizar grupos de componentes */}
         {Object.entries(groupedComponents).map(([category, components], index) => (
           <div key={index}>
             <div>

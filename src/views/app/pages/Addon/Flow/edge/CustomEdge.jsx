@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef  } from 'react'
+import React, { useEffect, useRef  } from 'react'
 import ReactFlow, { getBezierPath, EdgeText } from 'reactflow';
 import { useGraph } from '../index';
 
-import styles from './CustomEdge.module.css'
 
 const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {} }) => {
     const edgeRef = useRef(null);
@@ -18,24 +17,19 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
 
     const handleClick = () => {
         setSelectedEdge(id);
-        // console.log('setSelectedEdge', setEdge, edges)
     };
 
     const handleKeyPress = (event) => {
         if (selectedEdge == id && event.key === 'Delete') {
-            // Filtra los edges excluyendo el que tiene el ID actual
             const newEdges = edges.filter((edge) => edge.id !== id);
-            // Actualiza el estado con el nuevo array de edges
             setEdges(newEdges);
         }
     };
 
     useEffect(() => {
         const handleKeyPressWithRef = (event) => handleKeyPress(event);
-        // Agrega el event listener al montar el componente
         document.addEventListener('keydown', handleKeyPressWithRef);
 
-        // Remueve el event listener al desmontar el componente
         return () => {
             document.removeEventListener('keydown', handleKeyPressWithRef);
         };

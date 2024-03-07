@@ -1,7 +1,5 @@
 
-import React, { useEffect, useState, useRef } from "react";
-import { Route, Routes, Outlet, useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
+import React from "react";
 
 
 import components from '@components'
@@ -12,9 +10,6 @@ import styles from './index.module.css'
 const VectorAddon = ({
 
 }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-
   return (
     <>
       <components.SearchList

@@ -23,15 +23,13 @@ import {
   setModal
 } from '@/slices/iamSlice'
 import { useNavigate } from 'react-router-dom';
-// import { fetchsApplication } from '../../../../../../service/controllers/iam';
+
 
 const TableApplications = ({
   applications
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
-  // const { applications } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
 
@@ -52,11 +50,6 @@ const TableApplications = ({
   }
 
   // ---------------------------------------------------------------
-
-  // const component = ({ ...props }) => {
-  //   return <ComponentTable {...props} />
-  // }
-
   const component = ({ ...props }) => {
     let content
     let tag = props.tag
@@ -150,8 +143,6 @@ const ComponentStatus = (props) => {
 
 
 const ComponentTags = (props) => {
-
-
   return (
     <div className={styles.view}>
       Tagsss eliminited
@@ -162,10 +153,6 @@ const ComponentTags = (props) => {
 
 
 const ComponentPolices = (props) => {
-  // const handleViewTicket = () => {
-  //     props.setStateTable(`view-ticket:${props.item.id}`)
-  // }
-
   return (
     <div className={styles.view}>
       Tagsss eliminited
@@ -177,18 +164,9 @@ const ComponentPolices = (props) => {
 
 
 
-
-
-
-
-
-
-
 const PopupModalApp = ({ styles }) => {
   const dispatch = useDispatch()
-  // const [email, setEmail] = useState()
   const [isActive, setIsActive] = useState(false)
-
 
   // ---
   const [state, setState] = useState({
@@ -208,8 +186,6 @@ const PopupModalApp = ({ styles }) => {
 
     if (property === 'name') {
       const isValidValue = value.trim() !== '';
-
-      // Establecer el estado y activar según si el valor no está vacío
       setIsActive(isValidValue);
     }
 
@@ -226,7 +202,6 @@ const PopupModalApp = ({ styles }) => {
       name: state.name,
       description: state.description,
       status: 'active',
-      // tags: state.tags,
       createdAt: new Date(),
       tags: [{
         key: '',
@@ -236,7 +211,6 @@ const PopupModalApp = ({ styles }) => {
         key: '',
         value: ''
       }]
-      // polices: state.polices,
     }
 
     dispatch(addApplication({ application: data }))

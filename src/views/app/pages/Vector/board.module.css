@@ -209,10 +209,10 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 2px; /* Grosor del contorno */
+        height: 2px; 
         background-color: var(
           --color-primary-4
-        ); /* Cambia "blue" al color que desees */
+        ); 
       }
     }
   }
@@ -244,15 +244,11 @@
   .board {
     width: 100%;
     height: 100%;
-    /* padding: 10px; */
-    /* background: red; */
-    /* overflow: scroll; */
   }
 
   &::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-    /* background-color: red; */
   }
 
   &::-webkit-scrollbar-thumb {

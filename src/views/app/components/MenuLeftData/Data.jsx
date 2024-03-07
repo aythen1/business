@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-
 import styles from "./index.module.css";
 import * as Graphs from '@/views/graphs';
-
-
-import IconArrow from './assets/IconArrow.svg'
-import IconAdd from './assets/IconAdd.svg'
-import IconEarse from './assets/IconEarse.svg'
-
-
-
 
 import {
   fetchsVector,
@@ -65,10 +56,6 @@ const Data = ({ component, onSelectedChange }) => {
     alert(1)
   }
 
-
-
-  // const [showSettings, setShowSettings] = useState(false);
-
   const handleSelect = () => {
     setShowSettings(!showSettings)
 
@@ -114,7 +101,6 @@ const Data = ({ component, onSelectedChange }) => {
             setState={setState}
             component={component}
             regexOptions={regexOptions}
-          // onSelect={handleSelect} 
           />
         </div>
       ) : (

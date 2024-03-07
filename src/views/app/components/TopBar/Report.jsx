@@ -3,8 +3,6 @@ import React from 'react';
 import styles from './Report.module.css'
 
 
-
-
 const TopBar = ({ type = 'absolute' }) => {
     const selectedTab = () => {
 

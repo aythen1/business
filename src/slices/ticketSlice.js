@@ -1,4 +1,3 @@
-// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
@@ -34,9 +33,7 @@ const ticketSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Manejar las acciones generadas por createAsyncThunk
     builder
-
       .addCase(fetchsTicket.fulfilled, (state, action) => {
         state.status = 'fulfilled';
         state.tickets = action.payload;

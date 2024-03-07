@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as xlsx from 'xlsx';
 
-
-// import Dropzone from 'react-dropzone';
 import styles from './Upload.module.css'
 
 import { fields } from './fields';
@@ -59,7 +57,6 @@ export default ({ id, data: _data, setFilter, setNodes }) => {
     const file = e.dataTransfer.files[0];
 
     e.preventDefault()
-    // const file = acceptedFiles[0];
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -67,7 +64,7 @@ export default ({ id, data: _data, setFilter, setNodes }) => {
       const workbook = xlsx.read(binaryData, { type: 'binary' });
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
-      const title = `${file.name.replace(/\.[^/.]+$/, '')}_name`; // Eliminar extensión del nombre del archivo
+      const title = `${file.name.replace(/\.[^/.]+$/, '')}_name`; 
       const header = xlsx.utils.sheet_to_json(worksheet, { header: 1 })[0];
       const data = xlsx.utils.sheet_to_json(worksheet).map(row => {
         const rowData = {};
@@ -99,8 +96,6 @@ export default ({ id, data: _data, setFilter, setNodes }) => {
 
 
   const handleAddData = () => {
-    console.log('c0jvcuneruhn')
-
     setNodes((prevNodes) => {
       return prevNodes.map((node) => {
         if (node.id === id) {
@@ -135,12 +130,6 @@ export default ({ id, data: _data, setFilter, setNodes }) => {
             </label>
             Select header row
           </div>
-          {/* <div >
-            <label className={`${step >= 3 && styles.active}`}>
-              3
-            </label>
-            Validate Data
-          </div> */}
         </div>
         {step == 1 ? (
           <div>
@@ -275,13 +264,9 @@ const ModifyData = ({ data: _data, limit = 20 }) => {
   const { header, data } = _data;
   const [newHeader, setNewHeader] = useState(header.map(() => ''));
 
-  // console.log('eee', data)
-
   const cellWidth = 100 / header.length + '%';
 
   const isValidVariable = (variable) => {
-    // Implementa tu lógica para validar si es una variable válida
-    // Puedes usar expresiones regulares u otras validaciones según tus necesidades
     return /^[a-zA-Z_]\w*$/.test(variable);
   };
 
@@ -331,11 +316,9 @@ const ModifyData = ({ data: _data, limit = 20 }) => {
 
 
 const APIData = ({ }) => {
-  // Uso del componente
   const items = [
     { available: true, type: 'GET', path: '/users', description: 'Get list of users' },
     { available: false, type: 'POST', path: '/users', description: 'Create a new user' },
-    // Agrega más objetos según sea necesario
   ];
 
 

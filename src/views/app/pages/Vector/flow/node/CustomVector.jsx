@@ -3,11 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { useDispatch, useSelector } from 'react-redux'
 
-
 import { Handle, useReactFlow } from "reactflow";
-
-// import ReactFlow, { addEdge, useStoreApi, useReactFlow, applyEdgeChanges, applyNodeChanges } from 'reactflow';
-
 
 import styles from './CustomVector.module.css'
 
@@ -16,13 +12,11 @@ import { useGraph } from '../index';
 import VectorTable from './vector/Table'
 import VectorInfo from './vector/Info'
 import VectorAgent from './vector/Agent'
-// import VectorSchema from './vector/Schema'
+
 import VectorSQL from './vector/SQL'
 
 
 import IconExcel from './assets/icon-excel.svg'
-import IconWord from './assets/icon-word.svg'
-import IconOther from './assets/icon-other.svg'
 
 
 import {
@@ -31,7 +25,6 @@ import {
 
 
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
-
   const dispatch = useDispatch()
 
   const {
@@ -47,7 +40,6 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
   const { zoomIn, zoomOut, setCenter } = useReactFlow();
 
   useEffect(() => {
-    // console.log('Hello world', data)
     setFilter(data.status)
   }, [data])
 
@@ -57,10 +49,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
     if (dimension) {
       const nodePosition = dimension.position;
 
-      // Encuentra el elemento con la clase "react-flow"
       const reactFlowElement = document.querySelector('.react-flow');
-
-      // Hace scroll al nodo dentro de react-flow
       if (reactFlowElement) {
         const x = nodePosition.x + 300
         const y = nodePosition.y + 200
@@ -75,7 +64,6 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
   const handleSelectVector =  (e) => {
-    // Eliminar la clase 'selected' de todos los elementos
     const selectedElements = document.querySelectorAll(`.${styles.selected}`);
     selectedElements.forEach((element) => {
       element.classList.remove(styles.selected);
@@ -90,12 +78,9 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
     const node = nodes.filter((node) => node.id === id)[0]
     dispatch(setDimension(node))
 
-    console.log('wfoinhfeubv', e)
-    // Acceder al elemento del evento (e.target)
+
     const selectedVector = e.target.closest(`.${styles.boxVector}`);
-    // const selectedVector = e.target;
     if (selectedVector) {
-      console.log('31oinfe2ujbnfu')
       selectedVector.classList.add(styles.selected);
     }
   }
@@ -126,7 +111,6 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
   };
 
   const handleDelete = () => {
-    alert(1)
     setShowContextMenu(false)
 
     setNodes((prevNodes) => prevNodes.filter((node) => node.id !== id));

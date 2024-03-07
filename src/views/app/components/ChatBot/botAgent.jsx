@@ -5,11 +5,6 @@ import styles from './botAgent.module.css'
 
 
 
-
-
-// import {
-// } from "@/slices/chatbotSlice";
-
 import {
     fetchChatbot,
     addChatbot 

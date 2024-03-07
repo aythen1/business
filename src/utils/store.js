@@ -1,4 +1,3 @@
-// store.js
 import { configureStore } from '@reduxjs/toolkit';
 
 import ticketReducer from '@/slices/ticketSlice';
@@ -24,7 +23,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [
           'iam/setModal',
-        ], // Ignorar la comprobación de serialización para esta acción
+        ], 
       },
     }),
 });

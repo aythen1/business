@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux'
 import InfoTable from './InfoTable'
 import LibraryModel from './LibraryModel'
 import LogBackup from './LogBackup'
-import MonacoEditor from './MonacoEditor'
 
 
 import {
@@ -67,25 +66,6 @@ const Agent = ({ }) => {
             >
                 Crear un nuevo flow
             </button>
-
-
-            {/* <div>
-                <div>
-                    <InfoTable />
-                </div>
-                <div>
-                    <InfoTable />
-                </div>
-                <div>
-                    <LibraryModel />
-                </div>
-                <div>
-                    <MonacoEditor />
-                </div>
-                <div>
-                    <LogBackup />
-                </div>
-            </div> */}
         </div>
     )
 }

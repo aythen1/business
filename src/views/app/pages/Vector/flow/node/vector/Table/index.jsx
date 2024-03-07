@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect, memo } from "react";
-import { Handle } from "reactflow";
+import React, { useState, useRef, useEffect } from "react";
 import DataGridXL from "@datagridxl/datagridxl2";
 
 import styles from './index.module.css'
@@ -50,7 +49,6 @@ export default ({ data, setFilter }) => {
                 ) : (
                     <Upload />
                 )}
-                {/* <button onClick={() => download(dgxlRef.current)}>download as CSV</button> */}
             </div>
         </>
     );

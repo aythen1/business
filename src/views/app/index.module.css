@@ -58,7 +58,7 @@ body{
 
 
 .MenuLeft::-webkit-scrollbar {
-    display: none; /* Para navegadores basados en WebKit (Chrome, Safari) */
+    display: none; 
 }
 
 
@@ -117,7 +117,6 @@ body{
     bottom: 0px;
     left: 0px;
     background: var(--background);
-    /* height: 160px; */
     width: calc(100% - 380px);
     box-shadow: 0px -17px 38px 18px var(--background);
     z-index: 0;
@@ -125,11 +124,8 @@ body{
 
 
 
-/* Estilos para pantallas más grandes de 1200px */
 @media (min-width: 1200px) {
     .Container{
-      /* transform: scale(1.1); */
-
       zoom: 1.2;
     }
   }

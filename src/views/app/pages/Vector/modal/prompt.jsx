@@ -2,8 +2,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
-
-// import styles from '../Settings/iam/modal.module.css'
 import styles from './prompt.module.css'
 
 
@@ -17,8 +15,6 @@ import {
 import {
     setCode
 } from '@/slices/addonSlice'
-
-
 
 
 import AddTag from '../../Settings/iam/AddTag'
@@ -42,7 +38,6 @@ const VectorCustom = ({ setModal, vector }) => {
 
     const textareaRef = useRef(null);
 
-    // const [isNewVector, setIsNewVector] = useState(vector?.id ? true : false);
     const [isLoading, setIsLoading] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
@@ -66,10 +61,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
 
 
-
-
     // ---------------------------------------------------------------
-
     const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
@@ -77,7 +69,6 @@ const VectorCustom = ({ setModal, vector }) => {
         }
 
         if (property === 'title') {
-            // Verificar si el texto tiene una longitud mayor a cero
             const isValidText = value.trim().length > 0;
 
             setIsActive(isValidText);
@@ -117,7 +108,7 @@ const VectorCustom = ({ setModal, vector }) => {
 
     useEffect(() => {
         if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto'; // Restablecer la altura para recalcular
+            textareaRef.current.style.height = 'auto'; 
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
     }, [state.description]);

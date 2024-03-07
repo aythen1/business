@@ -2,9 +2,6 @@
 import apiBackend from '@/utils/apiBackend'
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import {
-  initialComponent
-} from '../slices/dashboardSlice'
 
 // Acción asincrónica
 export const fetchsDashboard =
@@ -42,7 +39,6 @@ export const fetchDashboard =
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
         });
         
         return res.data
@@ -108,8 +104,3 @@ export const deleteDashboard =
       }
     }
   );
-
-
-
-// -------------------------------------------------------
-

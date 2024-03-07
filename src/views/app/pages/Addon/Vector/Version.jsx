@@ -1,21 +1,12 @@
 
-import React, { useRef, useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-
-// import styles from '../../Settings/iam/modal.module.css'
-
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 
 import {
     codeAddon
 } from '@/actions/addon'
 
-
-import {
-    setCode
-} from '@/slices/addonSlice'
-
 import styles from './index.module.css'
-
 
 
 
@@ -147,7 +138,7 @@ const FilterItem = ({ item }) => {
 
     const handleCheckboxChange = () => {
         setIsChecked(!isChecked);
-        setCodeVisible(false); // Ocultar el código cuando se desmarca la casilla
+        setCodeVisible(false); 
     };
 
     const handleOpenCode = (code) => {
