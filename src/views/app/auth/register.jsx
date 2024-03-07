@@ -5,7 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import styles from './index.module.css'
 
-import IconLogo from './assets/IconLogo.svg'
+import IconLogo from './assets/IconLogo'
 
 // import { login } from './auth';
 
@@ -91,7 +91,7 @@ const Register = ({ onLogin }) => {
   };
 
   const handleClickSignIn = () => {
-    navigate(`/${lng}/login`); 
+    navigate(`/${lng}/app/login`); 
   }
 
 

@@ -163,8 +163,6 @@ async function _getVector(req, res) {
       options = [{ field: "id", operator: "LIKE", value: `%${data.id}%` }];
     }
 
-    console.log("options", options);
-
     const query = await getVector(id, name, [0, 0], options);
     // const query = await getVector(id, name, [0, 0])
 

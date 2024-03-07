@@ -20,6 +20,9 @@ import {
 } from '@/slices/iamSlice'
 
 
+import BackgroundVector from './assets/background-vector'
+
+
 const Support = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -77,8 +80,8 @@ const Support = () => {
     const handleClickTopic = () => {
         dispatch(setModal(<ModalSupport />))
     }
-    
- 
+
+
 
 
 
@@ -86,7 +89,7 @@ const Support = () => {
         <div className={styles.container}>
             <div className={styles.containerQuery}>
                 <h2 className={styles.title}>
-                    How con we help you?
+                    How can we help you?
                 </h2>
                 <div className={styles.input}>
                     <input
@@ -111,6 +114,9 @@ const Support = () => {
                         </div>
                     </div>
                 )}
+                <div className={styles.background}>
+                    <BackgroundVector />
+                </div>
             </div>
             <div className={styles.containerPopular}>
                 <h2 className={styles.title}>
@@ -270,11 +276,19 @@ export default Support
 
 
 
-const ModalSupport = ({ }) => {    
+
+
+
+
+
+
+
+
+const ModalSupport = ({ }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-       
+
     const handleClickDeny = () => {
         dispatch(setModal(null))
     }
@@ -282,6 +296,31 @@ const ModalSupport = ({ }) => {
     const handleClickTicket = () => {
         navigate(`/${'es'}/settings/ticket`)
     }
+
+
+    // ----------------------------------------------------------------
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredData, setFilteredData] = useState(initialTopics);
+
+
+    const handleSearch = (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        setSearchTerm(searchTerm);
+
+        const filteredData = initialTopics.filter((item) => {
+            // Verificar si alguna propiedad incluye el término de búsqueda
+            return (
+                item.title.toLowerCase().includes(searchTerm) ||
+                item.description.some(
+                    (desc) =>
+                        desc.title.toLowerCase().includes(searchTerm) ||
+                        desc.text.toLowerCase().includes(searchTerm)
+                )
+            );
+        });
+
+        setFilteredData(filteredData);
+    };
 
 
     return (
@@ -292,11 +331,14 @@ const ModalSupport = ({ }) => {
                 </svg>
                 <input
                     type="text"
+                    spellCheck="false"
                     placeholder={'Search support..'}
+                    value={searchTerm}
+                    onChange={handleSearch}
                 />
             </div>
             <div className={styles.list}>
-                {initialTopics.map((topic, index) => (
+                {filteredData.map((topic, index) => (
                     <div
                         key={index}
                         className={styles.topic}
@@ -304,16 +346,18 @@ const ModalSupport = ({ }) => {
                         <b className={styles.title}>
                             {topic.title}
                         </b>
-                        {topic.description.map((description, index) => (
-                            <div className={styles.item}>
-                                <b className={styles.subtitle}>
-                                    {description.title}
-                                </b>
-                                <p className={styles.text}>
-                                    {description.text}
-                                </p>
-                            </div>
-                        ))}
+                        <div className={styles.grid2}>
+                            {topic.description.map((description, index) => (
+                                <div className={styles.item}>
+                                    <b className={styles.subtitle}>
+                                        {description.title}
+                                    </b>
+                                    <p className={styles.text}>
+                                        {description.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </div>

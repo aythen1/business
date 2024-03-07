@@ -165,15 +165,20 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
 
   return emptyObject;
 };
-
 async function addVector(id, name, vector = [0, 0], data, relations) {
   // id base64
-  const { path0, path1 } = decodeVector(id);
-  const uri = "data/vector/" + path0 + "/" + path1;
-  console.log({ uri });
-  let schema;
+  const { path0, path1, path2 } = decodeVector(id);
 
-  if (path0 == "chatbot" || path0 == "addon" || path0 == "ticket") {
+  let uri;
+  if (path2) {
+    uri = "data/vector/" + path0 + "/" + path1 + "/" + path2;
+  } else {
+    uri = "data/vector/" + path0 + "/" + path1;
+  }
+
+  let schema;
+  if (path0 == "chatbot" || path0 == "ticket") {
+    // if (path0 == 'chatbot' || path0 == 'addon' || path0 == 'ticket') {
     schema = addRelationsToSchema(allSchemas["vectors"]);
   } else {
     const schemaExists = allSchemas.hasOwnProperty(name);
@@ -291,8 +296,16 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
 }
 
 async function updateVector(id, name, vector = [0, 0], data) {
-  const { path0, path1 } = decodeVector(id);
-  const uri = "data/vector/" + path0 + "/" + path1;
+  const { path0, path1, path2 } = decodeVector(id);
+
+  let uri = "";
+  if (path2) {
+    uri = "data/vector/" + path0 + "/" + path1 + "/" + path2;
+  } else {
+    uri = "data/vector/" + path0 + "/" + path1;
+  }
+
+  console.log("uriririri", uri);
 
   try {
     let schema;
@@ -323,6 +336,8 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
     const searchString = generateSearchString(conditions);
 
+    // console.log('searchString', searchString)
+
     const db = await lancedb.connect(uri);
     const tbl = await db.openTable(name);
 
@@ -337,32 +352,27 @@ async function updateVector(id, name, vector = [0, 0], data) {
       let updatedRecord = { ...query[0], ...data };
       // if(updatedRecord._distance) delete query[0]._distance;
       if ("_distance" in updatedRecord) delete updatedRecord._distance;
+
       updatedRecord = generateEmptyObjectFromSchema(
         allSchemas[name],
         updatedRecord
       );
       updatedRecord.vector = vector;
+      // console.log('udpatedRecord', updatedRecord)
 
       await tbl.update({ where: searchString, values: updatedRecord });
-      // console.log('updated', updatedRecord)
-
-      // const updatedQuery = await tbl
-      // .search(vector)
-      // .where(searchString)
-      // .execute();
-
-      // console.log('updatedQuery', updatedQuery)
 
       return updatedRecord;
     } else {
-      // No se encontró ningún usuario para actualizar
-      return 400;
+      console.log("no se encontro");
+      const resp = await addVector(id, name, (vector = [0, 0]), data);
+
+      return resp[0];
     }
   } catch (error) {
-    console.log("ERROR", error);
-    // Not exist table
+    // console.log('ERROR', error)
     const resp = await addVector(id, name, (vector = [0, 0]), data);
-    console.log("rrerr", resp);
+    // console.log('rrerr', resp)
     // console.log('respresprespresprespresp', resp)
     return resp[0];
   }
@@ -488,15 +498,18 @@ const getGraphVector = async (uri, conditions, _vector) => {
 };
 
 async function getVector(id, name, vector = [0, 0], conditions = []) {
-  const { path0, path1 } = decodeVector(id);
-  const uri = "data/vector/" + path0 + "/" + path1;
+  const { path0, path1, path2 } = decodeVector(id);
 
-  console.log("service", { path0, path1, uri });
+  let uri = "";
+  if (path2) {
+    uri = "data/vector/" + path0 + "/" + path1 + "/" + path2;
+  } else {
+    uri = "data/vector/" + path0 + "/" + path1;
+  }
 
   // const regex = /^.*"(?:\\.|[^"\\])*".*{.*}$/;
   const regex = /query\s*{\s*([\s\S]*?)\s*}/;
   if (regex.test(name)) {
-    console.log("=================", name);
     const resp = await getGraphVector(uri, name, vector);
     return resp;
   }
@@ -505,10 +518,7 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
     const db = await lancedb.connect(uri);
     const tbl = await db.openTable(name);
 
-    console.log("13455");
     const searchQuery = generateSearchString(conditions);
-
-    console.log("searchQuery", searchQuery);
 
     if (searchQuery.error) {
       return searchQuery;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import styles from './index.module.css'
 
-import IconLogo from './assets/IconLogo.svg'
+import IconLogo from './assets/IconLogo'
 
 // import { login } from './auth';
 import { useParams, useNavigate } from 'react-router-dom';

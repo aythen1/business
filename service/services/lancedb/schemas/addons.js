@@ -5,8 +5,8 @@ const schemaAddons = {
         bearer: { type: 'string' },
         owner: { type: 'string' },
 
-        available: { type: 'boolean' },
-        public: { type: 'boolean' },
+        ispublic: { type: 'boolean', default: true },
+        isavailable: { type: 'boolean', default: true },
 
         image: { type: 'string' },
         title: { type: 'string' },
@@ -14,7 +14,9 @@ const schemaAddons = {
         description: { type: 'string' },
         tags: { type: 'string', default: '[]' },
 
-        components: { type: 'string', default: '[]' },
+        // components: { type: 'string', default: '[]' }, //delete
+        nodes: { type: 'string', default: '[]' },
+        edges: { type: 'string', default: '[]' },
         // hay un object 
 
         updatedAt: { type: 'string', format: 'date-time' },

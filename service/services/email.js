@@ -105,7 +105,7 @@ async function sendEmail(email, template, data) {
 
   const mailOptions = {
     from: `info@aythen.com`,
-    to: `info@aythen.com`,
+    to: email, // `info@aythen.com`,
     // to: `eng.carlos.valle@gmail.com`,
     subject: 'Invitacion a mi workspace',
     text: `Hola, te invito a formar parte de mi espacio de trabajo`,

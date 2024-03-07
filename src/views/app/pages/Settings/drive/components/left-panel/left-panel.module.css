@@ -40,7 +40,7 @@
     align-items: center;
     gap: 6px;
     border-radius: 30px;
-    background: #F3F5F7;
+    background: var(--background-secondary);
 }
 
 .drive_shortcut_text {
@@ -60,8 +60,17 @@
     align-items: center;
     gap: 10px;
     border-radius: 4px;
-    border: 1px solid #D9D9D9;
+    border: 1px solid var(--border-color);
     background: #EBEBEB
+}
+
+.search_input{
+    color: var(--text-color-secondary);
+    width: 14px;
+    height: 14px;
+    float: left;
+    position: relative;
+    min-width: 14px;
 }
 
 .drive_input {

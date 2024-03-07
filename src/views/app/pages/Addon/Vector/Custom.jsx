@@ -9,13 +9,32 @@ import style from './index.module.css'
 import AddTag from '@/views/app/pages/shared/AddTag'
 
 
+import { v4 as uuidv4 } from 'uuid';
+
+
+
+
+
+import {
+    setModal
+} from '@/slices/iamSlice'
+
+import {
+    addAddon,
+    deleteAddon
+} from '@/actions/addon'
+
+
 
 
 const AddonCustom = ({ addon }) => {
 
+    console.log('adddon', addon?.id || 'not found')
+
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    // console.log('adddon', addon)
 
     const [isNewAddon, setIsNewAddon] = useState(addon?.id ? true : false);
     const [isActive, setIsActive] = useState(false)
@@ -23,7 +42,7 @@ const AddonCustom = ({ addon }) => {
 
     // ---
     const [state, setState] = useState({
-        id: addon?.id || '',
+        id: addon?.id || uuidv4(),
 
         tag: addon?.tag || [],
         createdAt: addon?.createdAt || '',
@@ -34,9 +53,11 @@ const AddonCustom = ({ addon }) => {
         description: addon?.description || '',
 
         components: addon?.components || [],
+        nodes: addon?.nodes || [],
+        edges: addon?.edges || [],
 
-        available: addon?.available || false,
-        public: addon?.public || false
+        isavailable: addon?.isavailable || false,
+        ispublic: addon?.ispublic || false
     });
 
 
@@ -48,15 +69,16 @@ const AddonCustom = ({ addon }) => {
             value = e.target.value;
         }
 
-        if (property === 'title') {
-            // Verificar si el texto tiene una longitud mayor a cero
-            const isValidText = value.trim().length > 0;
+        if (property === 'title' || property === 'href') {
+            // Verificar si ambos campos tienen una longitud mayor a cero
+            const isValidTitle = state.title.trim().length > 5;
+            const isValidHref = state.href.trim().length > 2; // Cambiado a > 2 para mayor a 3
 
-            setIsActive(isValidText);
+            setIsActive(isValidTitle && isValidHref);
 
             setState((prevState) => ({
                 ...prevState,
-                [property]: isValidText ? value.trim() : '',  // Asegura que el valor sea un array
+                [property]: value,
             }));
         } else {
             setState((prevState) => ({
@@ -70,22 +92,27 @@ const AddonCustom = ({ addon }) => {
 
 
     const handleAddAddon = () => {
-        const data = {
-            // owner: user?.id || '3r3',
-            available: true,
-            public: true,
+        if (isActive) {
+            const data = {
+                // owner: user?.id || '3r3',
+                id: state.id,
+                isavailable: state.isavailable || true,
+                ispublic: state.ispublic || true,
+                title: state.title || '',
+                href: state.href || '',
+                description: state.description || '',
+                tags: state.tags || [],
 
-            title: 'hello',
-            href: 'hello',
-            description: '33r',
-            tags: state.tags || [],
+                nodes: state.nodes || [],
+                edges: state.edges || [],
 
-            updatedAt: new Date(),
-            createdAt: new Date(),
+                updatedAt: new Date(),
+                createdAt: new Date(),
+            }
+
+            dispatch(addAddon(data))
+            dispatch(setModal(null))
         }
-
-        dispatch(addAddon(data))
-        dispatch(setModal(null))
     }
 
 
@@ -172,81 +199,6 @@ const AddonCustom = ({ addon }) => {
                 </div>
             )}
             <div className={`${styles.maxHeight} ${styles._400}`}>
-                <div className={style.userAddon}>
-                    <div className={style.avatarAddon}>
-                        -
-                    </div>
-                    <label className={style.name}>
-                        user12345
-                    </label>
-                    <span className={style.timeAgo}>
-                        creado -
-                        hace 2s
-                    </span>
-                    <button
-                        className={style.buttonEdit}
-                        onClick={() => handleEditAddon()}
-                    >
-                        edit
-                    </button>
-                </div>
-                <div className={style.gird2} style={{ gap: 20 }}>
-                    <div
-                        className={style.logo}
-                        onClick={handleSaveImage}
-                        onDrop={handleSaveImage}
-                        onDragOver={(e) => e.preventDefault()}
-                    >
-                        {imageError ? (
-                            <div
-                                className={styles.initial}
-                            >
-                                {state.title?.charAt(0).toUpperCase() || '-'}
-                            </div>
-                        ) : (
-                            <img
-                                ref={imgRef}
-                                src={imageSrc}
-                                onError={handleImageError}
-                            />
-                        )}
-                        <input
-                            type="file"
-                            id="fileInput"
-                            style={{ display: 'none' }}
-                            onChange={handleFileChange}
-                            accept="image/*"
-                        />
-                    </div>
-                    <div style={{ width: '100%' }}>
-
-                        <div className={`${styles.textBold} ${styles.gird2}`}>
-                            Select type public addons.
-                            <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
-                        </div>
-                        <div style={{ marginTop: '10px' }}>
-                            <div className={styles.checkbox}>
-                                <input
-                                    type="checkbox"
-                                    name="available"
-                                    checked={state.available}
-                                    onChange={(e) => handleInputChange(e.target.name, 'available')}
-                                />
-                                Available addon applications.
-                            </div>
-                            <div className={styles.checkbox}>
-                                <input
-                                    type="checkbox"
-                                    name="public"
-                                    checked={state.public}
-                                    onChange={(e) => handleInputChange(e.target.name, 'public')}
-                                />
-                                Public addon for applications.
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <p className={styles.textBold}>
                     Enter the title for addon.
                 </p>
@@ -293,22 +245,46 @@ const AddonCustom = ({ addon }) => {
                     className={styles.textarea}
                     onChange={(e) => handleInputChange(e, 'description')}
                 />
-
-
+                <div style={{ width: '100%' }}>
+                    <div className={`${styles.textBold} ${styles.gird2}`}>
+                        Select type public addons.
+                        <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
+                    </div>
+                    <div style={{ marginTop: '10px' }}>
+                        <div className={styles.checkbox}>
+                            <input
+                                type="checkbox"
+                                name="available"
+                                checked={state.isavailable}
+                                onChange={(e) => handleInputChange(e.target.name, 'available')}
+                            />
+                            Available addon applications.
+                        </div>
+                        <div className={styles.checkbox}>
+                            <input
+                                type="checkbox"
+                                name="public"
+                                checked={state.ispublic}
+                                onChange={(e) => handleInputChange(e.target.name, 'public')}
+                            />
+                            Public addon for applications.
+                        </div>
+                    </div>
+                </div>
             </div>
             {isNewAddon ? (
                 <div className={styles.button}>
-                    <button
-                        onClick={() => handleAddAddon()}
-                        className={styles.active}
-                    >
-                        Save Addon
-                    </button>
                     <button
                         onClick={() => handleDeleteAddon()}
                         className={styles.delete}
                     >
                         Delete Addon
+                    </button>
+                    <button
+                        onClick={() => handleAddAddon()}
+                        className={styles.active}
+                    >
+                        Save Addon
                     </button>
                 </div>
             ) : (

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './Modal.module.css';
 
@@ -28,6 +28,21 @@ const Modal = ({  }) => {
     // openModal(null);
     dispatch(setModal(null))
   };
+
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      dispatch(setModal(null));
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []); 
+
 
   if (!openModal) return null;
 
