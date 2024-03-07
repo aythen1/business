@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 import { v4 as uuidv4 } from 'uuid'
 
-// import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.css'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,15 +19,6 @@ import IconSettings from './assets/IconSettings'
 import NoneDashboard from './assets/NoneDashboard.webp'
 
 
-// import {
-//   // postBoard,
-//   // getServersZone,
-//   deleteBoard,
-//   getProjectBoard
-// } from '@/store/redux/actions/boards'
-
-// import { useParams } from 'next/navigation'
-
 import {
   addDashboard,
   fetchsDashboard
@@ -42,51 +32,21 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 
-// import { fetchsDashboard } from '../../../../../service/controllers/dashboard'
-
 const Dashboard = ({ }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
-  // const { projectId } = useParams()
-
-  // const [editMode, setEditMode] = useState(false)
-  const [listDashboards, setListDashboards] = useState([])
 
   const [textToolTip, setTextToolTip] = useState(null)
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
   const [positionToolTip, setPositionToolTip] = useState({ top: 0, left: 0 })
 
-  // const boards = dispatch(getProjectBoard()
   const {
     dashboards,
     dashboard
   } = useSelector((state) => state.dashboard)
 
 
-
-
-
   // ---------------------------------------------------------------------
-
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const dashboardParam = urlParams.get('dashboard');
-
-  //   if (dashboardParam) {
-  //     const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
-
-  //     if (selectedDashboard) {
-  //       // Establecer el dashboard utilizando dispatch
-  //       dispatch(setDashboard(selectedDashboard));
-  //     }
-  //   }
-
-
-  //   setListDashboards(dashboards)
-  // }, [dashboards])
-
-
   useEffect(() => {
     const fetchsItems = async () => {
       try {
@@ -103,10 +63,8 @@ const Dashboard = ({ }) => {
 
 
   // ---------------------------------------------------------------------
-
   const handleAddDashboard = async (uuid) => {
     const newUUID = uuidv4()
-    // setDashboardId(newUUID)
 
     const newDashboard = {
       id: newUUID,
@@ -115,27 +73,18 @@ const Dashboard = ({ }) => {
 
     await dispatch(addDashboard(newDashboard))
 
-    // // Actualizar la URL con el nuevo UUID
-    // navigate(`/es/app/board`)
     navigate(`/es/app/board?dashboard=${encodeURIComponent(newDashboard.id)}`)
   }
 
   const handleClickDashboard = (item) => {
-    // const newUUID = uuidv4()
-    // setDashboardId(id)
-    // setDashboardId(id)
-
     dispatch(setDashboard(item))
 
-    // const newURL = `?dashboard=${encodeURIComponent(id)}`
     navigate(`/es/app/board?dashboard=${item.id}`)
-    // window.history.pushState(null, null, newURL)
   }
 
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
-    // console.log('dataset', e.target.dataset.tooltip)
     setTextToolTip(e.target.dataset.tooltip)
   }
 
@@ -143,10 +92,6 @@ const Dashboard = ({ }) => {
     setIsToolTipHovered(false)
   }
 
-
-  // const handlePopupSettings = () => {
-  //   alert(1)
-  // }
 
   const handleMoreInfo = () => { }
 
@@ -173,7 +118,6 @@ const Dashboard = ({ }) => {
 
 
 
-  /* checkbox */
   const [selectedDashboards, setSelectedDashboards] = useState([]);
 
   const handleCheckboxChange = (index) => {
@@ -190,7 +134,6 @@ const Dashboard = ({ }) => {
   };
 
 
-  /* visible settings */
   const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
 
   const togglePopupSettings = (boardIndex) => {
@@ -315,7 +258,6 @@ const Dashboard = ({ }) => {
                       <div className={styles.boardSettings}>
                         <button
                           className={styles.button}
-                          // onClick={handlePopupSettings}
                           onClick={() => togglePopupSettings(index)}
                         >
                           <IconSettings width={'30'} height={'30'} />

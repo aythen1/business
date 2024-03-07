@@ -33,26 +33,22 @@ const encodeVector = (id) => {
 };
 
 function generateToken(payload) {
-  // Firma el token con la clave secreta y establece un tiempo de expiración (por ejemplo, 1 hora)
-  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
   return token;
 }
 
 function decodeToken(token) {
   try {
-    // Decodifica el token utilizando la clave secreta
     const decoded = jwt.verify(token, secretKey);
     return decoded;
   } catch (error) {
-    // Maneja errores de decodificación, por ejemplo, token no válido o expirado
-    console.error("Error al decodificar el token:", error.message);
+    console.error('Error al decodificar el token:', error.message);
     return null;
   }
 }
 
 // ------------------------------------------------------
-
 const fetchsDefault = async (req, res, next) => {
   try {
     const path = encodeVector(ID);
@@ -62,9 +58,10 @@ const fetchsDefault = async (req, res, next) => {
     const respChangelogs = await getVector(path, "default_changelogs");
     const respNews = await getVector(path, "default_news");
 
-    let resAddons = respAddons;
-    if (!(typeof respAddons == "object" && respAddons.length)) {
-      resAddons = await addVector(path, "default_addons", [0, 0], addons);
+
+    let resAddons = respAddons
+    if (!(typeof respAddons == 'object' && respAddons.length)) {
+      resAddons = await addVector(path, 'default_addons', [0, 0], addons)
     }
 
     let resGpts = respGpts;
@@ -72,20 +69,16 @@ const fetchsDefault = async (req, res, next) => {
       resGpts = await addVector(path, "default_gpts", [0, 0], gpts);
     }
 
-    let resChangelogs = respChangelogs;
-    if (!(typeof respChangelogs == "object" && respChangelogs.length)) {
-      resChangelogs = await addVector(
-        path,
-        "default_changelogs",
-        [0, 0],
-        changelogs
-      );
+    let resChangelogs = respChangelogs
+    if (!(typeof respChangelogs == 'object' && respChangelogs.length)) {
+      resChangelogs = await addVector(path, 'default_changelogs', [0, 0], changelogs)
     }
 
-    let resNews = respNews;
-    if (!(typeof respNews == "object" && respNews.length)) {
-      resNews = await addVector(path, "default_news", [0, 0], news);
+    let resNews = respNews
+    if (!(typeof respNews == 'object' && respNews.length)) {
+      resNews = await addVector(path, 'default_news', [0, 0], news)
     }
+
 
     return res.status(200).send({
       addons: resAddons,
@@ -100,15 +93,14 @@ const fetchsDefault = async (req, res, next) => {
 
 const updateDefault = async (req, res, next) => {
   try {
-    const path = encodeVector(ID);
-    const { table, data } = req.body;
+    const path = encodeVector(ID)
+    const { table, data } = req.body
 
-    console.log("update default", table, data);
+    console.log('update default', table, data)
 
-    const resp = await updateVector(path, `default_${table}`, [0, 0], data);
 
     if (resp == 400) {
-      return res.satus(400).send("Not found");
+      return res.satus(400).send('Not found')
     }
 
     return res.status(200).send({
@@ -122,13 +114,10 @@ const updateDefault = async (req, res, next) => {
 
 const fetchsBilling = async (req, res, next) => {
   try {
-    console.log("11234");
-    const { user } = req;
-    const path = encodeVector(ID);
-    // ---------------------------------------------------------
-    // tests() {
-    //   description
-    // }
+    console.log('11234')
+    const { user } = req
+    const path = encodeVector(ID)
+
     const options = `
    query {
     users(id: ${user.id}) {
@@ -154,11 +143,10 @@ const fetchsBilling = async (req, res, next) => {
     }
   }`;
 
-    // console.log('res', options)
+    const resp = await getVector(path, options, [0, 0])
 
-    const resp = await getVector(path, options, [0, 0]);
 
-    return res.status(200).send(resp);
+    return res.status(200).send(resp)
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -170,20 +158,9 @@ const updateBilling = async (req, res, next) => {
     const { billing } = req.body;
     const path = encodeVector(ID);
 
-    // console.log('billliiingg', payload)
 
-    const resp = await updateVector(path, "billings", [0, 0], billing, {
-      users: user,
-    });
-
-    // var data = {
-    //   title: 'title',
-    //   description: 'description',
-    // }
-    // const _resp = await addVector(path, 'tests', [0, 0], data, { users: user, billings: resp[0] })
-
-    console.log("resp", resp);
-    // console.log('_resp', _resp)
+    const resp = await updateVector(path, 'billings', [0, 0], billing, { users: user })
+    console.log('resp', resp)
 
     return res.status(200).send(resp[0]);
   } catch (err) {
@@ -215,13 +192,12 @@ const fetchInvoice = async (req, res) => {
 
 const deleteInvoice = async (req, res) => {
   try {
-    const { id } = req.body;
-    const path = encodeVector(ID);
-    // console.log('ed9iew2udh', id)
-    const resp = await deleteVector(path, "invoices", id);
-    console.log("resp", resp);
+    const { id } = req.body
+    const path = encodeVector(ID)
+    const resp = await deleteVector(path, 'invoices', id)
 
-    return res.status(200).send(id);
+    
+    return res.status(200).send(id)
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -229,17 +205,13 @@ const deleteInvoice = async (req, res) => {
 
 const addInvoice = async (req, res) => {
   try {
-    const { user } = req;
-    const { invoice } = req.body;
+    const { user } = req
+    const { invoice } = req.body
+    const path = encodeVector(ID)
 
-    const path = encodeVector(ID);
+    const resp = await addVector(path, 'invoices', [0, 0], invoice, { users: user })
 
-    console.log("apps", result, invoice);
-    const resp = await addVector(path, "invoices", [0, 0], invoice, {
-      users: user,
-    });
-    // console.log('re', resp)
-    return res.status(200).send(resp[0]);
+    return res.status(200).send(resp[0])
   } catch (err) {
     console.log("Error ", err);
   }
@@ -247,23 +219,17 @@ const addInvoice = async (req, res) => {
 
 const updateInvoice = async (req, res, next) => {
   try {
-    const { invoice } = req.body;
-
-    // user.id = payload.id
-    // const user = await models.UserModel.findOne({ where: { email } })
-    // id, name, vector = [1.3, 1.4], data, overwrite = false
-    const path = encodeVector(ID);
+    const { invoice } = req.body
+    const path = encodeVector(ID)
 
     const resp = await updateVector(path, "invoices", [0, 0], invoice, false);
 
     const _token = await generateToken(resp);
 
     if (resp.isverified) {
-      // response(res, 200, )
-      return res.status(200).send({ invoice: resp, token: _token });
+      return res.status(200).send({ invoice: resp, token: _token })
     } else {
-      return res.status(201).send({ message: 500 });
-      // response(res, 201, { message: 500 })
+      return res.status(201).send({ message: 500 })
     }
   } catch (err) {
     return res.status(500).send(err);
@@ -287,12 +253,9 @@ const confirmUser = async (req, res, next) => {
 
     const _token = await generateToken(resp);
 
-    // response(res, 200, { user: resp, token: _token })
-    return res.status(200).send({ user: resp, token: _token });
+    return res.status(200).send({ user: resp, token: _token })
   } catch (err) {
-    // const _resp = await addVector(path, 'users', [0, 0], data, false)
-
-    return res.status(301).send({ message: 301 });
+    return res.status(301).send({ message: 301 })
   }
 };
 
@@ -311,46 +274,34 @@ const avatarUser = async (req, res) => {
   const { id } = req.params;
   const path = encodeVector(ID);
 
-  console.log("iddd", id);
+  
+  const conditions = [
+    { field: 'id', operator: '==', value: id }
+  ];
 
-  // const options = `
-  //   query {
-  //    users(id: ${id}) {
-  //      avatar
-  //  }`
 
-  // const resp = await getVector(path, 'users', [0, 0], options)
+  const resp = await getVector(path, 'users', [0, 0], conditions, false)
 
-  const conditions = [{ field: "id", operator: "==", value: id }];
-
-  const resp = await getVector(path, "users", [0, 0], conditions, false);
 
   if (resp.length == 0) {
     throw "Not exist user";
   }
 
-  const base64Image = resp[0].avatar;
-  // console.log('base64Image', base64Image)
+  const base64Image = resp[0].avatar
 
-  // Verifica si el dato es válido antes de enviarlo
   if (!base64Image || !/^data:image\/\w+;base64,/.test(base64Image)) {
     res.status(402).send("Formato de imagen no válido");
     return;
   }
 
-  // Extrae el tipo de contenido de la imagen (png, jpeg, etc.)
-  const contentType = base64Image.split(";")[0].split(":")[1];
+  const contentType = base64Image.split(';')[0].split(':')[1];
+  const imageBuffer = Buffer.from(base64Image.split(',')[1], 'base64');
 
-  // Convierte el formato base64 a Buffer
-  const imageBuffer = Buffer.from(base64Image.split(",")[1], "base64");
-
-  // Establece las cabeceras de la respuesta con el tipo de contenido
   res.writeHead(200, {
     "Content-Type": contentType,
     "Content-Length": imageBuffer.length,
   });
 
-  // Envía la imagen en formato Buffer como respuesta
   res.end(imageBuffer);
 };
 
@@ -366,14 +317,15 @@ const updateUser = async (req, res, next) => {
     delete resp.avatar;
     console.log("rrres", resp);
 
-    const _token = await generateToken(resp);
+    delete resp.avatar
+
+    
+    const _token = await generateToken(resp)
 
     if (resp.isverified) {
-      // response(res, 200, { user: resp, token: _token })
-      return res.status(200).send({ user: resp, token: _token });
+      return res.status(200).send({ user: resp, token: _token })
     } else {
-      // response(res, 201, { message: 500 })
-      return res.status(201).send({ message: 500 });
+      return res.status(201).send({ message: 500 })
     }
   } catch (err) {
     return res.status(500).send(err);
@@ -421,16 +373,15 @@ const loginUser = async (req, res, next) => {
       return res.status(500).send({ message: "User not found by email" });
     }
 
-    const data = _user[0];
+    const data = _user[0]
     // avatar
-    delete data.avatar;
+    delete data.avatar
 
-    const token = await generateToken(data);
+
+    const token = await generateToken(data)
 
     if (data.isverified !== true) {
-      // resend email confirm email
-      // const email = sendEmail('info@aythen.com', 'confirm-email', { token })
-      return res.status(301).send({ message: 301 });
+      return res.status(301).send({ message: 301 })
     } else {
       return res.status(200).send({
         token,
@@ -444,17 +395,14 @@ const loginUser = async (req, res, next) => {
 
 const registerUser = async (req, res, next) => {
   try {
-    // const user = await models.UserModel.findOne({ where: { email } })
-    // id, name, vector = [1.3, 1.4], data, overwrite = false
-    const { path, user, password } = req.body;
+    const { path, user, password } = req.body
 
     const conditions = [{ field: "user", operator: "==", value: user }];
 
     const resp = await getVector(path, "users", [0, 0], conditions, false);
 
     if (resp.length > 0) {
-      // throw new ClientError('User ya existe ' + JSON.stringify(resp.exist), 400)
-      return res.status(400).send("User already exist");
+      return res.status(400).send('User already exist')
     }
 
     if (resp.error) {
@@ -476,8 +424,7 @@ const registerUser = async (req, res, next) => {
 
     const email = sendEmail(user, "confirm-email", { token });
 
-    // response(res, 200, { token: 'Success' })
-    return res.status(200).send({ token: "Success" });
+    return res.status(200).send({ token: 'Success' })
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -500,11 +447,6 @@ const upgradeUser = async (req, res, next) => {
 
     const email = sendEmail(user.email, "start-premium");
 
-    // response(res, 200, {
-    //   token: generateToken(_resp),
-    //   user: _resp
-    // })
-
     return res.status(200).send({
       token: generateToken(_resp),
       user: _resp,
@@ -520,27 +462,22 @@ const recoverPasswordUser = async (req, res, next) => {
 
     const options = [{ field: "user", operator: "==", value: email }];
 
-    //path
-
-    const resp = await getVector(path, "users", [0, 0], options, false);
+    const resp = await getVector(path, 'users', [0, 0], options, false)
 
     if (resp.error) {
       throw new ClientError(resp.error, 500);
     }
 
     if (resp.length == 0) {
-      console.log("wfrf");
-      // throw new ClientError(resp.error, 500)
-
-      return res.status(400).send({ message: "Not found user" });
+      return res.status(400).send({ message: 'Not found user' })
     }
 
     const user = resp[0];
     const token = generateToken(user);
 
-    sendEmail(email, "recover-password", { token });
-    // response(res, 200, { message: 'Send Email' })
-    return res.status(200).send({ message: "Send Email" });
+    sendEmail(email, 'recover-password', { token })
+    return res.status(200).send({ message: 'Send Email' })
+
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -548,9 +485,8 @@ const recoverPasswordUser = async (req, res, next) => {
 
 const updatePasswordUser = async (req, res, next) => {
   try {
-    console.log("123456");
-    const { user } = req;
-    const { password } = req.body;
+    const { user } = req
+    const { password } = req.body
 
     console.log("usertoekn, ", user.user);
     let _user = user;
@@ -564,11 +500,6 @@ const updatePasswordUser = async (req, res, next) => {
 
     const token = generateToken(resp);
 
-    // console.log('resp', resp)
-    // response(res, 200, {
-    //   user: resp,
-    //   token: __token
-    // })
     return res.status(200).send({
       user: resp,
       token: token,
@@ -580,10 +511,10 @@ const updatePasswordUser = async (req, res, next) => {
 
 // --------------------------------------
 const shareFile = async (req, res) => {
-  const { user } = req;
+  const { user } = req
+  const resp = await addVector(path, 'users', [0, 0], data, false)
 
-  const resp = await addVector(path, "users", [0, 0], data, false);
-};
+}
 
 const addUser = async (req, res) => {
   try {
@@ -599,9 +530,9 @@ const addUser = async (req, res) => {
         isverified: true,
       };
 
-      const resp = await addVector(path, "users", [0, 0], data, false);
-      console.log("re", resp);
-      arr.push(resp);
+      const resp = await addVector(path, 'users', [0, 0], data, false)
+
+      arr.push(resp)
     }
 
     return res.status(200).send(arr);
@@ -616,12 +547,8 @@ const deleteUser = async (req, res) => {
 
     const path = encodeVector(ID);
 
-    console.log("ed9iew2udh", id);
-    const resp = await deleteVector(path, "users", id);
-
-    console.log("resp", resp);
-
-    return res.status(200).send(id);
+    const resp = await deleteVector(path, 'users', id)
+    return res.status(200).send(id)
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -636,15 +563,13 @@ const fetchsUser = async (req, res) => {
 
     if (order) {
       conditions = [
-        { field: order.param, operator: "!==", value: "%", order: order.type },
+        { field: order.param, operator: '!==', value: '%', order: order.type }
       ];
     }
 
-    console.log("controller", { conditions });
+    const data = await getVector(path, 'users', [0, 0], conditions)
 
-    const data = await getVector(path, "users", [0, 0], conditions);
-    console.log("controller", { data });
-    return res.status(200).send(data);
+    return res.status(200).send(data)
   } catch (err) {
     return res.status(500).send(err);
   }
@@ -652,19 +577,13 @@ const fetchsUser = async (req, res) => {
 
 const addApplication = async (req, res) => {
   try {
-    const { user } = req;
-    const { application } = req.body;
+    const { user } = req
+    const { application } = req.body
+    const path = encodeVector(ID)
 
-    console.log("adddd", application);
+    const resp = await addVector(path, 'applications', [0, 0], application, { users: user })
 
-    const path = encodeVector(ID);
-
-    console.log("apps", application);
-    const resp = await addVector(path, "applications", [0, 0], application, {
-      users: user,
-    });
-    console.log("re", resp);
-    return res.status(200).send(resp);
+    return res.status(200).send(resp)
   } catch (err) {
     console.log("Error ", err);
   }
@@ -672,15 +591,12 @@ const addApplication = async (req, res) => {
 
 const deleteApplication = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.body
+    const path = encodeVector(ID)
+    const resp = await deleteVector(path, 'applications', id)
 
-    const path = encodeVector(ID);
 
-    const resp = await deleteVector(path, "applications", id);
-
-    console.log("resp", resp);
-
-    return res.status(200).send(id);
+    return res.status(200).send(id)
   } catch (err) {
     console.log("Error ", err);
   }
@@ -715,15 +631,11 @@ const addPolice = async (req, res) => {
 
 const deletePolice = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.body
+    const path = encodeVector(ID)
+    const resp = await deleteVector(path, 'polices', id)
 
-    const path = encodeVector(ID);
-
-    const resp = await deleteVector(path, "polices", id);
-
-    console.log("resp", resp);
-
-    return res.status(200).send(id);
+    return res.status(200).send(id)
   } catch (err) {
     console.log("err", err);
   }
@@ -744,13 +656,12 @@ const fetchsPolice = async (req, res) => {
 
 const addApi = async (req, res) => {
   try {
-    const { api } = req.body;
+    const { api } = req.body
+    const path = encodeVector(ID)
 
-    const path = encodeVector(ID);
+    const resp = await addVector(path, 'apis', [0, 0], api, false)
 
-    const resp = await addVector(path, "apis", [0, 0], api, false);
-    console.log("re", resp);
-    return res.status(200).send(resp);
+    return res.status(200).send(resp)
   } catch (err) {
     return res.status(200).send([]);
   }
@@ -758,15 +669,13 @@ const addApi = async (req, res) => {
 
 const deleteApi = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.body
+    const path = encodeVector(ID)
+    const resp = await deleteVector(path, 'apis', id)
 
-    const path = encodeVector(ID);
+    
 
-    const resp = await deleteVector(path, "apis", id);
-
-    console.log("resp", resp);
-
-    return res.status(200).send(id);
+    return res.status(200).send(id)
   } catch (err) {
     return res.status(200).send([]);
   }
@@ -774,9 +683,9 @@ const deleteApi = async (req, res) => {
 
 const fetchsApi = async (req, res) => {
   try {
-    const path = encodeVector(ID);
+    const path = encodeVector(ID)
+    const data = await getVector(path, 'apis')
 
-    const data = await getVector(path, "apis");
     if (Array.isArray(data)) {
       return res.status(200).send(data);
     } else {
@@ -794,12 +703,12 @@ const addLog = async (req, res) => {
 
     const path = encodeVector(ID);
 
-    const email = sendEmail("info@aythen.com", "confirm-email", {
-      backgroundColor: options?.backgroundColor || "red",
-    });
+    const email = sendEmail('info@aythen.com', 'confirm-email', {
+      backgroundColor: options?.backgroundColor || 'red'
+    })
 
-    const resp = await addVector(path, "logs", [0, 0], log, { users: user });
-    return res.status(200).send(resp);
+    const resp = await addVector(path, 'logs', [0, 0], log, { users: user })
+    return res.status(200).send(resp)
   } catch (err) {
     console.log("err", err);
   }
@@ -807,11 +716,9 @@ const addLog = async (req, res) => {
 
 const deleteLog = async (req, res) => {
   try {
-    const { id } = req.body;
-
-    const path = encodeVector(ID);
-
-    const resp = await deleteVector(path, "logs", id);
+    const { id } = req.body
+    const path = encodeVector(ID)
+    const resp = await deleteVector(path, 'logs', id)
 
     console.log("resp", resp);
 
@@ -849,12 +756,11 @@ const fetchsLog = async (req, res) => {
 
 const sendMail = async (req, res, next) => {
   try {
-    // const { path, user, password } = req.body
-    const { email } = req.body;
-    console.log("senddd email");
-    let template = email || "confirm-email";
+    const { email } = req.body
+    console.log('senddd email')
+    let template = email || 'confirm-email'
 
-    const resp = sendEmail("info@aythen.com", template, { token: "1234" });
+    const resp = sendEmail('info@aythen.com', template, { token: '1234' })
   } catch (err) {
     return res.status(500).send(err);
   }

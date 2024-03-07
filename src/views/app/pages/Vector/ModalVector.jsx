@@ -5,10 +5,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import styles from '../Settings/iam/modal.module.css'
-// src\views\app\pages\Settings\iam\modal.module.css
 
 import AddTag from '@/views/app/pages/shared/AddTag'
-// src\views\app\pages\shared\AddTag.jsx
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -25,26 +23,14 @@ import {
     setModal
 } from '@/slices/iamSlice'
 
-// import {
-//     fetchsVector,
-
-//     addVectorData,
-//     updateVector,
-//     addVector
-// } from '@/actions/vector'
-
 
 
 
 
 export const ModalAddVector = ({ }) => {
-
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-
-    const [email, setEmail] = useState()
     const [isActive, setIsActive] = useState(false)
 
 
@@ -90,10 +76,6 @@ export const ModalAddVector = ({ }) => {
             projectId: 'vector',
         })
         const data = {
-            // user: state.email,
-            // tags: state.tags,
-            // group: state.group,
-
             id: uuidv4(),
             version: '',
             title: '',
@@ -190,7 +172,6 @@ export const ModalVector = ({ vector }) => {
     const { user } = useSelector((state) => state.iam)
 
     const handleDeleteVector = () => {
-        // const id = vector.id
         const id = iniVector({
             workspaceId: user.id,
             projectId: 'vector',
@@ -223,7 +204,6 @@ export const ModalVector = ({ vector }) => {
                     <div className={styles.gird2}>
                         <span>
                             {vector.id || 'null'}
-                            {/* 6cab0034-da88-4209-950d-f3efe9a4e583 */}
                         </span>
                         <div>
                             <svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg>

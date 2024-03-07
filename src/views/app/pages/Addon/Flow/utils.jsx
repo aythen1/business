@@ -1,6 +1,4 @@
 import { useOpenAI } from "./openai"
-// import { Edge, Node } from "reactflow"
-// import { IChat } from "type"
 
 
 export const nodeChainTransformer = (

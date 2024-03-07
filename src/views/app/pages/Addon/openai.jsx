@@ -1,7 +1,5 @@
 import OpenAI from 'openai';
 
-// const token = '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'
-
 export const useOpenAI = async () => {
   
   try {
@@ -9,7 +7,7 @@ export const useOpenAI = async () => {
     if(!token) throw false
 
     const config = {
-      apiKey: token, // This is the default and can be omitted
+      apiKey: token, 
       dangerouslyAllowBrowser: true
     };
 

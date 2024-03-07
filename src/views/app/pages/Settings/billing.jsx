@@ -13,7 +13,6 @@ import {
     fetchsBilling,
     updateBilling,
 
-    addInvoice,
     fetchsInvoice,
 
     sendMail
@@ -33,21 +32,6 @@ const Billing = ({ }) => {
     const [stateTable, setStateTable] = useState('')
 
     const { billing, invoices } = useSelector((state) => state.iam)
-
-    // const organization = {
-    //     name: 'Aythen',
-    //     currency: 'eur',
-    //     iban: 'ESB61077863',
-    //     type: 'professional account',
-    //     address: {
-    //         mame: 'Pasaje Barcelona',
-    //         num: 'n8 local 2',
-    //         zip: '08130',
-    //         city: 'Santa Perpetua de Mogoda',
-    //         province: 'Barcelona',
-    //         country: 'SPAIN'
-    //     }
-    // }
 
 
     // ---
@@ -70,12 +54,9 @@ const Billing = ({ }) => {
 
 
     useEffect(() => {
-        console.log('billlingg', billing)
         if (billing) {
-            console.log('billing', billing)
             const address = JSON.parse(billing?.billings?.address || "{}")
 
-            console.log('eessss', address)
             setState({
                 id: billing.billings?.id || null,
                 type: billing.billings?.type || '',
@@ -94,8 +75,6 @@ const Billing = ({ }) => {
                 country: address.country || '',
                 region: address.region || '',
             })
-
-
         }
     }, [billing])
 
@@ -108,10 +87,7 @@ const Billing = ({ }) => {
         }
 
         if (property === 'email') {
-            // Dividir los correos electrónicos por comas y quitar los espacios en blanco
             const emailArray = value.split(',').map(email => email.trim());
-
-            // Verificar si al menos hay un correo electrónico válido
             const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
 
             setIsActive(isValidEmail);
@@ -156,7 +132,6 @@ const Billing = ({ }) => {
                 currency: state.currency || '',
                 vat: state.vat || '',
                 paymentmethod: state.paymentmethod || 'credit',
-                // test: '12345'
                 address: {
                     steetaddress1: state.address1 || '',
                     steetaddress2: state.address2 || '',
@@ -166,8 +141,6 @@ const Billing = ({ }) => {
                     region: state.region || '',
                 }
             }
-
-            console.log('update Billing: ', data)
 
             dispatch(updateBilling({ billing: data }))
         }
@@ -180,13 +153,6 @@ const Billing = ({ }) => {
 
     // -------------------------------------------------
     const handleAddInvoice = () => {
-        // alert(1)
-        // const item = {
-        //     invoiceDate: new Date()
-        // }
-
-        // dispatch(addInvoice(item))
-
         dispatch(setModal(<ModalInvoice />))
     }
 
@@ -194,16 +160,12 @@ const Billing = ({ }) => {
 
     const sendEmail = () => {
         dispatch(sendMail({
-            // email: 'confirm-email'
             email: 'new-account'
         }))
-
-        alert(1)
     }
 
 
     // -------------------------------------------------
-
     useEffect(() => {
         if (stateTable.startsWith('download-file:')) {
             const id = stateTable.split(':')[1].trim()
@@ -334,8 +296,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
-
             <div className={styles.containerContact}>
                 <h2 className={styles.title}>
                     Token de GPT
@@ -364,9 +324,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
-
-
             <div className={styles.containerAlerts}>
                 <h2 className={styles.title}>
                     Límite de banca
@@ -401,8 +358,6 @@ const Billing = ({ }) => {
                                     <input value={'€'} />
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div className={styles.button}>
@@ -415,7 +370,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
             <div className={styles.containerVat}>
                 <h2 className={styles.title}>
                     VAT identification number
@@ -444,8 +398,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
-
             <div className={styles.containerPayment}>
                 <h2 className={styles.title}>
                     Métodos de pago
@@ -479,12 +431,9 @@ const Billing = ({ }) => {
                     </div>
                     <div className={styles.table}>
                         falta tabla
-                        {/* <Table /> */}
                     </div>
                 </div>
             </div>
-
-
             <div className={styles.containerNotification}>
                 <h2 className={styles.title}>
                     Notificaciones de cuenta
@@ -539,12 +488,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
             <div id="invoice" className={styles.containerInvoices}>
                 <h2 className={styles.title}>
                     Facturas enviadas
@@ -588,8 +531,6 @@ const Billing = ({ }) => {
                     </div>
                 </div>
             </div>
-
-
         </div>
     )
 }
@@ -743,8 +684,6 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                         onChange={(e) => handleInputChange(e, 'region')}
                     />
                 </div>
-
-
                 <div
                     onClick={() => handleClickAccept()}
                     className={styles.button}

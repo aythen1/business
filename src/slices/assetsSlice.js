@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
-  // getAssets,
   directoriesDB,
   getRootDirectories,
   getDirectoriesVersions,
@@ -13,8 +12,6 @@ import {
   getFile,
   copyFile,
   uploadFile,
-  // getIconsByFolder,
-  // getIconByQuery
 } from "@/actions/assets";
 import {} from "../views/app/pages/Settings/drive/assetsAux";
 import * as types from "./types";
@@ -38,7 +35,6 @@ const filterDeleteMarkersByKey = (state, Key) => {
 export const assetsSlice = createSlice({
   name: "assets",
   initialState: {
-    // assets: [],
     directoriesData: [],
     directoriesTrash: { Versions: [], DeleteMarkers: [] },
     fileToCopy: "",

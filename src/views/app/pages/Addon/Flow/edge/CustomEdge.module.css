@@ -1,7 +1,7 @@
 :global(.react-flow__edge-path) {
-    stroke: #282727; /* Color de la línea de conexión */
+    stroke: #282727; 
     fill: none;
-    stroke-width: 1px; /* Ancho visual de la línea de conexión */
+    stroke-width: 1px; 
   
     :global(&.selected){
         stroke: var(--color-primary-0) !important;

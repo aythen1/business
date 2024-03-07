@@ -51,8 +51,6 @@ function generateGraphSql(options) {
 
   const regex = /query\s*{\s*([\s\S]*?)\s*}/;
   const match = options.match(regex);
-  // options = options.replace(/\bquery\s*{[^{}]*}/, '');
-  // Dividimos las líneas
   const lines = match[1].split('\n').map(line => line.trim()).filter(Boolean);
 
   let index = -1;
@@ -93,7 +91,6 @@ function generateGraphSql(options) {
           table: tag.name,
           variable: ['id'],
           limit: parseInt(tag.config.limit) || 20,
-          // filter: tag.config.id ? `${tag.name}_id == '${tag.config.id}'` : null
           filter: tag.config.id ? `id == '${tag.config.id}'` : null
         }
 
@@ -144,27 +141,20 @@ function generateSearchString(conditionsData) {
     return queryString;
 
     return ''
-    throw new Error('Se requiere al menos una condición.');
   } else if (!(typeof conditionsData === 'object')) {
-    // console.log(conditionsData, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     return ''
-    throw new Error('Se requiere al menos una condición.');
   }
 
 
 
-  // Mapea las condiciones y operadores lógicos a sus respectivas representaciones de cadena
   const conditionsStrings = conditionsData.map((item) => {
-    // Verifica si el valor es undefined
     if (item.value === undefined) {
-      return { error: `El valor para '${item.field}' está undefined.` }; // Devuelve un mensaje de error
+      return { error: `El valor para '${item.field}' está undefined.` }; 
     }
 
     if (item.conditions) {
-      // Si hay un subconjunto de condiciones, genera recursivamente su cadena
       return `(${generateSearchString(item.conditions)})`;
     } else {
-      // Si es una condición individual, convierte a cadena
       const value = typeof item.value === 'string' ? `'${item.value}'` : item.value;
 
       let order = ''
@@ -177,13 +167,11 @@ function generateSearchString(conditionsData) {
     }
   });
 
-  // Verifica si alguna condición devolvió un mensaje de error
   const errorCondition = conditionsStrings.find((item) => item && item.error);
   if (errorCondition) {
-    return errorCondition; // Devuelve el mensaje de error
+    return errorCondition; 
   }
 
-  // Combina todas las condiciones en una cadena
   const searchString = `${conditionsStrings.join(` ${conditionsData.logicalOperator || 'AND'} `)}`;
 
   return searchString;

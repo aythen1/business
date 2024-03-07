@@ -1,5 +1,4 @@
-import axios from "axios";
-// import { apiBackend } from '@/utils/config.js'
+import axios from 'axios'
 
 const axiosInstance = axios.create({
   // baseURL: 'https://business.ay-cloud.com/service/v1',

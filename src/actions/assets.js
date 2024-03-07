@@ -86,7 +86,6 @@ export const createNewFolder = createAsyncThunk(
   "assets/createNewFolder",
   async (name) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         userId,
@@ -105,7 +104,6 @@ export const uploadFile = createAsyncThunk(
   "assets/uploadFile",
   async ({ file, pathDepured }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const formData = new FormData();
       formData.append("userId", userId);
@@ -136,7 +134,6 @@ export const copyFile = createAsyncThunk(
   "assets/copyFile",
   async ({ sourceKey, destinationKey, file }, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         sourceBucket: userId,
@@ -165,7 +162,6 @@ export const moveFile = createAsyncThunk(
   "assets/copyFile",
   async ({ sourceKey, destinationKey, file, VersionId }, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         sourceBucket: userId,
@@ -197,7 +193,6 @@ export const deleteFolder = createAsyncThunk(
   "assets/deleteFolder",
   async (path, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const query = buildQueryString({
         userId,
@@ -258,7 +253,30 @@ export const deleteFiles = createAsyncThunk(
 // Borrar un archivo en scaleway
 export const deletePermanentFile = createAsyncThunk(
   "assets/deleteFile",
-  async ({ path, VersionId }, { dispatch }) => {
+  async ({ path, VersionId, Size, act }, { dispatch }) => {
+    console.log("SOY DELETE FILE");
+    try {
+      // const userId = JSON.parse(localStorage.getItem('user')).user.id
+      const userId = "1234";
+      const query = buildQueryString({
+        userId,
+        path,
+        VersionId,
+      });
+      const { data } = await apiBackend.delete(`/assets/file?${query}`);
+      // dispatch(filterFolder(path));
+      const objectData = { Key: path, VersionId, Size, act };
+
+      return objectData;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un archivo en scaleway
+export const deleteFiles = createAsyncThunk(
+  "assets/deleteFiles",
+  async ({ folders, action }, { dispatch }) => {
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
@@ -281,7 +299,6 @@ export const deleteFolders = createAsyncThunk(
   "assets/deleteFolders",
   async (folders, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       console.log(folders);
       const { data } = await apiBackend.put(`/assets/delete-folders`, {
@@ -301,12 +318,7 @@ export const directoriesDB = createAsyncThunk(
   "assets/directoriesDB",
   async (folders, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-      // const query = buildQueryString({
-      //   userId,
-      //   folders
-      // })
       const { data } = await apiBackend.post(`/assets/directories-db`, {
         id: userId,
         folders,

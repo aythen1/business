@@ -152,11 +152,5 @@ export const dataComponents = [
         description: `[Tres] rows.La primera con[un] título con[párrafo] debajo.Dan paso a un[grid] de 4x2 cajas basadas en[imagenes] relacionadas con la categoría del negocio.Terminando con el ultimo row con un[boton] a #home#contact#page… `
         
         
-    }, 
-    // {
-    //     href: 'List',
-    //     title: `Ajustes`,
-    //     image: require('./assets/components/list.jpg'),
-    //     description: `[Una] columna con una[imagen] inicial, con diferentes cajas de información de[nombre, apellidos, email, dirección, cerrar sesión]`
-    // }
+    }
 ]

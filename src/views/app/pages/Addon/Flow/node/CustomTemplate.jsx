@@ -15,7 +15,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { Handle } from "reactflow";
 
-// import * as Graphs from '@/views/graphs/render'
 import { useGraph } from '../index';
 
 
@@ -41,9 +40,6 @@ import styles from './CustomTemplate.module.css'
 
 export default memo(({ id, data, isConnectable, }) => {
   const { nodes, edges, setNodes, setEdges, setSelectedEdge, addNode } = useGraph();
-
-
-  const { fitView, setCenter } = useReactFlow();
 
   const { prompt, value, error, handles, components } = data;
 
@@ -122,27 +118,6 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
 
-  function transposeArrays(arrays) {
-    // Obtén la longitud máxima de los arrays
-    const maxLength = Math.max(...arrays.map(arr => arr.length));
-
-    // Inicializa un array de arrays vacíos
-    const result = Array.from({ length: maxLength }, () => []);
-
-    // Transpone los arrays
-    for (const array of arrays) {
-      array.forEach((value, index) => {
-        result[index].push(value);
-      });
-    }
-
-    return result;
-  }
-
-
-
-
-
 
   const handleGPT = async ({ id, prompt = false, type = 'text' }) => {
 
@@ -182,30 +157,8 @@ export default memo(({ id, data, isConnectable, }) => {
               });
             });
           }
-
-          // setGptValue(accumulatedText)
         }
 
-
-        if (type == 'graph') {
-          let accumulatedGraph = parseChartString(accumulatedText)
-
-          setNodes((prevNodes) => {
-            return prevNodes.map((node) => {
-              if (node.id === id) {
-                return {
-                  ...node,
-                  data: {
-                    ...node.data,
-                    value: prompt + '\n' + accumulatedText,
-                    response: accumulatedGraph,
-                  },
-                };
-              }
-              return node;
-            });
-          });
-        }
       } catch (err) {
         console.log('err', err)
       }
@@ -241,7 +194,6 @@ export default memo(({ id, data, isConnectable, }) => {
     if (allInputsPaths.length > 0) {
       const inputsParts = insertInputsPaths(allInputsPaths);
       console.log('inputsParts', inputsParts)
-      // await inputsGPT(inputsParts)
     }
   };
 
@@ -249,9 +201,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   // ------------------------------------------------------------ 
   const handleDuplicate = () => {
-
     const node = nodes.filter((node) => node.id === id)[0]
-
     const newNode = {
       id: uuidv4(),
       type: "selectorComponent",
@@ -285,7 +235,6 @@ export default memo(({ id, data, isConnectable, }) => {
 
   return (
     <>
-      {/* {id} */}
       <Handle
         id={`${id}_top`}
         type="target"

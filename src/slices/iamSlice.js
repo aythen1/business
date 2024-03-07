@@ -36,9 +36,10 @@ import {
   addLog,
   deleteLog,
   deleteLogs,
-  fetchsLog,
-} from "@/actions/iam";
-// import { fetchsUser } from '../actions/iam';
+  fetchsLog
+} from '@/actions/iam'
+
+
 
 const iamSlice = createSlice({
   name: "iam",
@@ -59,6 +60,7 @@ const iamSlice = createSlice({
     changelogs: [],
     news: [],
 
+    status: 'idle', 
     status: "idle", // Puede ser 'idle', 'pending', 'fulfilled', 'rejected'
     error: null,
 
@@ -101,7 +103,6 @@ const iamSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Manejar las acciones generadas por createAsyncThunk
     builder
       .addCase(setOpenMenuLeft.fulfilled, (state, action) => {
         state.openMenuLeft = action.payload;
@@ -132,13 +133,8 @@ const iamSlice = createSlice({
       .addCase(updateDefault.fulfilled, (state, action) => {
         console.log("dddd", action.payload);
         const { table, data } = action.payload;
-
-        // Obtener el índice del elemento que queremos actualizar
-        const arrayIndex = state[table].findIndex(
-          (item) => item.id === data.id
-        );
-
-        console.log("arrayindex", arrayIndex);
+        const arrayIndex = state[table].findIndex((item) => item.id === data.id);
+      
         // Si encontramos el índice, realizar la actualización
         if (arrayIndex !== -1) {
           state[table][arrayIndex] = data;
@@ -146,6 +142,7 @@ const iamSlice = createSlice({
       })
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {
+        state.billing = action.payload
         // state.billing = action.payload
         console.log("fetchsBillingfetchsBilling,", action.payload);
         state.billing = action.payload;
@@ -155,10 +152,12 @@ const iamSlice = createSlice({
       })
 
       .addCase(fetchsInvoice.fulfilled, (state, action) => {
+        state.invoices = action.payload
         // state.billing = action.payload
         state.invoices = action.payload;
       })
       .addCase(addInvoice.fulfilled, (state, action) => {
+        state.invoices = state.invoices.push(action.payload)
         // state.billing = action.payload
         state.invoices = state.invoices.push(action.payload);
       })
@@ -191,6 +190,7 @@ const iamSlice = createSlice({
         state.status = "pending";
       })
       .addCase(register.fulfilled, (state, action) => {
+        state.error = 'Email enviado de confirmación';
         console.log("token", action.payload);
         // localStorage.setItem('token', action.payload)
         // state.token = action.payload;
@@ -211,6 +211,7 @@ const iamSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(login.fulfilled, (state, action) => {
+        localStorage.setItem('token', action.payload.token)
         // state.user = action.payload;
         localStorage.setItem("token", action.payload.token);
         state.user = action.payload.user;
@@ -299,7 +300,6 @@ const iamSlice = createSlice({
             (app2) => !action.payload.find((app1) => app1.id === app2.id)
           )
         );
-        // state.applications.push(action.payload;
       })
       .addCase(deleteApplication.fulfilled, (state, action) => {
         const indexToDelete = state.applications.findIndex(
@@ -317,7 +317,6 @@ const iamSlice = createSlice({
       })
 
       .addCase(addPolice.fulfilled, (state, action) => {
-        // state.polices.push(action.payload);
         state.polices = action.payload.concat(
           state.polices.filter(
             (police2) =>
@@ -341,8 +340,6 @@ const iamSlice = createSlice({
       })
 
       .addCase(addApi.fulfilled, (state, action) => {
-        // state.apis.push(action.payload);
-
         state.apis = action.payload.concat(
           state.apis.filter(
             (api2) => !action.payload.find((api1) => api1.id === api2.id)

@@ -9,7 +9,6 @@
   }
 .drive_left_panel{
     height: 100%;
-    /* width: 220px; */
     border-right: 1px solid var(--border-color);
     padding: 10px 10px 10px 0px;
 }
@@ -21,13 +20,6 @@
 
 
 
-
-
-
-
-
-
-/**************************************************/
 
 .main_drive_page {
     display: flex;
@@ -198,15 +190,6 @@
     display: inline-flex;
     gap: 8px;
     padding: 15px 0px;
-
-    /* flex-basis: 0; */
-    /* Inicialmente, cada hijo tomará un espacio igual */
-    /* flex-grow: 1; */
-    /* Permitirá que los hijos crezcan para ocupar el espacio disponible */
-    /* flex-shrink: 1; */
-    /* Permitirá que los hijos se contraigan si hay poco espacio disponible */
-
-    /* Puedes añadir estilos adicionales según tus preferencias */
     padding: 10px;
     text-align: center;
 }

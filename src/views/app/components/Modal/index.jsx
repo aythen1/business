@@ -19,13 +19,11 @@ const Modal = ({  }) => {
 
   const handleOutsideClick = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      // openModal(null);
       dispatch(setModal(null))
     }
   };
 
   const handleCloseButtonClick = () => {
-    // openModal(null);
     dispatch(setModal(null))
   };
 

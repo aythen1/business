@@ -5,21 +5,21 @@ const generateColors = (startColor, steps = 6) => {
 
   for (let i = 0; i < steps; i++) {
     const ratio = i / (steps - 1);
-    const color = interpolateColor([255, 255, 255], startRGB, ratio); // Interpolamos con blanco para suavizar
+    const color = interpolateColor([255, 255, 255], startRGB, ratio); 
     colorListLight.push(rgbToHex(color));
   }
 
-  // Generar colores ascendentes con nombres específicos
   for (let i = 0; i < steps; i++) {
     const ratio = i / (steps - 1);
     const color = interpolateColor(startRGB, [0, 0, 0], ratio);
     colorListDark.push(rgbToHex(color));
   }
 
+
   return {
     light: colorListLight.reverse(),
-    dark: colorListDark,
-  };
+    dark: colorListDark
+  }
 };
 
 export default generateColors;
@@ -48,4 +48,4 @@ const interpolateColor = (startRGB, endRGB, ratio) => {
     result[i] = Math.round(startRGB[i] + ratio * (endRGB[i] - startRGB[i]));
   }
   return result;
-};
+};  

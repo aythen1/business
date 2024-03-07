@@ -1,4 +1,3 @@
-// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 
@@ -7,14 +6,9 @@ import {
   updateVector,
   addVectorData,
 
-  openVector,
-  openFile,
-  loadVector,
   deleteVector,
-  removeAllVector,
   fetchsVector,
   fetchVector,
-  getAllVector
 } from '@/actions/vector'
 
 
@@ -41,10 +35,7 @@ const vectorSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Manejar las acciones generadas por createAsyncThunk
     builder
-
-
       .addCase(fetchsVector.fulfilled, (state, action) => {
         state.vectors = action.payload
       })
@@ -82,37 +73,6 @@ const vectorSlice = createSlice({
         state.vector = null;
       })
 
-    // .addCase(openFile.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(loadVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(addVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(updateVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(deleteVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(removeAllVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(getVector.fulfilled, (state, action) => {
-
-    // })
-
-    // .addCase(getAllVector.fulfilled, (state, action) => {
-
-    // })
   },
 });
 

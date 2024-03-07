@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Routes, Route, Outlet, useParams, useNavigate, Link } from 'react-router-dom';
+import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 
-// import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-// import { Route, Routes, Outlet, useParams } from 'react-router-dom';
-// import { useNavigate  } from 'react-router-dom';
 
 
 import styles from './index.module.css'
@@ -17,10 +14,8 @@ import {
 import Home from './home'
 import Billing from './billing'
 import Contract from './contract'
-// import Support from './support'
 import Drive from './drive'
 import Bank from './bank'
-// import Dashboard from '../DashBoard'
 
 import Vector from '../Vector'
 
@@ -74,7 +69,6 @@ const Settings = ({ }) => {
       dispatch(setDashboard(null))
       navigate(`/${'es'}/app/settings/${value}`);
     } else {
-      // Realiza la navegación según la tag seleccionada
       navigate(`/${'es'}/app/settings/${value}`);
     }
   };
@@ -123,9 +117,7 @@ const Settings = ({ }) => {
       </div>
       <div>
         <Routes>
-          {/* <Route path="hello" element={<Drive />} /> */}
           <Route path="*" element={<SettingsPath />} />
-          {/* <Route path="" element={<SettingsPath />} /> */}
         </Routes>
       </div>
 

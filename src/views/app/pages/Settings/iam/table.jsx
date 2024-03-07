@@ -3,33 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
-import * as XLSX from 'xlsx';
 
-import { v4 as uuidv4 } from 'uuid'
-
-// import React, { useEffect, useRef, useState } from 'react'
 import styles from './table.module.css'
 
 
 import {
   TableRender
 } from '../utils/TableRender'
-
-
-
-
-// import {
-//   // postInstance,
-//   // getServersZone,
-//   deleteInstance,
-//   getProjectInstance
-// } from '@/store/redux/actions/instances'
-
-// import { useParams } from 'next/navigation'
-
-// import {
-//   fetchsUser,
-// } from '@/actions/iam'
 
 
 const Table = ({
@@ -44,11 +24,7 @@ const Table = ({
   const dispatch = useDispatch()
 
   // --------------------------------------------------------------------------------------------------------------
-  // const [editMode, setEditMode] = useState(false)
   const [table, setTable] = useState(null)
-  const [tableInfo, setTableInfo] = useState({
-    name: 'default'
-  })
 
   const [textToolTip, setTextToolTip] = useState(null)
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
@@ -61,37 +37,27 @@ const Table = ({
 
 
   const camelCase = (str) => {
-    // Convierte el string a camelCase
-    // return str.replace(/[^a-zA-Z]/g, ' ').replace(/\s+(.)/g, (_, match) => match.toUpperCase());
     return str.replace(/[^a-zA-Z0-9]/g, ' ')
-      .replace(/\b(\d+)\b/g, '_$1')  // Mueve los números al inicio con un guion bajo
+      .replace(/\b(\d+)\b/g, '_$1')  
       .replace(/\s+(.)/g, (_, match) => match.toUpperCase());
   };
 
 
 
   // --------------------------------------------------------------------------------------------------------------
-
   const handleCheckboxChange = (index) => {
     setSelectedDashboard((prevSelectedDashboards) => {
-      // Clonar el array para no mutar el estado directamente
       const newSelectedDashboards = [...prevSelectedDashboards]
 
-      // Alternar la selección de la instancia en el índice dado
       newSelectedDashboards[index] = !newSelectedDashboards[index]
-
       return newSelectedDashboards
     })
   }
 
-  /* visible settings */
   // --------------------------------------------------------------------------------------------------------------
-
-
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
-    // console.log('dataset', e.target.dataset.tooltip)
     setTextToolTip(e.target.dataset.tooltip)
   }
 
@@ -104,8 +70,6 @@ const Table = ({
 
 
   // --------------------------------------------------------------------------------------------------------------
-
-  // ---------------------------------------
   const onFilter = async (type) => {
     console.log('type filter', type)
 
@@ -118,11 +82,10 @@ const Table = ({
       const filteredItems = React.Children.toArray(children)
         .filter((child) => child.type === 'item')
         .map((item) => {
-          // const tag = camelCase(title).toLowerCase();
-          const filterAttribute = item.props.filter; // Obtén el valor del atributo filter si existe
-          const nameAttribute = item.props.name; // Obtén el valor del atributo filter si existe
+          const filterAttribute = item.props.filter; 
+          const nameAttribute = item.props.name; 
           const title = item.props.children
-          const tag = filterAttribute || camelCase(title).toLowerCase(); // Usa el valor de filterAttribute si existe, de lo contrario, utiliza el título
+          const tag = filterAttribute || camelCase(title).toLowerCase(); 
           const name = nameAttribute || item.props.children
           const size = item.props.size || null
           const component = item.props.component || null
@@ -155,12 +118,7 @@ const Table = ({
 
 
   // ----------------
-
-
-
   useEffect(() => {
-    // const tokenRoomTable = localStorage.getItem('token-' + roomTable)
-    // const dataTable = JSON.parse(tokenRoomTable)
     const fetchData = async () => {
       try {
         await dispatch(fetchs({}))

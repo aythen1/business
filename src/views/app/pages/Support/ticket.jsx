@@ -13,25 +13,12 @@ import {
 import {
     calculateTimeAgo
 } from '@/actions/vector'
-import e from 'cors';
-
-
-
-// Hello, Your instance 'scw-develop-new'('8158c223-f60d-4eca-8815-c2152e9b175c') is running on a
-// hypervisor that experienced a critical failure.Unfortunately, we were not able to reboot the hypervisor.
-// As a result, your instance has been stopped.However, your data is on a block volume so it has not been
-// impacted or lost.Your instance can now be restarted whenever you want.We apologize for any inconvenience 
-// caused and remain at your disposal if you have any question.Scaleway Team
-
 
 
 const esUUID = (variable) => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(variable);
 }
-
-
-
 
 
 const Ticket = () => {

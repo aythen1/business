@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 const ColorContext = createContext();
 
 export const ColorProvider = ({ children }) => {
-    const [color, setColor] = useState('#000fff'); // Valor inicial, puedes ajustarlo según tus necesidades
+    const [color, setColor] = useState('#000fff'); 
 
     const setRandomColor = (newColor) => {
         setColor(newColor);

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-
-import { v4 as uuidv4 } from 'uuid';
+import { useDispatch } from 'react-redux'
 
 import Table from './table'
 import styles from './index.module.css'
@@ -20,7 +18,6 @@ import {
     setModal
 } from '@/slices/iamSlice'
 import { useNavigate } from 'react-router-dom';
-// import { getEmail } from '../../../../../../service/services/email';
 
 
 
@@ -30,8 +27,6 @@ const TableUsers = ({
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-
-    // const [selectedItems, setSelectedItems] = useState()
     const [stateTable, setStateTable] = useState('')
 
     useEffect(() => {
@@ -39,7 +34,6 @@ const TableUsers = ({
             const id = stateTable.split(':')[1]
             const index = users.findIndex(user => user.id === id);
             const user = users[index]
-            console.log('user', user)
 
             dispatch(setModal(<PopupModalUser user={user} styles={stylesModal} />))
         } else if (stateTable.startsWith('delete-item:')) {
@@ -78,7 +72,6 @@ const TableUsers = ({
                 </button>
             </div>
             <div>
-
                 <Table
                     fetchs={fetchsUser}
                     items={users}
@@ -112,27 +105,26 @@ const TableUsers = ({
     )
 }
 
+
+
 export default TableUsers
 
 
 
 
+
+
+
 const PopupModalAddUser = ({ styles }) => {
-
     const dispatch = useDispatch()
-
-    const [email, setEmail] = useState()
     const [isActive, setIsActive] = useState(false)
 
 
-    // ---
     const [state, setState] = useState({
         email: [],
         tags: [],
         group: '',
     });
-
-
 
 
     const handleInputChange = (e, property) => {
@@ -142,10 +134,7 @@ const PopupModalAddUser = ({ styles }) => {
         }
 
         if (property === 'email') {
-            // Dividir los correos electrónicos por comas y quitar los espacios en blanco
             const emailArray = value.split(',').map(email => email.trim());
-
-            // Verificar si al menos hay un correo electrónico válido
             const isValidEmail = emailArray.some(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
 
             setIsActive(isValidEmail);

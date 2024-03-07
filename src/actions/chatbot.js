@@ -13,7 +13,6 @@ export const addChatbot =
     async (data, { dispatch }) => {
       try {
         const token = localStorage.getItem('token')
-        console.log('dd', data)
         const resp = await apiBackend.post(
           '/chatbot', {
           chatbot: data
@@ -24,7 +23,6 @@ export const addChatbot =
         }
         );
 
-        console.log('resp', resp)
 
         return resp.data[0];
       } catch (error) {
@@ -105,7 +103,6 @@ export const addChatbot =
         },
       })
 
-      console.log('delete res', res)
 
       return res.data
     } catch (error) {
@@ -119,19 +116,6 @@ export const addChatbot =
 
   
     
- 
-// // Acción asincrónica
-// export const addMessage =
-// createAsyncThunk('chatbot/addMessage',
-//   async (item, { dispatch }) => {
-//     try {
-
-//       return item;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
 
 
 

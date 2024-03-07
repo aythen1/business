@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-dom'
 import { useNavigate } from 'react-router-dom';
 
 
@@ -24,13 +23,8 @@ const IAM = ({
     logs
   } = useSelector((state) => state.iam)
 
-
   const navigate = useNavigate()
-
-
-
   const [selectedTab, setSelectedTab] = useState('users')
-
 
   const handleClickHome = () => {
     navigate(`/${'es'}/app/settings/home`)
@@ -49,7 +43,6 @@ const IAM = ({
         <h2 className={styles.title}>
           Identity and Access Managmenet (IAM)
         </h2>
-
       </div>
 
       <div className={styles.tabs}>

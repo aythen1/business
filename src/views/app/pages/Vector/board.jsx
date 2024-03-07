@@ -18,13 +18,7 @@ import components from '@components'
 
 
 import {
-    addVector,
-    addVectorData,
     updateVector,
-    deleteVector,
-    removeAllVector,
-    fetchsVector,
-    getAllVector
 } from '@/actions/vector'
 
 import {
@@ -62,7 +56,6 @@ const Board = ({ }) => {
     const { user } = useSelector((state) => state.iam)
     const {
         dimension,
-        vectors,
         vector
     } = useSelector((state) => state.vector)
     // -----------------------------------------------------------------------------
@@ -100,13 +93,11 @@ const Board = ({ }) => {
     // ----------------------------------------------------------------------------
 
     const handleClickOption = () => {
-        console.log('vector', vector)
         dispatch(setModal(<ModalVector vector={vector} />))
     }
 
 
     const handleAddVector = () => {
-        // alert(1)
         dispatch(setModal(<ModalAddVector />))
     }
 
@@ -116,12 +107,10 @@ const Board = ({ }) => {
         fileInput.type = 'file';
         fileInput.accept = '.xlsx, .xls';
         fileInput.style.display = 'none';
-        fileInput.addEventListener('change', handleDrop);  // Asignar handleDrop directamente al evento change
+        fileInput.addEventListener('change', handleDrop);  
 
-        // Agregar el elemento input al body
         document.body.appendChild(fileInput);
 
-        // Simular un clic en el nuevo elemento input
         fileInput.click();
     }
 
@@ -160,7 +149,6 @@ const Board = ({ }) => {
                 date: new Date(),
             };
 
-            console.log('table', table)
 
             const nodes = JSON.parse(vector.nodes)
             const lastNode = nodes[nodes.length - 1]
@@ -184,7 +172,6 @@ const Board = ({ }) => {
 
 
             let _vector = JSON.parse(JSON.stringify(vector))
-            // _vector.nodes = nodes
             _vector.nodes = JSON.stringify(nodes)
 
             console.log('vector nodes', _vector)
@@ -201,26 +188,6 @@ const Board = ({ }) => {
                 name: 'vectors',
                 data: _vector
             }))
-
-
-            // setDataVector((prevData) => [...prevData, table]);
-            // const lastNode = nodes[nodes.length - 1];
-            // let newY = 0;
-            // let newX = 0;
-            // // Verificar si hay nodos existentes
-            // if (lastNode) {
-            //     newX = lastNode.position.x;
-            //     newY = lastNode.position.y + lastNode.height + 20;
-            // }
-            // // Crear un nuevo nodo
-            // const newNode = {
-            //     id: uuidv4(),
-            //     type: 'selectorVector',
-            //     data: table,
-            //     position: { x: newX, y: newY }
-            // };
-            // // Actualizar el estado de los elementos para incluir el nuevo nodo
-            // setNodes((prevElements) => [...prevElements, newNode]);
         };
 
         reader.readAsArrayBuffer(file);
@@ -269,15 +236,10 @@ const Board = ({ }) => {
                         Home
                     </button>
                     <div>
-                        {/* <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M18.8 4H5.2a1 1 0 0 0-.7 1.7l5.3 6 .2.7v4.8c0 .2 0 .4.2.4l3 2.3c.3.2.8 0 .8-.4v-7.1c0-.3 0-.5.2-.7l5.3-6a1 1 0 0 0-.7-1.7Z" />
-                        </svg> */}
-                        {/* PONER ICONO seleccionables del util (vector) */}
                         <components.SearchList
                             icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.8 4H5.2a1 1 0 0 0-.7 1.7l5.3 6 .2.7v4.8c0 .2 0 .4.2.4l3 2.3c.3.2.8 0 .8-.4v-7.1c0-.3 0-.5.2-.7l5.3-6a1 1 0 0 0-.7-1.7Z" />
                         </svg>`}
-                            // data={vectors}
                             data={['', '']}
                         />
 
@@ -342,7 +304,6 @@ const Board = ({ }) => {
                     <div className={styles.info}>
                         <div className={styles.title}>
                             {vector.title || 'Not found'}
-                            {/* Matthew Frankina's Team */}
                         </div>
                         <div className={styles.subtitle}>
                             <button>
@@ -352,7 +313,6 @@ const Board = ({ }) => {
                             </button>
                             <div>
                                 {vector.description || 'No description..'}
-                                {/* Manager Commercial Sites */}
                             </div>
                         </div>
                     </div>
@@ -401,7 +361,7 @@ const Board = ({ }) => {
                         <VectorAddon />
                     ) : show == 'board' ? (
                         <VectorBoard />
-                    ) : ( // data
+                    ) : ( 
                         <VectorTable data={dataSheet} />
                     )}
                 </div>

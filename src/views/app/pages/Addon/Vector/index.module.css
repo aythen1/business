@@ -181,7 +181,6 @@
     border-radius: 12px;
     background-color: var(--background);
     padding: 8px;
-    /* padding: 6px; */
   }
   .chat{
     textarea{

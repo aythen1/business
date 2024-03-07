@@ -5,12 +5,9 @@ import styles from "./index.module.css";
 import NoneLangChain from './assets/NoneLangChain.webp'
 
 const LangChain = ({}) => {
-
   const handleAddDashboard = (uuid) => {
     alert(1)
   }
-
-
 
   return (
     <div className={styles.boxLangChains}>
@@ -43,17 +40,3 @@ const LangChain = ({}) => {
 };
 
 export default LangChain;
-
-    // <div >
-
-
-    //   chatbots
-    //   generación de recuperación aumentada
-    //   resumen de documentos
-    //   generacion de datos semanticos
-
-    //   Poner que no esta disponible todavia un soon now!
-
-    //   Algo muy parecido a esto
-    //   https://console.scaleway.com/document-db/LangChains
-    // </div>

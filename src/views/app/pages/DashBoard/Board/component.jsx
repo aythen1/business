@@ -5,7 +5,6 @@ import * as Graphs from '@/views/graphs/render'
 
 
 const Component = ({ component }) => {
-
     const Component = Graphs[component.type];
 
     if (!Component) {

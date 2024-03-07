@@ -48,22 +48,3 @@ const LogBackup = ({ }) => {
 }
 
 export default LogBackup
-
-
-
-// <div>
-//     npm install zip
-
-//     ---
-//     Se ha realizado un backup de tu copia de datos el día 29/02 de diciembre
-//     que ocupa 4mb, la siguiente copia de seguridad esta prevista para el día 2 de enero.
-
-//     Si has recibido este mensaje por error o desconce la procedencia, porfavor indiquelo dandole
-//     aquí para dejar de recibir emails.
-//     <div>
-//         Link de descarga
-//         20mb
-//         Icono de descarga
-//     </div>
-
-// </div>

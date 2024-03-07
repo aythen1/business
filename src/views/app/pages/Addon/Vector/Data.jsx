@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -10,18 +10,13 @@ const AddonData = ({ addon }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-
-    const [isNewAddon, setIsNewAddon] = useState(addon?.id ? true : false);
     const [isActive, setIsActive] = useState(false)
-
 
     const initialVector = [{
         title: 'name'
     }]
 
     const [listVector, setListVector] = useState(initialVector)
-
-
 
 
     const handleInputChange = (e, property) => {
@@ -31,14 +26,13 @@ const AddonData = ({ addon }) => {
         }
 
         if (property === 'title') {
-            // Verificar si el texto tiene una longitud mayor a cero
             const isValidText = value.trim().length > 0;
 
             setIsActive(isValidText);
 
             setState((prevState) => ({
                 ...prevState,
-                [property]: isValidText ? value.trim() : '',  // Asegura que el valor sea un array
+                [property]: isValidText ? value.trim() : '',  
             }));
         } else {
             setState((prevState) => ({
@@ -49,11 +43,8 @@ const AddonData = ({ addon }) => {
     };
 
 
-
-
     const handleAddAddon = () => {
         const data = {
-            // owner: user?.id || '3r3',
             available: true,
             public: true,
 

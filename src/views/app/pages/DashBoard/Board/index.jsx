@@ -55,16 +55,11 @@ const Board = ({
 
     if (dashboardParam) {
       const selectedDashboard = dashboards.find(dashboard => dashboard.id === dashboardParam);
-      console.log('d', selectedDashboard, dashboards)
 
       if (selectedDashboard) {
-        // Establecer el dashboard utilizando dispatch
         dispatch(setDashboard(selectedDashboard));
       }
     }
-
-    
-    // setListDashboards(dashboards)
   }, [dashboards])
 
 
@@ -86,8 +81,6 @@ const Board = ({
   
   const handleItemClick = async (e, action) => {
     e.stopPropagation()
-    // Aquí puedes manejar las acciones específicas para cada botón
-    console.log('SelectedComponent', action)
     switch(action){
       case 'new':
         dispatch(setOpenMenuRight('graph'))
@@ -125,16 +118,13 @@ const Board = ({
   
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Cierra el menú contextual si se hace clic fuera de él
       if (contextMenu && !event.target.closest('.context-menu')) {
         handleCloseContextMenu();
       }
     };
 
-    // Agrega el manejador de eventos click al documento
     document.addEventListener('click', handleClickOutside);
 
-    // Limpia el manejador de eventos al desmontar el componente
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -142,19 +132,12 @@ const Board = ({
 
 
   // --------------------------------------------------------------------
-
-
-
-  console.log('components', components)
-
   const _selectedComponent = (index) => {
-    // alert(1)
     dispatch(setOpenMenuLeft('graph'))
   }
 
 
   useEffect(() => {
-    // Cuando components cambia, actualiza el estado items
     const newComponents = components.map((component, index) => {
       return {
         id: index + 1,
@@ -182,7 +165,6 @@ const Board = ({
   const handleClickGraph = (e) => {
     e.stopPropagation()
     dispatch(setOpenMenuRight('graph'))
-    // setOpenChatBot(true)
   }
 
 
@@ -207,7 +189,6 @@ const Board = ({
           {listComponents.map((component, index) => (
             <div 
               key={index}
-              
             >
               <DraggableItem
                 key={component.id}
@@ -226,7 +207,6 @@ const Board = ({
           </div>
         </div>
       </DropTarget>
-
       {contextMenu && (
         <ContextMenu
           x={contextMenu.x}

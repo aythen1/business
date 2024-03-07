@@ -4,9 +4,6 @@ import { useDispatch } from 'react-redux'
 import styles from './index.module.css'
 import { useNavigate } from 'react-router-dom';
 
-//require('./assets/icon-get-started.svg').default
-// import IconGetStarted from './assets/icon-get-started.svg'
-
 
 import {
     initialTopics,
@@ -30,29 +27,17 @@ const Support = () => {
     const [inputValue, setInputValue] = useState('');
     const [listFilteredQuery, setListFilteredQuery] = useState([]);
 
-
     const [listQuery, setListQuery] = useState([])
     const [listTopics, setListTopics] = useState([])
     const [listStatus, setListStatus] = useState([])
 
-
-
-
-
-
-
-
-
     // ------------------------------------------------------------
-
     useEffect(() => {
         setListQuery(initialQuery)
 
         setListTopics(initialTopics)
         setListStatus(initialStatus)
     }, [])
-
-
 
     // ------------------------------------------------------------
     const handleManageTicket = () => {
@@ -308,7 +293,6 @@ const ModalSupport = ({ }) => {
         setSearchTerm(searchTerm);
 
         const filteredData = initialTopics.filter((item) => {
-            // Verificar si alguna propiedad incluye el término de búsqueda
             return (
                 item.title.toLowerCase().includes(searchTerm) ||
                 item.description.some(

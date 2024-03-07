@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { v4 as uuidv4 } from 'uuid'
-
-// import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.css'
 
 
@@ -23,14 +20,6 @@ import NoneVector from './assets/NoneVector.webp'
 
 
 import BackgroundVector from './assets/background-vector'
-// import {
-//   // postBoard,
-//   // getServersZone,
-//   deleteBoard,
-//   getProjectBoard
-// } from '@/store/redux/actions/boards'
-
-// import { useParams } from 'next/navigation'
 
 
 import {
@@ -39,7 +28,6 @@ import {
 
 import {
   iniVector,
-  addVector,
   fetchsVector,
   fetchVector
 } from '@/actions/vector'
@@ -58,16 +46,12 @@ import {
 
 
 
-// import { fetchsVector } from '../../../../../service/controllers/vector'
-
 const Vector = ({ }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
 
   const { vectorId } = useParams()
-
-  // const { projectId } = useParams()
 
   const { user } = useSelector((state) => state.iam)
 
@@ -77,36 +61,11 @@ const Vector = ({ }) => {
   } = useSelector((state) => state.vector)
 
 
-  // const [editMode, setEditMode] = useState(false)
-  const [listVectors, setListVectors] = useState([])
 
   const [textToolTip, setTextToolTip] = useState(null)
   const [isToolTipHovered, setIsToolTipHovered] = useState(false)
   const [positionToolTip, setPositionToolTip] = useState({ top: 0, left: 0 })
 
-  // const boards = dispatch(getProjectBoard()
-
-
-
-
-  // ---------------------------------------------------------------------
-
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const vectorParam = urlParams.get('vector');
-
-  //   if (vectorParam) {
-  //     const selectedVector = vectors.find(vector => vector.id === vectorParam);
-
-  //     if (selectedVector) {
-  //       // Establecer el vector utilizando dispatch
-  //       dispatch(setVector(selectedVector));
-  //     }
-  //   }
-
-
-  //   setListVectors(vectors)
-  // }, [vectors])
 
 
   useEffect(() => {
@@ -140,38 +99,17 @@ const Vector = ({ }) => {
   // ---------------------------------------------------------------------
 
   const handleAddVector = async (uuid) => {
-    // const newUUID = uuidv4()
-    // // setVectorId(newUUID)
-
-    // const newVector = {
-    //   id: newUUID,
-    //   name: 'new Vector'
-    // }
-
-    // await dispatch(addVector(newVector))
-
-    // // // Actualizar la URL con el nuevo UUID
-    // // navigate(`/es/app/board`)
-    // navigate(`/${'es'}/app/vector/${newVector.id}`)
     dispatch(setModal(<ModalAddVector />))
   }
 
   const handleClickVector = (item) => {
-    // const newUUID = uuidv4()
-    // setVectorId(id)
-    // setVectorId(id)
-
     dispatch(setVector(item))
-
-    // const newURL = `?vector=${encodeURIComponent(id)}`
     navigate(`/${'es'}/app/vector/${item.id}`)
-    // window.history.pushState(null, null, newURL)
   }
 
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
-    // console.log('dataset', e.target.dataset.tooltip)
     setTextToolTip(e.target.dataset.tooltip)
   }
 
@@ -180,9 +118,6 @@ const Vector = ({ }) => {
   }
 
 
-  // const handlePopupSettings = () => {
-  //   alert(1)
-  // }
 
   const handleMoreInfo = () => { }
 
@@ -190,9 +125,6 @@ const Vector = ({ }) => {
 
   const handleReboot = () => { }
 
-  const handleStandby = () => { }
-
-  const handleDetachIP = () => { }
 
   const handleDeleteBoard = (id) => {
     // dispatch(deleteBoard(id))
@@ -245,7 +177,6 @@ const Vector = ({ }) => {
 
 
   const handleVector = () => {
-    // navigate(`/${'es'}/app/support`)
     dispatch(setModal(<ModalAddVector />))
   }
 
@@ -303,8 +234,6 @@ const Vector = ({ }) => {
                 <div className={styles.background}>
                   <BackgroundVector />
                 </div>
-                {/* {BackgroundVector} */}
-                {/* <img src={BackgroundVector.default} className={styles.background} /> */}
               </div>
               <div
                 className={
@@ -394,7 +323,6 @@ const Vector = ({ }) => {
                       <div className={styles.boardSettings}>
                         <button
                           className={styles.button}
-                          // onClick={handlePopupSettings}
                           onClick={() => togglePopupSettings(index)}
                         >
                           <IconSettings width={'30'} height={'30'} />

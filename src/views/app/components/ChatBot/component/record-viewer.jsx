@@ -10,8 +10,6 @@ export const RecordViewer = ({ file, click }) => {
   const [recordPlay, setRecordPlay] = useState(false)
 
   const fileName = file.message
-//   const mimeType = fileName.split('.').pop()
-//   const name = fileName.split('/').pop()
 
   console.log('file', fileName)
     useEffect(async () => {
@@ -21,46 +19,15 @@ export const RecordViewer = ({ file, click }) => {
      }
     }, [])
 
-  // console.log('n', name)
-  const recordStart = async () => {
-      
+  const recordStart = async () => {      
     if (!record) {
         const _record = await openFile(fileName)
         console.log('re', _record)
         setRecord(_record)
     }else{
         setRecordPlay(true)
-         // Crear un contexto de audio
-    // const audioContext = new (window.AudioContext || window.webkitAudioContext)()
-  
-      console.log('record', record)
-  
-      // Supongamos que tienes un array buffer llamado 'audioData'
-    //   audioContext.decodeAudioData(
-    //     record.buffer,
-    //     (buffer) => {
-    //       const source = audioContext.createBufferSource()
-    //       source.buffer = buffer
-    //       source.connect(audioContext.destination)
-    //       source.start()
-    //       console.log('lisening')
-    //     },
-    //     (error) => {
-    //       console.error('Error al decodificar los datos de audio:', error)
-    //     }
-    //   )
     }
    
-
-    // Crear un buffer de audio
-    // const source = audioContext.createBufferSource()
-    // source.buffer = record.buffer
-
-    // // Conectar el buffer de audio al destino de salida (altavoces)
-    // source.connect(audioContext.destination)
-
-    // // Reproducir el audio
-    // source.start()
   }
 
   const recordEnd = () => {
@@ -74,9 +41,6 @@ export const RecordViewer = ({ file, click }) => {
 
       <div
         className={styles.recordViewer}
-        // onClick={() => {
-        //   click(fileName)
-        // }}
       >
         <div>
           {recordPlay === true ? (
@@ -127,7 +91,7 @@ export const RecordViewer = ({ file, click }) => {
                   key={index}
                   className={styles.splot}
                   style={{
-                    height: `${volume || 1}%` // Asegurar que tenga al menos 1% para ser visible
+                    height: `${volume || 1}%` 
                   }}
                 ></div>
               ))}

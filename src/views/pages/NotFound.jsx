@@ -7,7 +7,6 @@ const NotFound = () => (
         404
       </h2>
       <p>Página no encontrada</p>
-      {/* Puedes personalizar el contenido de la página 404 según tus necesidades */}
     </div>
   );
 

@@ -2,9 +2,7 @@ export const parseChartString = (chartString) => {
     try {
         let jsonContent;
 
-        // Verificar si el chartString contiene codeblocks
         if (chartString.includes('```')) {
-            // Extraer el contenido dentro de los codeblocks usando una expresión regular
             const match = chartString.match(/```(?:json)?\s*([\s\S]+?)```/);
             if (match) {
                 jsonContent = match[1];
@@ -13,11 +11,9 @@ export const parseChartString = (chartString) => {
                 return null;
             }
         } else {
-            // Si no hay codeblocks, asumir que el chartString ya es un JSON
             jsonContent = chartString;
         }
 
-        // Parsear el JSON y devolver el resultado
         const chartObject = JSON.parse(jsonContent);
         return chartObject;
     } catch (error) {
@@ -40,9 +36,6 @@ Returns only the result without any explanation, a simple result as if it were a
 `;
 
 
-
-
-// ${data.join('\n')}
 export const generateDefault = (data, prompt) => `
 ${data}
 

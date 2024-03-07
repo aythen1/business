@@ -83,35 +83,31 @@ function _deleteDirSync(directorio) {
       const stats = fs.statSync(rutaArchivo);
 
       if (stats.isDirectory()) {
-        eliminarDirectorioSync(rutaArchivo); // Recursivamente eliminar directorios internos
+        eliminarDirectorioSync(rutaArchivo) 
       } else {
-        fs.unlinkSync(rutaArchivo); // Eliminar archivo
+        fs.unlinkSync(rutaArchivo) 
       }
     });
 
-    fs.rmdirSync(directorio); // Eliminar el directorio vacío
-    console.log(`Directorio ${directorio} eliminado exitosamente.`);
+    fs.rmdirSync(directorio)
+    console.log(`Directorio ${directorio} eliminado exitosamente.`)
   } catch (err) {
     console.error(`Error al eliminar el directorio ${directorio}: ${err}`);
   }
 }
 
 async function _deleteVector(req, res) {
-  const { id, name } = req.params;
-  const { data } = req.body;
-  // console.log('delete', id, name, data)
+  const { id, name } = req.params
+  const { data } = req.body
 
-  const resp = await deleteVector(id, name, data);
-  // console.log('rrrrrr', resp)
+  const resp = await deleteVector(id, name, data)
 
-  return res.status(200).send(data);
-  // response(res, 200, { data: 200 })
+  return res.status(200).send(data)
 }
 
 async function _removeVector(req, res) {
-  // response(res, 200, { data: 'hello world como estás' })
-  const { id, name } = req.params;
-  const { workspaceId, projectId } = decodeVector(id);
+  const { id, name } = req.params
+  const { workspaceId, projectId } = decodeVector(id)
 
   const uri =
     "data/vector/" + workspaceId + "/" + projectId + "/" + name + ".lance/";
@@ -124,8 +120,7 @@ async function _removeVector(req, res) {
     console.error(`Errors al eliminar la tabla ${name}: ${error.message}`);
   }
 
-  // response(res, 200, { data: 200 })
-  return res.status(200).send(200);
+  return res.status(200).send(200)
 }
 
 async function _openVector(req, res) {
@@ -163,23 +158,20 @@ async function _getVector(req, res) {
       options = [{ field: "id", operator: "LIKE", value: `%${data.id}%` }];
     }
 
-    const query = await getVector(id, name, [0, 0], options);
-    // const query = await getVector(id, name, [0, 0])
+
+    const query = await getVector(id, name, [0, 0], options)
 
     if (!query.length) {
-      // response(res, 200, { data: [] })
-      return res.status(200).send([]);
+      return res.status(200).send([])
     }
 
-    // response(res, 200, { data: query })
     if (options.length > 0) {
       return res.status(200).send(query[0]);
     } else {
       return res.status(200).send(query);
     }
   } catch (err) {
-    // response(res, 200, { data: [] })
-    return res.status(200).send([]);
+    return res.status(200).send([])
   }
 }
 
@@ -231,7 +223,6 @@ async function _getAllVector(req, res) {
       const tbl = await db.openTable(table);
       const count = await tbl.countRows();
 
-      // Crear un objeto con las propiedades deseadas
       return {
         title: table,
         count,
@@ -352,58 +343,12 @@ const shareFileVector = async (req, res) => {
     }
   }
 
-  // function chunkFile(file, chunkSize) {
-  //   const chunks = []
-  //   for (let i = 0; i < file.length; i += chunkSize) {
-  //     chunks.push(file.slice(i, i + chunkSize))
-  //   }
-  //   return chunks
-  // }
-  // const chunkSize = 4000
 
-  // const pdfText = await pdf(fileBuffer)
-  //   .then((data) => {
-  //     return data.text
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error al cargar el PDF:', error)
-  //   })
-
-  // fileBuffer
 
   try {
-    // const chunks = chunkText(pdfText, chunkSize)
-    // Procesa cada chunk de forma secuencial
-    // for (const chunk of chunks) {
-    //   const response = await fetch('https://api.openai.com/v1/completions', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${KEY_OPENAI}`
-    //     },
-    //     body: JSON.stringify({
-    //       model: 'text-davinci-002',
-    //       prompt: chunk,
-    //       max_tokens: 50
-    //     })
-    //   })
-
-    //   if (!response.ok) {
-    //     throw new Error(`Error de HTTP! Estado: ${response.status}`)
-    //   }
-
-    //   const responseData = await response.json()
-    //   console.log('resp', responseData)
-    //   const generatedTokens = responseData.choices[0].text
-    //   // Acumula los tokens generados
-    //   allGeneratedTokens += generatedTokens
-    // }
-
-    console.log("dddd");
-
-    const uri = "data/vector/" + workspaceId + "/" + projectId;
-    const db = await lancedb.connect(uri);
-    // const tbl = await db.openTable(name)
+    console.log('dddd')
+    const uri = 'data/vector/' + workspaceId + '/' + projectId
+    const db = await lancedb.connect(uri)
 
     // JSON S3 FILEOBJECT
     const tableSchema = {

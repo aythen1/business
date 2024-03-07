@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { v4 as uuidv4 } from 'uuid';
-
 
 import Table from './table'
 import styles from './index.module.css'
 import stylesModal from './modal.module.css'
 
 
-
-
 import {
   addPolice,
-  deletePolice,
   fetchsPolice
 } from '@/actions/iam'
 
@@ -30,8 +26,6 @@ const TablePolices = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // const { polices } = useSelector((state) => state.iam)
 
   const [stateTable, setStateTable] = useState('')
 
@@ -97,13 +91,11 @@ export default TablePolices
 
 
 
+
+
 const PopupModalRules = ({ styles }) => {
-
   const dispatch = useDispatch()
-
   const [isActive, setIsActive] = useState(false)
-
-    // : ['id', 'name', 'description', 'target', 'resource', 'tags']
 
   const [state, setState] = useState({
     name: '',
@@ -121,8 +113,6 @@ const PopupModalRules = ({ styles }) => {
 
     if (property === 'name') {
       const isValidValue = value.trim() !== '';
-
-      // Establecer el estado y activar según si el valor no está vacío
       setIsActive(isValidValue);
     }
 
@@ -140,8 +130,6 @@ const PopupModalRules = ({ styles }) => {
       description: state.description,
       resource: state.resource,
       target: 'none',
-      // tags: state.tags,
-      // polices: state.polices,
     }
 
     dispatch(addPolice({police: data}))
