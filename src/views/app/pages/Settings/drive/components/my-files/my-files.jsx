@@ -107,7 +107,7 @@ export default function Page({
   const handleSetPrefix = (prefix) => {
     if (selectedFolders.length === 1) {
       const [file] = selectedFolders;
-      const { Key } = file;
+      const { Key, VersionId } = file;
 
       const originalFileName = Key.split("/").filter(Boolean).pop();
       let newKey;
@@ -134,7 +134,9 @@ export default function Page({
           newKey = Key.replace(originalFileName, prefix + originalFileName);
         }
       }
-      dispatch(moveFile({ sourceKey: Key, destinationKey: newKey, file }));
+      dispatch(
+        moveFile({ sourceKey: Key, destinationKey: newKey, file, VersionId })
+      );
       setSelectedFolders([]);
     }
   };
@@ -331,57 +333,98 @@ export default function Page({
     });
   };
 
-  const handleSelectFilter = (extension) => {
-    // Actualizar la lista de extensiones activas y luego filtrar basado en las extensiones activas.
-    setActiveExtensions((prevActiveExtensions) => {
-      const lowerCaseExtension = extension.toLowerCase();
-      const isCurrentlyActive =
-        prevActiveExtensions.includes(lowerCaseExtension);
-      let newActiveExtensions;
+  const selectAllFilters = () => {
+    // Selecciona todas las extensiones disponibles
+    const allExtensions = Object.keys(icons).map((extension) =>
+      extension.toLowerCase()
+    );
+    setActiveExtensions(allExtensions);
 
-      if (isCurrentlyActive) {
-        // Si ya está activa, la removemos.
-        newActiveExtensions = prevActiveExtensions.filter(
-          (ext) => ext !== lowerCaseExtension
+    // Aquí debes incluir la lógica para aplicar el filtro con todas las extensiones activas
+    // Asumiendo que tienes una función similar a setFilteredFolders pero para todos los casos
+    applyFilters(allExtensions);
+  };
+
+  const clearAllFilters = () => {
+    // Limpia todas las extensiones activas
+    setActiveExtensions([]);
+
+    // Resetea los filtros a su estado inicial (sin filtros)
+    // Deberás adaptar esto a cómo manejas el reseteo de los filtros en tu aplicación
+    setFilteredFolders(categoryFiles); // Asumiendo que esto resetea a todos los archivos
+    setFilterIsActive(false);
+  };
+
+  const applyFilters = (extensions) => {
+    // Tu lógica para filtrar archivos basada en las extensiones activas
+    // Similar a lo que tienes en handleSelectFilter pero para un conjunto de extensiones
+  };
+
+  const handleSelectFilter = (extension, action = "") => {
+    setActiveExtensions((prevActiveExtensions) => {
+      let newActiveExtensions = [];
+
+      // Acción para "Seleccionar todos"
+      if (action === "selectAll") {
+        newActiveExtensions = Object.keys(icons).map((ext) =>
+          ext.toLowerCase()
         );
-      } else {
-        // Si no está activa, la agregamos.
-        newActiveExtensions = [...prevActiveExtensions, lowerCaseExtension];
+      }
+      // Acción para "Quitar todos"
+      else if (action === "deselectAll") {
+        newActiveExtensions = [];
+      }
+      // Manejo de selección individual
+      else {
+        const lowerCaseExtension = extension.toLowerCase();
+        const isCurrentlyActive =
+          prevActiveExtensions.includes(lowerCaseExtension);
+
+        if (isCurrentlyActive) {
+          newActiveExtensions = prevActiveExtensions.filter(
+            (ext) => ext !== lowerCaseExtension
+          );
+        } else {
+          newActiveExtensions = [...prevActiveExtensions, lowerCaseExtension];
+        }
       }
 
-      // Verificamos si después de actualizar todavía hay extensiones activas.
+      // Actualiza si hay filtros activos
       setFilterIsActive(newActiveExtensions.length > 0);
 
-      // Realizar la filtración basada en las nuevas extensiones activas
-      // Nota: Este paso se hace aquí dentro para asegurarnos de que usamos el estado actualizado inmediatamente después de cambiarlo.
-      const filtered = categoryFiles.filter((item) => {
-        // Verificar si es un archivo (no es una carpeta).
-        const isFile = !item.Key.endsWith("/");
-        if (!isFile && newActiveExtensions.length > 0) return false;
-
-        // Extraer la extensión del archivo de la propiedad Key.
-        const itemExtension = item.Key.split(".").pop().toLowerCase();
-        // Comparar la extensión del archivo con las extensiones activas.
-        return newActiveExtensions.includes(itemExtension);
-      });
-      // Actualizar el estado con los archivos filtrados basado en las nuevas extensiones activas.
-      setFilteredFolders(
-        newActiveExtensions.length > 0
-          ? filtered.filter(
-              (f) => f.Key.startsWith(currentPath) && f.Key !== currentPath
-            )
-          : filterFoldersBasedOnSearchAndPath(
-              searchFiles,
-              categoryFiles,
-              currentPath,
-              category,
-              filterIsActive
-            )
-      );
+      // Filtra basado en las extensiones activas
+      filterBasedOnActiveExtensions(newActiveExtensions);
 
       return newActiveExtensions;
     });
   };
+
+  // Implementa esta función para realizar la filtración
+  // Este código es un ejemplo basado en la lógica anteriormente descrita
+  const filterBasedOnActiveExtensions = (activeExtensions) => {
+    const filtered = categoryFiles.filter((item) => {
+      const isFile = !item.Key.endsWith("/");
+      if (!isFile && activeExtensions.length > 0) return false;
+
+      const itemExtension = item.Key.split(".").pop().toLowerCase();
+      return activeExtensions.includes(itemExtension);
+    });
+
+    setFilteredFolders(
+      activeExtensions.length > 0
+        ? filtered.filter(
+            (f) => f.Key.startsWith(currentPath) && f.Key !== currentPath
+          )
+        : filterFoldersBasedOnSearchAndPath(
+            searchFiles,
+            categoryFiles,
+            currentPath,
+            category,
+            filterIsActive
+          )
+    );
+  };
+
   const handleSelectSort = (name, order) => {
     setSortOrder({ name, order });
   };
@@ -617,20 +660,30 @@ export default function Page({
                       {/* Agrega más opciones de sorteo aquí si es necesario */}
                     </>
                   ) : (
-                    Object.entries(icons).map(([iconName, iconPath]) => (
-                      <li
-                        key={iconName}
-                        onClick={() => handleSelectFilter(iconName)}
-                      >
-                        <img
-                          src={iconPath}
-                          alt={iconName}
-                          style={{ width: "20px", height: "20px" }}
-                        />
-                        {iconName}
-                        {activeExtensions.includes(iconName) && <div>a</div>}
+                    <>
+                      <li onClick={() => handleSelectFilter(null, "selectAll")}>
+                        Seleccionar todos
                       </li>
-                    ))
+                      <li
+                        onClick={() => handleSelectFilter(null, "deselectAll")}
+                      >
+                        Quitar todos
+                      </li>
+                      {Object.entries(icons).map(([iconName, iconPath]) => (
+                        <li
+                          key={iconName}
+                          onClick={() => handleSelectFilter(iconName)}
+                        >
+                          <img
+                            src={iconPath}
+                            alt={iconName}
+                            style={{ width: "20px", height: "20px" }}
+                          />
+                          {iconName}
+                          {activeExtensions.includes(iconName) && <div>a</div>}
+                        </li>
+                      ))}
+                    </>
                   )}
                 </ul>
               )}
