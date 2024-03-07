@@ -50,9 +50,15 @@
   position: relative;
   background: var(--background-menu-left);
 }
-.drive_options {
+.drive_options_filter {
+  max-height: 500px;
+  overflow: hidden scroll;
+}
+.drive_options,
+.drive_options_filter {
   position: absolute;
   width: 130px;
+  z-index: 10;
   top: 35px;
   left: 10px;
   background: #fff;
@@ -60,6 +66,8 @@
   box-shadow: 0px 0px 6px -6px #000;
   li {
     font-size: 12px;
+    display: flex;
+    gap: 10px;
     cursor: pointer;
     padding: 4px 6px;
     border-bottom: 1px solid #f0f0f0;
@@ -210,6 +218,8 @@
   flex-direction: column;
   gap: 15px;
   width: 100%;
+  min-height: 320px;
+  padding-bottom: 50px;
 }
 
 .drive_folders_title_container {
@@ -299,6 +309,12 @@
     background-color: var(--background-checkbox);
   }
 }
+.drive_folder_lastmodified_container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
 
 .drive_folder_title_container,
 .drive_folder_size_container,
@@ -338,7 +354,7 @@
 
 .drive_folder_size_container {
   flex-basis: 266px;
-  width: 265px;
+  width: 345px;
 }
 
 .drive_folder_lastmodified_container {
@@ -462,13 +478,13 @@
     width: 12px;
     color: rgb(213, 213, 213);
   }
-  &.top{
-    .bottom{
+  &.top {
+    .bottom {
       color: var(--color-primary-0);
     }
   }
-  &.bottom{
-    .top{
+  &.bottom {
+    .top {
       color: var(--color-primary-0);
     }
   }

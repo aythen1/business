@@ -1,18 +1,14 @@
 // userActions.js
-import apiBackend from '@/utils/apiBackend'
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import apiBackend from "@/utils/apiBackend";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
-
-
-const ID = 'test/test'
-
+const ID = "test/test";
 
 const encodeVector = (id) => {
-  const str = `${id}`
-  const base64Str = btoa(str)
-  return base64Str
-}
+  const str = `${id}`;
+  const base64Str = btoa(str);
+  return base64Str;
+};
 
 // Simula una operación asincrónica (deberías reemplazarlo con tu lógica real)
 const fetchUserFromApi = async (userId) => {
@@ -24,559 +20,574 @@ const fetchUserFromApi = async (userId) => {
   return data;
 };
 
-// / / / / / / / / / / / / / / / / / / / / / / / 
-
-
-// Acción asincrónica
-export const setOpenMenuLeft = 
-createAsyncThunk('iam/setOpenMenuLeft', async (value, { dispatch }) => {
-  try {
-    return value;
-  } catch (error) {
-    throw error;
-  }
-});
-
-export const setOpenMenuRight = 
-createAsyncThunk('iam/setOpenMenuRight', async (value, { dispatch }) => {
-  try {
-    return value;
-  } catch (error) {
-    throw error;
-  }
-});
-
-export const setOpenChatBot = 
-createAsyncThunk('iam/setOpenChatBot', async (value, { dispatch }) => {
-  try {
-    return value;
-  } catch (error) {
-    throw error;
-  }
-});
-
-
-export const setOpenModal = 
-createAsyncThunk('iam/setOpenModal', async (value, { dispatch }) => {
-  try {
-    return value;
-  } catch (error) {
-    throw error;
-  }
-});
-
-
-
-
-
-
-
-
-// / / / / / / / / / / / / / / / / / / / / / / / 
-
+// / / / / / / / / / / / / / / / / / / / / / / /
 
 // Acción asincrónica
-export const fetchUser = 
-createAsyncThunk('iam/fetchUser', async (userId, { dispatch }) => {
-  try {
-    const user = await fetchUserFromApi(userId);
-    // Disparar la acción 'fulfilled' con el usuario obtenido
-    dispatch(setUserFulfilled(user));
-    return user;
-  } catch (error) {
-    // Disparar la acción 'rejected' con el error
-    dispatch(setUserRejected(error.message));
-    throw error;
+export const setOpenMenuLeft = createAsyncThunk(
+  "iam/setOpenMenuLeft",
+  async (value, { dispatch }) => {
+    try {
+      return value;
+    } catch (error) {
+      throw error;
+    }
   }
-});
+);
+
+export const setOpenMenuRight = createAsyncThunk(
+  "iam/setOpenMenuRight",
+  async (value, { dispatch }) => {
+    try {
+      return value;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const setOpenChatBot = createAsyncThunk(
+  "iam/setOpenChatBot",
+  async (value, { dispatch }) => {
+    try {
+      return value;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const setOpenModal = createAsyncThunk(
+  "iam/setOpenModal",
+  async (value, { dispatch }) => {
+    try {
+      return value;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+// / / / / / / / / / / / / / / / / / / / / / / /
 
 // Acción asincrónica
-export const fetchsInvoice = 
-createAsyncThunk('iam/fetchsInvoice', async ({ dispatch }) => {
-  try {
-    console.log('dwciwdcujwunc')
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      '/iam/billing/invoices', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
-    });
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
+export const fetchUser = createAsyncThunk(
+  "iam/fetchUser",
+  async (userId, { dispatch }) => {
+    try {
+      // const user = await fetchUserFromApi(userId);
+      // Disparar la acción 'fulfilled' con el usuario obtenido
+      // dispatch(setUserFulfilled(user));
+      const { data } = await apiBackend.get(`/iam/user/all-uuser`);
+      // const { data } = await apiBackend.get(`/assets/directories?${query}`);
+      dispatch(setAssets(data.data));
+      return data.data.body;
+      return user;
+    } catch (error) {
+      // Disparar la acción 'rejected' con el error
+      dispatch(setUserRejected(error.message));
+      throw error;
     }
   }
-})
-
-
-export const fetchInvoice = 
-createAsyncThunk('iam/fetchInvoice', async ({id}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      `/iam/billing/invoice/${id}`, 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
-    });
-
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
+);
+// Acción asincrónica
+export const fetchUser2 = createAsyncThunk(
+  "iam/fetchUser2",
+  async (token, { dispatch }) => {
+    try {
+      // Configura los headers para incluir el token de autorización
+      const config = {
+        headers: {
+          // Asume que el token es un Bearer token
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log({ config });
+      // Incluye la configuración en la petición GET
+      const { data } = await apiBackend.get(`/iam/user/all-user`, config);
+      console.log({ data });
+      return data;
+    } catch (error) {
+      throw error;
     }
   }
-})
+);
 
-
-
-
-
-export const addInvoice = 
-createAsyncThunk('iam/addInvoice', async (invoice, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/billing/invoice',
-      {
-        invoice,
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('rrr', response)
-
-    return response.data
-  } catch (error) {
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
-    }
-  }
-})
-
-
-
-
-
-
-export const updateInvoice = 
-createAsyncThunk('iam/updateInvoice', async ({billing}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-
-    const response = await apiBackend.put(
-      '/iam/billing/invoice',{
-          billing
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-
-    console.log('rd3rlfrmo bill', response)
-
-    return response.data
-  } catch (error) {
-    console.log('Error: ', error.response.data.message)
-    throw error.response.data.message
-  }
-});
-
-
-
-
-export const deleteInvoice = 
-createAsyncThunk('iam/deleteInvoice', async ({id}, { dispatch }) => {
-  try {
-
-    const token = localStorage.getItem('token')
-
-    const response = await apiBackend.delete(
-      '/iam/billing/invoice',{
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        data: {
-          id
-        }
-      }
-      )
-
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-export const fetchsBilling = 
-createAsyncThunk('iam/fetchsBilling', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    console.log('12345')
-
-      const response = await apiBackend.get(
-        '/iam/billing/fetchs', 
-        {
+// Acción asincrónica
+export const fetchsInvoice = createAsyncThunk(
+  "iam/fetchsInvoice",
+  async ({ dispatch }) => {
+    try {
+      console.log("dwciwdcujwunc");
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get("/iam/billing/invoices", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
       });
-    
-    console.log('reesss', response)
 
-    return response.data
-  } catch (error) {
-    console.log('Error: ', error.response.data.message)
-    throw error.response.data.message
-  }
-});
-
-
-export const updateBilling = 
-createAsyncThunk('iam/updateBilling', async ({billing}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-
-    const response = await apiBackend.post(
-      '/iam/billing/update',
-      {
-        billing
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('rd3rlfrmo bill', response)
-
-    return response.data
-  } catch (error) {
-    console.log('Error: ', error.response.data.message)
-    throw error.response.data.message
-  }
-});
-
-
-export const login = 
-createAsyncThunk('iam/login', async ({user, password}, { dispatch }) => {
-  try {
-    const response = await apiBackend.post(
-      '/iam/user/login',
-      {
-        path: encodeVector(ID),
-        user,
-        password
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
       }
-    )
-
-    localStorage.setItem('id', response.data.user.id)
-
-    return {
-      user: response.data.user, 
-      token: response.data.token
-    }
-  } catch (error) {
-    console.log('Error: ', error.response.data.message)
-    if(error.response.data.message == 301){
-      throw "Token expried resend email" 
-    }else{
-      throw error.response.data.message
     }
   }
-})
+);
+export const fetchInvoice = createAsyncThunk(
+  "iam/fetchInvoice",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get(`/iam/billing/invoice/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
+      });
 
-
-
-
-export const register = 
-createAsyncThunk('iam/register', async ({user, password}, { dispatch }) => {
-  try {
-    
-    const response = await apiBackend.post(
-      '/iam/user/register',
-      {
-        path: encodeVector(ID),
-        user,
-        password
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
       }
-      )
-      
-
-      const token = response.data.token
-    return token 
-  } catch (error) {
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
     }
   }
-})
+);
 
-
-
-export const upgrade = 
-createAsyncThunk('iam/userUpgrade', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/upgrade',
-      {
-        upgradedat: new Date(new Date().setMinutes(new Date().getMinutes() + 5)).toISOString()
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const addInvoice = createAsyncThunk(
+  "iam/addInvoice",
+  async (invoice, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/billing/invoice",
+        {
+          invoice,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    console.log('reess', response)
-      
-    return {
-      user: response.data.token,
-      token: response.data.user
-    } 
-  } catch (error) {
-    console.log('error', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
+      console.log("rrr", response);
+
+      return response.data;
+    } catch (error) {
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
     }
   }
-})
+);
 
-
-
-export const fetchsDefault = 
-createAsyncThunk('iam/fetchsDefault', async ({}, { dispatch }) => {
-  try {    
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/load/default',
-      {
-        
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    return {
-      addons: response.data.addons,
-      gpts: response.data.gpts,
-      changelogs: response.data.changelogs,
-      news: response.data.news
-    } 
-  } catch (error) {
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
-    }
-  }
-})
-
-
-
-export const updateDefault = 
-createAsyncThunk('iam/updateDefault', async ({table, data}, { dispatch }) => {
-  try {    
-    const token = localStorage.getItem('token')
-
+export const updateInvoice = createAsyncThunk(
+  "iam/updateInvoice",
+  async ({ billing }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
 
       const response = await apiBackend.put(
-        '/iam/load/default',{
-            table, data
-        },{
+        "/iam/billing/invoice",
+        {
+          billing,
+        },
+        {
           headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
-        })
+        }
+      );
 
+      console.log("rd3rlfrmo bill", response);
 
-      console.log('response up', response)
-  
-
-    return response.data
-  } catch (error) {
-    console.log('eerrrr', error.response.status)
-    if(error.response.status == 400 || error.response.status == 500){
-      throw 500
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error.response.data.message);
+      throw error.response.data.message;
     }
   }
-})
+);
 
+export const deleteInvoice = createAsyncThunk(
+  "iam/deleteInvoice",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
 
-export const recoverPassword = 
-createAsyncThunk('iam/recoverPassword', async ({email}, { dispatch }) => {
-  try {
-    console.log('recover-password')
-    const response = await apiBackend.post(
-      '/iam/user/recover-password',
-      {
+      const response = await apiBackend.delete("/iam/billing/invoice", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          id,
+        },
+      });
+
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+);
+
+export const fetchsBilling = createAsyncThunk(
+  "iam/fetchsBilling",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("12345");
+
+      const response = await apiBackend.get("/iam/billing/fetchs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
+      });
+
+      console.log("reesss", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error.response.data.message);
+      throw error.response.data.message;
+    }
+  }
+);
+
+export const updateBilling = createAsyncThunk(
+  "iam/updateBilling",
+  async ({ billing }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await apiBackend.post(
+        "/iam/billing/update",
+        {
+          billing,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("rd3rlfrmo bill", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error.response.data.message);
+      throw error.response.data.message;
+    }
+  }
+);
+
+export const login = createAsyncThunk(
+  "iam/login",
+  async ({ user, password }, { dispatch }) => {
+    try {
+      const response = await apiBackend.post("/iam/user/login", {
         path: encodeVector(ID),
-        email
+        user,
+        password,
+      });
+
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    } catch (error) {
+      console.log("Error: ", error.response.data.message);
+      if (error.response.data.message == 301) {
+        throw "Token expried resend email";
+      } else {
+        throw error.response.data.message;
       }
-      )
+    }
+  }
+);
 
-    console.log('uuu', response)
-    return 'Send email'
+export const register = createAsyncThunk(
+  "iam/register",
+  async ({ user, password }, { dispatch }) => {
+    try {
+      const response = await apiBackend.post("/iam/user/register", {
+        path: encodeVector(ID),
+        user,
+        password,
+      });
+
+      const token = response.data.token;
+      return token;
+    } catch (error) {
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      }
+    }
+  }
+);
+
+export const upgrade = createAsyncThunk(
+  "iam/userUpgrade",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/user/upgrade",
+        {
+          upgradedat: new Date(
+            new Date().setMinutes(new Date().getMinutes() + 5)
+          ).toISOString(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("reess", response);
+
+      return {
+        user: response.data.token,
+        token: response.data.user,
+      };
+    } catch (error) {
+      console.log("error", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      }
+    }
+  }
+);
+
+export const fetchsDefault = createAsyncThunk(
+  "iam/fetchsDefault",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/load/default",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return {
+        addons: response.data.addons,
+        gpts: response.data.gpts,
+        changelogs: response.data.changelogs,
+        news: response.data.news,
+      };
+    } catch (error) {
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      }
+    }
+  }
+);
+
+export const updateDefault = createAsyncThunk(
+  "iam/updateDefault",
+  async ({ table, data }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await apiBackend.put(
+        "/iam/load/default",
+        {
+          table,
+          data,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("response up", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("eerrrr", error.response.status);
+      if (error.response.status == 400 || error.response.status == 500) {
+        throw 500;
+      }
+    }
+  }
+);
+
+export const recoverPassword = createAsyncThunk(
+  "iam/recoverPassword",
+  async ({ email }, { dispatch }) => {
+    try {
+      console.log("recover-password");
+      const response = await apiBackend.post("/iam/user/recover-password", {
+        path: encodeVector(ID),
+        email,
+      });
+
+      console.log("uuu", response);
+      return "Send email";
       // const token = response.data.token
-    // return token 
-  } catch (error) {
-    console.log('eerrfir', error)
-    if(error.response.status == 400){
-      throw error.response.data.message
+      // return token
+    } catch (error) {
+      console.log("eerrfir", error);
+      if (error.response.status == 400) {
+        throw error.response.data.message;
+      }
     }
   }
-})
+);
 
-
-export const updateUser = 
-createAsyncThunk('iam/updateUser', async ({user}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    console.log('t', token, user)
-    const response = await apiBackend.post(
-      '/iam/user',
-      {
-        user
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const updateUser = createAsyncThunk(
+  "iam/updateUser",
+  async ({ user }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("t", token, user);
+      const response = await apiBackend.post(
+        "/iam/user",
+        {
+          user,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    return {
-      user: response.data.user,
-      token: response.data.token,
-    }
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      }
     }
   }
-})
+);
 
-
-export const updatePasswordUser = 
-createAsyncThunk('iam/updatePasswordUser', async ({token, password}, { dispatch }) => {
-  try {
-    console.log('eduwedue', token)
-    // const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/password',
-      {
-        password
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const updatePasswordUser = createAsyncThunk(
+  "iam/updatePasswordUser",
+  async ({ token, password }, { dispatch }) => {
+    try {
+      console.log("eduwedue", token);
+      // const token = localStorage.getItem('token')
+      const response = await apiBackend.post(
+        "/iam/user/password",
+        {
+          password,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    return {
-      token: response.data.token,
-      user: response.data.user
+      return {
+        token: response.data.token,
+        user: response.data.user,
+      };
+    } catch (error) {
+      console.log("err", error);
     }
-  } catch (error) {
-    console.log('err', error)
   }
-})
+);
 
-
-
-export const confirm = 
-createAsyncThunk('iam/confirm', async ({token}, { dispatch }) => {
-  try {
-    // const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/confirm',
-      {
-        token
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const confirm = createAsyncThunk(
+  "iam/confirm",
+  async ({ token }, { dispatch }) => {
+    try {
+      // const token = localStorage.getItem('token')
+      const response = await apiBackend.post(
+        "/iam/user/confirm",
+        {
+          token,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    return {
-      user: response.data.user,
-      token: response.data.token
-    }
-  } catch (error) {
-    console.log('error', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
-    }else if (error.response.status == 301){ // token expired
-      throw "Token expired"
-      
-    } else if(error.response && error.response.status >= 500 && error.response.status < 600){
-      // localStorage.removeItem('token')
-      throw 500
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    } catch (error) {
+      console.log("error", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      } else if (error.response.status == 301) {
+        // token expired
+        throw "Token expired";
+      } else if (
+        error.response &&
+        error.response.status >= 500 &&
+        error.response.status < 600
+      ) {
+        // localStorage.removeItem('token')
+        throw 500;
+      }
     }
   }
-})
+);
 
-
-
-
-
-export const verify = 
-createAsyncThunk('iam/verify', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/verify',
-      {
-        token
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const verify = createAsyncThunk(
+  "iam/verify",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/user/verify",
+        {
+          token,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    return {
-      user: response.data.user,
-      token: response.data.token
-    }
-  } catch (error) {
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
-    }else if(error.response && error.response.status >= 500 && error.response.status < 600){
-      // localStorage.removeItem('token')
-      throw 500
+      return {
+        user: response.data.user,
+        token: response.data.token,
+      };
+    } catch (error) {
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      } else if (
+        error.response &&
+        error.response.status >= 500 &&
+        error.response.status < 600
+      ) {
+        // localStorage.removeItem('token')
+        throw 500;
+      }
     }
   }
-})
+);
 
-
-
-
-// export const isAuth = 
+// export const isAuth =
 // createAsyncThunk('iam/auth', async (user, password, { dispatch }) => {
 //   try {
 //     const token = localStorage.getItem('token');
@@ -586,20 +597,15 @@ createAsyncThunk('iam/verify', async ({}, { dispatch }) => {
 //   }
 // })
 
-
 export const isAuth = (user, password) => {
-    const token = localStorage.getItem('token');
-    return Boolean(token);
-}
-
-export const logout = () => {
-  localStorage.removeItem('token');
-  return true
+  const token = localStorage.getItem("token");
+  return Boolean(token);
 };
 
-
-
-
+export const logout = () => {
+  localStorage.removeItem("token");
+  return true;
+};
 
 //
 //
@@ -607,459 +613,462 @@ export const logout = () => {
 //
 //
 
-
-
-export const addUser = 
-createAsyncThunk('iam/addUser', async ({user, tags, group}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/add-user',
-      {
-        user,
-        tags,
-        group
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const addUser = createAsyncThunk(
+  "iam/addUser",
+  async ({ user, tags, group }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/user/add-user",
+        {
+          user,
+          tags,
+          group,
         },
-      })
-
-    console.log('rr', response)
-    return response.data
-  } catch (error) {
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
-    }
-  }
-})
-
-
-export const deleteUser = 
-createAsyncThunk('iam/deleteUser', async ({id}, { dispatch }) => {
-  try {
-
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/user/delete-user',
-      {
-        id
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-export const fetchsUser = 
-createAsyncThunk('iam/fetchsUser', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      '/iam/user/all-user', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        order: {
-          type: 'ASC',
-          param: 'createdat'
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      },
-      // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
-    });
+      );
 
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el usuario'
+      console.log("rr", response);
+      return response.data;
+    } catch (error) {
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
     }
   }
-})
+);
 
-
-
-
-
-export const addApplication = 
-createAsyncThunk('iam/addApplication', async ({application}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/application/add-application',
-      {
-        application,
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const deleteUser = createAsyncThunk(
+  "iam/deleteUser",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/user/delete-user",
+        {
+          id,
         },
-      })
-
-    return response.data
-  } catch (error) {
-    console.log('ee', error)
-    if(error.response.status == 400){
-      throw 'Ya existe la aplicación'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
-    }
-  }
-})
-
-
-export const deleteApplication = 
-createAsyncThunk('iam/deleteApplication', async ({id}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/application/delete-application',
-      {
-        id
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-export const fetchsApplication = 
-createAsyncThunk('iam/fetchsApplication', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      '/iam/application/all-application', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('fetchsApplication', response)
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el application'
-    }
-  }
-})
-
-
-
-
-
-export const addPolice = 
-createAsyncThunk('iam/addPolice', async ({police}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/police/add-police',
-      {
-        police,
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    return response.data
-  } catch (error) {
-    console.log('ee', error)
-    if(error.response.status == 400){
-      throw 'Ya existe la police'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
-    }
-  }
-})
-
-
-export const deletePolice = 
-createAsyncThunk('iam/deletePolice', async ({id}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/police/delete-police',
-      {
-        id
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-export const fetchsPolice = 
-createAsyncThunk('iam/fetchsPolice', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    console.log('to', token)
-    const response = await apiBackend.get(
-      '/iam/police/all-police', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('fetchsPolice', response)
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el police'
-    }
-  }
-})
-
-
-
-
-
-
-
-
-
-
-export const addApi = 
-createAsyncThunk('iam/addApi', async ({api}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    console.log('token', token, api)
-    const response = await apiBackend.post(
-      '/iam/api/add-api',
-      {
-        api,
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    return response.data
-  } catch (error) {
-    console.log('ee', error)
-    if(error.response.status == 400){
-      throw 'Ya existe la API'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
-    }
-  }
-})
-
-
-export const deleteApi = 
-createAsyncThunk('iam/deleteApi', async ({id}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/police/delete-api',
-      {
-        id
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-export const fetchsApi = 
-createAsyncThunk('iam/fetchsApi', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      '/iam/api/all-api', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('fetchsApi', response)
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el police'
-    }
-  }
-})
-
-
-
-
-
-
-export const addLog = 
-createAsyncThunk('iam/addLog', async ({log}, { dispatch }) => {
-  try {
-    const themeColor = localStorage.getItem('themeColor')
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/log/add-log',
-      {
-        log,
-        options: {
-          backgroundColor: themeColor
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
+      );
 
-      console.log('response', response)
-
-    return response.data
-  } catch (error) {
-    console.log('ee', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el logs'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
     }
   }
-})
+);
 
-
-export const deleteLogs = 
-createAsyncThunk('iam/deleteLogs', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/log/delete-logs',
-      {
-      },{
+export const fetchsUser = createAsyncThunk(
+  "iam/fetchsUser",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get("/iam/user/all-user", {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
-      })
+        params: {
+          order: {
+            type: "ASC",
+            param: "createdat",
+          },
+        },
+        // Puedes agregar otros parámetros de la solicitud GET aquí si es necesario
+      });
 
-    return response.data
-  } catch (error) {
-    console.log('ee', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el logs'
-    }else if(error.response.status == 501){
-      throw 'Permision denied'
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el usuario";
+      }
     }
   }
-})
+);
 
-export const deleteLog = 
-createAsyncThunk('iam/deleteLog', async ({id}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    console.log('token', token, id)
-    const response = await apiBackend.post(
-      '/iam/log/delete-log',
-      {
-        id
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const addApplication = createAsyncThunk(
+  "iam/addApplication",
+  async ({ application }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/application/add-application",
+        {
+          application,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    console.log('delete', response.data)
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-  }
-})
-
-
-
-export const fetchsLog = 
-createAsyncThunk('iam/fetchsLog', async ({}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.get(
-      '/iam/log/all-log', 
-      {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('fetchsLoG', response)
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el police'
+      return response.data;
+    } catch (error) {
+      console.log("ee", error);
+      if (error.response.status == 400) {
+        throw "Ya existe la aplicación";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
     }
   }
-})
+);
 
-
-
-
-
-
-export const sendMail = 
-createAsyncThunk('iam/sendMail', async ({email}, { dispatch }) => {
-  try {
-    const token = localStorage.getItem('token')
-    const response = await apiBackend.post(
-      '/iam/send/mail',
-      {
-        email
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`
+export const deleteApplication = createAsyncThunk(
+  "iam/deleteApplication",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/application/delete-application",
+        {
+          id,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    console.log('send email', response)
-
-    return response.data
-  } catch (error) {
-    console.log('err', error)
-    if(error.response.status == 400){
-      throw 'Ya existe el police'
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
     }
   }
-})
+);
 
+export const fetchsApplication = createAsyncThunk(
+  "iam/fetchsApplication",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get(
+        "/iam/application/all-application",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("fetchsApplication", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el application";
+      }
+    }
+  }
+);
+
+export const addPolice = createAsyncThunk(
+  "iam/addPolice",
+  async ({ police }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/police/add-police",
+        {
+          police,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("ee", error);
+      if (error.response.status == 400) {
+        throw "Ya existe la police";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
+    }
+  }
+);
+
+export const deletePolice = createAsyncThunk(
+  "iam/deletePolice",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/police/delete-police",
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+);
+
+export const fetchsPolice = createAsyncThunk(
+  "iam/fetchsPolice",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("to", token);
+      const response = await apiBackend.get("/iam/police/all-police", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("fetchsPolice", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el police";
+      }
+    }
+  }
+);
+
+export const addApi = createAsyncThunk(
+  "iam/addApi",
+  async ({ api }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("token", token, api);
+      const response = await apiBackend.post(
+        "/iam/api/add-api",
+        {
+          api,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("ee", error);
+      if (error.response.status == 400) {
+        throw "Ya existe la API";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
+    }
+  }
+);
+
+export const deleteApi = createAsyncThunk(
+  "iam/deleteApi",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/police/delete-api",
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+);
+
+export const fetchsApi = createAsyncThunk(
+  "iam/fetchsApi",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get("/iam/api/all-api", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("fetchsApi", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el police";
+      }
+    }
+  }
+);
+
+export const addLog = createAsyncThunk(
+  "iam/addLog",
+  async ({ log }, { dispatch }) => {
+    try {
+      const themeColor = localStorage.getItem("themeColor");
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/log/add-log",
+        {
+          log,
+          options: {
+            backgroundColor: themeColor,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("response", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("ee", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el logs";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
+    }
+  }
+);
+
+export const deleteLogs = createAsyncThunk(
+  "iam/deleteLogs",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/log/delete-logs",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("ee", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el logs";
+      } else if (error.response.status == 501) {
+        throw "Permision denied";
+      }
+    }
+  }
+);
+
+export const deleteLog = createAsyncThunk(
+  "iam/deleteLog",
+  async ({ id }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log("token", token, id);
+      const response = await apiBackend.post(
+        "/iam/log/delete-log",
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("delete", response.data);
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+    }
+  }
+);
+
+export const fetchsLog = createAsyncThunk(
+  "iam/fetchsLog",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get("/iam/log/all-log", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("fetchsLoG", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el police";
+      }
+    }
+  }
+);
+
+export const sendMail = createAsyncThunk(
+  "iam/sendMail",
+  async ({ email }, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.post(
+        "/iam/send/mail",
+        {
+          email,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("send email", response);
+
+      return response.data;
+    } catch (error) {
+      console.log("err", error);
+      if (error.response.status == 400) {
+        throw "Ya existe el police";
+      }
+    }
+  }
+);

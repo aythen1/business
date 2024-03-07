@@ -3,14 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 // import { useRouter, useParams } from 'next/navigation'
 import { useNavigate, useParams } from "react-router-dom";
-
+import jsonPivot from "../../../../../../../utils/addon.json";
 // import { updateUser } from '../../../../../../store/redux/actions/user.js'
 import {
   createNewFolder,
   addFolderLocal,
   uploadFile,
   selectCategory,
+  moveFile,
 } from "@/actions/assets";
+import { setCurrentFolder } from "@/slices/assetsSlice";
+import { getCurrentDateFormatted } from "../../assetsAux";
+
 import style from "./left-panel.module.css";
 // import Image from 'next/image'
 // import Chevron from '../../../../../../../assets/Vector 161 (Stroke).svg'
@@ -27,7 +31,7 @@ import file1 from "../../assets/File-to-upload.svg";
 
 import MyDocs from "../../assets/MyDocs.svg";
 import IconAddon from "../../assets/IconAddon.svg";
-import IconPriority from '../../assets/IconDashboard.svg'
+import IconPriority from "../../assets/IconDashboard.svg";
 
 import { setSearchFiles } from "@/slices/assetsSlice";
 import Modal from "react-modal";
@@ -55,11 +59,12 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
   const componentRef = useRef(null);
   const fileInputRef = useRef(null);
+  const folderInputRef = useRef(null);
 
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.persistedReducer.user)
   // const user = JSON.parse(localStorage.getItem('user')).user
-  const { currentFolder, loading, searchFiles } = useSelector(
+  const { currentFolder, loading, searchFiles, fileToCopy } = useSelector(
     (state) => state.assets
   );
   const [nameFolder, setNameFolder] = useState("");
@@ -70,11 +75,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
   // ------------------------------------
   useEffect(() => {
-    // setNewPopup(newPopup)
-    console.log("new", newPopup);
     if (newPopup == "title") {
     } else if (newPopup == "lancedb") {
-      // alert(11)
       dispatch(setModal(<ModalLanceDb />));
     }
   }, [newPopup]);
@@ -86,30 +88,98 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
     const folderPath =
       currentFolder === ""
-        ? `${driveId}/${nameFolder}`
+        ? `1234/${nameFolder}`
         : `${currentFolder}/${nameFolder}`;
-    // Puedes verificar si ya existe una carpeta con ese nombre aquí
-    // y modificar newFolderName en consecuencia, por ejemplo, añadiendo un número
-
-    await dispatch(createNewFolder(folderPath));
-    console.log("listo");
-    dispatch(addFolderLocal(folderPath + "/"));
-    // Limpiar el estado después de crear la carpeta
+    const pathDepured = folderPath.replace(/\/\/+/g, "/");
+    await dispatch(createNewFolder(pathDepured));
+    dispatch(addFolderLocal(pathDepured + "/", getCurrentDateFormatted));
     setModalIsOpen(false);
     setNameFolder("");
   };
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
-
     if (file) {
+      let currentFolderTrim = currentFolder;
+      if (currentFolderTrim.endsWith("/")) {
+        currentFolderTrim = currentFolderTrim.slice(0, -1);
+      }
+      const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
+      const pathDepured = path.replace(/\/\/+/g, "/");
+
       dispatch(
         uploadFile({
           file,
-          path: currentFolder === "" ? draveId : currentFolder,
+          pathDepured,
         })
       );
     }
     setNewPopup(false);
+    event.target.value = "";
+  };
+  const handleCreateNewMvp = async () => {
+    const response = await fetch(jsonPivot);
+    const blob = await response.blob();
+
+    // Crear un objeto File a partir del Blob si es necesario
+    const file = new File([blob], "addon.json", { type: "application/json" });
+
+    let currentFolderTrim = currentFolder;
+    if (currentFolderTrim.endsWith("/")) {
+      currentFolderTrim = currentFolderTrim.slice(0, -1);
+    }
+    const path = currentFolderTrim === "" ? draveId : currentFolderTrim;
+    const pathDepured = path.replace(/\/\/+/g, "/");
+
+    dispatch(
+      uploadFile({
+        file,
+        pathDepured,
+      })
+    );
+  };
+  const handleFolderInputChange = (event) => {
+    const files = event.target.files;
+    let foldersPaths = new Set();
+
+    if (files.length > 0) {
+      Array.from(files).forEach((file) => {
+        const folderPathParts = file.webkitRelativePath.split("/");
+        folderPathParts.pop();
+
+        const folderPath = folderPathParts.join("/");
+        foldersPaths.add(folderPath);
+        let path =
+          currentFolder === ""
+            ? draveId + "/" + folderPath
+            : currentFolder + "/" + folderPath;
+        if (path.endsWith("/")) {
+          path = path.slice(0, -1);
+        }
+        const pathDepured = path.replace(/\/\/+/g, "/");
+        dispatch(
+          uploadFile({
+            file,
+            pathDepured,
+          })
+        );
+      });
+
+      // Si necesitas trabajar con las rutas de las carpetas como un array
+      const foldersPathsArray = Array.from(foldersPaths);
+      foldersPathsArray.forEach((folderName) => {
+        const folderPath =
+          currentFolder === ""
+            ? `1234/${folderName}`
+            : `${currentFolder}/${folderName}`;
+        const pathDepured = folderPath.replace(/\/\/+/g, "/");
+
+        dispatch(createNewFolder(pathDepured));
+        const folderPathLocal = pathDepured + "/";
+        dispatch(addFolderLocal(folderPathLocal));
+      });
+    }
+    setNewPopup(false);
+    event.target.value = "";
   };
   const handleNavigate = (path) => {
     // router.push(`/${lng}/workspace/${id}/drive/${driveId}/${path}`)
@@ -119,6 +189,48 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   const handleClickMvp = () => {
     setSubNewPopup(true);
   };
+
+  const handleSetPrefix = (prefix) => {
+    const { directoryCopied, file } = fileToCopy;
+
+    const originalFileName = directoryCopied.split("/").filter(Boolean).pop();
+    let newKey;
+    const otherPrefix = prefix === "Marker." ? "Priority." : "Marker.";
+    const hasPrefix = new RegExp(`\\b${prefix}\\b`).test(originalFileName);
+    const hasOtherPrefix = new RegExp(`\\b${otherPrefix}\\b`).test(
+      originalFileName
+    );
+
+    if (hasPrefix) {
+      // si ya contiene el prefijo, no hacemos nada
+      return;
+    } else {
+      // Si no contiene el prefijo, agregarlo al inicio o después del otro prefijo si este último está presente
+      if (hasOtherPrefix) {
+        newKey = directoryCopied.replace(
+          originalFileName,
+          originalFileName.replace(
+            new RegExp(`^(${otherPrefix})`),
+            `$1${prefix}`
+          )
+        );
+      } else {
+        newKey = directoryCopied.replace(
+          originalFileName,
+          prefix + originalFileName
+        );
+      }
+    }
+    dispatch(
+      moveFile({ sourceKey: directoryCopied, destinationKey: newKey, file })
+    );
+  };
+
+  // uso para "Marker."
+  const handleSetMarker = () => handleSetPrefix("Marker.");
+
+  // uso para "Priority."
+  const handleSetPriority = () => handleSetPrefix("Priority.");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -226,11 +338,27 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
               onChange={handleFileInputChange}
             />
           </div>
-          <div className={style.drive_create_new_option}>
+          <div
+            onClick={() => {
+              if (folderInputRef.current) {
+                folderInputRef.current.click();
+              }
+            }}
+            className={style.drive_create_new_option}
+          >
             <img src={file1} width={25} height={25} />
-
             <p>Subir carpeta</p>
+            <input
+              type="file"
+              ref={folderInputRef}
+              style={{ display: "none" }}
+              webkitdirectory="" // Permite la selección de carpetas en navegadores que soportan webkit
+              directory="" // Para estandarización, aunque su soporte puede variar
+              multiple // Permite la selección de múltiples archivos
+              onChange={handleFolderInputChange}
+            />
           </div>
+
           <div
             onClick={() => handleClickMvp()}
             className={`${style.drive_create_new_option} ${style.drive_mvp_aythen}`}
@@ -245,6 +373,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
               <div className={`${style.drive_create_new_subpopup_container}`}>
                 {listMvps.map((item, index) => (
                   <div
+                    onClick={() => handleCreateNewMvp(item)}
                     key={index}
                     className={`${style.drive_create_new_mvp} ${item.lock ? style.active : ""
                       }`}
@@ -267,6 +396,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             onClick={() => {
               handleNavigate("document");
               dispatch(selectCategory("document"));
+              dispatch(setCurrentFolder(draveId + "/"));
             }}
           >
             Mis documentos
@@ -275,6 +405,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         <div
           className={style.drive_option}
           onClick={() => {
+            dispatch(setCurrentFolder(draveId + "/"));
             handleNavigate("addon");
             dispatch(selectCategory("addon"));
           }}
@@ -284,10 +415,13 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <label className={style.drive_option_label}>Soon</label>
         </div>
         <div
+          onDrop={handleSetPriority}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("priority");
             dispatch(selectCategory("priority"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconPriority} />
@@ -298,6 +432,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("shared");
             dispatch(selectCategory("shared"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconGroup} />
@@ -308,16 +443,20 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("recent");
             dispatch(selectCategory("recent"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconTime} />
           <p className={style.drive_option_text}>Recientes</p>
         </div>
         <div
+          onDrop={handleSetMarker}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("featured");
             dispatch(selectCategory("featured"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconStar} />
@@ -328,6 +467,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("glaciar");
             dispatch(selectCategory("glaciar"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconGlaciar} />
@@ -339,6 +479,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => {
             handleNavigate("trash");
             dispatch(selectCategory("trash"));
+            dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
           <img src={IconTrash} />

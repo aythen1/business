@@ -1,5 +1,5 @@
 import ai from "./assets/icons/AI.svg";
-import ay from "./assets/File (1).svg";
+import ay from "./assets/icons/LAMBDA.svg";
 import avi from "./assets/icons/AVI.svg";
 import bmp from "./assets/icons/BMP.svg";
 import crd from "./assets/icons/CRD.svg";
@@ -51,6 +51,7 @@ export function convertToMegabytes(valueInKilobytes) {
 
 export const calculateFolderSize = (directory, directoriesData) => {
   // Filtrar archivos y carpetas dentro del directorio actual
+  directoriesData.forEach((item) => {});
   const itemsInDirectory = directoriesData.filter(
     (item) => item.Key.startsWith(directory) && item.Key !== directory
   );
@@ -88,6 +89,141 @@ export const deleteItemsInDirectory = (
     }
   });
 };
+export const iterateElementsToCopy = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      copyElement(item.Key, destinationKey, item);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+    }
+  });
+};
+export const iterateElementsToDuplicates = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      console.log({ Key: item.Key, destinationKey, item });
+      // copyElement(item.Key, destinationKey, item);
+    } else {
+      console.log({ destinationKey });
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      // createFolder(destinationKey);
+    }
+  });
+};
+export const iterateElementsToDuplicate = (
+  directory,
+  copyElement,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied
+) => {
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+
+    // Aquí aseguramos que solo agregamos "-copy" al nivel de la carpeta principal que estamos duplicando
+    // y mantenemos la estructura de carpetas internas intacta para los subelementos.
+    let destinationKey;
+    if (directory === newPath) {
+      // Solo para el nivel más alto
+      destinationKey = `${newPath}`;
+    } else {
+      destinationKey = `${newPath}/${relativePath}`;
+    }
+
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      copyElement(item.Key, destinationKey, item);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+    }
+  });
+};
+export const iterateElementsToCut = (
+  directory,
+  moveFile,
+  directoriesData,
+  newPath,
+  createFolder,
+  folderNameCopied,
+  handleDeleteDirectory
+) => {
+  // Filtrar archivos y carpetas dentro del directorio actual
+  const itemsInDirectory = directoriesData.filter((item) =>
+    item.Key.startsWith(directory)
+  );
+  console.log({ directory, itemsInDirectory });
+
+  // copiar archivos y carpetas y llamar recursivamente para carpetas
+
+  itemsInDirectory.forEach((item) => {
+    const relativePath = item.Key.substring(directory.length);
+    let destinationKey = `${newPath}${folderNameCopied}/${relativePath}`;
+    console.log({ relativePath, destinationKey });
+    if (destinationKey.endsWith("/")) {
+      destinationKey = destinationKey.slice(0, -1);
+    }
+    const newItem = { ...item, Key: destinationKey };
+    if (regexExtensiones.test(item.Key)) {
+      // Si es un archivo, copiarlo
+      moveFile(item.Key, destinationKey, newItem, item.VersionId);
+    } else {
+      // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
+      createFolder(destinationKey);
+      handleDeleteDirectory(item.Key);
+    }
+  });
+};
 
 export function getFilesInDescendingOrder(directoriesData) {
   // Filtrar elementos que son archivos (Size !== 6)
@@ -100,6 +236,15 @@ export function getFilesInDescendingOrder(directoriesData) {
     return dateB - dateA;
   });
   return filesInDescendingOrder;
+}
+export function getCurrentDateFormatted() {
+  // Obtener la fecha y hora actuales
+  const now = new Date();
+
+  // Formatear según lo requiere formatLastModified
+  // En este caso, simplemente devolvemos el valor de la fecha actual en milisegundos desde la época Unix
+  // ya que formatLastModified espera un timestamp o una cadena que pueda ser convertida a fecha
+  return now.getTime();
 }
 
 export function formatLastModified(lastModified) {
@@ -130,6 +275,7 @@ export function formatLastModified(lastModified) {
 
 export const icons = {
   ai,
+  json: ay,
   ay,
   avi,
   bmp,
@@ -147,6 +293,7 @@ export const icons = {
   iso,
   javs,
   jpeg,
+  jpg: jpeg,
   mdb,
   mid,
   mov,

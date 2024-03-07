@@ -1,10 +1,9 @@
-const {
-  deleteS3Folder,
-} = require("../../services/assets/delete-folder-bucket");
+const { deleteObjectToS3 } = require("../../services/assets/object-delete");
+
 const { catchedAsync, response } = require("../../utils/err");
 const { ClientError } = require("../../utils/err/errors");
 
-// const deleteFolders = async (req, res) => {
+// const deleteFiles = async (req, res) => {
 //   const { userId, folders } = req.body
 
 //   console.log('dicuwducn', folders)
@@ -15,17 +14,21 @@ const { ClientError } = require("../../utils/err/errors");
 //   // response(res, 203, deletedFolder)
 // }
 
-const deleteFolders = async (req, res) => {
+const deleteFiles = async (req, res) => {
   try {
-    const { id, folders } = req.body;
-    console.log({ folders });
+    const { userId, folders } = req.body;
+    console.log({ userId, folders });
     // Crear un array de promesas para eliminar cada carpeta
     const deletePromises = folders.map((folder) =>
-      deleteS3Folder(id, folder.Key, folder.VersionId)
+      deleteObjectToS3({
+        path: folder.Key,
+        userId,
+        VersionId: folder.VersionId,
+      })
     );
 
     // Esperar a que todas las promesas se resuelvan
-    await Promise.all(deletePromises);
+    const deletedFolders = await Promise.all(deletePromises);
 
     // Puedes hacer algo con deletedFolders si lo necesitas
 
@@ -38,4 +41,4 @@ const deleteFolders = async (req, res) => {
   }
 };
 
-module.exports = { deleteFolders: catchedAsync(deleteFolders) };
+module.exports = { deleteFiles: catchedAsync(deleteFiles) };

@@ -10,6 +10,10 @@ import FolderOptions from "../../FolderOptions";
 import FileOptions from "../../FileOptions";
 import Folder from "../../../assets/FolderFigma.svg";
 import file1 from "../../../assets/File (1).svg";
+import Info from "../../../assets/IconDashboard.svg";
+import Star from "../../../assets/IconStar.svg";
+import StarComponent from "../../../assets/StarComponent";
+import PriorityComponent from "../../../assets/PriorityComponent";
 
 import style from "../my-files.module.css";
 
@@ -77,12 +81,15 @@ export const renderFolders = (
   handleFolderClick,
   handleCheckboxChange,
   dropAndUpload,
-  handleDragStart
+  handleDragStart,
+  copyFolder,
+  cutFolder,
+  duplicateFolder,
+  isTrash
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
-
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -118,10 +125,21 @@ export const renderFolders = (
   }
 
   return folders.map((directory, index) => {
-    const folderName = directory.Key.split("/").filter(Boolean).pop();
+    const originalFolderName = directory.Key.split("/").filter(Boolean).pop();
+    const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
+    // usamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía
+    let folderName = originalFolderName.replace(prefixRegex, "");
+    // cambio la extensión .json por .ay si existe
+    folderName = folderName.replace(/\.json$/, ".ay");
     const isFile = regexExtensiones.test(folderName);
     const fileExtension = folderName.toLowerCase().match(regexExtensiones)?.[1];
-    const icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
+    let icon = fileExtension ? icons[fileExtension] : Folder; // usamos el ícono correspondiente o default si no se encuentra
+    if (fileExtension === "ay") {
+      icon = icons["json"];
+    }
+    const isMarker = originalFolderName.includes("Marker.") ? true : false;
+    const isPriority = originalFolderName.includes("Priority.") ? true : false;
+
     const size = isFile
       ? convertToMegabytes(directory.Size)
       : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
@@ -137,7 +155,6 @@ export const renderFolders = (
         newOptions[index] = !newOptions[index];
         return newOptions;
       });
-      // Aquí podrías también establecer el estado para la posición del menú si es necesario
     };
 
     return (
@@ -177,12 +194,20 @@ export const renderFolders = (
             <img src={icon} style={{ width: 16 }} />
             <p className={style.drive_folder_title}>{folderName}</p>
           </div>
-          <div className={style.drive_folder_size_container}>
-            <span>{size}</span>
-          </div>
+          {isTrash !== true && (
+            <div className={style.drive_folder_size_container}>
+              <span>{size}</span>
+            </div>
+          )}
           <div className={style.drive_folder_lastmodified_container}>
-            {formatLastModified(directory.LastModified)}
+            {isTrash
+              ? directory.Key
+              : formatLastModified(directory.LastModified)}
           </div>
+          <span style={{ display: "flex", width: "60px" }}>
+            {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
+            {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
+          </span>
         </div>
 
         {/* <div className={style.fileRightSection}>
@@ -195,6 +220,7 @@ export const renderFolders = (
           </div> */}
 
         {folderOptions[index] &&
+          isTrash !== true &&
           (isFile ? (
             <FileOptions
               setShowFolderOption={(value) =>
@@ -218,8 +244,11 @@ export const renderFolders = (
               }
               handleDeleteFolder={clearStorage}
               folderName={folderName}
-              directory={directory.Key}
+              directory={directory}
               position={position}
+              copyFolder={copyFolder}
+              cutFolder={cutFolder}
+              duplicateFolder={duplicateFolder}
             />
           ))}
       </div>
@@ -286,9 +315,17 @@ export const renderRecentFiles = (
 
   // trabajamos solo con los primeros 3 archivos
   return filesOnly.slice(0, 3).map((file, index) => {
-    const fileName = file.Key.split("/").filter(Boolean).pop();
+    const originalFolderName = file.Key.split("/").filter(Boolean).pop();
+    const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
+    // utilizamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía.
+    let fileName = originalFolderName.replace(prefixRegex, "");
+    fileName = fileName.replace(/\.json$/, ".ay");
+
     const fileExtension = fileName.toLowerCase().match(regexExtensiones)?.[1];
-    const icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
+    let icon = fileExtension ? icons[fileExtension] : file1; // usamos el ícono correspondiente o default si no se encuentra
+    if (fileExtension === "ay") {
+      icon = icons["json"];
+    }
     const size = convertToMegabytes(file.Size);
     const handleContextMenu = (e) => {
       e.preventDefault();
@@ -308,7 +345,7 @@ export const renderRecentFiles = (
       <div
         className={style.drive_suggestion_container}
         key={index + "recent"}
-        onDragStart={() => handleDragStart(file.Key, true)}
+        onDragStart={() => handleDragStart(file, true, originalFolderName)}
         draggable
         onContextMenu={handleContextMenu}
       >
