@@ -216,7 +216,7 @@ export const iterateElementsToCut = (
     const newItem = { ...item, Key: destinationKey };
     if (regexExtensiones.test(item.Key)) {
       // Si es un archivo, copiarlo
-      moveFile(item.Key, destinationKey, newItem);
+      moveFile(item.Key, destinationKey, newItem, item.VersionId);
     } else {
       // Si es una carpeta, crear la nueva carpeta y llamar recursivamente
       createFolder(destinationKey);
