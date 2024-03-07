@@ -10,6 +10,10 @@ import FolderOptions from "../../FolderOptions";
 import FileOptions from "../../FileOptions";
 import Folder from "../../../assets/FolderFigma.svg";
 import file1 from "../../../assets/File (1).svg";
+import Info from "../../../assets/IconDashboard.svg";
+import Star from "../../../assets/IconStar.svg";
+import StarComponent from "../../../assets/StarComponent";
+import PriorityComponent from "../../../assets/PriorityComponent";
 
 import style from "../my-files.module.css";
 
@@ -133,6 +137,9 @@ export const renderFolders = (
     if (fileExtension === "ay") {
       icon = icons["json"];
     }
+    const isMarker = originalFolderName.includes("Marker.") ? true : false;
+    const isPriority = originalFolderName.includes("Priority.") ? true : false;
+
     const size = isFile
       ? convertToMegabytes(directory.Size)
       : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
@@ -197,6 +204,10 @@ export const renderFolders = (
               ? directory.Key
               : formatLastModified(directory.LastModified)}
           </div>
+          <span style={{ display: "flex", width: "60px" }}>
+            {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
+            {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
+          </span>
         </div>
 
         {/* <div className={style.fileRightSection}>
