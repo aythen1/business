@@ -163,7 +163,7 @@ export const copyFile = createAsyncThunk(
 // Crear carpeta
 export const moveFile = createAsyncThunk(
   "assets/copyFile",
-  async ({ sourceKey, destinationKey, file }, { dispatch }) => {
+  async ({ sourceKey, destinationKey, file, VersionId }, { dispatch }) => {
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
@@ -173,6 +173,7 @@ export const moveFile = createAsyncThunk(
         destinationBucket: userId,
         destinationKey,
         userId,
+        VersionId,
       };
       dispatch(filterFolder(sourceKey));
       dispatch(
