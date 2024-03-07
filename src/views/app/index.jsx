@@ -186,9 +186,11 @@ export const App = ({ }) => {
 
   useEffect(() => {
     const color = localStorage.getItem('themeColor')
-    const colors = generateColors(color)
-    setColorsLight(colors.light)
-    setColorsDark(colors.dark)
+    if (color) {
+      const colors = generateColors(color)
+      setColorsLight(colors.light)
+      setColorsDark(colors.dark)
+    }
   }, [themeColor])
 
 
@@ -207,7 +209,7 @@ export const App = ({ }) => {
         </style>
       )}
       <Modal />
-      <div 
+      <div
         className={styles["TopBar"]}
         onClick={() => {
           dispatch(setOpenChatBot(null))
@@ -234,7 +236,7 @@ export const App = ({ }) => {
 
               <Route path="" element={<Settings />} />
               <Route path="settings/:settingsTag/*" element={<Settings />} />
-              
+
               <Route path="vector" element={<Vector />} />
               <Route path="vector/:vectorId" element={<Vector />} />
 

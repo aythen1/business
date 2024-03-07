@@ -157,14 +157,8 @@ const Tickets = () => {
                     <item>
                         Subject
                     </item>
-                    <item filter="date" name="date">
-                        Product
-                    </item>
                     <item size="100">
                         Created by
-                    </item>
-                    <item size="100">
-                        Created
                     </item>
                     <item size="100">
                         Last updated
@@ -173,7 +167,7 @@ const Tickets = () => {
                         Status
                     </item>
                     <item component={component}>
-                        Awaiting customer
+                        Customer
                     </item>
                 </Table>
 
@@ -199,7 +193,6 @@ const ComponentTable = (props) => {
 
     return (
         <div className={styles.view}>
-            Awaiting Customer
             <div 
                 className={styles.button}
                 onClick={() => handleViewTicket()}

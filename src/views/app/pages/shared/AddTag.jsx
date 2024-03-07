@@ -34,6 +34,7 @@ const AddTag = ({handleInputChange}) => {
     };
 
     const handleRemoveTag = (index) => {
+        alert(1)
         const updatedTags = [...tags];
         updatedTags.splice(index, 1);
         setTags(updatedTags);
@@ -56,7 +57,7 @@ const AddTag = ({handleInputChange}) => {
     }
 
     return (
-        <div>
+        <div style={{width: '100%'}}>
             {isShow ? (
                 <div>
                     <div className={styles.labelsTag}>
@@ -111,6 +112,7 @@ const AddTag = ({handleInputChange}) => {
                                 </label>
                                 <input
                                     type="text"
+                                    spellCheck="false"
                                     value={tag.key}
                                     onChange={(e) => handleKeyChange(e, index)}
                                     />
@@ -121,6 +123,7 @@ const AddTag = ({handleInputChange}) => {
                                 </label>
                                 <input
                                     type="text"
+                                    spellCheck="false"
                                     value={tag.value}
                                     onChange={(e) => handleValueChange(e, index)}
                                     />

@@ -16,7 +16,7 @@
     flex-shrink: 0;
     border-radius: 8px;
     padding: 8px;
-    background: linear-gradient(177deg, rgba(203, 203, 255, 0.85) 2.55%, #f9f9ff00 98.34%);
+    background: linear-gradient(177deg, var(--color-primary-4) 2.55%, #f9f9ff00 98.34%);
 }
 
 .drive_transformers_title_container {
@@ -40,7 +40,7 @@
     align-items: center;
     gap: 6px;
     border-radius: 30px;
-    background: #F3F5F7;
+    background: var(--background-secondary);
 }
 
 .drive_shortcut_text {
@@ -60,8 +60,17 @@
     align-items: center;
     gap: 10px;
     border-radius: 4px;
-    border: 1px solid #D9D9D9;
+    border: 1px solid var(--border-color);
     background: #EBEBEB
+}
+
+.search_input{
+    color: var(--text-color-secondary);
+    width: 14px;
+    height: 14px;
+    float: left;
+    position: relative;
+    min-width: 14px;
 }
 
 .drive_input {
@@ -89,9 +98,12 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    background-color: blue;
+    background-color: var(--color-primary-0);
     border-radius: 4px;
     position: relative;
+    &:hover{
+        background-color: var(--color-primary-1);
+    }
 }
 
 .drive_create_new {

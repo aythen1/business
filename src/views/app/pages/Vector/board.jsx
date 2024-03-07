@@ -92,7 +92,6 @@ const Board = ({ }) => {
 
 
     const handleLoadData = (item) => {
-        console.log('data', item)
         setDataSheet(item)
         setShow('flow')
         dispatch(setDimension(item))
@@ -253,7 +252,7 @@ const Board = ({ }) => {
 
 
 
- 
+
 
 
     return (
@@ -330,7 +329,14 @@ const Board = ({ }) => {
                 <div className={styles.team}>
                     <div className={styles.avatar}>
                         <div className={styles.initial}>
-                            {vector.title.slice(0, 1) || '-'}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m10 8.1-3.7.3-2 2a1 1 0 0 0 .5 1.6l2.7.3M16 14l-.3 3.7-2 2a1 1 0 0 1-1.6-.5l-.4-2.7m8.2-11.1a1.4 1.4 0 0 0-1.2-1.2c-1.6-.2-4.9-.6-6.3.9a70.7 70.7 0 0 0-6.5 10.6c0 .2.2.4.3.5l.8.9.9.8a1 1 0 0 0 1 .2A71 71 0 0 0 19 11.8c1.5-1.5 1.1-4.8.9-6.4Zm-3 3.7A1.9 1.9 0 1 1 13 9a1.9 1.9 0 0 1 3.8 0Z" />
+                            </svg>
+                        </div>
+                        <div className={styles.buttonStatus}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4" />
+                            </svg>
                         </div>
                     </div>
                     <div className={styles.info}>
@@ -339,15 +345,22 @@ const Board = ({ }) => {
                             {/* Matthew Frankina's Team */}
                         </div>
                         <div className={styles.subtitle}>
-                            {vector.description || 'No description..'}
-                            {/* Manager Commercial Sites */}
+                            <button>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M7 4l3 3M7 4 4 7m9-3h6l-6 6h6m-6.5 10 3.5-7 3.5 7M14 18h4" />
+                                </svg>
+                            </button>
+                            <div>
+                                {vector.description || 'No description..'}
+                                {/* Manager Commercial Sites */}
+                            </div>
                         </div>
                     </div>
                 </div>
                 {dataSheets.map((data, index) => (
                     <div
                         key={index}
-                        className={`${styles.vector} ${dataSheet.id == data.id && styles.active}`}
+                        className={`${styles.vector} ${data.id == dimension?.id && styles.active}`}
                         onClick={() => handleLoadData(data)}
                     >
                         <label className={styles.title}>

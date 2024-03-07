@@ -37,6 +37,9 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  .logo{
+    width: 50px;
+  }
 }
 .frame-1547755085 {
   display: flex;
@@ -195,6 +198,7 @@
   position: relative;
 }
 .email-address {
+  width: 100%;
   text-align: left;
   font-size: 16px;
   font-weight: 400;
@@ -202,6 +206,7 @@
   left: 13px;
   top: 13px;
   input{
+    width: 100%;
     color: var(--text-color);
     background: transparent;
     border: none;

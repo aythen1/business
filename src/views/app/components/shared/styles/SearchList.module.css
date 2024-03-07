@@ -8,6 +8,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    svg{
+        width: 20px;
+    }
     input{
         background: transparent;
         padding: 4px;

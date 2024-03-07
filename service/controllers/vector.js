@@ -11,6 +11,9 @@ const {
   getVector,
   deleteVector,
   removeVector,
+
+  generateEmptyObjectFromSchema,
+  validateAgainstSchema,
 } = require('../services/lancedb')
 
 
@@ -195,13 +198,11 @@ async function _getVector(req, res) {
       options = [
         { field: 'title', operator: 'LIKE', value: `%${data.title}%` }
       ];
-    }else if (data.id) {
+    } else if (data.id) {
       options = [
         { field: 'id', operator: 'LIKE', value: `%${data.id}%` }
       ];
     }
-
-    console.log('options', options)
 
 
     const query = await getVector(id, name, [0, 0], options)
@@ -213,9 +214,9 @@ async function _getVector(req, res) {
     }
 
     // response(res, 200, { data: query })
-    if(options.length > 0){
+    if (options.length > 0) {
       return res.status(200).send(query[0])
-    }else{
+    } else {
       return res.status(200).send(query)
     }
 
@@ -296,10 +297,151 @@ async function _getAllVector(req, res) {
 
 
 
+
+const shareFileVector = async (req, res) => {
+  const { user } = req
+  const { id } = req.params
+  const { workspaceId, projectId } = decodeVector(id)
+
+  const file = req.file
+  const fileBuffer = file.buffer
+
+
+  try {
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
+  } catch (err) {
+    const db = await lancedb.connect(uri);
+    let emptyData
+    if (vector.length == 2) {
+      emptyData = generateEmptyObjectFromSchema(schema)
+    } else {
+      emptyData = data.length ? data[0] : data
+    }
+
+    emptyData.vector = vector
+    emptyData.id = uuidv4()
+    const validObj = validateAgainstSchema(emptyData, schema);
+    if (!validObj.isValid) {
+      return {
+        message: 'El objeto no cumple con el esquema',
+        data: emptyData,
+        error: validObj.errors[0]
+      };
+    }
+
+    try {
+      await db.createTable('shared', [emptyData], {
+        schema: schema,
+        writeMode: 'overwrite'
+      });
+
+      const tbl = await db.openTable('shared')
+      await tbl.delete(`id = '${emptyData.id}'`)
+
+    } catch (err) {
+      console.log('errrr', err)
+    }
+  }
+
+
+  // function chunkFile(file, chunkSize) {
+  //   const chunks = []
+  //   for (let i = 0; i < file.length; i += chunkSize) {
+  //     chunks.push(file.slice(i, i + chunkSize))
+  //   }
+  //   return chunks
+  // }
+  // const chunkSize = 4000 
+
+
+  // const pdfText = await pdf(fileBuffer)
+  //   .then((data) => {
+  //     return data.text
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error al cargar el PDF:', error)
+  //   })
+
+  // fileBuffer
+
+
+  try {
+    // const chunks = chunkText(pdfText, chunkSize)
+    // Procesa cada chunk de forma secuencial
+    // for (const chunk of chunks) {
+    //   const response = await fetch('https://api.openai.com/v1/completions', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       Authorization: `Bearer ${KEY_OPENAI}`
+    //     },
+    //     body: JSON.stringify({
+    //       model: 'text-davinci-002',
+    //       prompt: chunk,
+    //       max_tokens: 50
+    //     })
+    //   })
+
+    //   if (!response.ok) {
+    //     throw new Error(`Error de HTTP! Estado: ${response.status}`)
+    //   }
+
+    //   const responseData = await response.json()
+    //   console.log('resp', responseData)
+    //   const generatedTokens = responseData.choices[0].text
+    //   // Acumula los tokens generados
+    //   allGeneratedTokens += generatedTokens
+    // }
+
+    console.log('dddd')
+
+
+    const uri = 'data/vector/' + workspaceId + '/' + projectId
+    const db = await lancedb.connect(uri)
+    // const tbl = await db.openTable(name)
+
+    // JSON S3 FILEOBJECT
+    const tableSchema = {
+      type: 'object',
+      properties: {
+        currentDate: { type: 'string' },
+        message: { type: 'string' },
+        type: { type: 'string' },
+        data: { type: 'string' }
+      },
+      required: ['currentDate', 'message', 'type']
+    }
+
+    const tbl = await db.openTable('shared', { schema: tableSchema })
+
+    const message = [
+      {
+        currentDate: new Date().toISOString(),
+        message: file.originalname,
+        type: file.mimetype,
+        data: fileBuffer.toString('utf-8'),
+        vector: [0, 0]
+      }
+    ]
+
+    await tbl.add(message)
+
+    response(res, 200, { data: message })
+  } catch (error) {
+    console.error(`Errors al eliminar la tabla ${name}: ${error.message}`)
+
+    response(res, 200, { error })
+  }
+}
+
+
+
 module.exports = {
   addVector: catchedAsync(_addVector),
   updateVector: catchedAsync(_updateVector),
   addVectorData: catchedAsync(addVectorData),
+  shareFileVector: catchedAsync(shareFileVector),
 
   loadVector: catchedAsync(_loadVector),
   deleteVector: catchedAsync(_deleteVector),
@@ -308,3 +450,130 @@ module.exports = {
   getVector: catchedAsync(_getVector),
   getAllVector: catchedAsync(_getAllVector),
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const loadVector = async (req, res) => {
+//   const { id, name } = req.params
+//   const file = req.file
+//   const fileBuffer = file.buffer
+
+//   console.log('f9le', file)
+
+//   function chunkText(text, chunkSize) {
+//     const chunks = []
+//     for (let i = 0; i < text.length; i += chunkSize) {
+//       chunks.push(text.slice(i, i + chunkSize))
+//     }
+//     return chunks
+//   }
+
+//   const chunkSize = 4000 // Tamaño del chunk, puedes ajustarlo según tus necesidades
+
+//   const pdfText = await pdf(fileBuffer)
+//     .then((data) => {
+//       return data.text
+//     })
+//     .catch((error) => {
+//       console.error('Error al cargar el PDF:', error)
+//     })
+
+//   try {
+//     let allGeneratedTokens = ''
+
+//     const chunks = chunkText(pdfText, chunkSize)
+//     // Procesa cada chunk de forma secuencial
+//     for (const chunk of chunks) {
+//       const response = await fetch('https://api.openai.com/v1/completions', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${KEY_OPENAI}`
+//         },
+//         body: JSON.stringify({
+//           model: 'text-davinci-002',
+//           prompt: chunk,
+//           max_tokens: 50
+//         })
+//       })
+
+//       if (!response.ok) {
+//         throw new Error(`Error de HTTP! Estado: ${response.status}`)
+//       }
+
+//       const responseData = await response.json()
+//       console.log('resp', responseData)
+//       const generatedTokens = responseData.choices[0].text
+//       // Acumula los tokens generados
+//       allGeneratedTokens += generatedTokens
+//     }
+
+//     console.log('dddd')
+
+//     const { workspaceId, projectId } = decodeVector(id)
+
+//     const uri = 'data/vector/' + workspaceId + '/' + projectId
+
+//     const db = await lancedb.connect(uri)
+//     // const tbl = await db.openTable(name)
+
+//     const tableSchema = {
+//       type: 'object',
+//       properties: {
+//         currentDate: { type: 'string' },
+//         message: { type: 'string' },
+//         type: { type: 'string' },
+//         data: { type: 'string' }
+//       },
+//       required: ['currentDate', 'message', 'type']
+//     }
+
+//     const tbl = await db.openTable(name, { schema: tableSchema })
+
+//     const message = [
+//       {
+//         currentDate: new Date().toISOString(),
+//         message: file.originalname,
+//         type: 'application/pdf',
+//         data: JSON.stringify({
+//           pdfText,
+//           allGeneratedTokens
+//         }),
+//         vector: [1.3, 1.4]
+//         // _distance: 19463.6484375
+//       }
+//     ]
+//     console.log('aaaa', message)
+
+//     await tbl.add(message)
+
+//     // console.log('d', document)
+
+//     response(res, 200, { data: message })
+//   } catch (error) {
+//     console.error(`Errors al eliminar la tabla ${name}: ${error.message}`)
+
+//     response(res, 200, { error })
+//   }
+// }

@@ -13,9 +13,10 @@ import styles from './CustomVector.module.css'
 
 import { useGraph } from '../index';
 
-import VectorData from './vector/Data'
+import VectorTable from './vector/Table'
 import VectorInfo from './vector/Info'
-import VectorSchema from './vector/Schema'
+import VectorAgent from './vector/Agent'
+// import VectorSchema from './vector/Schema'
 import VectorSQL from './vector/SQL'
 
 
@@ -24,11 +25,18 @@ import IconWord from './assets/icon-word.svg'
 import IconOther from './assets/icon-other.svg'
 
 
+import {
+  setDimension
+} from '@/slices/vectorSlice'
+
+
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
+
+  const dispatch = useDispatch()
 
   const {
     dimension
-} = useSelector((state) => state.vector)
+  } = useSelector((state) => state.vector)
 
 
   const { nodes, edges, setNodes, setEdges } = useGraph();
@@ -38,55 +46,65 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
   const { zoomIn, zoomOut, setCenter } = useReactFlow();
 
-
-  const handleSelectVector = () => {
-    if (filter) {
-      setFilter(null)
-    } else {
-      setFilter('info')
-    }
-  }
-
-
   useEffect(() => {
-    console.log('Hello world', data)
+    // console.log('Hello world', data)
     setFilter(data.status)
-
   }, [data])
 
 
-  
+
   useEffect(() => {
-    console.log('dimension')
     if (dimension) {
       const nodePosition = dimension.position;
 
       // Encuentra el elemento con la clase "react-flow"
       const reactFlowElement = document.querySelector('.react-flow');
-      console.log('reactFlowElement', reactFlowElement.clientWidth)
-      console.log('nodePosition', nodePosition)
 
       // Hace scroll al nodo dentro de react-flow
       if (reactFlowElement) {
-        const x = nodePosition.x 
-        const y = nodePosition.y
+        const x = nodePosition.x + 300
+        const y = nodePosition.y + 200
 
-        const zoom = 1
+        const zoom = 0.9
 
-        setCenter(x, y, { zoom, duration: 1000 });
-
+        setCenter(x, y, { zoom, duration: 400 });
       }
     }
-  }, [data, dimension]);
+  }, [dimension]);
 
+
+
+  const handleSelectVector =  (e) => {
+    // Eliminar la clase 'selected' de todos los elementos
+    const selectedElements = document.querySelectorAll(`.${styles.selected}`);
+    selectedElements.forEach((element) => {
+      element.classList.remove(styles.selected);
+    });
+
+    if (filter) {
+      setFilter(null)
+    } else {
+      setFilter('info')
+    }
+
+    const node = nodes.filter((node) => node.id === id)[0]
+    dispatch(setDimension(node))
+
+    console.log('wfoinhfeubv', e)
+    // Acceder al elemento del evento (e.target)
+    const selectedVector = e.target.closest(`.${styles.boxVector}`);
+    // const selectedVector = e.target;
+    if (selectedVector) {
+      console.log('31oinfe2ujbnfu')
+      selectedVector.classList.add(styles.selected);
+    }
+  }
 
 
 
 
   const handleDuplicate = () => {
     setShowContextMenu(false)
-    
-
     const node = nodes.filter((node) => node.id === id)[0]
 
     const newNode = {
@@ -135,45 +153,48 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       {showContextMenu && (
         <ContextMenu onDuplicate={handleDuplicate} onDelete={handleDelete} />
       )}
-      <div
-        className={styles.customVector}
-        onClick={() => handleSelectVector()}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          setShowContextMenu(true);
-        }}
-      >
-        <div className={styles.logo}>
-          <img src={IconExcel} />
-        </div>
-        <div className={styles.info}>
-          <div className={styles.top}>
-            <p>
-              {data.title ? data.title : 'Not found'}
-            </p>
-            <label>
-              {data.size ? data.size : '0kb'}
-            </label>
+      <div className={styles.customVector}>
+        <div
+          className={styles.boxVector}
+          onClick={(e) => handleSelectVector(e)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            setShowContextMenu(true);
+          }}
+        >
+          <div className={styles.logo}>
+            <img src={IconExcel} />
           </div>
-          <div className={styles.bottom}>
-            <span>
-              {data.date ? JSON.stringify(data.date) : '-'}
-            </span>
-            <b>
-              IN OUT
-            </b>
+          <div className={styles.info}>
+            <div className={styles.top}>
+              <p>
+                {data.title ? data.title : 'Not found'}
+              </p>
+              <label>
+                {data.size ? data.size : '0kb'}
+              </label>
+            </div>
+            <div className={styles.bottom}>
+              <span>
+                {data.date ? JSON.stringify(data.date) : '-'}
+              </span>
+              <b>
+                IN OUT
+              </b>
+            </div>
           </div>
         </div>
       </div>
+
       <div>
-        {filter == 'data' ? (
-          <VectorData id={id} data={data} setFilter={setFilter} />
+        {filter == 'table' ? (
+          <VectorTable id={id} data={data} setFilter={setFilter} />
         ) : filter == 'sql' ? (
           <VectorSQL id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'schema' ? (
-          <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes} />
-        ) : filter == 'info' && (
+        ) : filter == 'info' ? (
           <VectorInfo id={id} data={data} setFilter={setFilter} />
+        ) : filter == 'agent' && (
+          <VectorAgent id={id} data={data} setFilter={setFilter} />
         )}
       </div>
     </>

@@ -32,6 +32,7 @@ const SearchList = ({ data, title, icon,  onSelect }) => {
 
   return (
     <div className={styles.search}>
+    
       <div dangerouslySetInnerHTML={{ __html: icon }} />
       <input
         type="text"

@@ -218,26 +218,6 @@ const Dashboard = ({ }) => {
         <div className={styles.boxBoards + ' ' + styles.mdNone}>
           {dashboards.length !== 0 ? (
             <div>
-              <div className={styles.alertBoard}>
-                <div className={styles.alertBoardIcon}>
-                  <IconImportant width={'20'} fill={'var(--color-primary-0)'} />
-                </div>
-                <div className={styles.alertBoardText}>
-                  <b>Requirements for moving to routed IP</b>
-                  <p>
-                    Before moving to a ROUTED IP, ensure no static network
-                    configuration is in use, and your ‘scaleway-ecosystem’ and
-                    ‘cloud-init’ packages are updated. Note that Boards with a
-                    bootscript are not compatible with routed IPs.
-                    <a onClick={() => handleClickSupport()}>
-                      Using routed IPs
-                      <svg viewBox="0 0 24 24">
-                        <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
-                      </svg>
-                    </a>
-                  </p>
-                </div>
-              </div>
               <div
                 className={
                   (selectedDashboards.filter((selected) => selected).length >= 1
@@ -360,7 +340,25 @@ const Dashboard = ({ }) => {
                   ))}
                 </div>
               </div>
-
+              <div className={styles.alertBoard}>
+                <div className={styles.alertBoardIcon}>
+                  <IconImportant width={'20'} fill={'var(--color-primary-0)'} />
+                </div>
+                <div className={styles.alertBoardText}>
+                  <p>
+                    Before moving to a ROUTED IP, ensure no static network
+                    configuration is in use, and your ‘scaleway-ecosystem’ and
+                    ‘cloud-init’ packages are updated. Note that Boards with a
+                    bootscript are not compatible with routed IPs.
+                    <a onClick={() => handleClickSupport()}>
+                      Using routed IPs
+                      <svg viewBox="0 0 24 24">
+                        <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
+                      </svg>
+                    </a>
+                  </p>
+                </div>
+              </div>
               {isToolTipHovered && (
                 <div
                   className={styles.popupToolTip}

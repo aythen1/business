@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import styles from './index.module.css'
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,23 @@ import { useNavigate } from 'react-router-dom';
 // import IconGetStarted from './assets/icon-get-started.svg'
 
 
+import {
+    initialTopics,
+    initialStatus,
+    initialQuery
+} from './assets/initial'
+
+
+import {
+    setModal
+} from '@/slices/iamSlice'
+
+
+import BackgroundVector from './assets/background-vector'
+
+
 const Support = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const [inputValue, setInputValue] = useState('');
@@ -19,65 +36,10 @@ const Support = () => {
     const [listStatus, setListStatus] = useState([])
 
 
-    const initialTopics = [{
-        icon: require('./assets/icon-get-started.jsx').default,
-        title: 'Get started',
-        href: '/es/app/support/tickets'
-    }, 
-    {
-        icon: require('./assets/icon-account.jsx').default,
-        title: 'Account',
-        href: '/es/app/support/tickets'
-    }, {
-        icon: require('./assets/icon-billing.jsx').default,
-        title: 'Billing',
-        href: '/es/app/support/tickets'
-    }, {
-        icon: require('./assets/icon-instance.jsx').default,
-        title: 'instance',
-        href: '/es/app/support/tickets'
-    }, {
-        icon: require('./assets/icon-elastic-metal.jsx').default,
-        title: 'Elastic Metal',
-        href: '/es/app/support/tickets'
-    }, {
-        icon: require('./assets/icon-kubernetes.jsx').default,
-        title: 'Kubernetes',
-        href: '/es/app/support/tickets'
-    }
-]
-
-    const initialStatus = [{
-        title: 'Containers',
-        value: 1
-    }, {
-        title: 'Containers',
-        value: 1
-    }, {
-        title: 'Containers',
-        value: 1
-    }, {
-        title: 'Containers',
-        value: 1
-    }, {
-        title: 'Containers',
-        value: 1
-    }]
 
 
-    const initialQuery = [{
-        title: 'Tutorials / Using-Secret-Manager-With-Github-Action /',
-        subtitle: 'Fetching secrets from the Secret Manager using the Scaleway Github Action'
-    },{
-        title: 'Tutorials / First-Steps-Linux-Command-Line /',
-        subtitle: 'First steps with the Linux command line'
-    },{
-        title: 'Serverless / Functions / Reference-Content / Use-Cases ',
-        subtitle: 'Functions use cases'
-    },{
-        title: 'Serverless / Functions / Reference-Content / Functions-Runtimes-Configuration ',
-        subtitle: 'Functions runtimes configurations'
-    }]
+
+
 
 
 
@@ -96,23 +58,29 @@ const Support = () => {
     const handleManageTicket = () => {
         navigate(`/es/app/support/tickets`)
     }
-    
+
     // ------------------------------------------------------------
     const handleInputChange = (event) => {
         const value = event.target.value;
         setInputValue(value);
-      
+
         // Filtrar la lista cuando el input no está vacío
         if (value.trim() !== '') {
-          const filteredList = listQuery.filter(query =>
-            (query.title && query.title.toLowerCase().includes(value.toLowerCase())) ||
-            (query.subtitle && query.subtitle.toLowerCase().includes(value.toLowerCase()))
-          );
-          setListFilteredQuery(filteredList);
+            const filteredList = listQuery.filter(query =>
+                (query.title && query.title.toLowerCase().includes(value.toLowerCase())) ||
+                (query.subtitle && query.subtitle.toLowerCase().includes(value.toLowerCase()))
+            );
+            setListFilteredQuery(filteredList);
         } else {
-          setListFilteredQuery([]);
+            setListFilteredQuery([]);
         }
-      };
+    };
+
+
+    const handleClickTopic = () => {
+        dispatch(setModal(<ModalSupport />))
+    }
+
 
 
 
@@ -121,7 +89,7 @@ const Support = () => {
         <div className={styles.container}>
             <div className={styles.containerQuery}>
                 <h2 className={styles.title}>
-                    How con we help you?
+                    How can we help you?
                 </h2>
                 <div className={styles.input}>
                     <input
@@ -146,6 +114,9 @@ const Support = () => {
                         </div>
                     </div>
                 )}
+                <div className={styles.background}>
+                    <BackgroundVector />
+                </div>
             </div>
             <div className={styles.containerPopular}>
                 <h2 className={styles.title}>
@@ -153,7 +124,11 @@ const Support = () => {
                 </h2>
                 <div className={styles.boxPopular}>
                     {listTopics.map((topic, index) => (
-                        <div key={index} className={styles.box}>
+                        <div
+                            key={index}
+                            className={styles.box}
+                            onClick={() => handleClickTopic()}
+                        >
                             <div>
                                 {<topic.icon />}
                                 {topic.title}
@@ -293,3 +268,113 @@ const Support = () => {
 }
 
 export default Support
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const ModalSupport = ({ }) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+
+    const handleClickDeny = () => {
+        dispatch(setModal(null))
+    }
+
+    const handleClickTicket = () => {
+        navigate(`/${'es'}/settings/ticket`)
+    }
+
+
+    // ----------------------------------------------------------------
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredData, setFilteredData] = useState(initialTopics);
+
+
+    const handleSearch = (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        setSearchTerm(searchTerm);
+
+        const filteredData = initialTopics.filter((item) => {
+            // Verificar si alguna propiedad incluye el término de búsqueda
+            return (
+                item.title.toLowerCase().includes(searchTerm) ||
+                item.description.some(
+                    (desc) =>
+                        desc.title.toLowerCase().includes(searchTerm) ||
+                        desc.text.toLowerCase().includes(searchTerm)
+                )
+            );
+        });
+
+        setFilteredData(filteredData);
+    };
+
+
+    return (
+        <div className={styles.modal}>
+            <div className={styles.search}>
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                </svg>
+                <input
+                    type="text"
+                    spellCheck="false"
+                    placeholder={'Search support..'}
+                    value={searchTerm}
+                    onChange={handleSearch}
+                />
+            </div>
+            <div className={styles.list}>
+                {filteredData.map((topic, index) => (
+                    <div
+                        key={index}
+                        className={styles.topic}
+                    >
+                        <b className={styles.title}>
+                            {topic.title}
+                        </b>
+                        <div className={styles.grid2}>
+                            {topic.description.map((description, index) => (
+                                <div className={styles.item}>
+                                    <b className={styles.subtitle}>
+                                        {description.title}
+                                    </b>
+                                    <p className={styles.text}>
+                                        {description.text}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className={styles.buttons}>
+                <button
+                    className={styles.deny}
+                    onClick={() => handleClickDeny()}
+                >
+                    Cancelar
+                </button>
+                <button
+                    className={styles.create}
+                    onClick={() => handleClickTicket()}
+                >
+                    Crear Ticket
+                </button>
+            </div>
+        </div>
+    )
+}

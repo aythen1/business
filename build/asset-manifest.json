@@ -1,15 +1,27 @@
 {
   "files": {
+<<<<<<< HEAD
+    "main.css": "/static/css/main.819169d3.css",
+    "main.js": "/static/js/main.434bc42f.js",
+=======
     "main.css": "/static/css/main.3dba3818.css",
     "main.js": "/static/js/main.2c7bf707.js",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/js/723.b6506c5f.chunk.js": "/static/js/723.b6506c5f.chunk.js",
     "static/css/11.74dfd6ea.chunk.css": "/static/css/11.74dfd6ea.chunk.css",
     "static/js/11.ebbc4a7a.chunk.js": "/static/js/11.ebbc4a7a.chunk.js",
     "static/js/403.752499e4.chunk.js": "/static/js/403.752499e4.chunk.js",
+<<<<<<< HEAD
+    "static/css/828.097635cd.chunk.css": "/static/css/828.097635cd.chunk.css",
+    "static/js/828.6eeec023.chunk.js": "/static/js/828.6eeec023.chunk.js",
+    "static/css/567.72b6e672.chunk.css": "/static/css/567.72b6e672.chunk.css",
+    "static/js/567.0bfb862a.chunk.js": "/static/js/567.0bfb862a.chunk.js",
+=======
     "static/css/567.72b6e672.chunk.css": "/static/css/567.72b6e672.chunk.css",
     "static/js/567.0bfb862a.chunk.js": "/static/js/567.0bfb862a.chunk.js",
     "static/css/967.fc8afe02.chunk.css": "/static/css/967.fc8afe02.chunk.css",
     "static/js/967.f600f1ac.chunk.js": "/static/js/967.f600f1ac.chunk.js",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/css/341.31d6cfe0.chunk.css": "/static/css/341.31d6cfe0.chunk.css",
     "static/js/341.030800e1.chunk.js": "/static/js/341.030800e1.chunk.js",
     "static/css/112.31d6cfe0.chunk.css": "/static/css/112.31d6cfe0.chunk.css",
@@ -19,8 +31,11 @@
     "static/js/203.96d59bac.chunk.js": "/static/js/203.96d59bac.chunk.js",
     "static/css/626.31d6cfe0.chunk.css": "/static/css/626.31d6cfe0.chunk.css",
     "static/js/626.bb4cbfec.chunk.js": "/static/js/626.bb4cbfec.chunk.js",
+<<<<<<< HEAD
+=======
     "static/css/943.57e4ca08.chunk.css": "/static/css/943.57e4ca08.chunk.css",
     "static/js/943.95d4c256.chunk.js": "/static/js/943.95d4c256.chunk.js",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/css/664.31d6cfe0.chunk.css": "/static/css/664.31d6cfe0.chunk.css",
     "static/js/664.a40e73b2.chunk.js": "/static/js/664.a40e73b2.chunk.js",
     "static/js/903.4c7e0cde.chunk.js": "/static/js/903.4c7e0cde.chunk.js",
@@ -57,7 +72,10 @@
     "static/media/right_03.jpg": "/static/media/right_03.083946cc549146cad506.jpg",
     "static/media/clients_06.jpg": "/static/media/clients_06.db47072a07020dd975ec.jpg",
     "static/media/feature_01.jpg": "/static/media/feature_01.19ed015c262fa99b34a0.jpg",
+<<<<<<< HEAD
+=======
     "static/media/illustration.webp": "/static/media/illustration.13659faf499faf190d5e.webp",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/hero_12.jpg": "/static/media/hero_12.2130205b0647221d478e.jpg",
     "static/media/hero_13.jpg": "/static/media/hero_13.fabd04eb3cc339dae96a.jpg",
     "static/media/flipkart-icon-01.svg": "/static/media/flipkart-icon-01.fa365abf7226970c25cc0045f05f3d18.svg",
@@ -177,13 +195,52 @@
     "static/media/source-sans-pro-cyrillic-400-normal.woff2": "/static/media/source-sans-pro-cyrillic-400-normal.d1cfd8b7bb2cbe3fabb0.woff2",
     "static/media/source-sans-pro-greek-400-normal.woff2": "/static/media/source-sans-pro-greek-400-normal.9c7d72dcc7a044db07b1.woff2",
     "static/media/source-code-pro-cyrillic-400-normal.woff2": "/static/media/source-code-pro-cyrillic-400-normal.e5904d7796f14a6284b7.woff2",
+<<<<<<< HEAD
+    "static/media/blockchain.svg": "/static/media/blockchain.7624647e5e055c5b78f8f77d4421f5b9.svg",
+=======
     "static/media/blockchain.svg": "/static/media/blockchain.fb2dd0ea188548a58bb594a8caec9ce1.svg",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/source-sans-pro-greek-ext-400-normal.woff2": "/static/media/source-sans-pro-greek-ext-400-normal.1b1cb10170f2616853f0.woff2",
     "static/media/recursive-vietnamese-400-normal.woff2": "/static/media/recursive-vietnamese-400-normal.ce10792e0d3526c778a1.woff2",
     "static/media/essayrewriter-icon-01.svg": "/static/media/essayrewriter-icon-01.8d3c7d8c1f65bdcf2713eb5feffdbe1d.svg",
     "static/media/SunDim.svg": "/static/media/SunDim.7370c4b0efc6cfe7c4b80b57b7b2f884.svg",
     "static/media/source-code-pro-greek-400-normal.woff2": "/static/media/source-code-pro-greek-400-normal.6c09b07bbd10f336c332.woff2",
     "static/media/source-sans-pro-cyrillic-ext-400-normal.woff2": "/static/media/source-sans-pro-cyrillic-ext-400-normal.de95c5209ef26bf69ccf.woff2",
+<<<<<<< HEAD
+    "static/media/uxay.svg": "/static/media/uxay.74eac37bade2994301b5fd979cdac48a.svg",
+    "static/media/hashtaggenerate.svg": "/static/media/hashtaggenerate.b78adde508559531e6cf898a0a4ce709.svg",
+    "static/media/source-sans-pro-vietnamese-400-normal.woff2": "/static/media/source-sans-pro-vietnamese-400-normal.e84a4369ad213f658ebb.woff2",
+    "static/media/source-code-pro-cyrillic-ext-400-normal.woff2": "/static/media/source-code-pro-cyrillic-ext-400-normal.0573a2ae2e466eba0356.woff2",
+    "static/media/plugins.svg": "/static/media/plugins.621066a345b8b4c0cb3fbb5a76a50ba1.svg",
+    "static/media/crimson-pro-vietnamese-400-normal.woff2": "/static/media/crimson-pro-vietnamese-400-normal.18c188ec6862cdc9ecdf.woff2",
+    "static/media/pivot.svg": "/static/media/pivot.0ae4d7701158eb201584c4dbf4de9d78.svg",
+    "static/media/support.svg": "/static/media/support.62fc4cb7c206ae36af3b40a5465785bc.svg",
+    "static/media/devops.svg": "/static/media/devops.bcf3f3445835fc6d9460defaa84f8241.svg",
+    "static/media/source-code-pro-vietnamese-400-normal.woff2": "/static/media/source-code-pro-vietnamese-400-normal.add6a1fe8239b714d178.woff2",
+    "static/media/freelancers.svg": "/static/media/freelancers.ab55bc6329099843f64e2f88c181f899.svg",
+    "static/media/rpa.svg": "/static/media/rpa.85cb8ae5284d189ed771c41b5a55e11e.svg",
+    "static/media/icon-component-task.svg": "/static/media/icon-component-task.0b07daa7a0e6981d395c1234d3a2761b.svg",
+    "static/media/cloud.svg": "/static/media/cloud.42ac1954e8b1a81eef18409fa334d38a.svg",
+    "static/media/docs.svg": "/static/media/docs.e8d855c2289b9ccbf2785a0bb9fe471e.svg",
+    "static/media/Editor.jsx.delete": "/static/media/Editor.jsx.f4561b2cd932ce2fd2a7.delete",
+    "static/media/translate.svg": "/static/media/translate.112bd06efe1178fc2e7386ae9ec3cc50.svg",
+    "static/media/IconLight.svg": "/static/media/IconLight.6dad5bb075ee5aed9d4b0042c03957e6.svg",
+    "static/media/icon-component-group.svg": "/static/media/icon-component-group.e7c96e4ee847ee6465e60fb65b181632.svg",
+    "static/media/MyDocs.svg": "/static/media/MyDocs.ce4b5dd786bb2f867c2b968217914c73.svg",
+    "static/media/apps.svg": "/static/media/apps.4630c79a2d38e938e05844ee1ef17ac2.svg",
+    "static/media/editor.svg": "/static/media/editor.3e047723051c5efd263610f4df1e2dd3.svg",
+    "static/media/product-design.svg": "/static/media/product-design.8be3236cb98bf119d3cd225aa9426d7c.svg",
+    "static/media/file-pdf.svg": "/static/media/file-pdf.e1eb8688f731e30ab0b1a8e31979917f.svg",
+    "static/media/ide.svg": "/static/media/ide.ecad11d305525752654eb5c35b5e44d9.svg",
+    "static/media/IconReport.svg": "/static/media/IconReport.9799266fcdea5e9906ce2c2082387162.svg",
+    "static/media/icon-label-alert.svg": "/static/media/icon-label-alert.bc94c93a658b40f265036614d968cece.svg",
+    "static/media/storyideagenerator-icon-01.svg": "/static/media/storyideagenerator-icon-01.24f9e10d59e38ec078f68cdee1c57d51.svg",
+    "static/media/academy.svg": "/static/media/academy.4f80be64223f538326aef1e73ef1a074.svg",
+    "static/media/coldemail-icon-01.svg": "/static/media/coldemail-icon-01.063d1cc5cdc2f5adb3ec27453d758885.svg",
+    "static/media/IconTrash.svg": "/static/media/IconTrash.910b63238676eaf3c694914478281632.svg",
+    "static/media/library.svg": "/static/media/library.9b25c6e243723c573b9425352a5db2e5.svg",
+    "static/media/company-biogenerator.svg": "/static/media/company-biogenerator.a12fb7c2bfa0cb4498ee73c37e7c99d5.svg",
+=======
     "static/media/uxay.svg": "/static/media/uxay.2993db6aa22d5e37e876b92f39c6a99d.svg",
     "static/media/hashtaggenerate.svg": "/static/media/hashtaggenerate.b78adde508559531e6cf898a0a4ce709.svg",
     "static/media/source-sans-pro-vietnamese-400-normal.woff2": "/static/media/source-sans-pro-vietnamese-400-normal.e84a4369ad213f658ebb.woff2",
@@ -221,6 +278,7 @@
     "static/media/icon-elastic-metal.svg": "/static/media/icon-elastic-metal.804ae89b6fcd06387f298fd888dbb9b6.svg",
     "static/media/company-biogenerator.svg": "/static/media/company-biogenerator.a12fb7c2bfa0cb4498ee73c37e7c99d5.svg",
     "static/media/icon-get-started.svg": "/static/media/icon-get-started.cf746e6cdf481171be4f1fbd719f433e.svg",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/icon-label-mark.svg": "/static/media/icon-label-mark.58ed69a981f67fbd9607437afe1f953e.svg",
     "static/media/IconExit.svg": "/static/media/IconExit.5e6435d25bd186be6b9572c6f8759fee.svg",
     "static/media/source-code-pro-greek-ext-400-normal.woff2": "/static/media/source-code-pro-greek-ext-400-normal.cc20b15eacd73fe42dfe.woff2",
@@ -229,14 +287,20 @@
     "static/media/icon-label-success.svg": "/static/media/icon-label-success.b9b4d6c5e0c83a4484e7b7af2fc81d76.svg",
     "static/media/IconArrow.svg": "/static/media/IconArrow.42aafb753e710da948bb722719082659.svg",
     "static/media/Group.svg": "/static/media/Group.0c9baf21301c95bde17e6ea7c09e8cd3.svg",
+<<<<<<< HEAD
+=======
     "static/media/icon-account.svg": "/static/media/icon-account.abe3290e386c9e0db0d74d0ed2493d39.svg",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/testimonialgenerator-icon-01.svg": "/static/media/testimonialgenerator-icon-01.dc44b00dcb432a03a99037f3377238fd.svg",
     "static/media/IconDNS.svg": "/static/media/IconDNS.8cd1d9b5aa0ad6c693aa6b1bd4b23614.svg",
     "static/media/features-benefit.svg": "/static/media/features-benefit.a6a9b9473d5e2d6e2ebdfa79384a9237.svg",
     "static/media/IconAdd.svg": "/static/media/IconAdd.2cd0b469c88218ab3df5ffe5fa4d87ce.svg",
     "static/media/scriptgenerator-icon-01.svg": "/static/media/scriptgenerator-icon-01.175ea73d02de0f914fdf822e64da3b22.svg",
     "static/media/thank-you-letter.svg": "/static/media/thank-you-letter.61e7a9b5aff785fd1871bb25e3696a40.svg",
+<<<<<<< HEAD
+=======
     "static/media/icon-instance.svg": "/static/media/icon-instance.83bc5db9304e44bd26a0b6a86d6285ae.svg",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/research-paper.svg": "/static/media/research-paper.acb568df16d373137c13d075cc992df6.svg",
     "static/media/research-title-generator.svg": "/static/media/research-title-generator.acb568df16d373137c13d075cc992df6.svg",
     "static/media/casestudy-icon-01.svg": "/static/media/casestudy-icon-01.e5df8f9c006b062d5d9bbaba64ce4e5e.svg",
@@ -244,6 +308,15 @@
     "static/media/cus-ai-business-name-generator.svg": "/static/media/cus-ai-business-name-generator.464837f4b2b00347c6dbf539468415f0.svg",
     "static/media/paraphrasingtool.svg": "/static/media/paraphrasingtool.7422391fc7c8f878a57f2aa405972da3.svg",
     "static/media/essaychecker.svg": "/static/media/essaychecker.27e935c606ee2ab0b3af8eaba727eba1.svg",
+<<<<<<< HEAD
+    "static/media/data.svg": "/static/media/data.4fd93fe7bb9360a5a0922ff953ccb570.svg",
+    "static/media/IconEarse.svg": "/static/media/IconEarse.28faa311b629781bec409758527cc719.svg",
+    "static/media/collabs.svg": "/static/media/collabs.fc35ebeb2afa3515d13fd1c958ec840e.svg",
+    "static/media/essayshortener-icon-01.svg": "/static/media/essayshortener-icon-01.0beb2f64b825e66b3317d2ca949e6fde.svg",
+    "static/media/thesisstatement-icon-01.svg": "/static/media/thesisstatement-icon-01.b8b2dcf1e32c1f387358d8615622d101.svg",
+    "static/media/value-proposition.svg": "/static/media/value-proposition.fe41db07a53581b5ed72e288c95f17a7.svg",
+    "static/media/sandbox.svg": "/static/media/sandbox.7554e455cde44ef8fed7e1164d60c388.svg",
+=======
     "static/media/data.svg": "/static/media/data.47aa3bcda845b966b2e4ccdb3c86ca30.svg",
     "static/media/IconEarse.svg": "/static/media/IconEarse.28faa311b629781bec409758527cc719.svg",
     "static/media/collabs.svg": "/static/media/collabs.84e42a5ff6d2d27fb8203322b65cd0e0.svg",
@@ -251,6 +324,7 @@
     "static/media/thesisstatement-icon-01.svg": "/static/media/thesisstatement-icon-01.b8b2dcf1e32c1f387358d8615622d101.svg",
     "static/media/value-proposition.svg": "/static/media/value-proposition.fe41db07a53581b5ed72e288c95f17a7.svg",
     "static/media/sandbox.svg": "/static/media/sandbox.8468d7709f7a4978490a2ccf94bbdf53.svg",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "static/media/conclusiongenerator.svg": "/static/media/conclusiongenerator.537b5ae0b5f77d23910d27157a66250c.svg",
     "static/media/recursive-cyrillic-ext-400-normal.woff2": "/static/media/recursive-cyrillic-ext-400-normal.bd74e81400bd97d26876.woff2",
     "static/media/essay-writer.svg": "/static/media/essay-writer.3113f9500b352a0828cd94a5ca5d6b00.svg",
@@ -293,6 +367,17 @@
     "static/media/arrow-upward.svg": "/static/media/arrow-upward.65b4bb14ba6abb0e0e77f281dddfda7e.svg",
     "static/media/IconPlus.svg": "/static/media/IconPlus.f801d12a372afdd2125b68515c3666df.svg",
     "static/media/arrow-drop-down.svg": "/static/media/arrow-drop-down.969da3026a54c5d72a302583c9f7df61.svg",
+<<<<<<< HEAD
+    "main.819169d3.css.map": "/static/css/main.819169d3.css.map",
+    "main.434bc42f.js.map": "/static/js/main.434bc42f.js.map",
+    "723.b6506c5f.chunk.js.map": "/static/js/723.b6506c5f.chunk.js.map",
+    "11.74dfd6ea.chunk.css.map": "/static/css/11.74dfd6ea.chunk.css.map",
+    "11.ebbc4a7a.chunk.js.map": "/static/js/11.ebbc4a7a.chunk.js.map",
+    "828.097635cd.chunk.css.map": "/static/css/828.097635cd.chunk.css.map",
+    "828.6eeec023.chunk.js.map": "/static/js/828.6eeec023.chunk.js.map",
+    "567.72b6e672.chunk.css.map": "/static/css/567.72b6e672.chunk.css.map",
+    "567.0bfb862a.chunk.js.map": "/static/js/567.0bfb862a.chunk.js.map",
+=======
     "main.3dba3818.css.map": "/static/css/main.3dba3818.css.map",
     "main.2c7bf707.js.map": "/static/js/main.2c7bf707.js.map",
     "723.b6506c5f.chunk.js.map": "/static/js/723.b6506c5f.chunk.js.map",
@@ -302,14 +387,18 @@
     "567.0bfb862a.chunk.js.map": "/static/js/567.0bfb862a.chunk.js.map",
     "967.fc8afe02.chunk.css.map": "/static/css/967.fc8afe02.chunk.css.map",
     "967.f600f1ac.chunk.js.map": "/static/js/967.f600f1ac.chunk.js.map",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "341.030800e1.chunk.js.map": "/static/js/341.030800e1.chunk.js.map",
     "112.7980f28f.chunk.js.map": "/static/js/112.7980f28f.chunk.js.map",
     "312.0a6b811e.chunk.js.map": "/static/js/312.0a6b811e.chunk.js.map",
     "173.98fee7bc.chunk.js.map": "/static/js/173.98fee7bc.chunk.js.map",
     "203.96d59bac.chunk.js.map": "/static/js/203.96d59bac.chunk.js.map",
     "626.bb4cbfec.chunk.js.map": "/static/js/626.bb4cbfec.chunk.js.map",
+<<<<<<< HEAD
+=======
     "943.57e4ca08.chunk.css.map": "/static/css/943.57e4ca08.chunk.css.map",
     "943.95d4c256.chunk.js.map": "/static/js/943.95d4c256.chunk.js.map",
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
     "664.a40e73b2.chunk.js.map": "/static/js/664.a40e73b2.chunk.js.map",
     "903.4c7e0cde.chunk.js.map": "/static/js/903.4c7e0cde.chunk.js.map",
     "890.8f97689d.chunk.js.map": "/static/js/890.8f97689d.chunk.js.map",
@@ -327,7 +416,12 @@
     "451.6a54ab62.chunk.js.map": "/static/js/451.6a54ab62.chunk.js.map"
   },
   "entrypoints": [
+<<<<<<< HEAD
+    "static/css/main.819169d3.css",
+    "static/js/main.434bc42f.js"
+=======
     "static/css/main.3dba3818.css",
     "static/js/main.2c7bf707.js"
+>>>>>>> 8203e4608cc4c98f7434e24d044bb486a8ad1252
   ]
 }

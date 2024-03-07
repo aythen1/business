@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Table from '@/views/app/pages/Settings/iam/table'
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'
-import Invoice from './Invoice/index'
+import ModalInvoice from './Invoice/index'
 
 import stylesModal from '../Settings/iam/modal.module.css'
 
@@ -15,6 +15,8 @@ import {
 
     addInvoice,
     fetchsInvoice,
+
+    sendMail
 } from '@/actions/iam'
 
 
@@ -179,13 +181,28 @@ const Billing = ({ }) => {
     // -------------------------------------------------
     const handleAddInvoice = () => {
         // alert(1)
-        const item = {
-            invoiceDate: new Date()
-        }
+        // const item = {
+        //     invoiceDate: new Date()
+        // }
 
-        dispatch(addInvoice(item))
+        // dispatch(addInvoice(item))
+
+        dispatch(setModal(<ModalInvoice />))
     }
 
+
+
+    const sendEmail = () => {
+        dispatch(sendMail({
+            // email: 'confirm-email'
+            email: 'new-account'
+        }))
+
+        alert(1)
+    }
+
+
+    // -------------------------------------------------
 
     useEffect(() => {
         if (stateTable.startsWith('download-file:')) {
@@ -194,9 +211,6 @@ const Billing = ({ }) => {
             alert(id)
         }
     }, [stateTable])
-
-
-
 
 
     // ---------------------
@@ -219,6 +233,10 @@ const Billing = ({ }) => {
             window.removeEventListener('hashchange', handleHashChange);
         };
     }, []);
+
+
+
+
 
 
     return (
@@ -288,10 +306,6 @@ const Billing = ({ }) => {
                 </div>
             </div>
 
-
-
-
-
             <div className={styles.containerContact}>
                 <h2 className={styles.title}>
                     Email de contacto
@@ -308,6 +322,36 @@ const Billing = ({ }) => {
                             <input
                                 type='text'
                                 placeholder={'placeholder@demo.com'}
+                                value={state.email}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                        </div>
+                        <div className={styles.button}>
+                            <button >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className={styles.containerContact}>
+                <h2 className={styles.title}>
+                    Token de GPT
+                </h2>
+                <div className={styles.boxContact}>
+                    <span className={styles.text}>
+                        You can create a GPT token to uniquely identify and authenticate your API requests.
+                    </span>
+                    <div className={styles.grid2}>
+                        <div className={styles.input}>
+                            <label>
+                                Token
+                            </label>
+                            <input
+                                type='text'
+                                placeholder={'sk-***'}
                                 value={state.email}
                                 onChange={(e) => handleInputChange(e, 'email')}
                             />
@@ -370,9 +414,36 @@ const Billing = ({ }) => {
                         </button>
                     </div>
                 </div>
-
             </div>
 
+            <div className={styles.containerVat}>
+                <h2 className={styles.title}>
+                    VAT identification number
+                </h2>
+                <div className={styles.boxContact}>
+                    <span className={styles.text}>
+                        Enter your VAT ID number to remove VAT from your monthly bill. Why do we need your VAT number?
+                    </span>
+                    <div className={styles.grid2}>
+                        <div className={styles.input}>
+                            <label>
+                                VAT
+                            </label>
+                            <input
+                                type='text'
+                                placeholder={'ESB61077863VAT'}
+                                value={state.vat}
+                                onChange={(e) => handleInputChange(e, 'vat')}
+                            />
+                        </div>
+                        <div className={styles.button}>
+                            <button onClick={() => sendEmail()}>
+                                Save (send email)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
             <div className={styles.containerPayment}>
@@ -414,35 +485,64 @@ const Billing = ({ }) => {
             </div>
 
 
-
-            <div className={styles.containerVat}>
+            <div className={styles.containerNotification}>
                 <h2 className={styles.title}>
-                    VAT identification number
+                    Notificaciones de cuenta
                 </h2>
-                <div className={styles.boxContact}>
-                    <span className={styles.text}>
-                        Enter your VAT ID number to remove VAT from your monthly bill. Why do we need your VAT number?
-                    </span>
-                    <div className={styles.grid2}>
+                <div className={styles.boxNotification}>
+                    <p className={styles.text}>
+                        Select and configure your notification preferences. When will notifications be sent to you?
+                    </p>
+                    <div className={styles.form}>
                         <div className={styles.input}>
-                            <label>
-                                VAT
-                            </label>
-                            <input
-                                type='text'
-                                placeholder={'ESB61077863VAT'}
-                                value={state.vat}
-                                onChange={(e) => handleInputChange(e, 'vat')}
-                            />
-                        </div>
-                        <div className={styles.button}>
-                            <button >
-                                Save
-                            </button>
+                            <div className={styles.type}>
+                                <input
+                                    type="radio"
+                                    checked={state.paymentmethod === 'card'}
+                                    onChange={(e) => handleInputChange('card', 'paymentmethod')}
+                                />
+                                Email Notifications
+                            </div>
+                            <div className={styles.type}>
+                                <input
+                                    type="radio"
+                                    checked={state.paymentmethod === 'sepa'}
+                                    onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
+                                />
+                                Daily Reminders
+                            </div>
+                            <div className={styles.type}>
+                                <input
+                                    type="radio"
+                                    checked={state.paymentmethod === 'sepa'}
+                                    onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
+                                />
+                                Special Event Notifications:
+                            </div>
+                            <div className={styles.type}>
+                                <input
+                                    type="radio"
+                                    checked={state.paymentmethod === 'sepa'}
+                                    onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
+                                />
+                                Private Message Notifications:
+                            </div>
+                            <div className={styles.type}>
+                                <input
+                                    type="radio"
+                                    checked={state.paymentmethod === 'sepa'}
+                                    onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
+                                />
+                                App Update Notifications:
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
 
 
             <div id="invoice" className={styles.containerInvoices}>

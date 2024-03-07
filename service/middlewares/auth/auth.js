@@ -17,7 +17,7 @@ const authenticateToken = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization
     const token = authHeader && authHeader.split(' ')[1]
-    console.log('token', token)
+
     if (!token) {
       throw new ClientError('Authorization token missing', 401)
     }
@@ -25,7 +25,7 @@ const authenticateToken = async (req, res, next) => {
     
     const decodedToken = jwt.verify(
       token,
-      'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf'
+      'keySecret156754asdas897fav45646xz4c65z899sa4fa654fas65f4sa65sadasf' // nfc
       )
       
       const ID = 'test/test'
@@ -40,7 +40,6 @@ const authenticateToken = async (req, res, next) => {
       const resp = await getVector(path, 'users', [0, 0], options)
       
       delete resp[0].avatar
-      console.log('11111', resp)
 
     if (resp.length == 0) {
       throw new ClientError('User not found', 404)

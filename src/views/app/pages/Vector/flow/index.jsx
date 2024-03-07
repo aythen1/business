@@ -1,10 +1,13 @@
-import { createContext, useContext, useCallback, useState, useEffect, useRef } from 'react';
+import { createContext, useContext, useCallback, useState, useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom';
 
+import ELK from 'elkjs/lib/elk.bundled.js';
+
 import 'reactflow/dist/style.css';
 
-import ReactFlow, { addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
 import * as xlsx from 'xlsx';
 
@@ -84,8 +87,8 @@ const nodeTypes = {
 
 
 
-export default function App({ }) {
 
+export default function App({ }) {
     // const params = useParams()
     const dispatch = useDispatch()
 
@@ -102,6 +105,10 @@ export default function App({ }) {
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
     const [selectedEdge, setSelectedEdge] = useState(false);
+
+
+    // const { fitView: fitViewFromHook } = useReactFlow();
+    // const reactFlowInstance = useStore((store) => store.getState().reactFlowInstance);
 
 
     const [dataVector, setDataVector] = useState([])
@@ -191,6 +198,27 @@ export default function App({ }) {
         setEdges((prevEdges) => [...prevEdges, newEdge]);
     };
 
+
+
+
+    // ------------------------------------
+
+    // const leftPosition = () => {
+    //     onLayout({ direction: 'RIGHT' })
+    // }
+
+
+    // const rightPosition = () => {
+    //     onLayout({ direction: 'DOWN' })
+    // }
+
+
+
+
+
+
+
+    // ---------------------------------
 
     const saveNode = async () => {
 
@@ -382,26 +410,43 @@ export default function App({ }) {
 
 
     useEffect(() => {
-        console.log('dimen', dimension)
         if (dimension) {
             // Encuentra el índice del nodo que coincide con el id
             const nodeIndex = nodes.findIndex((node) => node.id === dimension.id);
-            console.log('1111', nodeIndex)
             // Verifica si se encontró el nodo
             if (nodeIndex !== -1) {
                 // Copia los nodos actuales
-                const updatedNodes = [...nodes];
+                // let updatedNodes = [...nodes];
 
-                // Actualiza el estado del nodo encontrando el nodo y modificando data.status
-                updatedNodes[nodeIndex] = {
-                    ...updatedNodes[nodeIndex],
-                    data: {
-                        ...updatedNodes[nodeIndex].data,
-                        status: 'info', // Reemplaza 'tu_nuevo_estado_aqui' con el nuevo estado
-                    },
-                };
-                console.log('updatedNodes[nodeIndex]', updatedNodes[nodeIndex])
+                const updatedNodes = nodes.map((node) => {
+
+                    let status = undefined
+                    // console.log('node', node)
+                    if (node.id === dimension.id) {
+                        status = 'info';
+                    }
+
+                    return {
+                        ...node,
+                        data: {
+                            ...node.data,
+                            status
+                        },
+                    }
+
+                });
+
+
                 // Establece el nuevo estado de los nodos
+                setNodes(updatedNodes);
+
+
+                // Update nodes with status undefined
+
+
+                console.log('uopd', updatedNodes)
+
+                // Use setNodes to update the state with the modified nodes
                 setNodes(updatedNodes);
             }
         }
@@ -457,8 +502,19 @@ export default function App({ }) {
                         >
                             Create node
                         </button>
+                        <button
+                        // onClick={leftPosition}
+                        >
+                            <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
+                        <button
+                        // onClick={rightPosition}
+                        >
+                            <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
 
                     </div>
+                    <MiniMap />
                 </ReactFlow>
             </div>
         </GraphContext.Provider>
@@ -466,3 +522,109 @@ export default function App({ }) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------------------
+
+
+
+
+const elk = new ELK();
+
+// Elk has a *huge* amount of options to configure. To see everything you can
+// tweak check out:
+//
+// - https://www.eclipse.org/elk/reference/algorithms.html
+// - https://www.eclipse.org/elk/reference/options.html
+const elkOptions = {
+    'elk.algorithm': 'layered',
+    'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+    'elk.spacing.nodeNode': '240',
+};
+
+const getLayoutedElements = (nodes, edges, options = {}) => {
+    const isHorizontal = options?.['elk.direction'] === 'RIGHT';
+    const graph = {
+        id: 'root',
+        layoutOptions: options,
+        children: nodes.map((node) => ({
+            ...node,
+            targetPosition: isHorizontal ? 'left' : 'top',
+            sourcePosition: isHorizontal ? 'right' : 'bottom',
+            width: 150,
+            height: 50,
+        })),
+        edges: edges,
+    };
+
+    return elk
+        .layout(graph)
+        .then((layoutedGraph) => ({
+            nodes: layoutedGraph.children.map((node) => ({
+                ...node,
+                position: { x: node.x, y: node.y },
+            })),
+
+            edges: layoutedGraph.edges,
+        }))
+        .catch(console.error);
+};
+
+
+
+
+
+
+const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
+    const { fitView, setCenter } = useReactFlow();
+
+
+    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+    const onLayout = useCallback(
+        ({ direction, useInitialNodes = false }) => {
+            const opts = { 'elk.direction': direction, ...elkOptions };
+            const ns = useInitialNodes ? initialNodes : nodes;
+            const es = useInitialNodes ? initialEdges : edges;
+
+            getLayoutedElements(ns, es, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+                setNodes(layoutedNodes);
+                setEdges(layoutedEdges);
+
+                window.requestAnimationFrame(() => {
+                    setCenter(0, 0, {zoom: 0.4, duration: 2000})
+                });
+            });
+        },
+        [nodes, edges]
+    );
+
+    const onClick = () => {
+        if(position == 'left'){
+            onLayout({ direction: 'DOWN' })
+        }else{
+            onLayout({ direction: 'RIGHT' })
+        }
+    }
+
+
+
+    return (
+        <div
+            onClick={onClick}
+        >
+            {position}
+        </div>
+    )
+}

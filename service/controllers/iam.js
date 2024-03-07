@@ -169,7 +169,7 @@ const fetchsBilling = async (req, res, next) => {
     }
   }`
 
-  console.log('res', options)
+  // console.log('res', options)
 
     const resp = await getVector(path, options, [0, 0])
 
@@ -345,7 +345,6 @@ const confirmUser = async (req, res, next) => {
   } catch (err) {
     // const _resp = await addVector(path, 'users', [0, 0], data, false)
 
-    console.log('res', err)
 
     return res.status(301).send({ message: 301 })
   }
@@ -372,15 +371,24 @@ const avatarUser = async (req, res) => {
   const { id } = req.params
   const path = encodeVector(ID)
 
-  // console.log('iddd', id)
+  console.log('iddd', id)
 
-  const options = `
-    query {
-     users(id: ${id}) {
-       avatar
-   }`
+  // const options = `
+  //   query {
+  //    users(id: ${id}) {
+  //      avatar
+  //  }`
 
-  const resp = await getVector(path, 'users', [0, 0], options)
+  // const resp = await getVector(path, 'users', [0, 0], options)
+
+  const conditions = [
+    { field: 'id', operator: '==', value: id }
+  ];
+
+
+  const resp = await getVector(path, 'users', [0, 0], conditions, false)
+
+
 
   if (resp.length == 0) {
     throw 'Not exist user'
@@ -548,7 +556,7 @@ const registerUser = async (req, res, next) => {
 
     const token = generateToken(_resp[0])
 
-    const email = sendEmail('info@aythen.com', 'confirm-email', { token })
+    const email = sendEmail(user, 'confirm-email', { token })
 
     // response(res, 200, { token: 'Success' })
     return res.status(200).send({ token: 'Success' })
@@ -577,7 +585,7 @@ const upgradeUser = async (req, res, next) => {
 
     const _resp = await updateVector(path, 'users', [0, 0], data, false)
 
-    const email = sendEmail('info@aythen.com', 'start-premium')
+    const email = sendEmail(user.email, 'start-premium')
 
     // response(res, 200, {
     //   token: generateToken(_resp),
@@ -624,7 +632,7 @@ const recoverPasswordUser = async (req, res, next) => {
     const user = resp[0]
     const token = generateToken(user)
 
-    sendEmail('info@aythen.com', 'recover-password', { token })
+    sendEmail(email, 'recover-password', { token })
     // response(res, 200, { message: 'Send Email' })
     return res.status(200).send({ message: 'Send Email' })
 
@@ -672,7 +680,13 @@ const updatePasswordUser = async (req, res, next) => {
 
 
 // --------------------------------------
+const shareFile = async (req, res) => {
+  const { user } = req
 
+
+  const resp = await addVector(path, 'users', [0, 0], data, false)
+
+}
 
 const addUser = async (req, res) => {
   try {
@@ -688,7 +702,7 @@ const addUser = async (req, res) => {
         isverified: true
       }
 
-      const resp = await addVector(path, 'users', [0, 0, 0, 0, 0, 0, 0], data, false)
+      const resp = await addVector(path, 'users', [0, 0], data, false)
       console.log('re', resp)
       arr.push(resp)
     }
@@ -998,6 +1012,30 @@ const fetchsLog = async (req, res) => {
 
 
 
+
+
+const sendMail = async (req, res, next) => {
+  try {
+    // const { path, user, password } = req.body
+    const { email } = req.body
+    console.log('senddd email')
+    let template = email || 'confirm-email'
+   
+    const resp = sendEmail('info@aythen.com', template, { token: '1234' })
+  } catch (err) {
+    return res.status(500).send(err)
+  }
+
+}
+
+
+
+
+
+
+
+
+
 module.exports = {
   fetchsDefault: catchedAsync(fetchsDefault),
   updateDefault: catchedAsync(updateDefault),
@@ -1044,4 +1082,7 @@ module.exports = {
   deleteLog: catchedAsync(deleteLog),
   deleteLogs: catchedAsync(deleteLogs),
   fetchsLog: catchedAsync(fetchsLog),
+  
+
+  sendMail: catchedAsync(sendMail),
 }

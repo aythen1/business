@@ -293,15 +293,6 @@
   width: 209px;
 }
 
-.index .path-wrapper {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .path {
   height: 10px;
@@ -331,14 +322,17 @@
   width: 209px;
 }
 
-.index .img-wrapper {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-1.svg);
-  background-size: 100% 100%;
-  height: 21px;
+.img-wrapper {
+  background: var(--color-primary-4);
+  border-radius: 50%;
+  height: 22px;
   left: 0;
   position: absolute;
   top: 0;
   width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .index .group-5 {
@@ -349,15 +343,7 @@
   width: 209px;
 }
 
-.index .overlap-2 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-2.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .img {
   height: 9px;
@@ -387,15 +373,6 @@
   width: 209px;
 }
 
-.index .overlap-3 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-3.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .group-7 {
   height: 21px;
@@ -405,15 +382,7 @@
   width: 209px;
 }
 
-.index .overlap-4 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-4.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-8 {
   height: 21px;
@@ -423,15 +392,7 @@
   width: 209px;
 }
 
-.index .overlap-5 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-5.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-9 {
   height: 21px;
@@ -441,15 +402,7 @@
   width: 209px;
 }
 
-.index .overlap-6 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-6.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .group-10 {
   height: 21px;
@@ -459,15 +412,6 @@
   width: 209px;
 }
 
-.index .overlap-7 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-7.svg);
-  background-size: 100% 100%;
-  height: 21px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .frame-6 {
   align-items: flex-start;
@@ -565,15 +509,6 @@
   width: 209px;
 }
 
-.index .overlap-group-2 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-8.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .path-2 {
   height: 8px;
@@ -596,15 +531,7 @@
   width: 177px;
 }
 
-.index .overlap-8 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-9.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .path-3 {
   height: 8px;
@@ -614,45 +541,7 @@
   width: 11px;
 }
 
-.index .overlap-9 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-10.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
-.index .overlap-10 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-11.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
-
-.index .overlap-11 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-12.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
-
-.index .overlap-12 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-13.svg);
-  background-size: 100% 100%;
-  height: 22px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .group-13 {
   height: 20px;
@@ -661,15 +550,7 @@
   width: 209px;
 }
 
-.index .overlap-13 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-14.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
+
 
 .index .path-4 {
   height: 7px;
@@ -765,15 +646,6 @@
   width: 209px;
 }
 
-.index .overlap-group-3 {
-  background-image: url(https://cdn.animaapp.com/projects/65a6a8aa55b195961fd96806/releases/65a6a8efd78914ee71c5e676/img/shape-15.svg);
-  background-size: 100% 100%;
-  height: 20px;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 20px;
-}
 
 .index .text-wrapper-6 {
   color: #838099;
