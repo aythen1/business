@@ -330,7 +330,7 @@
   button {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 4px;
     /* margin-top: 10px; */
     border-radius: 6px;
     color: rgb(34, 38, 56);
