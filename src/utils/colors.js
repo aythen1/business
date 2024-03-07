@@ -22,14 +22,12 @@ const generateColors = (startColor, steps = 6) => {
   }
 };
 
-
-
-
-
-export default generateColors
-
+export default generateColors;
 
 const hexToRgb = (hex) => {
+  // Asignar #222 si hex es undefined
+  hex = hex || "#2222";
+
   const bigint = parseInt(hex.slice(1), 16);
   const r = (bigint >> 16) & 255;
   const g = (bigint >> 8) & 255;
@@ -37,13 +35,10 @@ const hexToRgb = (hex) => {
   return [r, g, b];
 };
 
-
 const rgbToHex = (rgb) => {
   return (
-    '#' +
-    ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2])
-      .toString(16)
-      .slice(1)
+    "#" +
+    ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1)
   );
 };
 

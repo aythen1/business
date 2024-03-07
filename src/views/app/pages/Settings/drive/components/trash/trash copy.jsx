@@ -1,26 +1,29 @@
-"use client";
-import style from "../components/my-files/my-files.module.css";
-// import Image from 'next/image'
+import style from "../my-files/my-files.module.css";
 
-// import Folder from '@/public/assets/Folder-figma.svg'
-// import Menu from '@/public/assets/Menu-figma.svg'
-// import Imagen from '@/public/assets/editor/assetManager/imagen.svg'
-// import Chevron from '../../../../../../../../assets/Vector 161 (Stroke).svg'
-// import ArrowUpWard from '../../../../../../../../assets/arrow-upward.svg'
+import Folder from "../../assets/FolderFigma.svg";
+import Menu from "../../assets/Menu-figma.svg";
+import file1 from "../../assets/File (1).svg";
+import Chevron from "../../assets/Vector 161 (Stroke).svg";
+import ArrowUpWard from "../../assets/arrow-upward.svg";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   getDirectoriesVersions,
+  directoriesDB,
+  deleteFolders,
+  deleteFolder,
   deleteFile,
-  // deleteFolder
+  getFile,
+  uploadFile,
+  obtainFileData,
+  moveFile,
 } from "@/actions/assets";
-// import FolderOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FolderOptions'
-// import FileTrashOptions from '../../../../../app/[id]/editor/components/explorer/AssetsManager/FileTrashOptions'
+import FolderOptions from "../FolderOptions";
+import FileTrashOptions from "../FileTrashOptions";
 
-export default function Page({ params }) {
+export default function Trash({ driveId }) {
   const dispatch = useDispatch();
-  const { driveId } = params;
 
   const { directoriesTrash, loading, searchFiles } = useSelector(
     (state) => state.assets
@@ -101,7 +104,7 @@ export default function Page({ params }) {
             className={style.drive_clickeable_folder_container}
           >
             <div className={style.drive_folder_title_container}>
-              {/* <Image src={isFile ? Imagen : Folder} priority /> */}
+              <img src={isFile ? file1 : Folder} />
               <p className={style.drive_folder_title}>{folderName}</p>
             </div>
 
@@ -112,39 +115,35 @@ export default function Page({ params }) {
               className={style.fileOption}
               onClick={() => handleToggleFolderOption(index)}
             >
-              {/* <Image priority src={Menu} alt="" /> */}
+              <img priority src={Menu} alt="" />
             </span>
           </div>
           {folderOptions[index] &&
             (isFile ? (
-              <div>
-                {/* <FileTrashOptions
-                  setShowFolderOption={(value) =>
-                    setFolderOptions((prevOptions) => ({
-                      ...prevOptions,
-                      [index]: value
-                    }))
-                  }
-                  handleDeleteFile={handleDeleteFile}
-                  handleRestoreFile={handleRestoreFile}
-                  folderName={folderName}
-                  directory={directory}
-                /> */}
-              </div>
+              <FileTrashOptions
+                setShowFolderOption={(value) =>
+                  setFolderOptions((prevOptions) => ({
+                    ...prevOptions,
+                    [index]: value,
+                  }))
+                }
+                handleDeleteFile={handleDeleteFile}
+                handleRestoreFile={handleRestoreFile}
+                folderName={folderName}
+                directory={directory}
+              />
             ) : (
-              <div>
-                {/* // <FolderOptions
-              //   setShowFolderOption={(value) =>
-              //     setFolderOptions((prevOptions) => ({
-              //       ...prevOptions,
-              //       [index]: value
-              //     }))
-              //   }
-              //   handleDeleteFolder={handleRestoreFile}
-              //   folderName={folderName}
-              //   directory={directory.Key}
-              // /> */}
-              </div>
+              <FolderOptions
+                setShowFolderOption={(value) =>
+                  setFolderOptions((prevOptions) => ({
+                    ...prevOptions,
+                    [index]: value,
+                  }))
+                }
+                handleDeleteFolder={handleRestoreFile}
+                folderName={folderName}
+                directory={directory.Key}
+              />
             ))}
         </div>
       );
@@ -220,11 +219,11 @@ export default function Page({ params }) {
                   gap: "9px",
                 }}
               >
-                {/* <Image
+                <img
                   src={Chevron}
-                  style={{ transform: 'rotate(-90deg)' }}
+                  style={{ transform: "rotate(-90deg)" }}
                   priority
-                /> */}
+                />
                 <span
                   key={index}
                   onClick={() => handleFolderClickBack(folder)}
@@ -239,17 +238,17 @@ export default function Page({ params }) {
           <div className={style.drive_folders_filters_container}>
             <div className={style.drive_folders_filters_title_container}>
               <p className={style.drive_folders_filters_title}>Name</p>
-              {/* <Image src={ArrowUpWard} priority /> */}
+              <img src={ArrowUpWard} priority />
             </div>
             <div className={style.drive_folder_size_container}>
               <p className={style.drive_folders_filters_title}>Tamaño</p>
-              {/* <Image src={ArrowUpWard} priority /> */}
+              <img src={ArrowUpWard} priority />
             </div>
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>
                 Último modificado
               </p>
-              {/* <Image src={ArrowUpWard} priority /> */}
+              <img src={ArrowUpWard} priority />
             </div>
           </div>
           {renderFolders(filteredFolders)}
