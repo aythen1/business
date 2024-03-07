@@ -323,7 +323,6 @@ async ({id, name, data = false}) => {
       }
     )
 
-    console.log('res fetchs', res)
 
     return res.data
   } catch (error) {

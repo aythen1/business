@@ -91,7 +91,7 @@ const Register = ({ onLogin }) => {
   };
 
   const handleClickSignIn = () => {
-    navigate(`/${lng}/login`); 
+    navigate(`/${lng}/app/login`); 
   }
 
 

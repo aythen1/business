@@ -204,8 +204,6 @@ async function _getVector(req, res) {
       ];
     }
 
-    console.log('options', options)
-
 
     const query = await getVector(id, name, [0, 0], options)
     // const query = await getVector(id, name, [0, 0])

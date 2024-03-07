@@ -14,7 +14,9 @@ const schemaAddons = {
         description: { type: 'string' },
         tags: { type: 'string', default: '[]' },
 
-        components: { type: 'string', default: '[]' },
+        // components: { type: 'string', default: '[]' }, //delete
+        nodes: { type: 'string', default: '[]' },
+        edges: { type: 'string', default: '[]' },
         // hay un object 
 
         updatedAt: { type: 'string', format: 'date-time' },

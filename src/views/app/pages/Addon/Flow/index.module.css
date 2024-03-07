@@ -1,7 +1,11 @@
 :global(.react-flow__node) {
   padding: 0px !important;
   border: none !important;
-  width: fit-content !important;
+  width: 200px !important;
+}
+
+:global(.react-flow__attribution){
+  display: none;
 }
 
 .buttons {
@@ -9,11 +13,11 @@
   gap: 14px;
   align-items: center;
   justify-content: flex-start;
-  /* margin-left: 16px; */
   z-index: 99999999;
-  position: relative;
+  position: absolute;
+  height: 0px;
   padding: 10px;
-
+  width: 100%;
   button {
     cursor: pointer;
     background: var(--color-primary-4);
@@ -35,6 +39,7 @@
       padding: 3px 8px;
       border-radius: 6px;
       background: var(--color-primary-4);
+      outline: none;
       span{
         display: none;
         color: #fff;

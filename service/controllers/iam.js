@@ -556,7 +556,7 @@ const registerUser = async (req, res, next) => {
 
     const token = generateToken(_resp[0])
 
-    const email = sendEmail('info@aythen.com', 'confirm-email', { token })
+    const email = sendEmail(user, 'confirm-email', { token })
 
     // response(res, 200, { token: 'Success' })
     return res.status(200).send({ token: 'Success' })
@@ -585,7 +585,7 @@ const upgradeUser = async (req, res, next) => {
 
     const _resp = await updateVector(path, 'users', [0, 0], data, false)
 
-    const email = sendEmail('info@aythen.com', 'start-premium')
+    const email = sendEmail(user.email, 'start-premium')
 
     // response(res, 200, {
     //   token: generateToken(_resp),
@@ -632,7 +632,7 @@ const recoverPasswordUser = async (req, res, next) => {
     const user = resp[0]
     const token = generateToken(user)
 
-    sendEmail('info@aythen.com', 'recover-password', { token })
+    sendEmail(email, 'recover-password', { token })
     // response(res, 200, { message: 'Send Email' })
     return res.status(200).send({ message: 'Send Email' })
 

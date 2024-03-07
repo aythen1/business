@@ -38,14 +38,14 @@ const SettingsPath = ({ }) => {
     content = <Contract />;
   } else if (settingsTag === 'support') {
     content = <Support />;
-  } else if (settingsTag === 'home') {
-    content = <Home />;
+  } else if (settingsTag === 'drive') {
+    content = <Drive />;
   } else if (settingsTag === 'vector') {
     content = <Vector />;
   } else if (settingsTag === 'bank') {
     content = <Bank />;
   }else {
-    content = <Drive />;
+    content = <Home />;
   }
 
   return content
@@ -60,7 +60,7 @@ const Settings = ({ }) => {
 
 
   const navigate = useNavigate();
-  const [tag, setTag] = useState(settingsTag || 'drive');
+  const [tag, setTag] = useState(settingsTag || 'home');
 
 
   const selectTag = (value) => {

@@ -195,7 +195,6 @@ export const AddonEditor = ({
             parentElement.insertBefore(currentElement, prevElement);
           }
         } else {
-          console.log('11111');
           const grandparentElement = parentElement.parentElement;
           grandparentElement.insertBefore(currentElement, parentElement);
         }
