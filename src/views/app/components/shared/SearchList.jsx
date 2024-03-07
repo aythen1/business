@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
-
 import styles from './styles/SearchList.module.css'
 
 
@@ -11,7 +9,6 @@ const SearchList = ({ data, title, icon,  onSelect }) => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    // Filter data based on user input
     const filteredResults = data.filter(item =>
       item.toLowerCase().includes(filter.toLowerCase())
     );
@@ -54,8 +51,6 @@ const SearchList = ({ data, title, icon,  onSelect }) => {
 };
 
 
-
-// Usage of the component
 const App = (props) => {
   const icon = props.icon 
   const sampleData = props.data || [];

@@ -48,13 +48,6 @@ const TableLogs = ({
   }
 
 
-  // ------------------
-
-
-  // const [email, setEmail] = useState()
-  const [isActive, setIsActive] = useState(false)
-
-
   // ---
   const [state, setState] = useState({
     name: '',
@@ -77,12 +70,9 @@ const TableLogs = ({
       action: 'created',
       description: state.description,
       status: 'active',
-      // tags: state.tags,
       createdAt: new Date()
-      // polices: state.polices,
     }
 
-    // log({ title: 'Insert title' })
     dispatch(addLog({ log: data }))
     dispatch(setModal(null))
   }
@@ -179,7 +169,6 @@ const TableLogs = ({
           items={logs}
           setStateTable={setStateTable}
           handleAdd={() => dispatch(setModal(<PopupModalLogs styles={stylesModal} />))}
-
         >
           <header>
             Logs
@@ -211,7 +200,6 @@ export default TableLogs
 
 
 const PopupModalLogs = ({ styles }) => {
-  const dispatch = useDispatch()
   return (
     <div className={styles.modal}>
       <h2 className={styles.title} style={{ marginTop: -10 }}>

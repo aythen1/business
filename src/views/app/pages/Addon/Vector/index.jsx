@@ -1,6 +1,5 @@
 
-import React, { useRef, useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useState } from 'react'
 
 import styles from './index.module.css'
 
@@ -9,12 +8,7 @@ import AddonCustom from './Custom'
 import AddonVersion from './Version'
 
 const ModalVector = ({ modal: _modal, addon }) => {
-    // const [vector, setVector] = useState(null)
     const [modal, setModal] = useState(_modal || 'custom')
-
-    // const { addon, vectors } = useSelector((state) => state.addon)
-
-
 
     const handleClickCustom = () => {
         setModal('custom')
@@ -31,10 +25,6 @@ const ModalVector = ({ modal: _modal, addon }) => {
         setModal('version')
 
     }
-
-
-
-
 
     return (
         <div>

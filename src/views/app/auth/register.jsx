@@ -7,7 +7,6 @@ import styles from './index.module.css'
 
 import IconLogo from './assets/IconLogo'
 
-// import { login } from './auth';
 
 import { useTranslation } from 'react-i18next';
 import useDarkMode from 'use-dark-mode';
@@ -32,9 +31,8 @@ const Register = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
 
-  // Estado para controlar el modo oscuro o claro
   const darkMode = useDarkMode(false, {
-    storageKey: 'prefered-theme', // Cambiar esto según tus necesidades
+    storageKey: 'prefered-theme', 
     onChange: (value) => {
       const appElement = document.getElementById('app');
 
@@ -49,7 +47,6 @@ const Register = ({ onLogin }) => {
   });
 
   const [themeMode, setThemeMode] = useState(() => {
-    // Intentar obtener el modo desde localStorage al cargar la aplicación
     const storedMode = localStorage.getItem('darkMode');
 
     return storedMode ? storedMode : 'light';
@@ -61,7 +58,6 @@ const Register = ({ onLogin }) => {
     } else {
       darkMode.disable()
     }
-    // darkMode.toggle();
   }, [themeMode])
 
 
@@ -78,9 +74,7 @@ const Register = ({ onLogin }) => {
 
 
   const handleRegister = async () => {
-    console.log('13', password)
     if(password == repassword){
-      console.log('334')
       dispatch(register({
         user: username, 
         password: password
@@ -96,7 +90,6 @@ const Register = ({ onLogin }) => {
 
 
   // ----------------------------------------------
-
   const [showPassword, setShowPasswords] = useState({});
   
   const handleInputChange = (inputName, value) => {

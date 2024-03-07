@@ -1,19 +1,10 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-
-
+import React, { useState, useCallback } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './ModalViewComponent.module.css'
 
 
-
-// import "@tldraw/tldraw/tldraw.css";
-// import { htmlExample1 } from './html/example-1'
-
-// import { Tldraw, useEditor } from "@tldraw/tldraw";
 import { Tldraw } from "@tldraw/tldraw";
-// import { useEditor } from "@tldraw/tldraw";
-// import { useEditor, } from "@tldraw/tldraw";
 import { getSvgAsImage } from "@/lib/getSvgAsImage";
 import { blobToBase64 } from "@/lib/blobToBase64";
 
@@ -22,34 +13,20 @@ import { blobToBase64 } from "@/lib/blobToBase64";
 
 const ModalViewComponent = ({ image }) => {
 
-    const [elements, setElements] = useState([{
-        type: 'image',
-        src: image,
-        x: 100,
-        y: 100,
-        width: 200,
-        height: 150,
-      }]);
+  const [elements, setElements] = useState([{
+    type: 'image',
+    src: image,
+    x: 100,
+    y: 100,
+    width: 200,
+    height: 150,
+  }]);
 
 
-    // const [initialState, setInitialState] = useState({
-    //     elements: [
-    //         {
-    //             id: 'some-unique-id',
-    //             type: 'image',
-    //             src: image,
-    //             x: 100,
-    //             y: 100,
-    //             width: 1000,
-    //             height: 1000,
-    //         },
-    //     ],
-    // });
-
-    console.log('image', image)
+  console.log('image', image)
 
 
-    const editor = useEditor();
+  const editor = useEditor();
 
   const handleMount = useCallback(() => {
     const assetId = uuidv4();
@@ -76,20 +53,20 @@ const ModalViewComponent = ({ image }) => {
     });
   }, [editor]);
 
-    return (
-        <div className={styles.modal}>
-        {/* <Tldraw
+  return (
+    <div className={styles.modal}>
+      {/* <Tldraw
             persistenceKey="tldraw"
             elements={elements}
             style={{ height: '100%', width: '100%' }}
             onError={(error) => console.error('Error cargando la imagen:', error)}
         >
           </Tldraw> */}
-          <Tldraw
+      <Tldraw
         onMount={handleMount}
       />
     </div>
-    )
+  )
 }
 
 

@@ -11,10 +11,6 @@ const Contract = ({ }) => {
 
     const [stateTable, setStateTable] = useState('')
 
-    const openPDF = () => {
-        window.open('./assets/pdf', '_blank')
-    }
-
 
     const [contracts, setContracts] = useState([{
         title: 'Data Processing Agreement',
@@ -36,16 +32,10 @@ const Contract = ({ }) => {
     useEffect(() => {
         if (stateTable.startsWith('download-file')) {
             const [, fileName] = stateTable.split(':');
-            console.log('fileName', fileName, stateTable)
-            // console.log('file name', `./public/${fileName}`, process.env.PUBLIC_URL)
-            // Crear el enlace de descarga dinámico
             const downloadLink = document.createElement('a');
             downloadLink.href = `/assets/${fileName}`;
             downloadLink.download = fileName;
-
-            // Simular el clic en el enlace
             downloadLink.click();
-
         }
 
     }, [stateTable])

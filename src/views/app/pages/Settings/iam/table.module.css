@@ -211,7 +211,6 @@
     padding: 10px;
     border-radius: 5px;
     z-index: 1;
-    /* Puedes ajustar otros estilos según tus necesidades */
   }
   
   @media (max-width: 1200px) {

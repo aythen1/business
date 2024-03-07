@@ -17,7 +17,6 @@ const ModalToken = () => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token-gpt');
-        console.log('storedtokej', storedToken)
         if (storedToken) {
             setToken(storedToken);
         }

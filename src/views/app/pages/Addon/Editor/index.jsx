@@ -21,26 +21,8 @@ import ModalViewComponent from './ModalViewComponent'
 
 
 
-// import DOMPurify from 'dompurify';
 
 
-// import "@tldraw/tldraw/tldraw.css";
-// import { htmlExample1 } from './html/example-1'
-
-
-
-
-
-import { Tldraw } from "@tldraw/tldraw";
-import { useEditor } from "@tldraw/tldraw";
-import { getSvgAsImage } from "@/lib/getSvgAsImage";
-import { blobToBase64 } from "@/lib/blobToBase64";
-
-
-
-// import IconThrow from './assets/icon-throw.svg'
-
-// import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 
 
@@ -71,7 +53,6 @@ import {
   handleViewEditor,
   handlChatEditor,
   handleCodeEditor,
-  // handleSettingsComponent,
 } from '../actions';
 
 
@@ -82,21 +63,6 @@ export const AddonEditor = ({
 }) => {
   const dispatch = useDispatch()
   const [html, setHtml] = useState(component.code);
-  // const [activeTab, setActiveTab] = useState("preview");
-
-
-
-
-
-  // useEffect(() => {
-  //   // Puedes agregar aquí cualquier lógica adicional que necesites al actualizar el HTML
-  // }, [html, activeTab]);
-
-
-
-  // if (!html) {
-  //   return null;
-  // }
 
   // handle -------------------------------------------------------
 
@@ -106,22 +72,18 @@ export const AddonEditor = ({
 
 
   const handleKeyClick = (key) => {
-    // Verificar si la tecla clickeada es 'alt+v'
     if (key === 'alt+v') {
-      // Incrementar la frecuencia solo para 'alt+v'
       setKeyFrequency((prevFrequency) => ({
         ...prevFrequency,
         [key]: prevFrequency[key] + 1,
       }));
     }
 
-    // Obtener las 5 teclas más utilizadas
     const sortedKeys = Object.keys(keyFrequency).sort(
       (a, b) => keyFrequency[b] - keyFrequency[a]
     );
     const mostUsedKeys = sortedKeys.slice(0, 5);
 
-    // Actualizar la lista de teclas más utilizadas
     setFrequentKeys(
       keysAlt.filter(({ key }) => mostUsedKeys.includes(key)).slice(0, 5)
     );
@@ -140,13 +102,11 @@ export const AddonEditor = ({
   const [isMove, setIsMove] = useState(false)
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredElement, setHoveredElement] = useState(null);
-  // const [hoveredSelector, setHoveredSelector] = useState('');
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
 
   const handleMouseOver = (event) => {
     if (isAltKeyPressed()) {
-      // Obtener el selector del elemento actual
       const newHoveredElement = document.elementFromPoint(event.clientX, event.clientY);
 
       console.log('handleMouseOver', newHoveredElement, !isLeavingToButtons(event.relatedTarget))
@@ -201,21 +161,15 @@ export const AddonEditor = ({
       } else if (e.key === 'ArrowDown' && nextElement) {
         setIsMove(true)
 
-        // Mover hacia abajo en la jerarquía del DOM
         if (!nextElement) {
-          // Si no hay siguiente, colocamos el elemento después del padre
           parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
         } else {
-          // Si hay un siguiente elemento
           if (nextElement.children.length > 0) {
-            // Si el siguiente tiene hijos, el current pasa a ser el primer hijo de ese elemento
             nextElement.insertBefore(currentElement, nextElement.firstElementChild);
           } else {
-            // Si el siguiente no tiene hijos
             parentElement.removeChild(currentElement);
             nextElement.appendChild(currentElement);
 
-            // Si es el último, realiza el paso 1 (colocar después del padre)
             if (!nextElement.nextElementSibling) {
               parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
             }
@@ -226,15 +180,6 @@ export const AddonEditor = ({
   };
 
 
-
-
-  // const swapElements = (el1, el2) => {
-  //   const parent = el1.parentNode;
-  //   const nextSibling = el1.nextSibling === el2 ? el1 : el2.nextSibling;
-
-  //   el2.parentNode.insertBefore(el1, el2);
-  //   parent.insertBefore(el2, nextSibling);
-  // };
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -247,8 +192,6 @@ export const AddonEditor = ({
 
 
 
-
-  const [altPressed, setAltPressed] = useState(false);
 
 
   // -A: Refresh el componente devolviendo otro parecido pero con diferentes estilos y estructura
@@ -349,11 +292,6 @@ export const AddonEditor = ({
 
 
 
-  // // Manejar el cambio en el estado de la tecla Alt
-  // useHotkeys('alt', () => setAltPressed(true), { keydown: true }, [altPressed]);
-  // useHotkeys('alt', () => setAltPressed(false), { keyup: true }, [altPressed]);
-
-
   // Cambiar el cursor y agregar/quitar la clase en el body según el estado de la tecla Alt
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -408,155 +346,6 @@ export const AddonEditor = ({
     </div>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-// const ComponentCustom = ({ }) => {
-//   return (
-//     <div>
-//       {activeTab === "preview" ? (
-//         <div>
-
-//         </div>
-//       ) : activeTab === "editor" ? (
-//         <div style={{ width: '100%', height: '100vh' }}>
-//           <Tldraw
-//             persistenceKey="tldraw">
-//             <ExportButton setHtml={setHtml} />
-//           </Tldraw>
-//         </div>
-//       ) : (
-//         <Editor
-//           height="100vh"
-//           language="html"
-//           theme="vs-dark"
-//           value={html}
-//           onChange={handleEditorChange}
-//           options={{
-//             readOnly: false,
-//             minimap: { enabled: false },
-//           }}
-//         />
-//       )}
-//     </div>
-//   )
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const ExportButton = ({ setHtml }) => {
-//   // const editor = useEditor();
-//   const [loading, setLoading] = useState(false);
-//   // A tailwind styled button that is pinned to the bottom right of the screen
-//   return (
-//     <button
-//       onClick={async (e) => {
-//         setLoading(true);
-//         try {
-//           e.preventDefault();
-//           const svg = []
-//           // const svg = await editor.getSvg(
-//           //   Array.from(editor.currentPageShapeIds)
-//           // );
-//           if (!svg) {
-//             return;
-//           }
-//           const png = await getSvgAsImage(svg, {
-//             type: "png",
-//             quality: 1,
-//             scale: 1,
-//           });
-//           const dataUrl = await blobToBase64(png);
-//           const resp = await fetch("https://business.ay-cloud.com/service/v1/openai/test", {
-//             method: "POST",
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({ image: dataUrl }),
-//           })
-
-
-//           const json = await resp.json();
-
-//           // console.log('json', json.choices[0].message.content)
-
-//           if (json.error) {
-//             // console.log("Error from open ai: " + JSON.stringify(json.error));
-//             return;
-//           }
-
-
-//           var html = obtainContent(json[0])
-//           console.log('html: ', html)
-//           // console.log('result', data)
-
-//           // const message = json.choices[0].message.content;
-//           // const start = message.indexOf("<!DOCTYPE html>");
-//           // const end = message.indexOf("</html>");
-//           // const html = message.slice(start, end + "</html>".length);
-//           setHtml(html);
-//         } finally {
-//           setLoading(false);
-//         }
-//       }}
-//       className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ="
-//       style={{ zIndex: 1000, position: 'relative' }}
-//     >
-//       {loading ? (
-//         <div className="flex justify-center items-center ">
-//           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-//         </div>
-//       ) : (
-//         "Make Real"
-//       )}
-//     </button>
-//   );
-// }
-
 
 
 

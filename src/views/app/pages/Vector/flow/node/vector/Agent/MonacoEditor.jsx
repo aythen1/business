@@ -17,11 +17,6 @@ const MonacoEditor = ({ }) => {
         console.log('value', value)
         setHtml(value)
     }
-    
-
-    const handleClick = () => {
-        // dispatch(setModal(<ModalMonacoEditor />))
-    }
 
 
     return (

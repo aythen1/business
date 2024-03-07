@@ -5,16 +5,12 @@ import styles from './index.module.css';
 import Data from './Data';
 import { v4 as uuidv4 } from 'uuid';
 
-
-
 import { 
   initialComponent,
   deleteComponent,
   addComponent,
   setComponents 
 } from '@/slices/dashboardSlice';
-
-import IconTrash from './assets/IconTrash.svg'
 
 
 
@@ -62,7 +58,6 @@ const MenuLeftData = ({ setRef }) => {
     const [movedComponent] = updatedComponents.splice(fromIndex, 1);
     updatedComponents.splice(toIndex, 0, movedComponent);
 
-    // Dispatch una acción para actualizar el estado de Redux con la nueva lista de componentes
     dispatch(setComponents(updatedComponents));
   };
 
@@ -70,28 +65,20 @@ const MenuLeftData = ({ setRef }) => {
   const [selectedItemsAll, setSelectedItemsAll] = useState([]);
 
   const handleSelectedChange = (selectedComponent) => {
-
     console.log('selectedComponentselectedComponentselectedComponent', selectedComponent)
     setSelectedItemsAll((prevSelectedItems) => {
       const isSelected = prevSelectedItems.some((item) => item.id === selectedComponent.id);
 
       if (isSelected) {
-        // Deseleccionar: Filtrar el componente de la lista
         return prevSelectedItems.filter((item) => item.id !== selectedComponent.id);
       } else {
-        // Seleccionar: Agregar el componente a la lista
         return [...prevSelectedItems, selectedComponent];
       }
     });
 
-
-    console.log('sssssss', selectedItemsAll)
   };
 
   const handleDeleteSelected = () => {
-    // Lógica para eliminar los elementos seleccionados
-    console.log('Eliminar elementos seleccionados:', selectedItemsAll);
-
     dispatch(deleteComponent(selectedItemsAll))
   };
 
@@ -104,9 +91,7 @@ const MenuLeftData = ({ setRef }) => {
 
 
   // ------------------------------------------------------------
-
   const handleCopySelected = useCallback(() => {
-    console.log('selectedItemsAll', selectedItemsAll)
     const selectedItemsJson = JSON.stringify(selectedItemsAll);
     navigator.clipboard.writeText(selectedItemsJson);
   }, [selectedItemsAll]);
@@ -116,7 +101,6 @@ const MenuLeftData = ({ setRef }) => {
       const clipboardData = await navigator.clipboard.readText();
       const parsedData = JSON.parse(clipboardData);
 
-      console.log('cxscwev', parsedData)
       if (Array.isArray(parsedData)) {
         parsedData.forEach((item) => dispatch(addComponent(item)));
       }

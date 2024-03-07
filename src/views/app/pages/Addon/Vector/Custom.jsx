@@ -1,19 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-
 import styles from '../../Settings/iam/modal.module.css'
-import style from './index.module.css'
-// import AddTag from '../../Settings/iam/AddTag'
 import AddTag from '@/views/app/pages/shared/AddTag'
 
-
 import { v4 as uuidv4 } from 'uuid';
-
-
-
-
 
 import {
     setModal
@@ -28,13 +20,8 @@ import {
 
 
 const AddonCustom = ({ addon }) => {
-
-    console.log('adddon', addon?.id || 'not found')
-
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
-    // console.log('adddon', addon)
 
     const [isNewAddon, setIsNewAddon] = useState(addon?.id ? true : false);
     const [isActive, setIsActive] = useState(false)
@@ -70,9 +57,8 @@ const AddonCustom = ({ addon }) => {
         }
 
         if (property === 'title' || property === 'href') {
-            // Verificar si ambos campos tienen una longitud mayor a cero
             const isValidTitle = state.title.trim().length > 5;
-            const isValidHref = state.href.trim().length > 2; // Cambiado a > 2 para mayor a 3
+            const isValidHref = state.href.trim().length > 2; 
 
             setIsActive(isValidTitle && isValidHref);
 
@@ -94,7 +80,6 @@ const AddonCustom = ({ addon }) => {
     const handleAddAddon = () => {
         if (isActive) {
             const data = {
-                // owner: user?.id || '3r3',
                 id: state.id,
                 isavailable: state.isavailable || true,
                 ispublic: state.ispublic || true,
@@ -128,8 +113,6 @@ const AddonCustom = ({ addon }) => {
     }
 
 
-
-    // -------------------------------------z
     // -------------------------------------z
     const imgRef = useRef(null);
     const [imageError, setImageError] = useState(false);
@@ -155,13 +138,10 @@ const AddonCustom = ({ addon }) => {
             img.src = e.target.result;
 
             img.onload = () => {
-
-                // Escala la imagen a 400 píxeles
                 const scaleFactor = 400 / Math.max(img.width, img.height);
                 const scaledWidth = img.width * scaleFactor;
                 const scaledHeight = img.height * scaleFactor;
 
-                // Crea un canvas para renderizar la imagen escalada
                 const canvas = document.createElement('canvas');
                 canvas.width = scaledWidth;
                 canvas.height = scaledHeight;
@@ -170,7 +150,6 @@ const AddonCustom = ({ addon }) => {
                 ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
                 const base64Image = canvas.toDataURL('image/jpeg', 0.8);
-                // console.log('base62', base64Image)
                 setImageSrc(base64Image)
                 setImageError(false)
 
@@ -185,8 +164,6 @@ const AddonCustom = ({ addon }) => {
 
         reader.readAsDataURL(file);
     };
-
-
 
 
     return (

@@ -1,4 +1,3 @@
-// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 import {
@@ -8,7 +7,6 @@ import {
   updateDashboard,
   deleteDashboard
 } from '@/actions/dashboard'
-// import dashboard from '../../service/controllers/dashboard';
 
 export const initialComponent = {
   id: '',
@@ -44,9 +42,7 @@ const dashboardSlice = createSlice({
   },
   reducers: {
     setDashboard: (state, action) => {
-      // lógica para manejar la acción 'setUser'
       state.dashboard = action.payload
-      // state.components = JSON.parse(state.dashboard.components)
     },
     deleteComponent: (state, action) => {
       console.log('deleteComponent', action.payload)
@@ -76,10 +72,8 @@ const dashboardSlice = createSlice({
     setEdges: (state, action) => {
       state.edges = action.payload
     }
-    // otras acciones...
   },
   extraReducers: (builder) => {
-    // Manejar las acciones generadas por createAsyncThunk
     builder
       .addCase(fetchsDashboard.pending, (state) => {
         state.status = 'pending';

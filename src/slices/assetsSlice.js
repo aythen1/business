@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
-  // getAssets,
   directoriesDB,
   getRootDirectories,
   getDirectoriesVersions,
@@ -12,15 +11,12 @@ import {
   getFile,
   copyFile,
   uploadFile,
-  // getIconsByFolder,
-  // getIconByQuery
 } from "@/actions/assets";
 import * as types from "./types";
 
 export const assetsSlice = createSlice({
   name: "assets",
   initialState: {
-    // assets: [],
     directoriesData: [],
     directoriesTrash: [],
     fileToCopy: "",
@@ -86,15 +82,13 @@ export const assetsSlice = createSlice({
       .addCase(directoriesDB.fulfilled, (state, action) => {
         const dbKeys = action.payload.map((dbFolder) => dbFolder.Key);
         console.log("dbKeys", dbKeys);
-        // Filtrar el array de assets para excluir los elementos con las claves eliminadas
-        // state.directoriesData = state.directoriesData.filter((asset) => !dbKeys.includes(asset.Key));
       })
 
       .addCase(deleteFolders.fulfilled, (state, action) => {
         const deletedKeys = action.payload.map(
           (deletedFolder) => deletedFolder.Key
         );
-        // Filtrar el array de assets para excluir los elementos con las claves eliminadas
+
         state.directoriesData = state.directoriesData.filter(
           (asset) => !deletedKeys.includes(asset.Key)
         );

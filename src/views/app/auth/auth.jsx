@@ -1,10 +1,6 @@
-// auth.js
-
 const USER_KEY = 'user';
 
 export const login = (username, password) => {
-  // Aquí puedes implementar la lógica de autenticación
-  // En este ejemplo, se simula un inicio de sesión exitoso
   const user = { username };
   localStorage.setItem(USER_KEY, JSON.stringify(user));
   return user;

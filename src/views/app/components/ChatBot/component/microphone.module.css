@@ -16,11 +16,8 @@
 }
 .iconMicrophone {
   width: 24px;
-  /* Ajusta el ancho del icono según sea necesario */
   height: 24px;
-  /* Ajusta la altura del icono según sea necesario */
   fill: #ffffff;
-  /* Ajusta el color del icono según sea necesario */
 }
 .bar {
   display: flex;
@@ -29,12 +26,9 @@
   overflow-y: hidden;
   width: 140px;
   height: 20px;
-  /* background: #ececec; */
   border-radius: 8px;
 
-
   .containerBar {
-    /* background: red; */
     width: 100%;
     height: 100%;
     display: flex;

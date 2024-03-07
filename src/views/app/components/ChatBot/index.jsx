@@ -3,34 +3,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
-import { v4 as uuidv4 } from 'uuid';
-
-
-
-
-// import { PromptTemplate } from 'langchain/prompts'
-// import { OpenAI } from 'langchain/llms'
-// import { LLMChain } from 'langchain/chains'
-
-// const template = 'What sound does the {animal} make?'
-// const prompt = new PromptTemplate({
-//   template,
-//   inputVariables: ['animal']
-// })
-
-// const llm = new OpenAI()
-
-// const chain = new LLMChain({ llm, prompt })
-
-// const response = await chain.call({ animal: 'cat' })
-// console.log({ response })
-
 
 import Bot from './bot'
 import BotAgent from './botAgent'
-
-// import { openDB } from 'idb'
-// import { openDB, deleteDB, wrap, unwrap } from 'idb'
 
 import {
   fetchsVector,
@@ -42,8 +17,6 @@ import {
   openVector,
   iniVector,
   removeAllVector
-  // addVector,
-  // getAllVector
 } from '@/actions/vector'
 
 
@@ -53,8 +26,7 @@ import {
   deleteChatbot
 } from '@/actions/chatbot'
 
-// import SelectBot from './selectBot'
-// import Bot from './bot'
+
 import Microphone from './component/microphone'
 
 import {
@@ -64,7 +36,6 @@ import {
 } from "@/actions/iam";
 
 
-// import { useDispatch } from "react-redux";
 import Picker from 'emoji-picker-react';
 
 const ChatBot = ({
@@ -88,11 +59,9 @@ const ChatBot = ({
   const [listGpts, setListGpts] = useState([])
 
   const [file, setFile] = useState(null)
-  // const [tokenVector, setTokenVector] = useState('' || null)
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
   const [dragging, setDragging] = useState(false)
-  // const [history, setHistory] = useState([])
 
   // ------------------------------------------------------------------------------------------------------------
 
@@ -148,13 +117,9 @@ const ChatBot = ({
 
     const reader = new FileReader()
 
-    // Acción a realizar cuando la lectura del archivo esté completa
     reader.onload = async (event) => {
-      // const formData = new FormData()
       const fileContent = event.target.result
       const type = detectDrop(droppedFile)
-
-      // Convertir el contenido a base64
       const base64Content = arrayBufferToBase64(fileContent);
 
       const file = {
@@ -164,8 +129,6 @@ const ChatBot = ({
       }
 
       const { vector, uri } = await loadVector(tokenVector, 'files', file)
-
-
       const dropMessage = {
         vector,
         uri
@@ -206,9 +169,6 @@ const ChatBot = ({
 
   const handleAddMessage = async (value, type = 'text') => {
     const newMessage = await detectBot(value, type)
-
-    console.log('new message', newMessage)
-
     const obj = {
       workspaceId: user.id,
       projectId: chatbot.id
@@ -216,9 +176,7 @@ const ChatBot = ({
 
     const token = iniVector(obj)
 
-
     setMessages((prevMessages) => [...prevMessages, newMessage])
-    // updateVector(token, 'chatbots', [...messages, newMessage])
     dispatch(updateVector({
       id: token, 
       name: 'chatbots_vector', 
@@ -228,32 +186,6 @@ const ChatBot = ({
       }
     }))
   }
-
-
-
-  // ------------------------------------------------------------------------------------------------------------
-
-  // const createDashboard = () => {
-  //   const workspaceId = uuidv4();
-  //   const projectId = uuidv4();
-
-  //   const obj = {
-  //     workspaceId,
-  //     projectId
-  //   }
-
-  //   const token = iniVector(obj)
-  //   console.log('token', token, obj)
-
-  //   localStorage.setItem('tokenVector', token)
-  //   setTokenVector(token)
-  // }
-
-
-
-  // useEffect(() => {
-  //   console.log('idChatbot', idChatbot)
-  // }, [idChatbot])
 
 
 
@@ -275,8 +207,6 @@ const ChatBot = ({
 
         const dataValues = JSON.parse(dataValues1[0].message)
         console.log('val', dataValues)
-
-        // setMessages(dataValues || [])
       } catch (error) {
         console.error('Error al cargar desde IndexedDB:', error)
       }
@@ -286,19 +216,6 @@ const ChatBot = ({
 
   }, [user])
 
-
-
-
-
-  // useEffect(() => {
-  //   const existingTokenVector = localStorage.getItem('tokenVector')
-  //   console.log('=======', existingTokenVector)
-  //   if (existingTokenVector) {
-  //     setTokenVector(existingTokenVector)
-  //   }else{
-  //     createDashboard()
-  //   }
-  // }, []) 
 
 
   useEffect(() => {
@@ -336,16 +253,12 @@ const ChatBot = ({
 
 
   // -------------------------------------------------------
-
   const handleCancel = () => {
     dispatch(setOpenChatBot(false))
   }
 
 
   const handleAccept = () => {
-    // const workspaceId = uuidv4();
-    // const projectId = uuidv4();
-
     const data = {
       id: '',
       version: '',
@@ -472,12 +385,6 @@ const ChatBot = ({
               <div className={styles["microphoneWrapper"]}>
                 {/* <Microphone loadRecordVector={loadRecordVector} /> */}
               </div>
-            </div>
-
-            <div>
-
-              {/* <Microphone loadRecordVector={loadRecordVector}/> */}
-              {/* <Microphone loadRecordVector={loadRecordVector} /> */}
             </div>
           </div>
         </div>

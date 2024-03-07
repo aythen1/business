@@ -1,7 +1,6 @@
 import { createContext, useContext, useCallback, useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom';
 
 import ELK from 'elkjs/lib/elk.bundled.js';
 
@@ -30,7 +29,6 @@ import {
 
     addVectorData,
     updateVector,
-    addVector
 } from '@/actions/vector'
 
 
@@ -46,69 +44,14 @@ const nodeTypes = {
 
 
 
-// const idSelectorVector = uuidv4()
-// const idSelectorGPT = uuidv4()
-// const initialNodes = [
-//     {
-//         id: idSelectorVector,
-//         type: "selectorVector",
-//         data: {
-//             header: ['a', 'b'],
-//             data: [[0, 1], [0, 2], [1, 3], [1, 5]],
-//             connectedNodeIds: [idSelectorGPT]
-//         },
-//         position: { x: -50, y: -100 }
-//     }, {
-//         id: idSelectorGPT,
-//         type: "selectorGPT",
-//         data: {
-//             prompt: "",
-//             value: "",
-//             handles: {
-//                 top_connectedNodeIds: [idSelectorVector],
-//                 bottom_connectedNodeIds: [],
-//             }
-//         },
-
-//         position: { x: 100, y: 0 }
-//     }
-// ];
-
-
-// const initialEdges = [
-//     { id: uuidv4(), source: initialNodes[0].id, target: initialNodes[1].id },
-// ];
-
-
-
-
-
-
-
-
 
 
 export default function App({ }) {
-    // const params = useParams()
     const dispatch = useDispatch()
-
-    // const { vectorId } = params
-    // console.log('vectorId', vectorId)
-
-    // const [prompt, setPrompt] = useState('')
-    // const [apiKey, setApiKey] = useState('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')
-    // const [loading, setLoading] = useState(false)
-    // const [nodes, setNodes] = useState(initialNodes)
-    // const [edges, setEdges] = useState(initialEdges)
-
 
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
     const [selectedEdge, setSelectedEdge] = useState(false);
-
-
-    // const { fitView: fitViewFromHook } = useReactFlow();
-    // const reactFlowInstance = useStore((store) => store.getState().reactFlowInstance);
 
 
     const [dataVector, setDataVector] = useState([])
@@ -152,11 +95,8 @@ export default function App({ }) {
 
 
     // ------------------------------
-
-
     const addNode = () => {
         const lastNode = nodes[nodes.length - 1];
-        // Verificar si hay nodos existentes
         if (!lastNode) {
             console.error('No hay nodos existentes para conectar.');
             return;
@@ -164,10 +104,6 @@ export default function App({ }) {
 
         const newY = lastNode.position.y + lastNode.height + 50;
         const newX = lastNode.position.x
-
-        console.log('lastNode', lastNode)
-        // const lastNode = document.querySelector(lastNodeSelector);
-
         const newNode = {
             id: uuidv4(),
             type: 'selectorGPT',
@@ -187,41 +123,21 @@ export default function App({ }) {
 
         setNodes((prevNodes) => [...prevNodes, newNode]);
 
-        // Crear una nueva conexión (edge) entre el último nodo y el nuevo nodo
         const newEdge = {
             id: uuidv4(),
-            source: lastNode.id, // El último nodo como origen
-            target: newNode.id, // El nuevo nodo como destino
+            source: lastNode.id, 
+            target: newNode.id, 
         };
 
-        // Actualizar el estado de las conexiones añadiendo la nueva conexión
         setEdges((prevEdges) => [...prevEdges, newEdge]);
     };
 
 
 
 
-    // ------------------------------------
-
-    // const leftPosition = () => {
-    //     onLayout({ direction: 'RIGHT' })
-    // }
-
-
-    // const rightPosition = () => {
-    //     onLayout({ direction: 'DOWN' })
-    // }
-
-
-
-
-
-
 
     // ---------------------------------
-
     const saveNode = async () => {
-
         let id = iniVector({
             workspaceId: user.id,
             projectId: 'vector',
@@ -255,7 +171,6 @@ export default function App({ }) {
     }
 
     // ------------------------------
-
     const handleDrop = (e) => {
         e.preventDefault()
         if (e.target.getAttribute('refs') == 'schema') {
@@ -302,13 +217,11 @@ export default function App({ }) {
 
             let newY = 0;
             let newX = 0;
-            // Verificar si hay nodos existentes
             if (lastNode) {
                 newX = lastNode.position.x;
                 newY = lastNode.position.y + lastNode.height + 20;
             }
 
-            // Crear un nuevo nodo
             const newNode = {
                 id: uuidv4(),
                 type: 'selectorVector',
@@ -316,27 +229,14 @@ export default function App({ }) {
                 position: { x: newX, y: newY }
             };
 
-            // Actualizar el estado de los elementos para incluir el nuevo nodo
             setNodes((prevElements) => [...prevElements, newNode]);
         };
 
         reader.readAsArrayBuffer(file);
     };
 
-    // const [state, setState] = useState({
-    //     id: vector?.id || '',
-    //     version: vector?.version || '0',
-    //     title: vector?.title || '',
-    //     description: vector?.description || initialDescription,
-    //     code: vector?.code || '',
-    //     updatedAt: vector?.updatedAt || new Date(),
-    //     createdAt: vector?.createdAt || new Date(),
-    // });
-
-
 
     // ------------------------------
-
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [setNodes, nodes]
@@ -353,13 +253,9 @@ export default function App({ }) {
             const sourceNode = nodes.find((node) => node.id === source);
             const targetNode = nodes.find((node) => node.id === target);
 
-            // console.log('sourceNode', sourceNode)
-            // console.log('targetNode', targetNode)
-
             if (sourceNode.type == 'selectorVector' && targetNode.type == 'selectorVector') {
                 return false
             }
-
 
 
             if (sourceNode && targetNode) {
@@ -369,14 +265,9 @@ export default function App({ }) {
                 if (sourceType == 'selectorVector') {
 
                 } else {
-
-                    // Determinar si el handle es top o bottom
                     const isTopHandle = sourceHandle.endsWith('_top')
-
-                    // Obtener el nombre del handle
                     const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
 
-                    // Actualizar connectedNodeIds dependiendo del tipo de nodo
                     if (sourceType === 'selectorGPT') {
                         setNodes((prevNodes) => {
                             const updatedNodes = [...prevNodes];
@@ -399,8 +290,6 @@ export default function App({ }) {
                 }
             }
 
-            // console.log('connection', connection)
-
             setEdges((prevEdges) => addEdge(connection, prevEdges));
         },
         [setNodes, setEdges, nodes])
@@ -411,17 +300,12 @@ export default function App({ }) {
 
     useEffect(() => {
         if (dimension) {
-            // Encuentra el índice del nodo que coincide con el id
-            const nodeIndex = nodes.findIndex((node) => node.id === dimension.id);
-            // Verifica si se encontró el nodo
-            if (nodeIndex !== -1) {
-                // Copia los nodos actuales
-                // let updatedNodes = [...nodes];
 
+            const nodeIndex = nodes.findIndex((node) => node.id === dimension.id);
+            if (nodeIndex !== -1) {
                 const updatedNodes = nodes.map((node) => {
 
                     let status = undefined
-                    // console.log('node', node)
                     if (node.id === dimension.id) {
                         status = 'info';
                     }
@@ -437,17 +321,7 @@ export default function App({ }) {
                 });
 
 
-                // Establece el nuevo estado de los nodos
-                setNodes(updatedNodes);
-
-
-                // Update nodes with status undefined
-
-
-                console.log('uopd', updatedNodes)
-
-                // Use setNodes to update the state with the modified nodes
-                setNodes(updatedNodes);
+                setNodes(updatedNodes);                
             }
         }
     }, [dimension])
@@ -502,17 +376,12 @@ export default function App({ }) {
                         >
                             Create node
                         </button>
-                        <button
-                        // onClick={leftPosition}
-                        >
+                        <button>
                             <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
-                        <button
-                        // onClick={rightPosition}
-                        >
+                        <button>
                             <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
-
                     </div>
                     <MiniMap />
                 </ReactFlow>

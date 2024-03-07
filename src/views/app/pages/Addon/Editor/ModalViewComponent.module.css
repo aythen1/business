@@ -1,5 +1,4 @@
 :global(.scrollbar){
-    /* invisible scrollbar vertical fade */
     width: 8px !important;
 }
 

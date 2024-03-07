@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-// import 'chartist/dist/index.css';
 import { BarChart } from '@/views/graphs/render'
 
-
 import styles from './settingsCurrentConsumption.module.css'
-
-// import GraphDonut from './assets/GraphDonut.jpeg'
-
-
 
 
 const SettingsCurrentConsumption = () => {
@@ -66,7 +60,6 @@ const SettingsCurrentConsumption = () => {
             <div className={styles["grid2"]}>
                 <div className={styles["bar"]}>
                     <BarChart className={styles["image"]} value={value} />
-                    {/* <img src={GraphDonut}  /> */}
                     <div className={styles["box"]}>
                         <b className={styles["pricing"]}>
                             €0.00

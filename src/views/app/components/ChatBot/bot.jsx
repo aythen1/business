@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import { openDB, deleteDB, wrap, unwrap } from 'idb'
-// import { useDispatch } from 'react-redux'
 
 import InfoAythen from './infoAythen'
 import styles from './bot.module.css'
@@ -11,16 +9,10 @@ import {
   updateDefault
 } from '@/actions/iam'
 
-// import {
-
-// } from '@/slice/chatbot'
-// import { loadWorkspaces, getWorkspace } from './handleBot'
-
 import {
   BotViewer,
   TextViewer,
   WebView,
-  // RecordViewer,
   FileViewer,
   PdfViewer,
   ImageViewer,
@@ -43,7 +35,6 @@ import {
   EditLabel,
   EditSection
 } from './component/index'
-// import { valuesIn } from 'lodash'
 
 import { RecordViewer } from './component/record-viewer'
 
@@ -58,7 +49,7 @@ const Bots = ({
   openVector
 }) => {
   const dispatch = useDispatch()
-  //   const [internalHistory, setInternalHistory] = useState(history)
+
   const { message } = useSelector((state) => state.chatbot)
 
   const [gpt, setGpt] = useState(_gpt)
@@ -66,17 +57,6 @@ const Bots = ({
   const [internalMessage, setInternalMessage] = useState(messages)
 
 
-
-  //   const [internalType, setInternalType] = useState(type)
-
-  //   const [internalWorkspace, setInternalWorkspace] = useState(workspace)
-  //   const [internalProject, setInternalProject] = useState(project)
-  //   const [internalSpace, setInternalSpace] = useState(space)
-  //   const [internalPage, setInternalPage] = useState(page)
-  //   const [internalComponent, setInternalComponent] = useState(component)
-  //   const [internalFile, setInternalFile] = useState(file)
-
-  // Function to scroll down in the chat container
   const chatContainerRef = useRef(null)
 
   const handleAudioMessage = (audioUrl, volumeArray) => {
@@ -99,14 +79,11 @@ const Bots = ({
 
   useEffect(() => {
     setInternalMessage(messages)
-    // scrollToBottom()
 
-    // Esperar 100 milisegundos antes de llamar a scrollToBottom
     const timeoutId = setTimeout(() => {
       scrollToBottom()
     }, 100)
 
-    // Limpieza del timeout en el caso de que el componente se desmonte antes de que transcurran los 100 ms
     return () => clearTimeout(timeoutId)
   }, [messages])
 
@@ -364,14 +341,9 @@ const Bots = ({
         <div style={{ height: '100%' }}>
           {internalMessage.length === 0 && (
             <InfoAythen />
-            // <div>
-            //   No existe nada que sea el sistema de pago ¿?
-            // </div>
           )}
         </div>
       )}
-      {/* <ImageViewer /> */}
-      {/* {renderViewer()} */}
     </div>
   )
 }

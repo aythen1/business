@@ -2,25 +2,7 @@ import React, { useState } from 'react';
 
 import styles from './TableRender.module.css'
 
-
 import IconSettings from '../../DashBoard/assets/IconSettings'
-
-
-// export const renderModule = ({ items = [], filteredItems, setStateTable}) => {
-//     // Lógica para renderizar el módulo según el nombre
-//     // Puedes implementar esto según tus necesidades específicas
-//     if (items.length == 0) return false
-//     switch (tag) {
-//         // case 'TicketID':
-//         //     return <RenderTicketID items={items} />
-//         case 'options':
-//             return <RenderOptions items={items} setStateTable={setStateTable} />
-//         case 'download':
-//             return <RenderDownload items={items} setStateTable={setStateTable} />
-//         default:
-//             return <RenderDefault name={tag} items={items} setStateTable={setStateTable} />
-//     }
-// };
 
 
 
@@ -56,7 +38,7 @@ export const TableRender = ({
     const selectedItem = (id) => {
         setSelectedItems((prev) => ({
             ...prev,
-            [id]: !prev[id], // Cambia el estado del elemento específico
+            [id]: !prev[id], 
         }));
     };
 
@@ -80,7 +62,6 @@ export const TableRender = ({
             return <Component item={item} setStateTable={setStateTable} />
         }
         switch (filter.tag) {
-            // Puedes agregar más casos según tus necesidades
             case 'options':
                 return <RenderOptions item={item} filter={filter.tag} setStateTable={setStateTable} />;
             case 'checkbox':
@@ -143,10 +124,6 @@ export const TableRender = ({
 };
 
 
-// export default TableRender
-
-
-
 
 const RenderCheckbox = ({ item, filter, setStateTable, selectedItems, selectedItem }) => {
     return (
@@ -154,11 +131,6 @@ const RenderCheckbox = ({ item, filter, setStateTable, selectedItems, selectedIt
             className={`${styles.inputCheckbox} ${Object.values(selectedItems).some(Boolean) ? styles.active : ''}`}
             onClick={() => setStateTable(`checkbox-item:${item[filter] || item.id}`)}
         >
-            {/* <input
-                type="checkbox"
-                checked={selectedItems[item.id]}
-                onChange={() => selectedItem(item.id)}
-            /> */}
             <input
                 type="checkbox"
                 checked={selectedItems[item.id] || false}
@@ -201,8 +173,6 @@ const RenderDefault = ({ item, filter, setStateTable }) => {
             className={styles.tablename}
             onClick={() => setStateTable(`edit-item:${item.id}`)}
         >
-            {/* {name} */}
-            {/* {JSON.stringify(item)} */}
             {item[filter] || 'Not found ' + filter}
         </td>
     );
@@ -246,7 +216,6 @@ const RenderUser = ({ item, filter, setStateTable }) => {
     const [imageError, setImageError] = useState(false);
 
     const handleImageError = () => {
-        // Maneja el error de la carga de la imagen
         setImageError(true);
     };
 
@@ -281,7 +250,6 @@ const RenderUser = ({ item, filter, setStateTable }) => {
 
 
 const RenderOptions = ({ name, item, setStateTable }) => {
-
     const [visiblePopupSettings, setVisiblePopupSettings] = useState(false);
 
     const togglePopupSettings = () => {
@@ -297,7 +265,6 @@ const RenderOptions = ({ name, item, setStateTable }) => {
         <div className={styles.instanceSettings}>
             <button
                 className={styles.button}
-                // onClick={handlePopupSettings}
                 onClick={() => togglePopupSettings()}
             >
                 <IconSettings width={'30'} height={'30'} />

@@ -3,11 +3,8 @@
     background: #000000;
 }
 
-
-
 .container{
     width: 600px;
-    /* height: 300px; */
     position: relative;
 
     .header{
@@ -35,12 +32,6 @@
         border-radius: 8px;
     }
 }
-
-
-
-
-
-
 
 
 

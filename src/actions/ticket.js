@@ -1,8 +1,6 @@
-// userActions.js
 import apiBackend from '@/utils/apiBackend'
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// Acción asincrónica
 export const fetchsTicket =
   createAsyncThunk('ticket/fetchsTicket',
     async (ticketId, { dispatch }) => {
@@ -155,7 +153,7 @@ export const updateTicket =
           headers: {
             'Authorization': `Bearer ${token}`,
           },
-          data: { id: ticketId },  // Datos que se enviarán en el cuerpo
+          data: { id: ticketId }, 
         });
 
         return resp.data;

@@ -16,11 +16,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
 import { createRoot } from 'react-dom/client';
-// import BarChartBorderRadius from './views/BarChartBorderRadius'
-// import DoughnutChart from './views/DoughnutChart'
 
 import Test from './test';
-// import Web from './views/web'
+
 import DynamicRoute from './DynamicRoute';
 import Register from './views/app/auth/register';
 import Login from './views/app/auth/login';
@@ -29,12 +27,8 @@ import RecoverPassword from './views/app/auth/recover-password';
 
 
 import App from './views/app'
-// import Dashboard from './views/app/pages/DashBoard'
-// import Home from './views/app/pivot/components/DashBoard/home'
 import NotFound from './views/pages/NotFound'
 
-
-// import { isAuthenticated } from './views/app/auth/auth';
 
 import { I18nextProvider } from 'react-i18next';
 
@@ -83,23 +77,18 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
       }
 
       if (res.payload?.user?.id) {
-        // http://localhost:3001/service/v1/iam/user/310afa87-242a-4a33-941c-9e318b2ca24a
-        // Crear un nuevo elemento link
         const faviconLink = document.createElement('link');
         faviconLink.rel = 'icon';
         faviconLink.href = `http://localhost:3001/service/v1/iam/user/${res.payload?.user?.id}`;
         faviconLink.type = 'image/x-icon';
 
-        // Asegurarse de que haya un head en el documento
         const head = document.head || document.getElementsByTagName('head')[0];
 
-        // Eliminar cualquier favicon existente
         const existingFavicon = document.querySelector('link[rel="icon"]');
         if (existingFavicon) {
           head.removeChild(existingFavicon);
         }
 
-        // Agregar el nuevo favicon al head
         head.appendChild(faviconLink);
       }
 
@@ -119,7 +108,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
 // -----------------------
 const supportedLanguages = ['es', 'en', 'pt', 'fr'];
-const defaultLanguage = 'es'; // Idioma por defecto
+const defaultLanguage = 'es'; 
 
 const { pathname } = window.location;
 const languageFromPath = pathname.split('/')[1];
@@ -130,11 +119,7 @@ if (!languageFromPath || !supportedLanguages.includes(languageFromPath)) {
 
 
 const Layout = () => {
-  // const { themeColor } = useSelector((state) => state.iam)
-
   const [isAuth, setIsAuth] = useState(false)
-  // const dispatch = useDispatch()
-  // Verificar el idioma y redirigir si es necesario
   const { pathname } = window.location;
   const languageFromPath = pathname.split('/')[1];
   const currentLanguage = languageFromPath && supportedLanguages.includes(languageFromPath)
@@ -145,11 +130,6 @@ const Layout = () => {
     i18n.changeLanguage(currentLanguage);
   }, [currentLanguage]);
 
-
-  // useEffect(() => {
-  //   const _token = localStorage.getItem('token')
-  //   if(_token) setIsAuth = true
-  // }, [])
 
   // ----------------------------------------------------------
   const [colorsLight, setColorsLight] = useState([])

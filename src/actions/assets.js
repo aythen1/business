@@ -86,7 +86,6 @@ export const createNewFolder = createAsyncThunk(
   "assets/createNewFolder",
   async (name) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         userId,
@@ -105,7 +104,6 @@ export const uploadFile = createAsyncThunk(
   "assets/uploadFile",
   async ({ file, path }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const formData = new FormData();
       formData.append("userId", userId);
@@ -129,7 +127,6 @@ export const copyFile = createAsyncThunk(
   "assets/copyFile",
   async ({ sourceKey, destinationKey, file }, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         sourceBucket: userId,
@@ -152,7 +149,6 @@ export const moveFile = createAsyncThunk(
   "assets/copyFile",
   async ({ sourceKey, destinationKey, file }, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = {
         sourceBucket: userId,
@@ -177,7 +173,6 @@ export const deleteFolder = createAsyncThunk(
   "assets/deleteFolder",
   async (path, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const query = buildQueryString({
         userId,
@@ -199,7 +194,6 @@ export const deleteFile = createAsyncThunk(
   "assets/deleteFile",
   async ({ path, VersionId }, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       console.log({ path, VersionId });
       const query = buildQueryString({
@@ -222,7 +216,6 @@ export const deleteFolders = createAsyncThunk(
   "assets/deleteFolders",
   async (folders, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
 
       const { data } = await apiBackend.delete(`/assets/delete-folders`, {
@@ -231,8 +224,6 @@ export const deleteFolders = createAsyncThunk(
           folders,
         },
       });
-      // console.log('data', data)
-      // dispatch(filterFolder(path))
       return folders;
     } catch (error) {
       throw new Error(error);
@@ -245,12 +236,7 @@ export const directoriesDB = createAsyncThunk(
   "assets/directoriesDB",
   async (folders, { dispatch }) => {
     try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-      // const query = buildQueryString({
-      //   userId,
-      //   folders
-      // })
       const { data } = await apiBackend.post(`/assets/directories-db`, {
         id: userId,
         folders,
