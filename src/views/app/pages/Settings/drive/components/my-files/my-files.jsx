@@ -936,6 +936,7 @@ function isValidElementForCategory(folder, currentPath, category) {
   const isFolder = folder.Size === 6;
   const folderDepth = folder.Key.split("/").length;
   const currentPathDepth = currentPath.split("/").length;
+  console.log({ category });
   let isValidDepth = isFolder
     ? folderDepth === currentPathDepth + 1
     : folderDepth === currentPathDepth;
