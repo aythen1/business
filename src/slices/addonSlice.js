@@ -150,8 +150,8 @@ const addonSlice = createSlice({
 
       .addCase(codeAddon.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.components = action.payload.components;
-        state.code = action.payload.components;
+        // state.components = action.payload.components;
+        // state.code = action.payload.components;
       })
       // .addCase(codeAddon.rejected, (state, action) => {
       //   state.status = 'rejected';

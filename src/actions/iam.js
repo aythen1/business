@@ -271,10 +271,11 @@ export const updateBilling = createAsyncThunk(
 
 export const login = createAsyncThunk(
   "iam/login",
-  async ({ user, password }, { dispatch }) => {
+  async ({ user, password, remember }, { dispatch }) => {
     try {
       const response = await apiBackend.post("/iam/user/login", {
         path: encodeVector(ID),
+        remember,
         user,
         password,
       });

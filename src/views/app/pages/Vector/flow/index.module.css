@@ -1,4 +1,6 @@
-
+.grid11{
+  background: red;
+}
 
 :global(.react-flow__node) {
   padding: 0px !important;
