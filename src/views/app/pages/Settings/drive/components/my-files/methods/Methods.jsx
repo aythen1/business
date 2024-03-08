@@ -296,7 +296,7 @@ export const renderRecentFiles = (
   });
 
   // trabajamos solo con los primeros 3 archivos
-  return filesOnly.slice(0, 3).map((file, index) => {
+  return filesOnly.slice(0, 5).map((file, index) => {
     const originalFolderName = file.Key.split("/").filter(Boolean).pop();
     const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
     // utilizamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía.
