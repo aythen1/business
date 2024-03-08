@@ -433,7 +433,6 @@ export default function Page({
 
   const handleDropFolderTitle = (path) => {
     if (path === "main") {
-      console.log("HANDLE DROPP");
       const { directoryCopied, folderNameCopied } = fileToCopy;
 
       iterateElementsToCut(
@@ -466,7 +465,7 @@ export default function Page({
         path = directory.slice(0, -1);
       }
 
-      dispatch(uploadFile({ file, path }));
+      dispatch(uploadFile({ file, pathDepured: path }));
     }
   };
   const handleDragStart = (directory, isFile, folderName) => {
@@ -497,92 +496,84 @@ export default function Page({
     }
   };
 
-  const handleDropFiles = (e) => {
-    e.preventDefault(); // Prevenir el comportamiento por defecto
+  // Esta función procesa recursivamente archivos y directorios.
+  const processEntry = async (entry, path = "") => {
+    const files = [];
+    if (entry.isFile) {
+      const file = await new Promise((resolve) => entry.file(resolve));
+      const modifiedFile = new File([file], `${path}${file.name}`, {
+        type: file.type,
+      });
+      files.push(modifiedFile);
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      const entries = await new Promise((resolve) =>
+        reader.readEntries(resolve)
+      );
 
-    const items = e.dataTransfer.items; // Obtener los items arrastrados
-
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i].webkitGetAsEntry(); // Intentar obtener como una entrada del sistema de archivos
-
-      if (item) {
-        if (item.isFile) {
-          // Si es un archivo, manejar como archivo
-          item.file((file) => {
-            console.log("Subiendo archivo:", file);
-            let currentFolderTrim = currentFolder;
-            if (currentFolderTrim.endsWith("/")) {
-              currentFolderTrim = currentFolderTrim.slice(0, -1);
-            }
-            const path = currentFolderTrim === "" ? driveId : currentFolderTrim;
-            const pathDepured = path.replace(/\/\/+/g, "/");
-
-            // Ahora 'file' es un objeto File que puedes subir
-            dispatch(
-              uploadFile({
-                file, // Usa 'file' aquí en lugar de 'item'
-                pathDepured,
-              })
-            );
-          });
-        } else if (item.isDirectory) {
-          const directoryReader = item.createReader();
-
-          // Función recursiva para leer las entradas de un directorio
-          const readEntries = (reader, callback) => {
-            reader.readEntries(
-              (entries) => {
-                if (entries.length > 0) {
-                  callback(entries);
-                  readEntries(reader, callback); // Llamar recursivamente hasta que no haya más entradas
-                }
-              },
-              (error) => console.log(error)
-            );
-          };
-
-          let files = [];
-
-          readEntries(directoryReader, (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isFile) {
-                entry.file((file) => {
-                  files.push(file);
-                  // Una vez que tienes el archivo, puedes hacer algo con él
-                  // Aquí necesitas ajustar la lógica para construir la ruta correcta basada en webkitRelativePath o alguna otra estrategia
-                  const folderPathParts = file.webkitRelativePath.split("/");
-                  folderPathParts.pop(); // Remover el nombre del archivo para quedarse solo con la ruta de la carpeta
-
-                  const folderPath = folderPathParts.join("/");
-                  let path =
-                    currentFolder === ""
-                      ? driveId + "/" + folderPath
-                      : currentFolder + "/" + folderPath;
-                  if (path.endsWith("/")) {
-                    path = path.slice(0, -1);
-                  }
-                  const pathDepured = path.replace(/\/\/+/g, "/");
-
-                  dispatch(
-                    uploadFile({
-                      file,
-                      pathDepured,
-                    })
-                  );
-                });
-              }
-            });
-          });
-
-          // Nota: Puede que necesites ajustar el código para manejar la creación de carpetas y el envío de archivos de manera adecuada,
-          // ya que este proceso es asíncrono y necesitarás esperar a que todos los archivos sean leídos.
-        }
+      for (const innerEntry of entries) {
+        const innerFiles = await processEntry(
+          innerEntry,
+          `${path}${entry.name}/`
+        );
+        files.push(...innerFiles);
       }
     }
+
+    return files;
   };
 
-  // const handleDropFiles = () => {
-  // };
+  const handleDropFiles = async (e) => {
+    e.preventDefault();
+
+    const items = e.dataTransfer.items;
+    const entries = Array.from(items, (item) => item.webkitGetAsEntry());
+    const allFiles = [];
+
+    for (const entry of entries) {
+      const filesFromEntry = await processEntry(entry, "");
+      allFiles.push(...filesFromEntry);
+    }
+    // Filtrar para crear carpetas solo cuando sea necesario
+    const foldersPaths = new Set();
+    allFiles.forEach((file) => {
+      const folderPathParts = file.name.split("/");
+      folderPathParts.pop(); // Eliminar el nombre del archivo para obtener solo la ruta de la carpeta
+      const folderPath = folderPathParts.join("/");
+      if (folderPath) foldersPaths.add(folderPath);
+    });
+
+    // Subir archivos
+    allFiles.forEach((file) => {
+      const originalDirectory = file.name.split("/");
+      originalDirectory.pop();
+      let path = currentFolder ? `${currentFolder}` : `${driveId}`;
+      path = path.replace(/\/\/+/g, "/").replace(/\/+$/, ""); // Normalizar la ruta
+      path = path + "/" + originalDirectory.join("/");
+      console.log(`Subiendo archivo: ${file.name} a ${path}`);
+      // Lógica para subir el archivo
+      dispatch(uploadFile({ file, pathDepured: path }));
+    });
+
+    // Crear carpetas si es necesario
+    if (foldersPaths.size > 0) {
+      foldersPaths.forEach((folderPath) => {
+        // Verifica si no estás intentando recrear la carpeta actual
+        if (folderPath !== currentFolder) {
+          let fullPath =
+            currentFolder === ""
+              ? `${driveId}/${folderPath}`
+              : `${currentFolder}/${folderPath}`;
+          fullPath = fullPath.replace(/\/\/+/g, "/").replace(/\/+$/, "");
+          console.log(`Creando carpeta: ${fullPath}`);
+          // Lógica para crear la carpeta
+          dispatch(createNewFolder(fullPath));
+          // Añadir la carpeta localmente si es necesario
+          dispatch(addFolderLocal(`${fullPath}/`));
+        }
+      });
+    }
+  };
 
   const handleFolderInputChange = (event) => {};
 
@@ -720,11 +711,7 @@ export default function Page({
             : renderFilesDB(filteredFolders, handleDragStart)}
         </div>
       </div>
-      <div
-        className={style.drive_folders_main_container}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => handleDropFiles(e)}
-      >
+      <div className={style.drive_folders_main_container}>
         <div className={style.drive_folders_title_container}>
           <span
             onDrop={() => handleDropFolderTitle("main")}
@@ -821,9 +808,15 @@ export default function Page({
             copyFolder,
             cutFolder,
             duplicateFolder,
-            false
+            false,
+            handleDropFiles
           )}
         </div>
+        <div
+          style={{ flexGrow: "1" }}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => handleDropFiles(e)}
+        ></div>
       </div>
 
       {selectedFolders.length > 0 && (
