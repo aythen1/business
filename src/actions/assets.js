@@ -233,23 +233,23 @@ export const deleteFile = createAsyncThunk(
   }
 );
 // Borrar un archivo en scaleway
-export const deleteFiles = createAsyncThunk(
-  "assets/deleteFiles",
-  async ({ folders, action }, { dispatch }) => {
-    try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
-      const userId = "1234";
-      const body = { folders, userId };
-      const { data } = await apiBackend.put(`/assets/files`, body);
-      // dispatch(filterFolder(path));
-      const objectData = { folders, act: action };
+// export const deleteFiles = createAsyncThunk(
+//   "assets/deleteFiles",
+//   async ({ folders, action }, { dispatch }) => {
+//     try {
+//       // const userId = JSON.parse(localStorage.getItem('user')).user.id
+//       const userId = "1234";
+//       const body = { folders, userId };
+//       const { data } = await apiBackend.put(`/assets/files`, body);
+//       // dispatch(filterFolder(path));
+//       const objectData = { folders, act: action };
 
-      return objectData;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-);
+//       return objectData;
+//     } catch (error) {
+//       throw new Error(error);
+//     }
+//   }
+// );
 // Borrar un archivo en scaleway
 export const deletePermanentFile = createAsyncThunk(
   "assets/deleteFile",
@@ -280,14 +280,12 @@ export const deleteFiles = createAsyncThunk(
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
-      const query = buildQueryString({
-        userId,
-        path,
-        VersionId,
-      });
-      const { data } = await apiBackend.delete(`/assets/file?${query}`);
-      dispatch(filterFolder(path));
-      return data.data.body;
+      const body = { folders, userId };
+      const { data } = await apiBackend.put(`/assets/files`, body);
+      // dispatch(filterFolder(path));
+      const objectData = { folders, act: action };
+
+      return objectData;
     } catch (error) {
       throw new Error(error);
     }
