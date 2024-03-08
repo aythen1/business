@@ -310,6 +310,25 @@ export const deleteFolders = createAsyncThunk(
     }
   }
 );
+// Borrar un conjunto de archivos en Scaleway
+export const makeGlacier = createAsyncThunk(
+  "assets/makeGlacier",
+  async (fileName, { dispatch }) => {
+    try {
+      const userId = "1234";
+      const body = {
+        userId,
+        fileName,
+        StorageClass: "GLACIER",
+      };
+      console.log({ body });
+      const { data } = await apiBackend.put("/assets/glacier", body);
+      return { fileName, data };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
 
 // Enviar un conjunto de datos en Scaleway
 export const directoriesDB = createAsyncThunk(

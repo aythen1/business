@@ -12,6 +12,8 @@ import Chevron from "../../assets/Vector 161 (Stroke).svg";
 import ArrowDropDown from "../../assets/arrow-drop-down.svg";
 import Info from "../../assets/IconDashboard.svg";
 import Star from "../../assets/IconStar.svg";
+import IconGlaciar from "../../assets/IconGlaciar.svg";
+
 import Modal from "react-modal";
 import ShareFiles from "../shareFiles/shareFiles";
 import { useState, useEffect } from "react";
@@ -40,6 +42,7 @@ import {
   icons,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
+import { makeGlacier } from "../../../../../../../actions/assets";
 
 export default function Page({
   setIsNew,
@@ -146,6 +149,8 @@ export default function Page({
 
   // uso para "Priority."
   const handleSetPriority = () => handleSetPrefix("Priority.");
+
+  const handleMakeGlacier = () => dispatch(makeGlacier(selectedFolders[0].Key));
 
   const handleDeleteDirectory = (path) => {
     dispatch(deleteFolder(path));
@@ -548,8 +553,8 @@ export default function Page({
       const originalDirectory = file.name.split("/");
       originalDirectory.pop();
       let path = currentFolder ? `${currentFolder}` : `${driveId}`;
-      path = path.replace(/\/\/+/g, "/").replace(/\/+$/, ""); // Normalizar la ruta
       path = path + "/" + originalDirectory.join("/");
+      path = path.replace(/\/\/+/g, "/").replace(/\/+$/, ""); // Normalizar la ruta
       console.log(`Subiendo archivo: ${file.name} a ${path}`);
       // Lógica para subir el archivo
       dispatch(uploadFile({ file, pathDepured: path }));
@@ -834,6 +839,17 @@ export default function Page({
               regexExtensiones.test(selectedFolders[0].Key) && (
                 <>
                   <button
+                    onClick={handleMakeGlacier}
+                    className={style.buttonDelete}
+                    style={{
+                      borderColor: selectedFolders[0].Key.includes("Marker.")
+                        ? "#bba400"
+                        : "grey",
+                    }}
+                  >
+                    <img src={IconGlaciar} />
+                  </button>
+                  <button
                     onClick={handleSetMarker}
                     className={style.buttonDelete}
                     style={{
@@ -934,9 +950,15 @@ function isValidElementForCategory(folder, currentPath, category) {
     ? folderDepth === currentPathDepth + 1
     : folderDepth === currentPathDepth;
   if (
-    ["recent", "addon", "dashboard", "priority", "featured", "trash"].includes(
-      category
-    )
+    [
+      "recent",
+      "addon",
+      "dashboard",
+      "priority",
+      "featured",
+      "trash",
+      "glaciar",
+    ].includes(category)
   )
     isValidDepth = true;
   return (
