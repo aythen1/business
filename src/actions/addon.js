@@ -258,10 +258,8 @@ export const codeAddon =
         );
 
 
-        return {
-          components: resp.data,
-          code: resp.data.join('\n')
-        }
+
+        return resp.data
       } catch (error) {
         console.log('error', error)
         throw error;

@@ -23,6 +23,13 @@ const Login = ({ onLogin }) => {
 
   const { token, error } = useSelector((state) => state.iam);
 
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+
   // ---------------------------
   // Estado para controlar el modo oscuro o claro
   const darkMode = useDarkMode(false, {
@@ -80,7 +87,7 @@ const Login = ({ onLogin }) => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleLogin(); 
+      handleLogin();
     }
   };
 
@@ -99,7 +106,11 @@ const Login = ({ onLogin }) => {
       return;
     }
 
-    dispatch(login({ user: username, password }))
+    dispatch(login({ 
+      remember: isChecked,
+      user: username, 
+      password 
+    }))
   };
 
   useEffect(() => {
@@ -119,17 +130,17 @@ const Login = ({ onLogin }) => {
   }
 
 
-    // -------------------------------------z
-    const imgRef = useRef(null);
-    const [imageError, setImageError] = useState(false);
+  // -------------------------------------z
+  const imgRef = useRef(null);
+  const [imageError, setImageError] = useState(false);
 
-    const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/iam/user/${localStorage.id}`)
-  
-  
-    const handleImageError = () => {
-      setImageError(true);
-    };
-  
+  const [imageSrc, setImageSrc] = useState(`http://localhost:3001/service/v1/iam/user/${localStorage.id}`)
+
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
 
 
   return (
@@ -289,21 +300,16 @@ const Login = ({ onLogin }) => {
           </div>
         </div>
         <div className={styles["frame-1547755086"]}>
-          <div className={styles["frame-1547755081"]}>
-            <svg
-              className={styles["vector9"]}
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7 14L2 9L3.41 7.58L7 11.17L14.59 3.58L16 5M16 0H2C0.89 0 0 0.89 0 2V16C0 16.5304 0.210714 17.0391 0.585786 17.4142C0.960859 17.7893 1.46957 18 2 18H16C16.5304 18 17.0391 17.7893 17.4142 17.4142C17.7893 17.0391 18 16.5304 18 16V2C18 0.89 17.1 0 16 0Z"
-                fill="#0000FF"
-              />
-            </svg>
-            <div className={styles["remember-me"]}>Remember me </div>
+          <div className={styles["checkbox-container"]}>
+            <input
+              type="checkbox"
+              className={styles['checkbox-remember']}
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
+            <div className={styles["remember-me"]} >
+              Remember me
+            </div>
           </div>
           <div
             onClick={() => handlePassword()}

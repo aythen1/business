@@ -196,7 +196,7 @@ export const updateInvoice =
       throw error.response.data.message;
     }
   }
-);
+  );
 
 export const deleteInvoice =
   createAsyncThunk('iam/deleteInvoice', async ({ id }, { dispatch }) => {
@@ -267,10 +267,11 @@ export const updateBilling =
 
 export const login = createAsyncThunk(
   "iam/login",
-  async ({ user, password }, { dispatch }) => {
+  async ({ user, password, remember }, { dispatch }) => {
     try {
       const response = await apiBackend.post("/iam/user/login", {
         path: encodeVector(ID),
+        remember,
         user,
         password,
       });
@@ -399,7 +400,7 @@ export const updateDefault =
       }
     }
   }
-);
+  );
 
 export const recoverPassword =
   createAsyncThunk('iam/recoverPassword', async ({ email }, { dispatch }) => {
@@ -540,10 +541,10 @@ export const verify =
       }
     }
   }
-);
+  );
 
 
-  
+
 
 export const isAuth = (user, password) => {
   const token = localStorage.getItem('token');
@@ -556,24 +557,24 @@ export const logout = () => {
 };
 
 
-export const addUser = createAsyncThunk(
-  "iam/addUser",
-  async ({ user, tags, group }, { dispatch }) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await apiBackend.post(
-        "/iam/user/add-user",
-        {
-          user,
-          tags,
-          group,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+// export const addUser = createAsyncThunk(
+//   "iam/addUser",
+//   async ({ user, tags, group }, { dispatch }) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       const response = await apiBackend.post(
+//         "/iam/user/add-user",
+//         {
+//           user,
+//           tags,
+//           group,
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
 
 
 export const addUser =

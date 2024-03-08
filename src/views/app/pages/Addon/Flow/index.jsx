@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useCallback, useState, useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +10,7 @@ import 'reactflow/dist/style.css';
 
 import { useOpenAI } from '../openai'
 
-import ReactFlow, { useReactFlow, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, zoomOut, MiniMap, Background, BackgroundVariant, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
 import * as xlsx from 'xlsx';
 
@@ -20,6 +21,10 @@ export const useGraph = () => useContext(GraphContext);
 
 import CustomEdge from "./edge/CustomEdge";
 import CustomTemplate from "./node/CustomTemplate"
+
+
+const panOnDrag = [1, 2];
+
 
 
 /*
@@ -78,9 +83,51 @@ const nodeTypes = {
 
 
 
-export const AddonFlow = ({ }) => {
+
+
+const typeBackground = {
+    cross: [{
+        size: 4,
+        gap: 50,
+        lineWidth: 4,
+        variant: 'cross'
+    }, {
+        size: 10,
+        gap: 200,
+        lineWidth: 4,
+        variant: 'cross'
+    }],
+    lines: [{
+        size: 1,
+        gap: 50,
+        lineWidth: 1,
+        variant: 'lines'
+    }, {
+        size: 1,
+        gap: 100,
+        lineWidth: 1,
+        variant: 'lines'
+    }],
+    dots: [{
+        size: 2,
+        gap: 25,
+        lineWidth: 4,
+        variant: 'dots'
+    }, {
+        size: 4,
+        gap: 50,
+        lineWidth: 4,
+        variant: 'dots'
+    }]
+}
+
+
+
+export const AddonFlow = ({
+    setIsEditor
+}) => {
     const dispatch = useDispatch()
-    const { id: addonId } = useParams()
+    const { addonId } = useParams()
 
 
     const [nodes, setNodes] = useState([])
@@ -94,6 +141,8 @@ export const AddonFlow = ({ }) => {
 
     // ------------------------------
     const { user } = useSelector((state) => state.iam)
+
+
 
     // const {
     //     vector,
@@ -208,8 +257,6 @@ export const AddonFlow = ({ }) => {
         })
 
 
-        // const data = []
-
         for (var i = 0; i < nodes.length; i++) {
             const node = nodes[i]
             const components = node.data.components
@@ -224,14 +271,20 @@ export const AddonFlow = ({ }) => {
                 arr.push({
                     id: component.id,
                     text: component.text,
-                    code: component.code,
-                    // image: component.image
+                    image: component.image,
+                    code: component.code
+                })
+
+                console.log('arr.push', {
+                    id: component.id,
+                    text: component.text,
+                    image: component.image,
+                    code: component.code
                 })
             }
 
             await dispatch(addVectorAddon({
                 addon: { id: addon.id },
-                // vector: data 
                 vector: {
                     id: node.id,
                     components: arr
@@ -429,7 +482,8 @@ export const AddonFlow = ({ }) => {
         setEdges,
         selectedEdge,
         setSelectedEdge,
-        addNode
+        addNode,
+        setIsEditor
     };
 
     const onDragStart = () => {
@@ -463,6 +517,42 @@ export const AddonFlow = ({ }) => {
 
 
 
+    const [backgroundVariant, setBackgroundVariant] = useState(typeBackground.dots)
+
+    const handleTypeBackground = () => {
+        const currentVariant = backgroundVariant[0].variant;
+        const currentIndex = Object.keys(typeBackground).indexOf(currentVariant);
+
+        const nextIndex = (currentIndex + 1) % Object.keys(typeBackground).length;
+        const nextVariant = Object.keys(typeBackground)[nextIndex];
+
+        setBackgroundVariant(typeBackground[nextVariant]);
+    };
+
+
+
+    // --------------------------------
+    const [zoomType, setZoomType] = useState(0)
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.ctrlKey && event.key === '+') {
+                event.preventDefault();
+                setZoomType(prevZoomType => Math.max(prevZoomType + 1, 0));
+            } else if (event.ctrlKey && event.key === '-') {
+                event.preventDefault();
+                setZoomType(prevZoomType => Math.min(prevZoomType - 1, 0));
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+
     return (
         <GraphContext.Provider value={value}>
             <div
@@ -470,6 +560,7 @@ export const AddonFlow = ({ }) => {
                 style={{ width: '100%', height: 'calc(100vh - 55px)' }}
             >
                 <ReactFlow
+                    // panOnDrag={'false'}
                     nodes={nodes}
                     edges={edges}
                     fitView
@@ -483,7 +574,28 @@ export const AddonFlow = ({ }) => {
                     nodeTypes={nodeTypes}
                     onConnect={handleConnect}
                     onDragStart={onDragStart}
+                    panOnScroll
+                    selectionOnDrag
+                    panOnDrag={panOnDrag}
+                    selectionMode={SelectionMode.Partial}
                 >
+                    <Background
+                        id="1"
+                        gap={backgroundVariant[0].gap}
+                        size={backgroundVariant[0].size}
+                        lineWidth={backgroundVariant[0].lineWidth}
+                        variant={backgroundVariant[0].variant}
+                        color="var(--color-primary-4)"
+                    />
+
+                    <Background
+                        id="2"
+                        gap={backgroundVariant[1].gap}
+                        size={backgroundVariant[1].size}
+                        lineWidth={backgroundVariant[1].lineWidth}
+                        variant={backgroundVariant[1].variant}
+                        color="var(--color-primary-3)"
+                    />
                     <div className={styles.buttons} style={{ top: '18px' }} >
                         <button onClick={saveNode} >
                             <ButtonSave />
@@ -500,6 +612,10 @@ export const AddonFlow = ({ }) => {
                         <button>
                             <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
+                        <button>
+                            <PositionComponent position="other" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                        </button>
+
                     </div>
 
                     <div className={styles.buttons} style={{ bottom: '22px' }}>
@@ -508,6 +624,9 @@ export const AddonFlow = ({ }) => {
                         </button>
                         <button>
                             <ButtonLess />
+                        </button>
+                        <button>
+                            <TypeBackground handleTypeBackground={handleTypeBackground} />
                         </button>
                         <button style={{ marginLeft: 'auto' }}>
                             <ButtonMap setMiniMapVisible={setMiniMapVisible} />
@@ -519,6 +638,7 @@ export const AddonFlow = ({ }) => {
                     {zoomInitial && (
                         <ZoomInitial nodes={nodes} />
                     )}
+                    <ZoomFunction direction={zoomType} />
                 </ReactFlow>
             </div>
         </GraphContext.Provider>
@@ -531,6 +651,42 @@ export const AddonFlow = ({ }) => {
 
 
 
+const ZoomFunction = ({ direction }) => {
+    const { zoomIn, zoomOut } = useReactFlow();
+
+    useEffect(() => {
+        if (direction > 0) {
+            zoomIn();
+        } else if (direction) {
+            zoomOut();
+        }
+    }, [direction])
+
+    return null
+};
+
+
+
+
+
+
+const TypeBackground = ({ handleTypeBackground }) => {
+
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleTypeBackground}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
+            </svg>
+            <span>
+                Styles
+            </span>
+        </div>
+    )
+}
 
 const ZoomInitial = ({ nodes }) => {
     const { fitView, setCenter } = useReactFlow();
@@ -548,7 +704,7 @@ const ZoomInitial = ({ nodes }) => {
                     newX = lastNode.position.x + lastNode.width + 1
                 }
 
-                setCenter(newX - 200, newY + 100, { zoom: 0.6, duration: 500 });
+                setCenter(newX - 200, newY + 270, { zoom: 0.8, duration: 500 });
             }
         };
 
@@ -664,7 +820,7 @@ const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
             onClick={() => handleAddNode()}
         >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 0a4 4 0 0 1-4 4h-1a3 3 0 0 0-3 3" />
             </svg>
             <span>
                 ADD
@@ -727,9 +883,9 @@ const ButtonTree = ({ save = false }) => {
             className={styles.button}
             onClick={() => handleClickTree()}
         >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                <path fillRule="evenodd" clipRule="evenodd" d="M17.4 3c.3 0 .6.1.7.3l2.6 2.6c.4.3.4 1 0 1.4l-2.5 2.5-4-4 2.5-2.5c.2-.2.5-.3.7-.3Zm-4.6 4.2-9.5 9.5a1 1 0 0 0 0 1.4l2.6 2.6c.3.4 1 .4 1.4 0l9.5-9.5-4-4ZM6 6c.6 0 1 .4 1 1v1h1a1 1 0 0 1 0 2H7v1a1 1 0 1 1-2 0v-1H4a1 1 0 0 1 0-2h1V7c0-.6.4-1 1-1Zm9 9c.6 0 1 .4 1 1v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h1v-1c0-.6.4-1 1-1Z" />
-                <path d="M19 13h-2v2h2v-2ZM13 3h-2v2h2V3Zm-2 2H9v2h2V5ZM9 3H7v2h2V3Zm12 8h-2v2h2v-2Zm0 4h-2v2h2v-2Z" />
+
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12v4m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 0v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
             </svg>
             <span>
                 Tree
@@ -859,7 +1015,7 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
                     </span>
                 </div>
 
-            ) : (
+            ) : position == 'right' ? (
                 <div className={styles.button}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.1 4H5c-.5 0-.9.4-.9.9V9c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9V5c0-.5-.4-.9-.9-.9Zm10 0H15c-.5 0-.9.4-.9.9V9c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9V5c0-.5-.4-.9-.9-.9Zm-10 10H5c-.5 0-.9.4-.9.9V19c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9v-4c0-.5-.4-.9-.9-.9Zm10 0H15c-.5 0-.9.4-.9.9V19c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9v-4c0-.5-.4-.9-.9-.9Z" />
@@ -868,7 +1024,18 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
                         Vector
                     </span>
                 </div>
+            ) : (
+                <div className={styles.button}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11.2v.8l7 4 7-4v-.8m-14 5v.8l7 4 7-4v-1M12 3 5 7l7 4 7-4-7-4Z" />
+                    </svg>
+                    <span>
+                        Map
+                    </span>
+                </div>
             )}
         </div>
     )
 }
+
+

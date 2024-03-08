@@ -163,7 +163,7 @@ const addAddon = async (req, res) => {
 
 
 
-const getVectorAddon = async (req, res) => {
+const fetchsVectorAddon = async (req, res) => {
   const { id, name } = req.params
 
   console.log('path', id, name)
@@ -279,7 +279,7 @@ module.exports = {
   addAddon: catchedAsync(addAddon),
   updateAddon: catchedAsync(updateAddon),
 
-  getVectorAddon: catchedAsync(getVectorAddon),
+  fetchsVectorAddon: catchedAsync(fetchsVectorAddon),
   addVectorAddon: catchedAsync(addVectorAddon),
 
   visionAddon: catchedAsync(visionAddon),
