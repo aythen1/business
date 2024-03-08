@@ -222,15 +222,24 @@ export default function Page({
     const selectedIndex = selectedFolders.findIndex(
       (selectedId) => selectedId.Key === directory.Key
     );
-
+    let previousDirectory = directory.Key.split("/");
+    previousDirectory.pop();
+    console.log(previousDirectory.join("/"));
     if (selectedIndex !== -1) {
       // Si el directorio ya está seleccionado, lo quitamos de la lista
       setSelectedFolders(
         selectedFolders.filter((_, index) => index !== selectedIndex)
       );
     } else {
-      // Agregamos el directorio a la lista de seleccionados
-      setSelectedFolders([...selectedFolders, directory]);
+      const isFolder = categoryFiles.find(
+        (item) => item.Key === previousDirectory.join("/") + "/"
+      );
+      if (isFolder) {
+        setSelectedFolders([...selectedFolders, directory, isFolder]);
+      } else {
+        // Agregamos el directorio a la lista de seleccionados
+        setSelectedFolders([...selectedFolders, directory]);
+      }
     }
   };
 

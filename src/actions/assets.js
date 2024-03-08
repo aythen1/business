@@ -232,7 +232,7 @@ export const deleteFile = createAsyncThunk(
     }
   }
 );
-// // Borrar un archivo en scaleway
+// Borrar un archivo en scaleway
 // export const deleteFiles = createAsyncThunk(
 //   "assets/deleteFiles",
 //   async ({ folders, action }, { dispatch }) => {
@@ -250,28 +250,6 @@ export const deleteFile = createAsyncThunk(
 //     }
 //   }
 // );
-
-// Borrar un archivo en scaleway
-export const deleteFiles = createAsyncThunk(
-  "assets/deleteFiles",
-  async ({ folders, action }, { dispatch }) => {
-    try {
-      // const userId = JSON.parse(localStorage.getItem('user')).user.id
-      const userId = "1234";
-      const query = buildQueryString({
-        userId,
-        path,
-        VersionId,
-      });
-      const { data } = await apiBackend.delete(`/assets/file?${query}`);
-      dispatch(filterFolder(path));
-      return data.data.body;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-);
-
 // Borrar un archivo en scaleway
 export const deletePermanentFile = createAsyncThunk(
   "assets/deleteFile",
@@ -295,7 +273,24 @@ export const deletePermanentFile = createAsyncThunk(
     }
   }
 );
+// Borrar un archivo en scaleway
+export const deleteFiles = createAsyncThunk(
+  "assets/deleteFiles",
+  async ({ folders, action }, { dispatch }) => {
+    try {
+      // const userId = JSON.parse(localStorage.getItem('user')).user.id
+      const userId = "1234";
+      const body = { folders, userId };
+      const { data } = await apiBackend.put(`/assets/files`, body);
+      // dispatch(filterFolder(path));
+      const objectData = { folders, act: action };
 
+      return objectData;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
 
 // Borrar un conjunto de archivos en Scaleway
 export const deleteFolders = createAsyncThunk(
@@ -310,6 +305,42 @@ export const deleteFolders = createAsyncThunk(
       });
       // dispatch(filterFolder(path))
       return folders;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un conjunto de archivos en Scaleway
+export const makeGlacier = createAsyncThunk(
+  "assets/makeGlacier",
+  async (fileName, { dispatch }) => {
+    try {
+      const userId = "1234";
+      const body = {
+        userId,
+        fileName,
+        StorageClass: "GLACIER",
+      };
+      console.log({ body });
+      const { data } = await apiBackend.put("/assets/glacier", body);
+      return { fileName, data: data.data };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un conjunto de archivos en Scaleway
+export const restoreGlacier = createAsyncThunk(
+  "assets/restoreGlacier",
+  async (fileName, { dispatch }) => {
+    try {
+      const userId = "1234";
+      const body = {
+        userId,
+        fileName,
+      };
+      const { data } = await apiBackend.put("/assets/restore-glacier", body);
+      return { fileName };
     } catch (error) {
       throw new Error(error);
     }

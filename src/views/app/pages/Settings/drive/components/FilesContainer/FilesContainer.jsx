@@ -64,7 +64,7 @@ const filterFilesByCategory = (directoriesTrash, category) => {
 
   switch (category) {
     case "document":
-      return Versions;
+      return Versions.filter((file) => file.StorageClass !== "GLACIER");
     case "addon":
       return Versions.filter((file) => {
         const folderName = file.Key.split("/").filter(Boolean).pop();
@@ -72,8 +72,6 @@ const filterFilesByCategory = (directoriesTrash, category) => {
         return folderName.toLowerCase().endsWith(".ay");
       });
 
-    case "dashboard":
-      return Versions.filter((file) => file.isShared);
     case "priority":
       return Versions.filter((file) => {
         const originalFolderName = file.Key.split("/").filter(Boolean).pop();
@@ -95,7 +93,7 @@ const filterFilesByCategory = (directoriesTrash, category) => {
         regexExtensiones.test(file.Key.split("/").filter(Boolean).pop())
       );
     case "glaciar":
-      return Versions.filter((file) => file.isShared);
+      return Versions.filter((file) => file.StorageClass === "GLACIER");
     case "trash":
       return DeleteMarkers;
     // Añade más casos según tus categorías

@@ -85,38 +85,20 @@ export const renderFolders = (
   copyFolder,
   cutFolder,
   duplicateFolder,
-  isTrash
+  isTrash,
+  handleDrop
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-
-    if (file) {
-      dispatch(
-        uploadFile({
-          file,
-          // path: currentFolder === '' ? id : currentFolder
-          path: "",
-        })
-      );
-    }
-    // setNewPopup(false);
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
 
   if (folders.length === 0) {
     return (
       <div
         className={style.emptyFolderMessage}
         draggable
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => handleDrop(e)}
         onDragStart={handleDragStart}
       >
         Esta carpeta está vacía
@@ -161,7 +143,7 @@ export const renderFolders = (
       <div
         key={index}
         draggable
-        onDragOver={handleDragOver}
+        onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
         onDragStart={() => handleDragStart(directory, isFile, folderName)}
         onContextMenu={handleContextMenu}
@@ -207,6 +189,7 @@ export const renderFolders = (
           <span style={{ display: "flex", width: "60px" }}>
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
+            {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
           </span>
         </div>
 
@@ -314,7 +297,7 @@ export const renderRecentFiles = (
   });
 
   // trabajamos solo con los primeros 3 archivos
-  return filesOnly.slice(0, 3).map((file, index) => {
+  return filesOnly.slice(0, 5).map((file, index) => {
     const originalFolderName = file.Key.split("/").filter(Boolean).pop();
     const prefixRegex = /^(Marker\.|Priority\.){1,2}/;
     // utilizamos la expresión regular para reemplazar los prefijos encontrados por una cadena vacía.

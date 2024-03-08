@@ -9,7 +9,7 @@ const { ClientError } = require("../../utils/err/errors");
 
 const logicDelete = async (req, res) => {
   const { StorageClass, fileName, userId } = req.body;
-
+  console.log({ StorageClass, fileName, userId });
   const bucket = await checkBucketExistence(userId);
   if (!bucket) await addBucket(userId);
 

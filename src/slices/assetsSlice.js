@@ -7,6 +7,8 @@ import {
   deleteFolders,
   deleteFolder,
   deleteFile,
+  makeGlacier,
+  restoreGlacier,
   deleteFiles,
   createNewFolder,
   getFile,
@@ -46,7 +48,7 @@ export const assetsSlice = createSlice({
     cutOrCopy: "",
     currentFolder: "",
     searchFiles: "",
-    category: "",
+    category: "document",
     loading: {},
     error: {},
   },
@@ -215,6 +217,51 @@ export const assetsSlice = createSlice({
         state.error = {
           ...state.error,
           [types.DELETE_FILE]: action.payload,
+        };
+      })
+      .addCase(makeGlacier.pending, (state) => {
+        state.loading = { ...state.loading, [types.MAKE_GLACIER]: true };
+        state.error = { ...state.error, [types.MAKE_GLACIER]: "" };
+      })
+      .addCase(makeGlacier.fulfilled, (state, action) => {
+        const { fileName, data } = action.payload;
+        const { VersionId } = data;
+        state.loading = { ...state.loading, [types.MAKE_GLACIER]: false };
+        const index = state.directoriesTrash.Versions.findIndex(
+          (marker) => marker.Key === fileName && marker.IsLatest === true
+        );
+        if (index !== -1) {
+          console.log({ data, VersionId });
+          state.directoriesTrash.Versions[index].StorageClass = "GLACIER";
+          state.directoriesTrash.Versions[index].VersionId = VersionId;
+        }
+      })
+      .addCase(makeGlacier.rejected, (state, action) => {
+        state.loading = { ...state.loading, [types.MAKE_GLACIER]: false };
+        state.error = {
+          ...state.error,
+          [types.MAKE_GLACIER]: action.payload,
+        };
+      })
+      .addCase(restoreGlacier.pending, (state) => {
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: true };
+        state.error = { ...state.error, [types.RESTORE_GLACIER]: "" };
+      })
+      .addCase(restoreGlacier.fulfilled, (state, action) => {
+        const { fileName } = action.payload;
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: false };
+        const index = state.directoriesTrash.Versions.findIndex(
+          (marker) => marker.Key === fileName && marker.IsLatest === true
+        );
+        if (index !== -1) {
+          state.directoriesTrash.Versions[index].StorageStatus = "pending";
+        }
+      })
+      .addCase(restoreGlacier.rejected, (state, action) => {
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: false };
+        state.error = {
+          ...state.error,
+          [types.RESTORE_GLACIER]: action.payload,
         };
       })
       .addCase(deleteFiles.pending, (state) => {
