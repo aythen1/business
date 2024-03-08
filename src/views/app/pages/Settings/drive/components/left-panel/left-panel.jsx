@@ -164,7 +164,6 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         );
       });
 
-      // Si necesitas trabajar con las rutas de las carpetas como un array
       const foldersPathsArray = Array.from(foldersPaths);
       foldersPathsArray.forEach((folderName) => {
         const folderPath =
@@ -266,10 +265,18 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       <div className={style.drive_transformers_container}>
         <div className={style.drive_input_container}>
           {/* <img src={Search} /> */}
-          <svg 
-          className={style.search_input}
-          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+          <svg
+            className={style.search_input}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeWidth="2"
+              d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+            />
           </svg>
           <input
             type="text"
@@ -296,8 +303,9 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         <div
           ref={componentRef}
           className={`${style.drive_create_new_popup_container} 
-        ${newPopup ? style.show : ""} ${newPopup == "title" ? style.title : ""
-            }`}
+        ${newPopup ? style.show : ""} ${
+            newPopup == "title" ? style.title : ""
+          }`}
         >
           <div
             onClick={() => {
@@ -375,8 +383,9 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
                   <div
                     onClick={() => handleCreateNewMvp(item)}
                     key={index}
-                    className={`${style.drive_create_new_mvp} ${item.lock ? style.active : ""
-                      }`}
+                    className={`${style.drive_create_new_mvp} ${
+                      item.lock ? style.active : ""
+                    }`}
                   >
                     <img src={item.path} width={28} height={28} />
                     <p>Use {item.title}</p>
