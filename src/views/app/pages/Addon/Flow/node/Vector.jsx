@@ -1,18 +1,39 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+
 
 import styles from './Vector.module.css'
 
-const Vector = () => {
+const Vector = ({
+    position,
+    setCenter,
+}) => {
+    const navigate = useNavigate()
     const [listVector, setListVector] = useState([{
 
     }, {}, {}])
 
+
+    const handleVector = (index) => {
+        const newX = position.x - 20
+        const newY = position.y + (index * 40)
+
+        setCenter(newX, newY, { zoom: 4, duration: 2000 });
+        // alert(`Posición del ratón: (${mouseX}, ${mouseY})`);
+
+        setTimeout(function(){
+            navigate(`/${'es'}/app/vector/3f6376b1-8e12-4870-8833-4307348b3db9`)
+        }, 1800)
+    };
+
     return (
         <div className={styles.panel}>
             {listVector.map((vector, index) => (
-                <div 
+                <div
                     key={index}
                     className={styles.vector}
+                    onClick={(e) => handleVector(index)}
                 >
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">

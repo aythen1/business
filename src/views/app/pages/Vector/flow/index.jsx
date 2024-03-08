@@ -6,7 +6,7 @@ import ELK from 'elkjs/lib/elk.bundled.js';
 
 import 'reactflow/dist/style.css';
 
-import ReactFlow, { useReactFlow, MiniMap, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, MiniMap, Background, BackgroundVariant, addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
 import * as xlsx from 'xlsx';
 
@@ -125,8 +125,8 @@ export default function App({ }) {
 
         const newEdge = {
             id: uuidv4(),
-            source: lastNode.id, 
-            target: newNode.id, 
+            source: lastNode.id,
+            target: newNode.id,
         };
 
         setEdges((prevEdges) => [...prevEdges, newEdge]);
@@ -321,7 +321,7 @@ export default function App({ }) {
                 });
 
 
-                setNodes(updatedNodes);                
+                setNodes(updatedNodes);
             }
         }
     }, [dimension])
@@ -384,6 +384,7 @@ export default function App({ }) {
                         </button>
                     </div>
                     <MiniMap />
+                    {/* lines,dots,cross */}
                 </ReactFlow>
             </div>
         </GraphContext.Provider>
@@ -472,7 +473,7 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
                 setEdges(layoutedEdges);
 
                 window.requestAnimationFrame(() => {
-                    setCenter(0, 0, {zoom: 0.4, duration: 2000})
+                    setCenter(0, 0, { zoom: 0.4, duration: 2000 })
                 });
             });
         },
@@ -480,9 +481,9 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
     );
 
     const onClick = () => {
-        if(position == 'left'){
+        if (position == 'left') {
             onLayout({ direction: 'DOWN' })
-        }else{
+        } else {
             onLayout({ direction: 'RIGHT' })
         }
     }

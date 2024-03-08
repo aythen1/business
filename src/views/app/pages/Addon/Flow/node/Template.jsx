@@ -54,11 +54,11 @@ const initialDescription =
 
 
 const Template = ({
-    setModal,
     template,
     addTemplate,
     listComponents,
     setListComponents,
+    onEditor
 }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -77,7 +77,7 @@ const Template = ({
     const [isLoading, setIsLoading] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
-    const [isImage, setIsImage] = useState(false)
+    const [isImage, setIsImage] = useState(true)
 
 
     const [state, setState] = useState({
@@ -99,88 +99,6 @@ const Template = ({
     //     }
     // }, [code])
 
-
-
-    // useEffect(() => {
-    //     const obtainImage = async () => {
-    //         for (let i = 0; i < components.length; i++) {
-    //             let component = components[i];
-    //             console.log('component', component)
-    //             console.log('typeof component', typeof component)
-    //             const tempDiv = document.createElement('div');
-    //             tempDiv.innerHTML = component;
-
-
-    //             console.log('1234556', components)
-
-    //             // Crear un div temporal
-    //             const wrappedComponent = document.createElement('div');
-
-    //             // Obtener todas las imágenes dentro de tempDiv
-    //             const images = tempDiv.querySelectorAll('img');
-    //             const imagePromises = [];
-
-    //             // Función para esperar a que una imagen se cargue
-    //             const loadImage = (img) => {
-    //                 return new Promise((resolve, reject) => {
-    //                     img.onload = () => resolve(img);
-    //                     img.onerror = reject;
-    //                 });
-    //             };
-
-    //             // Agregar el componente envuelto al cuerpo del documento
-    //             document.body.appendChild(wrappedComponent);
-    //             wrappedComponent.appendChild(tempDiv);
-
-    //             // Iterar sobre todas las imágenes y crear promesas de carga
-    //             images.forEach((img) => {
-    //                 imagePromises.push(loadImage(img));
-    //             });
-
-    //             // Esperar a que todas las imágenes se carguen
-    //             await Promise.all(imagePromises)
-    //             console.log('========================')
-
-    //             try {
-    //                 // Agregar el componente envuelto al cuerpo del documento
-    //                 document.body.appendChild(wrappedComponent);
-    //                 wrappedComponent.appendChild(tempDiv);
-
-    //                 console.log('eee', wrappedComponent)
-
-    //                 // Agregar el componente al div temporal
-
-    //                 // Esperar antes de capturar la imagen
-    //                 await new Promise(resolve => setTimeout(resolve, 2000));
-
-    //                 // Convertir el componente en una imagen
-    //                 const image = await domtoimage.toPng(wrappedComponent);
-
-    //                 // Hacer algo con la imagen (en este caso, imprimir en la consola)
-    //                 console.log('image', image);
-
-    //                 // Esperar un tiempo antes de pasar al siguiente componente
-    //                 await new Promise(resolve => setTimeout(resolve, 2000));
-
-    //                 // Copia el array actual
-    //                 setListComponents(prevList => prevList.map(obj =>
-    //                     obj.id === i ? { ...obj, image } : obj
-    //                 ));
-
-    //                 console.log('list component', listComponents);
-
-    //                 setIsLoading(false);
-    //                 // handleInputChange(code, 'code');
-    //             } catch (error) {
-    //                 console.error('Error al convertir a imagen:', error);
-    //             } finally {
-    //                 // Remover el componente del cuerpo del documento
-    //                 // document.body.removeChild(wrappedComponent);
-    //             }
-    //         }
-    //     };
-    //     if (components.length > 0) obtainImage();
-    // }, [components]);
 
 
 
@@ -212,11 +130,104 @@ const Template = ({
     };
 
 
-    const handleNewAddon = () => {
+    const loadImage = (img, errorHandler) => {
+        return new Promise((resolve, reject) => {
+            img.onload = () => resolve(img);
+            img.onerror = () => {
+                // Llama a la función de manejo de error
+                errorHandler();
+                // Resuelve la promesa con un valor que indique que hubo un error
+                resolve(null);
+            };
+        });
+    };
+
+
+    const notFoundDiv = document.createElement('div');
+    notFoundDiv.textContent = 'Not Found Resource';
+
+    const obtainImage = async (components) => {
+        for (let i = 0; i < components.length; i++) {
+            let component = components[i].code;
+            console.log('component', component)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = component;
+            // Crear un div temporal
+            const wrappedComponent = document.createElement('div');
+
+            // Obtener todas las imágenes dentro de tempDiv
+            const images = tempDiv.querySelectorAll('img');
+            const imagePromises = [];
+
+
+            // Agregar el componente envuelto al cuerpo del documento
+            document.body.appendChild(wrappedComponent);
+            wrappedComponent.appendChild(tempDiv);
+
+            // Eliminar todas las imágenes del DOM
+            images.forEach((img) => {
+                img.remove();
+            });
+
+
+            // Esperar a que todas las imágenes se carguen
+            // await Promise.all(imagePromises)
+
+            try {
+                // Agregar el componente envuelto al cuerpo del documento
+                document.body.appendChild(wrappedComponent);
+                wrappedComponent.appendChild(tempDiv);
+
+                // Esperar antes de capturar la imagen
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Convertir el componente en una imagen
+                const image = await domtoimage.toPng(wrappedComponent);
+
+                // Hacer algo con la imagen (en este caso, imprimir en la consola)
+                console.log('image', image);
+
+
+                // Esperar un tiempo antes de pasar al siguiente componente
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                setListComponents(prevList => prevList.map(obj =>
+                    obj.id === i + 1 ? { 
+                        ...obj, 
+                        image 
+                    } : obj
+                ));
+
+            } catch (error) {
+                console.error('Error al convertir a imagen:', error);
+            } finally {
+            }
+        }
+
+        return components
+    };
+
+
+    const handleGenerateTemplate = async () => {
         setIsLoading(true)
-        dispatch(codeAddon({
+        const resp = await dispatch(codeAddon({
             components: listComponents
         }))
+
+
+        console.log('payload', resp)
+
+        let updatedListComponents = listComponents.map((component, index) => ({
+            ...component,
+            code: resp.payload[index]
+        }));
+
+        setListComponents(updatedListComponents)
+
+        await obtainImage(updatedListComponents)
+
+
+        setIsLoading(false)
     }
 
     // const handleAddVector = async () => {
@@ -311,7 +322,7 @@ const Template = ({
         ]);
 
 
-    
+
     };
 
 
@@ -323,7 +334,6 @@ const Template = ({
                     : component
             );
 
-            // Comprobamos si realmente hay un cambio en la lista antes de actualizar el estado
             if (!arraysAreEqual(prevList, updatedList)) {
                 return updatedList;
             }
@@ -380,30 +390,31 @@ const Template = ({
     // ------------------------------------------------
 
     const handleMagicTitle = async () => {
-        // Aquí generas el prompt con los textos de listComponents
         const prompt = generatePrompt(listComponents);
-
-        // Llama a la función que utiliza OpenAI con el prompt generado
         const generatedTitle = await generateTitle(prompt);
 
-        // Actualiza el estado del componente con el título generado
         setState({
             ...state,
             title: generatedTitle,
         });
+
+        calculateRows(generatedTitle)
+
+
+        if (generatedTitle.trim().length > 0 && listComponents.length > 0) {
+            setIsActive(true)
+        }
     };
 
     // Función para generar el prompt con los textos de listComponents
     const generatePrompt = (components) => {
         const texts = components.map((component) => component.text);
-        const prompt = `Generate a title based on the following texts:\n\n${texts.join('\n')}\n\nTitle: `;
+        const prompt = `Generate a title based on the following texts:\n\n${texts.join('\n')}\n\nTitle (without quotation marks): `;
         return prompt;
     };
 
     // Función que utiliza OpenAI para generar el título
     const generateTitle = async (prompt) => {
-        // Llama a la lógica que usas para obtener la respuesta de OpenAI
-        // y extrae el título de la respuesta
         const openai = await useOpenAI();
         const resp = await openai.chat.completions.create({
             model: 'gpt-4',
@@ -451,22 +462,8 @@ const Template = ({
     //
     const calculateRows = (content) => {
         const rows = content.split('\n').length;
-        return rows > 1 ? rows : 2; // Asegúrate de que al menos haya 2 filas
+        return rows > 1 ? rows : 2;
     };
-
-
-    // ----------------------------------------------
-    // const [isFlowDragEnabled, setFlowDragEnabled] = useState(true);
-
-    // const onFlowDragStart = (event) => {
-    //     // Desactiva el arrastre en react-flow temporalmente
-    //     setFlowDragEnabled(false);
-    // };
-
-    // const onFlowDragEnd = () => {
-    //     // Vuelve a activar el arrastre en react-flow
-    //     setFlowDragEnabled(true);
-    // };
 
 
     // ---------------------------------------------
@@ -481,22 +478,19 @@ const Template = ({
 
     // --------------------------------------------
     const handleDoubleClickTemplate = () => {
-        alert(1)
-        navigate(`/${'es'}/app/addon/${'ddf97681-ca79-465d-bab2-c1c366dc0d2b'}/${'-'}`)
+        onEditor()
+        // setIsEditor(true)
+        // navigate(`/${'es'}/app/addon/${'ddf97681-ca79-465d-bab2-c1c366dc0d2b'}/${'-'}`)
     }
 
 
     // ----------------------------------------------
-
     useEffect(() => {
-        console.log('id', template)
-        console.log('listComponents', listComponents)
         if (state.title.trim().length > 0 && listComponents.length > 0) {
             setIsActive(true)
-        }else{
+        } else {
             setIsActive(false)
         }
-
     }, [listComponents])
 
 
@@ -513,7 +507,7 @@ const Template = ({
                         onChange={(e) => handleInputChange(e, 'title')}
                         className={styles.textArea} // Añade esta clase para aplicar estilos si es necesario
                         rows={calculateRows(state.title)}
-                        style={{ height: `${calculateRows(state.title) * 1.15}em` }}
+                        style={{ height: `${calculateRows(state.title) * 2.5}em` }}
                     />
                     <button
                         className={styles.addMagicTitle}
@@ -585,44 +579,6 @@ const Template = ({
                         </div>
                     )}
                 </div>
-                {/* <DndProvider backend={HTML5Backend}> */}
-                <div
-                    className={styles.items}
-                    // draggable
-                    // Esto es para hacer el contenido interno draggable
-                    // onDragStart={(e) => {
-                    //     // Aquí podrías realizar acciones específicas al inicio del arrastre interno
-                    //     e.stopPropagation(); // Detiene la propagación del evento de arrastre
-                    // }}
-                    onDoubleClick={() => handleDoubleClickTemplate()}
-
-                >
-                    {listComponents.map((component, index) => (
-                        <DraggableComponent
-                            id={component.id}
-                            key={component.id}
-                            index={index}
-                            moveComponent={moveComponent}
-                            updateComponentText={updateComponentText}
-                            deleteComponent={deleteComponent}
-                            updateTextareaRef={updateTextareaRef}
-                            component={component}
-                            isImage={isImage}
-                        />
-                    ))}
-                </div>
-                {/* </DndProvider> */}
-
-                <div className={styles.addComponent}>
-                    <button
-                        onClick={() => handleClickAddComponent()}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
-                        </svg>
-                        Random Component
-                    </button>
-                </div>
                 {isLoading ? (
                     <div className={styles.bar}>
                         <div className={styles.progress}></div>
@@ -642,12 +598,6 @@ const Template = ({
                                 >
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="#4F0599"><g><g><path fill="fillCurrent" d="M12 5.5 14.5 3 17 5.5 14.5 8zm0 9 2.5-2.5 2.5 2.5-2.5 2.5zm-9 0L5.5 12 8 14.5 5.5 17zm0-9L5.5 3 8 5.5 5.5 8z"></path><path fill="#A365F6" d="m7 10 3-3 3 3-3 3z"></path></g></g></svg>
                                 </button>
-                                {/* <button
-                                        onClick={() => handleAddVector()}
-                                        className={styles.active}
-                                    >
-                                        Save Vector
-                                    </button> */}
                                 <button
                                     onClick={() => handleDeleteVector()}
                                     className={styles.delete}
@@ -658,15 +608,44 @@ const Template = ({
                         ) : (
                             <div className={styles.button}>
                                 <button
-                                    onClick={() => handleNewAddon()}
+                                    onClick={() => handleGenerateTemplate()}
                                     className={`${styles.desactive} ${isActive ? styles.active : ''}`}
                                 >
-                                    Loading GPT
+                                    Generate Template
                                 </button>
                             </div>
                         )}
                     </div>
                 )}
+                <div
+                    className={styles.items}
+                    onDoubleClick={() => handleDoubleClickTemplate()}
+                >
+                    {listComponents.map((component, index) => (
+                        <DraggableComponent
+                            id={component.id}
+                            key={component.id}
+                            index={index}
+                            moveComponent={moveComponent}
+                            updateComponentText={updateComponentText}
+                            deleteComponent={deleteComponent}
+                            updateTextareaRef={updateTextareaRef}
+                            component={component}
+                            isImage={isImage}
+                        />
+                    ))}
+                </div>
+                <div className={styles.addComponent}>
+                    <button
+                        onClick={() => handleClickAddComponent()}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
+                        </svg>
+                        Random Component
+                    </button>
+                </div>
+
             </div>
         </div>
     )
@@ -739,11 +718,37 @@ const DraggableComponent = ({
     };
 
 
+    // 
+
+    const [contextMenuPosition, setContextMenuPosition] = useState(false);
+    const [contextMenuVisible, setContextMenuVisible] = useState(false);
+
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+
+        // Muestra el menú contextual
+        setContextMenuVisible(true);
+
+        // Posiciona el menú en la posición del clic derecho
+        setContextMenuPosition({
+            top: event.clientY,
+            left: event.clientX,
+        });
+    };
+
+    const handleMouseLeave = () => {
+        // Oculta el menú contextual al hacer hover fuera del área
+        if (contextMenuVisible) {
+            setContextMenuVisible(false);
+        }
+    };
+
 
     return (
         <div
             ref={(node) => drop(drag(node))}
             className={`${styles.draggableComponent} ${isDragging ? styles.dragging : ''}`}
+            onContextMenu={handleContextMenu}
         >
             {isImage ? (
                 <div>
@@ -753,8 +758,8 @@ const DraggableComponent = ({
                         </div>
                     ) : (
                         <div className={styles.noneImage}>
-                            <svg ariaHidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                <path fillRule="evenodd" d="M13 10c0-.6.4-1 1-1a1 1 0 1 1 0 2 1 1 0 0 1-1-1Z" clipGule="evenodd" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <path fillRule="evenodd" d="M13 10c0-.6.4-1 1-1a1 1 0 1 1 0 2 1 1 0 0 1-1-1Z" clipRule="evenodd" />
                                 <path fillRule="evenodd" d="M2 6c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v12c0 .6-.2 1-.6 1.4a1 1 0 0 1-.9.6H4a2 2 0 0 1-2-2V6Zm6.9 12 3.8-5.4-4-4.3a1 1 0 0 0-1.5.1L4 13V6h16v10l-3.3-3.7a1 1 0 0 0-1.5.1l-4 5.6H8.9Z" clipRule="evenodd" />
                             </svg>
                             <span>
@@ -773,6 +778,61 @@ const DraggableComponent = ({
                     onChange={handleTextChange}
                 />
             )}
+            {contextMenuVisible && (
+                <div
+                    className={styles.contextMenu}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <ModalContextMenu />
+                </div>
+            )}
         </div>
     );
 };
+
+
+
+const ModalContextMenu = () => {
+    const handleDuplicate = () => {
+        alert(1)
+    }
+
+    const handleCopy = () => {
+        alert(2)
+    }
+
+    const handlePaste = () => {
+        alert(3)
+    }
+
+    const handleEarse = () => {
+        alert(4)
+    }
+
+    const handleDelete = () => {
+        alert(5)
+    }
+
+
+    return (
+        <div >
+            <ul>
+                <li onClick={() => handleDuplicate()} >
+                    Duplicar
+                </li>
+                <li onClick={() => handleCopy()}>
+                    Copiar
+                </li>
+                <li onClick={() => handlePaste()}>
+                    Pegar
+                </li>
+                <li onClick={() => handleEarse()}>
+                    Borrar Component
+                </li>
+                <li onClick={() => handleDelete()}>
+                    Eliminar template
+                </li>
+            </ul>
+        </div>
+    )
+}

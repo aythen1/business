@@ -188,8 +188,8 @@ export const App = ({ }) => {
               <Route path="support/tickets" element={<Tickets />} />
               <Route path="support/ticket/:ticketId" element={<Ticket />} />
 
-              <Route path="addon/*" element={<Addon />} />
-              <Route path="addon" element={<Addon />} />
+              <Route path="addon/:addonId" element={<Addon />} />
+              <Route path="addon/:addonId/:templateId" element={<Addon />} />
               <Route path="gpt" element={<GPTs />} />
               <Route path="langchain" element={<LangChain />} />
               <Route path="*" element={<NotFound />} />

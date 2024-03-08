@@ -54,15 +54,28 @@ import {
   handlChatEditor,
   handleCodeEditor,
 } from '../actions';
+import Template from "../Flow/node/Template";
 
 
 
 
 export const AddonEditor = ({
-  component
+  addonId,
+  template,
+  setTemplate
 }) => {
+  // const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [html, setHtml] = useState(component.code);
+
+  const [html, setHtml] = useState(null);
+
+
+  useEffect(() => {
+    console.log('c=C=C=C=', template)
+    if (template.content) {
+      setHtml(template.content)
+    }
+  }, [template])
 
   // handle -------------------------------------------------------
 
@@ -192,14 +205,21 @@ export const AddonEditor = ({
 
 
 
+  useHotkeys('esc', () => {
+    console.log('1i3uhfu4ufhu4fu4', addonId)
+    setTemplate({})
+    // navigate(`/${'es'}/app/addon/${addonId}`)
 
+    const newUrl = `/${'es'}/app/addon/${addonId}`;
+    window.history.pushState({}, '', newUrl);
+  })
 
   // -A: Refresh el componente devolviendo otro parecido pero con diferentes estilos y estructura
   useHotkeys('alt+a', async () => {
-    try{
+    try {
       handleKeyClick('alt+a');
       await handleRefresh(hoveredElement);
-    }catch(e){
+    } catch (e) {
       console.log('hello world', e)
       dispatch(setModal(<ModalToken />))
     }

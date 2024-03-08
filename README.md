@@ -4,6 +4,10 @@ pm2 start service.js --name "server"
 pm2 monit
 
 
+Stop-Process -Id (Get-NetTCPConnection -LocalPort 3001).OwningProcess -Force
+
+
+
 sudo fuser -k 5000/tcp  # Cierra el puerto 5000
 sudo fuser -k 3000/tcp  # Cierra el puerto 3000
 

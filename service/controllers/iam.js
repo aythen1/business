@@ -32,11 +32,24 @@ const encodeVector = (id) => {
   return base64Str;
 };
 
-function generateToken(payload) {
+function generateToken(payload, remember = false) {
   const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
   return token;
 }
+
+function generateToken(payload, remember = false) {
+  let expiresIn = '1h'; 
+
+  if (remember) {
+    expiresIn = '365d'; 
+  }
+
+  const token = jwt.sign(payload, secretKey, { expiresIn });
+
+  return token;
+}
+
 
 function decodeToken(token) {
   try {
@@ -357,7 +370,7 @@ const decoderUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    const { path, user, password } = req.body;
+    const { path, user, password, remember } = req.body;
 
     const options = [
       { field: "user", operator: "==", value: user },
@@ -378,7 +391,7 @@ const loginUser = async (req, res, next) => {
     delete data.avatar
 
 
-    const token = await generateToken(data)
+    const token = await generateToken(data, remember)
 
     if (data.isverified !== true) {
       return res.status(301).send({ message: 301 })

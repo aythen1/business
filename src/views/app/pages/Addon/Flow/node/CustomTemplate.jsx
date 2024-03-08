@@ -35,11 +35,22 @@ import {
 } from '../prompt';
 
 import styles from './CustomTemplate.module.css'
+import { t } from "i18next";
 
 
 
 export default memo(({ id, data, isConnectable, }) => {
-  const { nodes, edges, setNodes, setEdges, setSelectedEdge, addNode } = useGraph();
+  const {
+    nodes,
+    edges,
+    setNodes,
+    setEdges,
+    setSelectedEdge,
+    addNode,
+    setIsEditor
+  } = useGraph();
+
+  const { setCenter } = useReactFlow()
 
   const { prompt, value, error, handles, components } = data;
 
@@ -68,7 +79,8 @@ export default memo(({ id, data, isConnectable, }) => {
 
         // Modificar la propiedad nodes.data.components del nodo con el id específico
         updatedNodes[selectedNodeIndex].data.components = listComponents;
-
+        // console.log('owrnuruenuvrf')
+        // console.log('wifnruh', updatedNodes[selectedNodeIndex])
         // Actualizar nodes con el nuevo array de nodos
         setNodes(updatedNodes);
       }
@@ -78,28 +90,40 @@ export default memo(({ id, data, isConnectable, }) => {
   }, [listComponents])
 
 
+  // useEffect(() => {
+  //   if (components.length > 0) {
+
+  //     setListComponents(components)
+
+  //     setInternalUpdate(true);
+  //   }
+  // }, [components])
+
+
+
+  // useEffect(() => {
+  //   setInputValue(data.prompt)
+
+  //   if (data.response) {
+  //     setGptActive(true)
+  //     if (!data.response.type) {
+  //       setGptValue(data.response)
+  //     }
+  //   }
+  // }, [data])
+
+
+  const [position, setPosition] = useState()
+
   useEffect(() => {
-    if (components.length > 0) {
+    const currentNode = nodes.find(node => node.id === id);
 
-      console.log('components', components)
-      setListComponents(components)
-
-      setInternalUpdate(true);
+    if (currentNode) {
+      console.log('currentNode', currentNode.position)
+      setPosition(currentNode.position);
     }
-  }, [components])
 
-
-
-  useEffect(() => {
-    setInputValue(data.prompt)
-
-    if (data.response) {
-      setGptActive(true)
-      if (!data.response.type) {
-        setGptValue(data.response)
-      }
-    }
-  }, [data])
+  }, [])
 
 
 
@@ -111,10 +135,10 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
 
-  const handleReturnGPT = () => {
-    setGptActive(false)
-    setGptValue('')
-  }
+  // const handleReturnGPT = () => {
+  //   setGptActive(false)
+  //   setGptValue('')
+  // }
 
 
 
@@ -229,6 +253,34 @@ export default memo(({ id, data, isConnectable, }) => {
   };
 
 
+  //
+  const onEditor = () => {
+    const template = nodes.map(node => {
+      const code = node.data.components.map(component => {
+        return component.code
+      }).join('\n')
+
+      if (code.length > 0) {
+        return code
+      }
+    }).join('\n');
+
+    if (template.trim().length > 0) {
+
+      setCenter(position.x + 100, position.y + 220, { zoom: 5, duration: 2000 })
+
+      setTimeout(function () {
+        setIsEditor({
+          id,
+          content: template
+        })
+      }, 1800)
+    }
+  }
+
+
+
+
 
 
 
@@ -250,12 +302,16 @@ export default memo(({ id, data, isConnectable, }) => {
         isConnectable={isConnectable}
       />
       <div className={styles.box}>
-        <Vector />
+        <Vector
+          position={position}
+          setCenter={setCenter}
+        />
         <Template
           template={data}
           addTemplate={() => addTemplate()}
           listComponents={listComponents}
           setListComponents={setListComponents}
+          onEditor={onEditor}
         />
       </div>
     </>
