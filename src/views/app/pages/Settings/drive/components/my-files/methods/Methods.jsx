@@ -85,38 +85,20 @@ export const renderFolders = (
   copyFolder,
   cutFolder,
   duplicateFolder,
-  isTrash
+  isTrash,
+  handleDrop
 ) => {
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-
-    if (file) {
-      dispatch(
-        uploadFile({
-          file,
-          // path: currentFolder === '' ? id : currentFolder
-          path: "",
-        })
-      );
-    }
-    // setNewPopup(false);
-  };
-
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
 
   if (folders.length === 0) {
     return (
       <div
         className={style.emptyFolderMessage}
         draggable
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => handleDrop(e)}
         onDragStart={handleDragStart}
       >
         Esta carpeta está vacía
@@ -161,7 +143,7 @@ export const renderFolders = (
       <div
         key={index}
         draggable
-        onDragOver={handleDragOver}
+        onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => dropAndUpload(directory.Key, e, isFile)}
         onDragStart={() => handleDragStart(directory, isFile, folderName)}
         onContextMenu={handleContextMenu}
