@@ -323,7 +323,24 @@ export const makeGlacier = createAsyncThunk(
       };
       console.log({ body });
       const { data } = await apiBackend.put("/assets/glacier", body);
-      return { fileName, data };
+      return { fileName, data: data.data };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
+// Borrar un conjunto de archivos en Scaleway
+export const restoreGlacier = createAsyncThunk(
+  "assets/restoreGlacier",
+  async (fileName, { dispatch }) => {
+    try {
+      const userId = "1234";
+      const body = {
+        userId,
+        fileName,
+      };
+      const { data } = await apiBackend.put("/assets/restore-glacier", body);
+      return { fileName };
     } catch (error) {
       throw new Error(error);
     }

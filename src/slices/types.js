@@ -40,6 +40,7 @@ export const DELETE_DIRECTORY = "DELETE_DIRECTORY";
 export const DELETE_FILE = "DELETE_FILE";
 export const DELETE_FILES = "DELETE_FILES";
 export const MAKE_GLACIER = "MAKE_GLACIER";
+export const RESTORE_GLACIER = "RESTORE_GLACIER";
 export const UPDATE_DIRECTORY = "UPDATE_DIRECTORY";
 export const GET_FILE = "GET_FILE";
 export const COPY_FILE = "COPY_FILE";

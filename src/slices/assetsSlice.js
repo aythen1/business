@@ -8,6 +8,7 @@ import {
   deleteFolder,
   deleteFile,
   makeGlacier,
+  restoreGlacier,
   deleteFiles,
   createNewFolder,
   getFile,
@@ -240,6 +241,27 @@ export const assetsSlice = createSlice({
         state.error = {
           ...state.error,
           [types.MAKE_GLACIER]: action.payload,
+        };
+      })
+      .addCase(restoreGlacier.pending, (state) => {
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: true };
+        state.error = { ...state.error, [types.RESTORE_GLACIER]: "" };
+      })
+      .addCase(restoreGlacier.fulfilled, (state, action) => {
+        const { fileName } = action.payload;
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: false };
+        const index = state.directoriesTrash.Versions.findIndex(
+          (marker) => marker.Key === fileName && marker.IsLatest === true
+        );
+        if (index !== -1) {
+          state.directoriesTrash.Versions[index].StorageStatus = "pending";
+        }
+      })
+      .addCase(restoreGlacier.rejected, (state, action) => {
+        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: false };
+        state.error = {
+          ...state.error,
+          [types.RESTORE_GLACIER]: action.payload,
         };
       })
       .addCase(deleteFiles.pending, (state) => {

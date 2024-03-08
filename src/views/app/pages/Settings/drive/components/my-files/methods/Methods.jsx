@@ -189,6 +189,7 @@ export const renderFolders = (
           <span style={{ display: "flex", width: "60px" }}>
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
+            {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
           </span>
         </div>
 

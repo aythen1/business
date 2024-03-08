@@ -42,7 +42,10 @@ import {
   icons,
 } from "../../assetsAux";
 import { setCurrentFolder } from "@/slices/assetsSlice";
-import { makeGlacier } from "../../../../../../../actions/assets";
+import {
+  makeGlacier,
+  restoreGlacier,
+} from "../../../../../../../actions/assets";
 
 export default function Page({
   setIsNew,
@@ -150,7 +153,15 @@ export default function Page({
   // uso para "Priority."
   const handleSetPriority = () => handleSetPrefix("Priority.");
 
-  const handleMakeGlacier = () => dispatch(makeGlacier(selectedFolders[0].Key));
+  const handleMakeGlacier = () => {
+    if (category === "glaciar") {
+      dispatch(restoreGlacier(selectedFolders[0].Key));
+      // console.log(true, { category });
+    } else {
+      // console.log(false, { category });
+      dispatch(makeGlacier(selectedFolders[0].Key));
+    }
+  };
 
   const handleDeleteDirectory = (path) => {
     dispatch(deleteFolder(path));
