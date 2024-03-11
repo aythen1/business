@@ -24,7 +24,7 @@ const ModalIdeComponent = ({ hoveredElement }) => {
     };
 
     return (
-        <div className={styles.modal}>
+        <div className={styles.modal1}>
         <Editor
             ref={editorRef}
             height="100vh"

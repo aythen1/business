@@ -4,7 +4,26 @@
 }
 
 
-.modal{
+.modal1{
     width: 90vw;
 }
 
+:global(.margin-view-overlays){
+    width: 20px !important;
+}
+
+:global(.margin),
+:global(.current-line),
+:global(.line-numbers){
+    width: 20px !important;
+}
+
+:global(.monaco-scrollable-element){
+    left: 40px !important;
+}
+
+/* [class^="modal"] {
+    padding: 0px;
+    padding-top: 5px;
+    padding-right:10px;
+} */

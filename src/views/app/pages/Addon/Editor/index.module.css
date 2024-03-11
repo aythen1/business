@@ -9,17 +9,19 @@
   flex-wrap: wrap;
   gap: 2px;
   .button {
+    height: 16px;
+    line-height: 9px;
     position: relative;
     border-radius: 4px;
     padding: 2px 6px;
-    font-size: 8px;
+    font-size: 6px;
     color: #fff;
     background: var(--color-primary-0);
     border-left: 2px solid var(--color-primary-2);
     border-right: 3px solid var(--color-primary-3);
     border-bottom: 4px solid var(--color-primary-1);
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     label {
       font-size: 12px;
       font-weight: 500;

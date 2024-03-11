@@ -1,10 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './ModalViewComponent.module.css'
 
 
-import { Tldraw } from "@tldraw/tldraw";
+import { AssetRecordType, Editor, Tldraw } from 'tldraw'
+import 'tldraw/tldraw.css'
+
+// import { AssetRecordType, Tldraw } from "@tldraw/tldraw";
 import { getSvgAsImage } from "@/lib/getSvgAsImage";
 import { blobToBase64 } from "@/lib/blobToBase64";
 
@@ -13,45 +16,142 @@ import { blobToBase64 } from "@/lib/blobToBase64";
 
 const ModalViewComponent = ({ image }) => {
 
-  const [elements, setElements] = useState([{
-    type: 'image',
-    src: image,
-    x: 100,
-    y: 100,
-    width: 200,
-    height: 150,
-  }]);
+  // const [elements, setElements] = useState([{
+  //   type: 'image',
+  //   src: image,
+  //   x: 100,
+  //   y: 100,
+  //   width: 200,
+  //   height: 150,
+  // }]);
 
 
   console.log('image', image)
 
 
-  const editor = useEditor();
+  // const editor = new Tldraw();
 
-  const handleMount = useCallback(() => {
-    const assetId = uuidv4();
-    const imageWidth = 1200;
-    const imageHeight = 675;
+  // const editor = useEditor();
 
-    const base64Image = 'data:image/png;base64,iVBORw0KG...'; // Tu cadena base64 real
+  // useEffect(() => {
+  //   // Initialize Tldraw editor
+  //   const editor = new Tldraw();
 
-    editor.addShape({
-      type: 'image',
-      x: (window.innerWidth - imageWidth) / 2,
-      y: (window.innerHeight - imageHeight) / 2,
-      props: {
+  //   // Call handleMount with the initialized editor
+  //   handleMount(editor);
+
+  //   // Cleanup function
+  //   return () => {
+  //     editor.destroy();
+  //   };
+  // }, []); // Run this effect only once when the component mounts
+
+  // const handleMount = (editor) => {
+  //   const imageWidth = 1200;
+  //   const imageHeight = 675;
+
+  //   editor.createShapes([
+  //     {
+  //       id: uuidv4(),
+  //       x: (window.innerWidth - imageWidth) / 2,
+  //       y: (window.innerHeight - imageHeight) / 2,
+  //       props: {
+  //         type: 'image',
+  //         // typeName: 'asset',
+  //         w: imageWidth,
+  //         h: imageHeight,
+  //         name: 'tldraw.png',
+  //         src: image, // Replace with the actual path or URL
+  //         // mimeType: 'image/png',
+  //       },
+  //     },
+  //   ]);
+  // };
+
+
+  const handleMount = useCallback((editor) => {
+    //[2]
+    // const assetId = uuidv4()
+    const assetId = AssetRecordType.createId()
+
+    const imageWidth = 1200
+    const imageHeight = 675
+    //[2]
+    editor.createAssets([
+      {
         id: assetId,
         type: 'image',
         typeName: 'asset',
-        name: 'tldraw.png',
-        src: base64Image,
+        props: {
+          name: 'tldraw.png',
+          src: image, // You could also use a base64 encoded string here
+          w: imageWidth,
+          h: imageHeight,
+          mimeType: 'image/png',
+          isAnimated: false,
+        },
+        meta: {},
+      },
+    ])
+    //[3]
+    editor.createShape({
+      type: 'image',
+      // Let's center the image in the editor
+      x: (window.innerWidth - imageWidth) / 2,
+      y: (window.innerHeight - imageHeight) / 2,
+      props: {
+        assetId,
         w: imageWidth,
         h: imageHeight,
-        mimeType: 'image/png',
-        isAnimated: false,
       },
-    });
-  }, [editor]);
+    })
+  }, [])
+
+
+  // const handleMount = (editor) => {
+  //   // const assetId = uuidv4();
+  //   const imageWidth = 1200;
+  //   const imageHeight = 675;
+
+  //   // // const base64Image = 'data:image/png;base64,iVBORw0KG...'; // Tu cadena base64 real
+  //   // const base64Image = image
+
+  //   // editor.addShape({
+  //   //   type: 'image',
+  //   //   x: (window.innerWidth - imageWidth) / 2,
+  //   //   y: (window.innerHeight - imageHeight) / 2,
+  //   //   props: {
+  //   //     id: assetId,
+  //   //     type: 'image',
+  //   //     typeName: 'asset',
+  //   //     name: 'tldraw.png',
+  //   //     src: base64Image,
+  //   //     w: imageWidth,
+  //   //     h: imageHeight,
+  //   //     mimeType: 'image/png',
+  //   //     isAnimated: false,
+  //   //   },
+  //   // });
+  //   editor
+  //     .selectAll()
+  //     // .deleteShapes(editor.selectedShapeIds)
+  //     .createShapes([
+  //       {
+  //         id: uuidv4(),
+  //         x: (window.innerWidth - imageWidth) / 2,
+  //         y: (window.innerHeight - imageHeight) / 2,
+  //         props: {
+  //           type: 'image',
+  //           typeName: 'asset',
+  //           w: imageWidth,
+  //           h: imageHeight,
+  //           name: 'tldraw.png',
+  //           src: image,
+  //           mimeType: 'image/png',
+  //         },
+  //       },
+  //     ])
+  // };
 
   return (
     <div className={styles.modal}>

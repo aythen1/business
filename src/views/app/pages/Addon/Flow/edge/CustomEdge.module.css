@@ -1,7 +1,7 @@
 :global(.react-flow__edge-path) {
-    stroke: #282727; 
+    stroke: red; 
     fill: none;
-    stroke-width: 1px; 
+    stroke-width: 0px; 
   
     :global(&.selected){
         stroke: var(--color-primary-0) !important;
@@ -9,7 +9,7 @@
 }
 
 
-:global(.edge-path-line) {
+:global(.edge-path-smoothstep) {
     stroke: transparent !important;
     fill: none;
     stroke-width: 30px; 

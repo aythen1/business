@@ -24,7 +24,7 @@
     font-size: 12px;
     font-weight: 600;
     border-radius: 6px;
-
+    outline: none;
     &:hover{
         background: var(--color-primary-3);
     }

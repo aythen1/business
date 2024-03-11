@@ -139,7 +139,7 @@ export const keysAlt = [{
     description: `Edit component`
 }, {
     title: 'Code',
-    key: 'alt+y',
+    key: 'alt+e',
     description: `Code component`
 }, {
     title: 'Ajustes',

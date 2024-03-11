@@ -41,6 +41,7 @@ import {
 
 import AddTag from '@/views/app/pages/shared/AddTag'
 import { useNavigate } from 'react-router-dom';
+import { useEdges } from 'reactflow';
 
 
 
@@ -58,6 +59,8 @@ const Template = ({
     addTemplate,
     listComponents,
     setListComponents,
+    setInternalUpdate,
+    setTitle,
     onEditor
 }) => {
     const dispatch = useDispatch()
@@ -91,6 +94,11 @@ const Template = ({
     });
 
 
+    useEffect(() => {
+        console.log('remplate', template)
+    }, [template])
+
+
     // useEffect(() => {
     //     if (code) {
     //         setIsLoading(false)
@@ -121,6 +129,8 @@ const Template = ({
                 ...prevState,
                 [property]: isValidText ? value : '',
             }));
+
+            setTitle(value)
         } else {
             setState((prevState) => ({
                 ...prevState,
@@ -192,9 +202,9 @@ const Template = ({
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
                 setListComponents(prevList => prevList.map(obj =>
-                    obj.id === i + 1 ? { 
-                        ...obj, 
-                        image 
+                    obj.id === i + 1 ? {
+                        ...obj,
+                        image
                     } : obj
                 ));
 
@@ -279,14 +289,18 @@ const Template = ({
         const newComponents = [...listComponents];
         const [removed] = newComponents.splice(fromIndex, 1);
         newComponents.splice(toIndex, 0, removed);
+        setInternalUpdate(false)
         setListComponents(newComponents);
-    };
 
+    };
+    
     const updateComponentText = (id, newText) => {
         const updatedComponents = listComponents.map((component) =>
-            component.id === id ? { ...component, text: newText } : component
+        component.id === id ? { ...component, text: newText } : component
         );
+        setInternalUpdate(false)
         setListComponents(updatedComponents);
+
     };
 
 
@@ -462,7 +476,8 @@ const Template = ({
     //
     const calculateRows = (content) => {
         const rows = content.split('\n').length;
-        return rows > 1 ? rows : 2;
+        const calculatedRows = rows > 1 ? rows : 2;
+        return calculatedRows;
     };
 
 
@@ -507,7 +522,7 @@ const Template = ({
                         onChange={(e) => handleInputChange(e, 'title')}
                         className={styles.textArea} // Añade esta clase para aplicar estilos si es necesario
                         rows={calculateRows(state.title)}
-                        style={{ height: `${calculateRows(state.title) * 2.5}em` }}
+                        style={{ minHeight: `${calculateRows(state.title) * 1}em` }}
                     />
                     <button
                         className={styles.addMagicTitle}
@@ -526,7 +541,7 @@ const Template = ({
                         <input
                             spellCheck="false"
                             type="text"
-                            placeholder="Buscar..."
+                            placeholder="Buscar componentes..."
                             value={searchComponent}
                             onChange={(e) => setSearchComponent(e.target.value)}
                         />
