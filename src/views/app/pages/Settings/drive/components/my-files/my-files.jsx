@@ -177,8 +177,8 @@ export default function Page({
     dispatch(createNewFolder(newPath));
     dispatch(addFolderLocal(newPath + "/"));
   };
-  const moveElement = (sourceKey, destinationKey, file) => {
-    dispatch(moveFile({ sourceKey, destinationKey, file }));
+  const moveElement = (sourceKey, destinationKey, file, VersionId) => {
+    dispatch(moveFile({ sourceKey, destinationKey, file, VersionId }));
   };
   const copyFolder = (newPath) => {
     const { directoryCopied, folderNameCopied } = folderToCopy;
@@ -470,7 +470,14 @@ export default function Page({
 
       const destinationKey = directory + folderNameCopied;
 
-      dispatch(moveFile({ sourceKey: directoryCopied, destinationKey, file }));
+      dispatch(
+        moveFile({
+          sourceKey: directoryCopied,
+          destinationKey,
+          file,
+          VersionId: file.VersionId,
+        })
+      );
 
       dispatch(obtainFileData({ action: "reset" }));
     } else if (!isFile) {
