@@ -52,15 +52,16 @@ export default memo(({ id, data, isConnectable, }) => {
 
   const { setCenter } = useReactFlow()
 
-  const { prompt, value, error, handles, components } = data;
+  // const { prompt, value, error, handles, components } = data;
+  const { title, error, handles, components } = data;
+
 
 
   const [isError, setIsError] = useState(error);
 
-  const [inputValue, setInputValue] = useState(prompt)
-
-  const [gptActive, setGptActive] = useState(false);
-  const [gptValue, setGptValue] = useState('')
+  // const [inputValue, setInputValue] = useState(prompt)
+  // const [gptActive, setGptActive] = useState(false);
+  // const [gptValue, setGptValue] = useState('')
 
 
   const [listComponents, setListComponents] = useState([]);
@@ -68,20 +69,13 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   useEffect(() => {
+    console.log('list components change', internalUpdate)
     if (!internalUpdate) {
-      // Buscar el nodo con el id específico
       const selectedNodeIndex = nodes.findIndex((node) => node.id === id);
 
-      // Verificar si se encontró el nodo
       if (selectedNodeIndex !== -1) {
-        // Clonar el array de nodos para no modificar el original directamente
         const updatedNodes = [...nodes];
-
-        // Modificar la propiedad nodes.data.components del nodo con el id específico
         updatedNodes[selectedNodeIndex].data.components = listComponents;
-        // console.log('owrnuruenuvrf')
-        // console.log('wifnruh', updatedNodes[selectedNodeIndex])
-        // Actualizar nodes con el nuevo array de nodos
         setNodes(updatedNodes);
       }
     }
@@ -90,26 +84,28 @@ export default memo(({ id, data, isConnectable, }) => {
   }, [listComponents])
 
 
+  useEffect(() => {
+    if (components.length > 0) {
+
+      setListComponents(components)
+
+      setInternalUpdate(true);
+    }
+  }, [components])
+
+
+
   // useEffect(() => {
-  //   if (components.length > 0) {
+  //   // setInputValue(data.prompt)
 
-  //     setListComponents(components)
+  //   // if (data.response) {
+  //   //   setGptActive(true)
+  //   //   if (!data.response.type) {
+  //   //     setGptValue(data.response)
+  //   //   }
+  //   // }
 
-  //     setInternalUpdate(true);
-  //   }
-  // }, [components])
-
-
-
-  // useEffect(() => {
-  //   setInputValue(data.prompt)
-
-  //   if (data.response) {
-  //     setGptActive(true)
-  //     if (!data.response.type) {
-  //       setGptValue(data.response)
-  //     }
-  //   }
+  //   console.log('data', data)
   // }, [data])
 
 
@@ -196,7 +192,23 @@ export default memo(({ id, data, isConnectable, }) => {
 
   // ----------------------------------------------------------
   const addTemplate = async () => {
-    addNode()
+    const lastNode = nodes[nodes.length - 1];
+
+    addNode(lastNode, 'column')
+
+    console.log('lastNode', lastNode)
+    let newY = 0
+    let newX = 0
+    if (lastNode) {
+      newY = lastNode.position.y + lastNode.height + 100;
+      newX = lastNode.position.x;
+    }
+
+    setTimeout(function () {
+      window.requestAnimationFrame(() => {
+        setCenter(newX + 100, newY, { zoom: 1.6, duration: 500 })
+      })
+    }, 100)
   }
 
 
@@ -267,19 +279,38 @@ export default memo(({ id, data, isConnectable, }) => {
 
     if (template.trim().length > 0) {
 
-      setCenter(position.x + 100, position.y + 220, { zoom: 5, duration: 2000 })
+      setCenter(position.x + 100, position.y + 220, { zoom: 5, duration: 1000 })
 
       setTimeout(function () {
         setIsEditor({
           id,
           content: template
         })
-      }, 1800)
+      }, 800)
     }
   }
 
 
 
+  const setTitle = (title) => {
+     // Find the index of the node in the nodes array
+     const selectedNodeIndex = nodes.findIndex((node) => node.id === id);
+
+     // If the node is found, update its title property
+     if (selectedNodeIndex !== -1) {
+         setNodes((prevNodes) => {
+             const updatedNodes = [...prevNodes];
+             updatedNodes[selectedNodeIndex] = {
+                 ...updatedNodes[selectedNodeIndex],
+                 data: {
+                     ...updatedNodes[selectedNodeIndex].data,
+                     title
+                 },
+             };
+             return updatedNodes;
+         });
+     }
+  }
 
 
 
@@ -311,8 +342,13 @@ export default memo(({ id, data, isConnectable, }) => {
           addTemplate={() => addTemplate()}
           listComponents={listComponents}
           setListComponents={setListComponents}
+          setInternalUpdate={setInternalUpdate}
+          setTitle={setTitle}
           onEditor={onEditor}
         />
+        <div style={{height: 0}}>
+          &nbsp;
+        </div>
       </div>
     </>
   );

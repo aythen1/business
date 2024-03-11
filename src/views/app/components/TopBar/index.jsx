@@ -70,7 +70,7 @@ export const TopBar = ({
 
   // --------------------------------------------------------------
   const handleClickVersion = () => {
-    dispatch(setModal(<ModalAddon modal={'custom'} />))
+    dispatch(setModal(<ModalAddon modal={'version'} />))
   }
 
   const handleClickUser = () => {

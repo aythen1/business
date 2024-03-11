@@ -54,7 +54,7 @@ import {
   handlChatEditor,
   handleCodeEditor,
 } from '../actions';
-import Template from "../Flow/node/Template";
+// import Template from "../Flow/node/Template";
 
 
 
@@ -284,24 +284,42 @@ export const AddonEditor = ({
   // -Q: Abre para editar el componente en el chatbot
   useHotkeys('alt+q', async () => {
     handleKeyClick('alt+q');
-    const image = await domtoimage.toPng(hoveredElement);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    if (hoveredElement) {
+      const componentsToRemove = hoveredElement.querySelectorAll('.customButtons');
+      componentsToRemove.forEach((component) => component.remove());
 
-    handlChatEditor(dispatch, ModalChatComponent, image);
+      const image = await domtoimage.toPng(hoveredElement);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+
+      handlChatEditor(dispatch, ModalChatComponent, image);
+    }
   });
   // -W: Abre tlweditor para pintar el componente
   useHotkeys('alt+w', async () => {
     handleKeyClick('alt+w');
 
-    const image = await domtoimage.toPng(hoveredElement);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    if (hoveredElement) {
+      const componentsToRemove = hoveredElement.querySelectorAll('.customButtons');
+      componentsToRemove.forEach((component) => component.remove());
 
-    handleViewEditor(dispatch, ModalViewComponent, image);
+      const image = await domtoimage.toPng(hoveredElement);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+
+      handleViewEditor(dispatch, ModalViewComponent, image);
+    }
+    
   });
   // E -: Abre para editar el código
   useHotkeys('alt+e', () => {
     handleKeyClick('alt+e');
-    handleCodeEditor(dispatch, ModalIdeComponent, hoveredElement);
+    if (hoveredElement) {
+      const componentsToRemove = hoveredElement.querySelectorAll('.customButtons');
+      componentsToRemove.forEach((component) => component.remove());
+
+      handleCodeEditor(dispatch, ModalIdeComponent, hoveredElement);
+    }
   });
   // -alt+ctrl: Abrir ajustes de addons
   useHotkeys('alt+ctrl', () => {
