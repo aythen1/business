@@ -69,7 +69,7 @@ const filterFilesByCategory = (directoriesTrash, category) => {
       return Versions.filter((file) => {
         const folderName = file.Key.split("/").filter(Boolean).pop();
         // Verifica si folderName termina en '.png'
-        return folderName.toLowerCase().endsWith(".ay");
+        return folderName.toLowerCase().endsWith(".json");
       });
 
     case "priority":

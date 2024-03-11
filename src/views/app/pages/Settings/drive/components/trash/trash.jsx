@@ -383,7 +383,7 @@ export default function Page({
           selectedFolder,
           toDelete
         );
-        dispatch(deleteFiles({ folders: toDelete, action }));
+        dispatch(deleteFiles({ folders: toDelete, act: action }));
       } else if (action === "restore") {
         // Para "delete", solo se consideran los DeleteMarkers
         toDelete = addMatchingElements(
@@ -391,7 +391,7 @@ export default function Page({
           selectedFolder,
           toDelete
         );
-        dispatch(deleteFiles({ folders: toDelete, action }));
+        dispatch(deleteFiles({ folders: toDelete, act: action }));
       }
     });
   };

@@ -252,18 +252,18 @@ export const deleteFile = createAsyncThunk(
 // );
 // Borrar un archivo en scaleway
 export const deletePermanentFile = createAsyncThunk(
-  "assets/deleteFile",
-  async ({ path, VersionId, Size, act }, { dispatch }) => {
-    console.log("SOY DELETE FILE");
+  "assets/deleteFiles",
+  async ({ folders, action }, { dispatch }) => {
+    console.log("SOY DELETE FILE", { folders, action });
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
-      const userId = "1234";
-      const query = buildQueryString({
-        userId,
-        path,
-        VersionId,
-      });
-      const { data } = await apiBackend.delete(`/assets/file?${query}`);
+      // const userId = "1234";
+      // const query = buildQueryString({
+      //   userId,
+      //   path,
+      //   VersionId,
+      // });
+      // const { data } = await apiBackend.delete(`/assets/file?${query}`);
       // dispatch(filterFolder(path));
       const objectData = { Key: path, VersionId, Size, act };
 
@@ -276,21 +276,39 @@ export const deletePermanentFile = createAsyncThunk(
 // Borrar un archivo en scaleway
 export const deleteFiles = createAsyncThunk(
   "assets/deleteFiles",
-  async ({ folders, action }, { dispatch }) => {
+  async ({ folders, act }) => {
+    console.log({ folders, act });
     try {
       // const userId = JSON.parse(localStorage.getItem('user')).user.id
       const userId = "1234";
       const body = { folders, userId };
       const { data } = await apiBackend.put(`/assets/files`, body);
       // dispatch(filterFolder(path));
-      const objectData = { folders, act: action };
+      const objectData = { folders, act };
 
       return objectData;
     } catch (error) {
-      throw new Error(error);
+      console.error(error);
+      throw error; // En lugar de throw new Error(error)
     }
   }
 );
+
+// Borrar un conjunto de archivos en Scaleway
+export const asd = createAsyncThunk("assets/asd", async (folders) => {
+  try {
+    const userId = "1234";
+    console.log(folders);
+    // const { data } = await apiBackend.put(`/assets/delete-folders`, {
+    //   id: userId,
+    //   folders,
+    // });
+    // dispatch(filterFolder(path))
+    return folders;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // Borrar un conjunto de archivos en Scaleway
 export const deleteFolders = createAsyncThunk(
@@ -299,10 +317,10 @@ export const deleteFolders = createAsyncThunk(
     try {
       const userId = "1234";
       console.log(folders);
-      const { data } = await apiBackend.put(`/assets/delete-folders`, {
-        id: userId,
-        folders,
-      });
+      // const { data } = await apiBackend.put(`/assets/delete-folders`, {
+      //   id: userId,
+      //   folders,
+      // });
       // dispatch(filterFolder(path))
       return folders;
     } catch (error) {
@@ -416,6 +434,14 @@ export const setFileDragging = (src) => (dispatch) => {
 export const selectCategory = (category) => (dispatch) => {
   try {
     dispatch(setCategory(category));
+  } catch (error) {
+    console.error("Ha ocurrido un error al seleccionar una categoria:", error);
+  }
+};
+// Agregar una carpeta en redux
+export const selectCategory2 = (category) => (dispatch) => {
+  try {
+    console.log({ category });
   } catch (error) {
     console.error("Ha ocurrido un error al seleccionar una categoria:", error);
   }
