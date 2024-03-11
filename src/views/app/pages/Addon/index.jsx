@@ -17,6 +17,8 @@ import {
 
 
 
+
+
 const Addon = ({
 
 }) => {
@@ -28,41 +30,41 @@ const Addon = ({
 
   console.log('ree', addonId, templateId)
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const fetchItem = async () => {
-      console.log('templateid', templateId)
-      // setIsEditor(true)
+  //   const fetchItem = async () => {
+  //     console.log('templateid', templateId)
+  //     // setIsEditor(true)
 
-      //
-      let id = iniVector({
-        path0: 'addon',
-        path1: addonId,
-        path2: templateId
-      })
+  //     //
+  //     let id = iniVector({
+  //       path0: 'addon',
+  //       path1: addonId,
+  //       path2: templateId
+  //     })
 
-      const resp = await dispatch(fetchsVectorAddon({
-        id: id,
-        name: 'templates'
-      }))
+  //     const resp = await dispatch(fetchsVectorAddon({
+  //       id: id,
+  //       name: 'templates'
+  //     }))
 
-      if (resp.payload.length > 0) {
-        console.log('resp', resp)
-        // setNodes((prevNodes) =>
-        //   prevNodes.map((node) =>
-        //     node.id === resp.payload[0].id
-        //       ? { ...node, data: { ...node.data, components: JSON.parse(resp.payload[0].components) } }
-        //       : node
-        //   )
-        // );
-      }
-    }
+  //     if (resp.payload.length > 0) {
+  //       console.log('resp', resp)
+  //       // setNodes((prevNodes) =>
+  //       //   prevNodes.map((node) =>
+  //       //     node.id === resp.payload[0].id
+  //       //       ? { ...node, data: { ...node.data, components: JSON.parse(resp.payload[0].components) } }
+  //       //       : node
+  //       //   )
+  //       // );
+  //     }
+  //   }
 
 
-    if (templateId) {
-      fetchItem()
-    }
-  }, [templateId])
+  //   if (templateId) {
+  //     fetchItem()
+  //   }
+  // }, [templateId])
 
 
   useEffect(() => {

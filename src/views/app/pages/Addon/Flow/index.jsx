@@ -8,11 +8,12 @@ import ELK from 'elkjs/lib/elk.bundled.js';
 
 import 'reactflow/dist/style.css';
 
+
 import { useOpenAI } from '../openai'
 
-import ReactFlow, { useReactFlow, zoomOut, MiniMap, Background, BackgroundVariant, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, MiniMap, Background, BackgroundVariant, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
-import * as xlsx from 'xlsx';
+// import * as xlsx from 'xlsx';
 
 import styles from './index.module.css'
 
@@ -21,6 +22,11 @@ export const useGraph = () => useContext(GraphContext);
 
 import CustomEdge from "./edge/CustomEdge";
 import CustomTemplate from "./node/CustomTemplate"
+
+
+import {
+    setStatus
+  } from '@/slices/addonSlice'
 
 
 const panOnDrag = [1, 2];
@@ -69,12 +75,12 @@ import {
 } from '@/actions/addon'
 
 
-import { UnexpectedResponseException } from 'pdfjs-dist';
+// import { UnexpectedResponseException } from 'pdfjs-dist';
 
 
 
 const edgeTypes = {
-    default: CustomEdge
+    customEdge: CustomEdge
 }
 
 const nodeTypes = {
@@ -196,6 +202,7 @@ export const AddonFlow = ({
         if (addonId) {
             // console.log('search addon')
             dispatch(fetchAddon(addonId))
+            dispatch(setStatus('active'))
         } else {
             // console.log('existe vector', vector)
             // setNodes(JSON.parse(vector.nodes))
@@ -226,7 +233,7 @@ export const AddonFlow = ({
                     name: 'templates'
                 }))
 
-                console.log('resp', resp.payload[0])
+                console.log('fetch addons vector: ', resp)
 
                 if (resp.payload.length > 0) {
                     setNodes((prevNodes) =>
@@ -240,6 +247,7 @@ export const AddonFlow = ({
             }
         }
 
+        console.log('addon', addon)
         if (addon.id) {
             fetchItem()
         }
@@ -259,7 +267,10 @@ export const AddonFlow = ({
 
         for (var i = 0; i < nodes.length; i++) {
             const node = nodes[i]
+            const title = node.data.title
             const components = node.data.components
+
+            console.log('components', components)
 
             nodes[i].data.components = []
 
@@ -274,19 +285,19 @@ export const AddonFlow = ({
                     image: component.image,
                     code: component.code
                 })
-
-                console.log('arr.push', {
-                    id: component.id,
-                    text: component.text,
-                    image: component.image,
-                    code: component.code
-                })
             }
+
+            console.log('===========', {
+                id: node.id,
+                title: title,
+                components: arr
+            })
 
             await dispatch(addVectorAddon({
                 addon: { id: addon.id },
                 vector: {
                     id: node.id,
+                    title: title,
                     components: arr
                 }
             }));
@@ -376,6 +387,7 @@ export const AddonFlow = ({
             const sourceNode = nodes.find((node) => node.id === source);
             const targetNode = nodes.find((node) => node.id === target);
 
+      
             // if (sourceNode.type == 'selector' && targetNode.type == 'selectorVector') {
             //     return false
             // }
@@ -388,37 +400,42 @@ export const AddonFlow = ({
 
                 } else {
 
-                    // // Determinar si el handle es top o bottom
-                    // const isTopHandle = sourceHandle.endsWith('_top')
+                    // Determinar si el handle es top o bottom
+                    const isTopHandle = sourceHandle.endsWith('_top')
 
-                    // // Obtener el nombre del handle
-                    // const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
+                    // Obtener el nombre del handle
+                    const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
 
-                    // // Actualizar connectedNodeIds dependiendo del tipo de nodo
-                    // if (sourceType === 'selectorComponent') {
+                    // Actualizar connectedNodeIds dependiendo del tipo de nodo
+                    if (sourceType === 'selectorTemplate') {
+                        setNodes((prevNodes) => {
+                            const updatedNodes = [...prevNodes];
+                            const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
+                            if (sourceNodeIndex !== -1) {
+                                updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
+                            }
+                            return updatedNodes;
+                        });
+                    }
+                    // else if (targetType === 'selectorGPT') {
                     //     setNodes((prevNodes) => {
                     //         const updatedNodes = [...prevNodes];
-                    //         const sourceNodeIndex = updatedNodes.findIndex((node) => node.id === source);
-                    //         if (sourceNodeIndex !== -1) {
-                    //             updatedNodes[sourceNodeIndex].data.handles[handleName].push(target);
+                    //         const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
+                    //         if (targetNodeIndex !== -1) {
+                    //             updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
                     //         }
                     //         return updatedNodes;
                     //     });
-                    // } 
-                    // // else if (targetType === 'selectorGPT') {
-                    // //     setNodes((prevNodes) => {
-                    // //         const updatedNodes = [...prevNodes];
-                    // //         const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
-                    // //         if (targetNodeIndex !== -1) {
-                    // //             updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
-                    // //         }
-                    // //         return updatedNodes;
-                    // //     });
-                    // // }
+                    // }
                 }
             }
 
-            setEdges((prevEdges) => addEdge(connection, prevEdges));
+            // setEdges((prevEdges) => addEdge(connection, prevEdges));
+            // const onConnect = useCallback((params)=> setEdges(addEdge({...params, type:"smoothstep"}, edges)) );
+
+
+            setEdges(addEdge({...connection, type:"customEdge"}, edges))
+            
         },
         [setNodes, setEdges, nodes])
 
@@ -429,15 +446,22 @@ export const AddonFlow = ({
 
 
 
-    const addNode = (lastNode = false) => {
+    const addNode = (lastNode = false, direction = 'row') => {
         let newX = 0
         let newY = 0
         let handles = {}
 
 
         if (lastNode) {
-            newY = lastNode.position.y;
-            newX = lastNode.position.x + lastNode.width + 100
+
+            console.log('lastNode', lastNode)
+            if (direction == 'row') {
+                newY = lastNode.position.y;
+                newX = lastNode.position.x + lastNode.width + 100
+            } else {
+                newY = lastNode.position.y + lastNode.height;
+                newX = lastNode.position.x;
+            }
 
             handles = {
                 top_connectedNodeIds: [lastNode.id],
@@ -450,8 +474,10 @@ export const AddonFlow = ({
             type: 'selectorTemplate',
             dragHandle: '.custom-drag-handle',
             data: {
-                prompt: 'An input node',
-                value: '',
+                // prompt: 'An input node',
+                // value: '',
+                // label: 'hello',
+                title: '',
                 error: '',
                 handles,
                 components: []
@@ -461,17 +487,24 @@ export const AddonFlow = ({
             sourcePosition: 'right',
         };
 
+
         setNodes((prevNodes) => [...prevNodes, newNode]);
+
 
         if (lastNode) {
             const newEdge = {
                 id: uuidv4(),
-                source: lastNode.id,
+                source: lastNode?.id,
                 target: newNode.id,
+                type: 'customEdge'
             };
 
             setEdges((prevEdges) => [...prevEdges, newEdge]);
+
+            // setEdges(addEdge({...connection, type:"customEdge"}, edges))
+
         }
+
     };
 
 
@@ -503,8 +536,6 @@ export const AddonFlow = ({
 
 
     const reactFlowWrapper = useRef(null);
-
-
 
     useEffect(() => {
         if (reactFlowWrapper.current) {
@@ -560,7 +591,6 @@ export const AddonFlow = ({
                 style={{ width: '100%', height: 'calc(100vh - 55px)' }}
             >
                 <ReactFlow
-                    // panOnDrag={'false'}
                     nodes={nodes}
                     edges={edges}
                     fitView
@@ -578,6 +608,9 @@ export const AddonFlow = ({
                     selectionOnDrag
                     panOnDrag={panOnDrag}
                     selectionMode={SelectionMode.Partial}
+                    // connectionLineType={ConnectionLineType.Step}
+                    // connectionLineType={ConnectionLineType.SmoothStep}
+                // style={{ transform: 'none' }}
                 >
                     <Background
                         id="1"
@@ -615,9 +648,7 @@ export const AddonFlow = ({
                         <button>
                             <PositionComponent position="other" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
-
                     </div>
-
                     <div className={styles.buttons} style={{ bottom: '22px' }}>
                         <button>
                             <ButtonPlus />
@@ -799,6 +830,7 @@ const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
         let newX = 0
         let newY = 0
 
+
         await addNode(lastNode)
 
         if (lastNode) {
@@ -976,10 +1008,10 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
     const onLayout = useCallback(
         ({ direction, useInitialNodes = false }) => {
             const opts = { 'elk.direction': direction, ...elkOptions };
-            const ns = useInitialNodes ? initialNodes : nodes;
-            const es = useInitialNodes ? initialEdges : edges;
+            // const ns = useInitialNodes ? initialNodes : nodes;
+            // const es = useInitialNodes ? initialEdges : edges;
 
-            getLayoutedElements(ns, es, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
+            getLayoutedElements(nodes, edges, opts).then(({ nodes: layoutedNodes, edges: layoutedEdges }) => {
                 setNodes(layoutedNodes);
                 setEdges(layoutedEdges);
 
