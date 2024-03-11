@@ -414,9 +414,9 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         <div
           className={style.drive_option}
           onClick={() => {
+            dispatch(selectCategory("addon"));
             dispatch(setCurrentFolder(draveId + "/"));
             handleNavigate("addon");
-            dispatch(selectCategory("addon"));
           }}
         >
           <img src={IconAddon} />

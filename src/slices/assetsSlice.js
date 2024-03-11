@@ -10,6 +10,7 @@ import {
   makeGlacier,
   restoreGlacier,
   deleteFiles,
+  asd,
   createNewFolder,
   getFile,
   copyFile,
@@ -264,9 +265,31 @@ export const assetsSlice = createSlice({
           [types.RESTORE_GLACIER]: action.payload,
         };
       })
-      .addCase(deleteFiles.pending, (state) => {
-        state.loading = { ...state.loading, [types.DELETE_FILES]: true };
+      .addCase(deleteFiles.pending, (state, action) => {
+        const { folders, act } = action.meta.arg;
+        console.log({ folders, act });
         state.error = { ...state.error, [types.DELETE_FILES]: "" };
+
+        if (!Array.isArray(state.loading[types.DELETE_FILES])) {
+          state.loading[types.DELETE_FILES] = [];
+        }
+
+        switch (act) {
+          case "delete":
+          case "trash":
+            const loadingItems = folders.map((f) => ({
+              Key: f.Key,
+              VersionId: f.VersionId,
+            }));
+            console.log({ loadingItems });
+            state.loading[types.DELETE_FILES] = [
+              ...state.loading[types.DELETE_FILES],
+              ...loadingItems,
+            ];
+            break;
+          default:
+            break;
+        }
       })
       .addCase(deleteFiles.fulfilled, (state, action) => {
         const { folders, act } = action.payload;
@@ -302,6 +325,66 @@ export const assetsSlice = createSlice({
         }
       })
       .addCase(deleteFiles.rejected, (state, action) => {
+        state.loading = { ...state.loading, [types.DELETE_FILES]: false };
+        state.error = {
+          ...state.error,
+          [types.DELETE_FILES]: action.payload,
+        };
+      })
+      .addCase(asd.pending, (state, action) => {
+        const { folders, act } = action.payload;
+        state.error = { ...state.error, [types.DELETE_FILES]: "" };
+
+        switch (act) {
+          case "delete":
+          case "trash":
+            folders.forEach((f) => {
+              const { Key, VersionId } = f;
+
+              state.loading = {
+                ...state.loading,
+                [types.DELETE_FILES]: [
+                  ...types.DELETE_FILES,
+                  { Key, VersionId },
+                ],
+              };
+            });
+        }
+      })
+      .addCase(asd.fulfilled, (state, action) => {
+        const { folders, act } = action.payload;
+        state.loading = { ...state.loading, [types.DELETE_FILES]: false };
+
+        switch (act) {
+          case "restore":
+            folders.forEach((f) => {
+              const { Key } = f;
+              updateVersionsIsLatest(state, Key, true);
+              filterDeleteMarkersByKey(state, Key);
+            });
+            break;
+          case "delete":
+          case "trash":
+            folders.forEach((f) => {
+              const { Key, VersionId } = f;
+              updateVersionsIsLatest(state, Key, false);
+
+              if (act === "trash") {
+                const deletedObject = { Key, VersionId, IsLatest: true };
+                console.log({ deletedObject });
+                state.directoriesTrash.DeleteMarkers.push(deletedObject);
+                console.log(state.directoriesTrash.DeleteMarkers);
+              } else {
+                filterDeleteMarkersByKey(state, Key);
+              }
+            });
+            break;
+          default:
+            // Manejar cualquier otro caso si es necesario
+            break;
+        }
+      })
+      .addCase(asd.rejected, (state, action) => {
         state.loading = { ...state.loading, [types.DELETE_FILES]: false };
         state.error = {
           ...state.error,

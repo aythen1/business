@@ -6,6 +6,7 @@ const ID = "test/test";
 const encodeVector = (id) => {
   const str = `${id}`;
   const base64Str = btoa(str);
+  console.log({ base64Str });
   return base64Str;
 };
 
@@ -273,6 +274,7 @@ export const login = createAsyncThunk(
   "iam/login",
   async ({ user, password, remember }, { dispatch }) => {
     try {
+      console.log({ remember });
       const response = await apiBackend.post("/iam/user/login", {
         path: encodeVector(ID),
         remember,

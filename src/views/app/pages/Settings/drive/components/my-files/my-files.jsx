@@ -177,8 +177,8 @@ export default function Page({
     dispatch(createNewFolder(newPath));
     dispatch(addFolderLocal(newPath + "/"));
   };
-  const moveElement = (sourceKey, destinationKey, file) => {
-    dispatch(moveFile({ sourceKey, destinationKey, file }));
+  const moveElement = (sourceKey, destinationKey, file, VersionId) => {
+    dispatch(moveFile({ sourceKey, destinationKey, file, VersionId }));
   };
   const copyFolder = (newPath) => {
     const { directoryCopied, folderNameCopied } = folderToCopy;
@@ -309,13 +309,11 @@ export default function Page({
       ...item,
       VersionId: "",
     }));
-    console.log({ modifiedFilesToDelete, modifiedFolderToDelete });
 
     // ahora podemos hacer el dispatch con los objetos modificados
     if (modifiedFilesToDelete.length) {
-      dispatch(
-        deleteFiles({ folders: modifiedFilesToDelete, action: "trash" })
-      );
+      console.log({ modifiedFilesToDelete, modifiedFolderToDelete });
+      dispatch(deleteFiles({ folders: modifiedFilesToDelete, act: "trash" }));
     }
     if (modifiedFolderToDelete.length) {
       dispatch(deleteFolders(modifiedFolderToDelete));
@@ -470,7 +468,14 @@ export default function Page({
 
       const destinationKey = directory + folderNameCopied;
 
-      dispatch(moveFile({ sourceKey: directoryCopied, destinationKey, file }));
+      dispatch(
+        moveFile({
+          sourceKey: directoryCopied,
+          destinationKey,
+          file,
+          VersionId: file.VersionId,
+        })
+      );
 
       dispatch(obtainFileData({ action: "reset" }));
     } else if (!isFile) {
@@ -825,7 +830,8 @@ export default function Page({
             cutFolder,
             duplicateFolder,
             false,
-            handleDropFiles
+            handleDropFiles,
+            loading
           )}
         </div>
         <div
@@ -853,9 +859,7 @@ export default function Page({
                     onClick={handleMakeGlacier}
                     className={style.buttonDelete}
                     style={{
-                      borderColor: selectedFolders[0].Key.includes("Marker.")
-                        ? "#bba400"
-                        : "grey",
+                      borderColor: "grey",
                     }}
                   >
                     <img src={IconGlaciar} />
@@ -972,6 +976,7 @@ function isValidElementForCategory(folder, currentPath, category) {
     ].includes(category)
   )
     isValidDepth = true;
+  console.log({ isValidDepth });
   return (
     folder.Key.startsWith(currentPath) &&
     folder.Key !== currentPath &&

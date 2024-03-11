@@ -388,6 +388,7 @@
 }
 
 .drive_clickeable_folder_container {
+  width: 100%;
   display: inline-flex;
   flex-grow: 1;
   padding: 8px;

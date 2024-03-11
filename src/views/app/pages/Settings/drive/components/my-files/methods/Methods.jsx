@@ -86,8 +86,10 @@ export const renderFolders = (
   cutFolder,
   duplicateFolder,
   isTrash,
-  handleDrop
+  handleDrop,
+  pending
 ) => {
+  console.log({ pending });
   if (isGettingFolder && folders.length === 0 && empty !== true) {
     return <p className={style.emptyFolderMessage}>Un momento, por favor...</p>;
   }
@@ -139,6 +141,13 @@ export const renderFolders = (
       });
     };
 
+    let isDeleting = false;
+    if (pending?.DELETE_FILES?.length) {
+      isDeleting = pending?.DELETE_FILES?.some(
+        (file) => file.Key === directory.Key
+      );
+    }
+    console.log({ Key: directory.Key, isDeleting });
     return (
       <div
         key={index}
@@ -187,6 +196,7 @@ export const renderFolders = (
               : formatLastModified(directory.LastModified)}
           </div>
           <span style={{ display: "flex", width: "60px" }}>
+            {isDeleting && <p>Borrando..</p>}
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
             {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
