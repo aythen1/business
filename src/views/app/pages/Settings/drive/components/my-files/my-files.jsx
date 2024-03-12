@@ -271,7 +271,7 @@ export default function Page({
   };
 
   const handleDelete = async () => {
-    await dispatch(deleteFolders(selectedFolders));
+    await dispatch(deleteFolders({ folders: selectedFolders, act: "trash" }));
 
     setSelectedFolders([]);
     setSelectAll(false);
@@ -316,7 +316,9 @@ export default function Page({
       dispatch(deleteFiles({ folders: modifiedFilesToDelete, act: "trash" }));
     }
     if (modifiedFolderToDelete.length) {
-      dispatch(deleteFolders(modifiedFolderToDelete));
+      dispatch(
+        deleteFolders({ folders: modifiedFolderToDelete, act: "trash" })
+      );
     }
   };
 

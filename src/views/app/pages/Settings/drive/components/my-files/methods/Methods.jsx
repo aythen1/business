@@ -129,6 +129,8 @@ export const renderFolders = (
       : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
 
     const handleContextMenu = (e) => {
+      handleFileClick(directory.Key);
+
       e.preventDefault();
       const x = e.clientX;
       const y = e.clientY;
@@ -140,12 +142,25 @@ export const renderFolders = (
         return newOptions;
       });
     };
-
     let isDeleting = false;
-    if (pending?.DELETE_FILES?.length) {
-      isDeleting = pending?.DELETE_FILES?.some(
+
+    const filesArray = Array.isArray(pending?.DELETE_FILES)
+      ? pending?.DELETE_FILES
+      : [];
+    const directoriesArray = Array.isArray(pending?.DELETE_DIRECTORY)
+      ? pending?.DELETE_DIRECTORY
+      : [];
+
+    if (filesArray.length || directoriesArray.length) {
+      const isInDeleteFiles = filesArray.some(
         (file) => file.Key === directory.Key
       );
+      const isInDeleteDirectory = directoriesArray.some(
+        (directoryItem) => directoryItem.Key === directory.Key
+      );
+
+      // Establece isDeleting a true si alguna condición es verdadera
+      isDeleting = isInDeleteFiles || isInDeleteDirectory;
     }
     console.log({ Key: directory.Key, isDeleting });
     return (
@@ -161,6 +176,8 @@ export const renderFolders = (
         <div
           className={style.drive_clickeable_folder_container}
           onClick={() => {
+            if (isDeleting) return; // Si isDeleting es true, no hace nada
+
             isFile
               ? handleFileClick(directory.Key)
               : handleFolderClick(directory.Key);

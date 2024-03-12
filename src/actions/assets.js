@@ -313,16 +313,18 @@ export const asd = createAsyncThunk("assets/asd", async (folders) => {
 // Borrar un conjunto de archivos en Scaleway
 export const deleteFolders = createAsyncThunk(
   "assets/deleteFolders",
-  async (folders, { dispatch }) => {
+  async ({ folders, act }, { dispatch }) => {
     try {
       const userId = "1234";
       console.log(folders);
-      // const { data } = await apiBackend.put(`/assets/delete-folders`, {
-      //   id: userId,
-      //   folders,
-      // });
-      // dispatch(filterFolder(path))
-      return folders;
+      const { data } = await apiBackend.put(`/assets/delete-folders`, {
+        id: userId,
+        folders,
+      });
+      // dispatch(filterFolder(path));
+      const objectData = { folders, act };
+
+      return objectData;
     } catch (error) {
       throw new Error(error);
     }

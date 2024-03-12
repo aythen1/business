@@ -159,10 +159,36 @@ export const assetsSlice = createSlice({
         // state.directoriesData = state.directoriesData.filter((asset) => !dbKeys.includes(asset.Key));
       })
 
-      .addCase(deleteFolders.fulfilled, (state, action) => {
-        const { payload } = action;
+      .addCase(deleteFolders.pending, (state, action) => {
+        state.error = { ...state.error, [types.DELETE_DIRECTORY]: "" };
+        const { folders, act } = action.meta.arg;
 
-        const deletedKeys = payload.map((deletedFolder) => deletedFolder.Key);
+        if (!Array.isArray(state.loading[types.DELETE_DIRECTORY])) {
+          state.loading[types.DELETE_DIRECTORY] = [];
+        }
+        console.log({ folders });
+
+        switch (act) {
+          case "delete":
+          case "trash":
+            const loadingItems = folders.map((f) => ({
+              Key: f.Key,
+              VersionId: f.VersionId,
+            }));
+            console.log({ loadingItems });
+            state.loading[types.DELETE_DIRECTORY] = [
+              ...state.loading[types.DELETE_DIRECTORY],
+              ...loadingItems,
+            ];
+            break;
+          default:
+            break;
+        }
+      })
+      .addCase(deleteFolders.fulfilled, (state, action) => {
+        const { folders } = action.payload;
+
+        const deletedKeys = folders.map((deletedFolder) => deletedFolder.Key);
 
         // Actualizar las propiedades IsLatest de los archivos coincidentes sin filtrarlos fuera
         state.directoriesTrash.Versions.forEach((file) => {
@@ -172,13 +198,14 @@ export const assetsSlice = createSlice({
         });
         state.directoriesTrash.DeleteMarkers = [
           ...state.directoriesTrash.DeleteMarkers,
-          ...payload,
+          ...folders,
         ];
+        state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: false };
       })
 
       .addCase(deleteFolder.pending, (state) => {
-        state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: true };
         state.error = { ...state.error, [types.DELETE_DIRECTORY]: "" };
+        state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: true };
       })
       .addCase(deleteFolder.fulfilled, (state, action) => {
         state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: false };
