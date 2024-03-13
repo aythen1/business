@@ -842,7 +842,7 @@ export default function Page({
           )}
         </div>
         <div
-          style={{ flexGrow: "1" }}
+          style={{ flexGrow: "1", height: "500px" }}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => handleDropFiles(e)}
         ></div>
