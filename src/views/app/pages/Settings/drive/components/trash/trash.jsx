@@ -395,18 +395,15 @@ export default function Page({
   ) => {
     const allElements =
       act === "delete" ? [...Versions, ...DeleteMarkers] : DeleteMarkers;
-    console.log({ allElements, selectedFolder });
     allElements.forEach((element) => {
-      console.log("me ejecute");
       if (element.Key.startsWith(selectedFolder.Key)) {
         arrayToDelete.push(element);
-        console.log({ arrayToDelete });
       }
     });
   };
+
   const iterateFilesToDelete = (act) => {
     let filesToDelete = [];
-    console.log({ selectedFolders });
     selectedFolders.forEach((selectedFolder) => {
       const elementName = selectedFolder.Key.split("/").filter(Boolean).pop();
       const isFile = regexExtensiones.test(elementName);
@@ -421,8 +418,38 @@ export default function Page({
     });
     // ahora podemos hacer el dispatch con los objetos modificados
     if (filesToDelete.length) {
+      let existPreviousDirectoryInVersions;
+      let existPreviousDirectoryInFilesToDelete;
+      filesToDelete.forEach((f) => {
+        let previousDirectory = f.Key.endsWith("/")
+          ? f.Key.slice(0, -1)
+          : f.Key;
+        previousDirectory = previousDirectory.split("/");
+        previousDirectory.pop();
+        existPreviousDirectoryInFilesToDelete = filesToDelete.some(
+          (folder) => folder.Key === previousDirectory.join("/") + "/"
+        );
+        existPreviousDirectoryInVersions = directoriesTrash.Versions.some(
+          (folder) =>
+            folder.Key === previousDirectory.join("/") + "/" &&
+            folder.IsLatest === true
+        );
+
+        console.log({
+          existPreviousDirectoryInFilesToDelete,
+          existPreviousDirectoryInVersions,
+        });
+        if (
+          !existPreviousDirectoryInFilesToDelete &&
+          !existPreviousDirectoryInVersions
+        ) {
+          dispatch(createNewFolder(previousDirectory.join("/")));
+          dispatch(addFolderLocal(previousDirectory.join("/") + "/"));
+        }
+      });
       dispatch(deleteFiles({ folders: filesToDelete, act }));
-      // console.log({ folders: filesToDelete, act });
+
+      console.log({ folders: filesToDelete, act });
     }
   };
 
