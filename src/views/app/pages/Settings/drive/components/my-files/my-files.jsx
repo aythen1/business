@@ -491,6 +491,9 @@ export default function Page({
       }
 
       dispatch(uploadFile({ file, pathDepured: path }));
+    } else if (isFile) {
+      e.preventDefault();
+      handleDropFiles(e);
     }
   };
   const handleDragStart = (directory, isFile, folderName) => {
@@ -734,7 +737,8 @@ export default function Page({
                 position,
                 setPosition,
                 recentFilesOptions,
-                setRecentFilesOptions
+                setRecentFilesOptions,
+                handleDropFiles
               )
             : renderFilesDB(filteredFolders, handleDragStart)}
         </div>

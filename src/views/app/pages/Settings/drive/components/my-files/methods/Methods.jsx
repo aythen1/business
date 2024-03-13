@@ -344,7 +344,8 @@ export const renderRecentFiles = (
   position,
   setPosition,
   folderOptions,
-  setFolderOptions
+  setFolderOptions,
+  handleDropFiles
 ) => {
   // filtramos primero para obtener solo archivos
   const filesOnly = recentFilesFiltered.filter((file) => {
@@ -387,6 +388,8 @@ export const renderRecentFiles = (
         onDragStart={() => handleDragStart(file, true, originalFolderName)}
         draggable
         onContextMenu={handleContextMenu}
+        onDrop={handleDropFiles}
+        onDragOver={(e) => e.preventDefault()}
       >
         <div className={style.icon}>
           <div className={style.file}>
