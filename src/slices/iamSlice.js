@@ -60,12 +60,13 @@ const iamSlice = createSlice({
     changelogs: [],
     news: [],
 
-    status: 'idle', 
+    status: 'idle',
     status: "idle", // Puede ser 'idle', 'pending', 'fulfilled', 'rejected'
     error: null,
 
     modal: null,
     openModal: false,
+    openNotification: true,
     openMenuLeft: false,
     openMenuRight: false,
     openChatBot: false,
@@ -88,6 +89,14 @@ const iamSlice = createSlice({
         state.modal = action.payload;
       } else {
         state.openModal = false;
+      }
+    },
+    setNotification: (state, action) => {
+      if (action.payload) {
+        state.openNotification = true;
+        // state.notification = action.payload;
+      } else {
+        state.openNotification = false;
       }
     },
     setVector: (state, action) => {
@@ -134,7 +143,7 @@ const iamSlice = createSlice({
         console.log("dddd", action.payload);
         const { table, data } = action.payload;
         const arrayIndex = state[table].findIndex((item) => item.id === data.id);
-      
+
         // Si encontramos el índice, realizar la actualización
         if (arrayIndex !== -1) {
           state[table][arrayIndex] = data;
@@ -384,7 +393,13 @@ const iamSlice = createSlice({
   },
 });
 
-export const { setUser, setModal, setVector, setVectors, setThemeColor } =
-  iamSlice.actions;
+export const {
+  setUser,
+  setModal,
+  setNotification,
+  setVector,
+  setVectors,
+  setThemeColor
+} = iamSlice.actions;
 
 export default iamSlice.reducer;

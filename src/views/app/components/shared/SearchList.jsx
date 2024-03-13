@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles/SearchList.module.css'
 
+import { useDispatch } from 'react-redux'
 
 
-const SearchList = ({ data, title, icon,  onSelect }) => {
+import { fetchsVector } from '@/actions/vector'
+
+const SearchList = ({ 
+  title, 
+  icon, 
+  data, 
+  option, 
+  onSelect 
+}) => {
+  const dispatch = useDispatch()
+
   const [filter, setFilter] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
   const [results, setResults] = useState([]);
@@ -27,13 +38,39 @@ const SearchList = ({ data, title, icon,  onSelect }) => {
     setFilter(e.target.value);
   };
 
+
+  useEffect(() => {
+    if(filter){
+      const id = {
+  
+      }
+  
+      const name = 'vectors'
+      const data = {
+  
+      }
+  
+      const timeoutId = setTimeout(() => {
+        // console.log('buscar desde el vector2')
+        dispatch(fetchsVector({
+          id: option.id,
+          name: option.name,
+          filter: option.filter,
+          // data: option.data,
+        }));
+      }, 2000);
+  
+      clearTimeout(timeoutId);
+      
+    }
+  }, [filter]);
+
   return (
     <div className={styles.search}>
-    
       <div dangerouslySetInnerHTML={{ __html: icon }} />
       <input
         type="text"
-        placeholder="Buscar un producto..."
+        placeholder="Buscar un vector..."
         value={selectedItem !== null ? selectedItem : filter}
         onChange={handleInputChange}
       />

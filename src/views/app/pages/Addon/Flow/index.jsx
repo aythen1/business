@@ -11,7 +11,7 @@ import 'reactflow/dist/style.css';
 
 import { useOpenAI } from '../openai'
 
-import ReactFlow, { useReactFlow, MiniMap, Background, BackgroundVariant, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, MiniMap, Background, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
 // import * as xlsx from 'xlsx';
 
@@ -26,7 +26,7 @@ import CustomTemplate from "./node/CustomTemplate"
 
 import {
     setStatus
-  } from '@/slices/addonSlice'
+} from '@/slices/addonSlice'
 
 
 const panOnDrag = [1, 2];
@@ -387,7 +387,7 @@ export const AddonFlow = ({
             const sourceNode = nodes.find((node) => node.id === source);
             const targetNode = nodes.find((node) => node.id === target);
 
-      
+
             // if (sourceNode.type == 'selector' && targetNode.type == 'selectorVector') {
             //     return false
             // }
@@ -434,8 +434,8 @@ export const AddonFlow = ({
             // const onConnect = useCallback((params)=> setEdges(addEdge({...params, type:"smoothstep"}, edges)) );
 
 
-            setEdges(addEdge({...connection, type:"customEdge"}, edges))
-            
+            setEdges(addEdge({ ...connection, type: "customEdge" }, edges))
+
         },
         [setNodes, setEdges, nodes])
 
@@ -525,14 +525,14 @@ export const AddonFlow = ({
     };
 
     // ----------------------------------------------------------
-    const handleGraphLoad = (reactFlowInstance) => {
-        console.log('===========================')
-        // Realiza el setCenter u otras acciones cuando el componente se carga (onLoad)
-        const centerX = 20;
-        const centerY = 20;
+    // const handleGraphLoad = (reactFlowInstance) => {
+    //     console.log('===========================')
+    //     // Realiza el setCenter u otras acciones cuando el componente se carga (onLoad)
+    //     const centerX = 20;
+    //     const centerY = 20;
 
-        reactFlowInstance.setCenter(centerX, centerY, { zoom: 1.0, duration: 500 });
-    };
+    //     reactFlowInstance.setCenter(centerX, centerY, { zoom: 1.0, duration: 500 });
+    // };
 
 
     const reactFlowWrapper = useRef(null);
@@ -547,6 +547,7 @@ export const AddonFlow = ({
 
 
 
+    // --------------------------------
 
     const [backgroundVariant, setBackgroundVariant] = useState(typeBackground.dots)
 
@@ -562,7 +563,6 @@ export const AddonFlow = ({
 
 
 
-    // --------------------------------
     const [zoomType, setZoomType] = useState(0)
 
     useEffect(() => {
@@ -608,8 +608,8 @@ export const AddonFlow = ({
                     selectionOnDrag
                     panOnDrag={panOnDrag}
                     selectionMode={SelectionMode.Partial}
-                    // connectionLineType={ConnectionLineType.Step}
-                    // connectionLineType={ConnectionLineType.SmoothStep}
+                // connectionLineType={ConnectionLineType.Step}
+                // connectionLineType={ConnectionLineType.SmoothStep}
                 // style={{ transform: 'none' }}
                 >
                     <Background
@@ -698,27 +698,6 @@ const ZoomFunction = ({ direction }) => {
 
 
 
-
-
-
-const TypeBackground = ({ handleTypeBackground }) => {
-
-
-    return (
-        <div
-            className={styles.button}
-            onClick={handleTypeBackground}
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
-            </svg>
-            <span>
-                Styles
-            </span>
-        </div>
-    )
-}
-
 const ZoomInitial = ({ nodes }) => {
     const { fitView, setCenter } = useReactFlow();
 
@@ -742,6 +721,25 @@ const ZoomInitial = ({ nodes }) => {
         waitForLoad();
     }, [fitView, setCenter]);
 }
+
+
+
+const TypeBackground = ({ handleTypeBackground }) => {
+    return (
+        <div
+            className={styles.button}
+            onClick={handleTypeBackground}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
+            </svg>
+            <span>
+                Styles
+            </span>
+        </div>
+    )
+}
+
 
 
 
@@ -819,17 +817,13 @@ const ButtonMap = ({ setMiniMapVisible }) => {
 
 
 
-
-
 const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
     const { fitView, setCenter } = useReactFlow();
-
 
     const handleAddNode = async () => {
         const lastNode = nodes[nodes.length - 1];
         let newX = 0
         let newY = 0
-
 
         await addNode(lastNode)
 
@@ -844,7 +838,6 @@ const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
             })
         }, 100)
     }
-
 
     return (
         <div

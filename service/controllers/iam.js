@@ -769,11 +769,17 @@ const fetchsLog = async (req, res) => {
 
 const sendMail = async (req, res, next) => {
   try {
-    const { email } = req.body
+    const { email, options } = req.body
     console.log('senddd email')
     let template = email || 'confirm-email'
 
-    const resp = sendEmail('info@aythen.com', template, { token: '1234' })
+    // const resp = sendEmail('info@aythen.com', template, { token: '1234' })
+
+    const resp = sendEmail('info@aythen.com', template, {
+      backgroundColor: options?.backgroundColor || 'red'
+    })
+
+
   } catch (err) {
     return res.status(500).send(err);
   }

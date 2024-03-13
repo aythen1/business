@@ -564,12 +564,14 @@ async function getFile(path, vector = [2, 2]) {
 }
 
 async function deleteVector(id, name, data) {
-  const { path0, path1 } = decodeVector(id);
+  const { path0, path1, path2 } = decodeVector(id);
   const uri = "data/vector/" + path0 + "/" + path1;
-
+  
+  console.log('dataaaa', path0, path1, path2, data.id)
   const db = await lancedb.connect(uri);
   const tbl = await db.openTable(name);
   //   await tbl.delete()
+
   await tbl.delete(`id = '${data.id}'`);
 
   return 200;

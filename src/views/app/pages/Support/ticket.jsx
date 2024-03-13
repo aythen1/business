@@ -12,7 +12,7 @@ import {
 
 import {
     calculateTimeAgo
-} from '@/actions/vector'
+} from '@/utils'
 
 
 const esUUID = (variable) => {

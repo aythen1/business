@@ -45,7 +45,7 @@ const Contract = ({ }) => {
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <h2 className={styles.title}>
                 Organization: Aythen
             </h2>

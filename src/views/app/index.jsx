@@ -17,7 +17,7 @@ import MenuRightGraph from './components/MenuRightGraph';
 import MenuRightComponent from './components/MenuRightComponent';
 
 import ChatBot from './components/ChatBot';
-import Modal from './components/Modal';
+import { Modal, Notification } from './components/Modal';
 import NotFound from '../pages/NotFound'
 
 import DashBoard from './pages/DashBoard'
@@ -154,6 +154,7 @@ export const App = ({ }) => {
         </style>
       )}
       <Modal />
+      <Notification />
       <div
         className={styles["TopBar"]}
         onClick={() => {
@@ -181,7 +182,7 @@ export const App = ({ }) => {
               <Route path="" element={<Settings />} />
               <Route path="settings/:settingsTag/*" element={<Settings />} />
 
-              <Route path="vector" element={<Vector />} />
+              {/* <Route path="vector" element={<Vector />} /> */}
               <Route path="vector/:vectorId" element={<Vector />} />
 
               <Route path="support" element={<Support />} />

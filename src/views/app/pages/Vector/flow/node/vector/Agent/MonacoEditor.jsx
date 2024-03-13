@@ -24,7 +24,7 @@ const MonacoEditor = ({ }) => {
             <div>
                 <Editor
                     ref={editorRef}
-                    height="100vh"
+                    height="100px"
                     language="html"
                     theme="vs-light"
                     value={html}

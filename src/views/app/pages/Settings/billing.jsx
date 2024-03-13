@@ -160,7 +160,7 @@ const Billing = ({ }) => {
 
     const sendEmail = () => {
         dispatch(sendMail({
-            email: 'new-account'
+            email: 'start-premium'
         }))
     }
 

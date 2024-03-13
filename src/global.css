@@ -7,8 +7,8 @@
     --background-topbar: #fff;
     --background-container: #f7f7f7;
     --background-chatbot: #f0f2f5f7;
-    --background-button-topbar: #f0f2f5;
-    --background-button-selected-topbar: #ffffff;
+    /* --background-button-topbar: #f0f2f5; */
+    /* --background-button-selected-topbar: #ffffff; */
 
     --background-banner: rgb(241, 238, 252);
 
@@ -39,8 +39,8 @@ body.dark-mode {
     --background-topbar: #000;
     --background-container: #090808;
     --background-chatbot: #0e0e0ef7;
-    --background-button-topbar: #161515;
-    --background-button-selected-topbar: #100f0f;
+    /* --background-button-topbar: #161515; */
+    /* --background-button-selected-topbar: #100f0f; */
 
     --background-banner: #1b1b1b;
 

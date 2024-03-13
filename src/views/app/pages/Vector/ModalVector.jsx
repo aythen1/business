@@ -77,9 +77,11 @@ export const ModalAddVector = ({ }) => {
         })
         const data = {
             id: uuidv4(),
-            version: '',
-            title: '',
-            description: '',
+            version: 'test',
+
+            title: state.title || '',
+            description: state.description || '',
+            tags: state.tags || [],
 
             code: '',
             data: '',
@@ -187,7 +189,7 @@ export const ModalVector = ({ vector }) => {
 
 
         dispatch(setModal(null))
-        navigate(`/${'es'}/app/vector`)
+        navigate(`/${'es'}/app/settings/vector`)
     }
 
 
@@ -203,7 +205,7 @@ export const ModalVector = ({ vector }) => {
                     </label>
                     <div className={styles.gird2}>
                         <span>
-                            {vector.id || 'null'}
+                            {vector?.id || 'null'}
                         </span>
                         <div>
                             <svg viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg>

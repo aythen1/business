@@ -1,15 +1,17 @@
 .containerBilling {
   max-width: 900px;
-  margin: 40px auto;
+  margin: 10px auto;
+  padding-top: 10px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   align-items: start;
+  border-top: 1px solid var(--border-color);
 }
 
 .title {
   color: var(--text-primary);
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 400;
   letter-spacing: 0px;
   line-height: 32px;

@@ -37,7 +37,9 @@
 
 .main {
   max-width: 900px;
-  margin: 20px auto;
+  margin: 10px auto;
+  border-top: 1px solid var(--border-color);
+    padding-top: 10px;
 }
 
 .headerTab {

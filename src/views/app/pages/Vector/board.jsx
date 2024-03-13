@@ -18,6 +18,7 @@ import components from '@components'
 
 
 import {
+    iniVector,
     updateVector,
 } from '@/actions/vector'
 
@@ -36,21 +37,31 @@ import {
     ModalVector,
     ModalAddVector
 } from './ModalVector'
-import { iniVector } from '../../../../actions/vector';
+
+import {
+    formatBytes,
+    calculateTimeAgo
+} from '@/utils'
+
+
 
 
 const Board = ({ }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const boardContainerRef = useRef(null);
+    const containerRef = useRef(null);
+    const flowContainerRef = useRef(null);
 
 
     const [dataSheets, setDataSheets] = useState([]);
     const [dataSheet, setDataSheet] = useState({})
 
+    const [keyUse, setKeyUse] = useState(false);
+    let scrollTimer;
 
-    const [show, setShow] = useState('table')
+
+    const [show, setShow] = useState('flow')
 
 
     const { user } = useSelector((state) => state.iam)
@@ -62,7 +73,7 @@ const Board = ({ }) => {
 
     const handleClickReturn = () => {
         dispatch(setVector(null))
-        navigate(`/${'es'}/app/vector`)
+        navigate(`/${'es'}/app/settings/vector`)
     }
 
     const handleClickPreview = () => {
@@ -85,6 +96,7 @@ const Board = ({ }) => {
 
 
     const handleLoadData = (item) => {
+        console.log('item', item.id)
         setDataSheet(item)
         setShow('flow')
         dispatch(setDimension(item))
@@ -107,7 +119,7 @@ const Board = ({ }) => {
         fileInput.type = 'file';
         fileInput.accept = '.xlsx, .xls';
         fileInput.style.display = 'none';
-        fileInput.addEventListener('change', handleDrop);  
+        fileInput.addEventListener('change', handleDrop);
 
         document.body.appendChild(fileInput);
 
@@ -120,10 +132,9 @@ const Board = ({ }) => {
         const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
         const reader = new FileReader();
 
-
-        const fileSizeInBytes = file.size;
-        const fileSizeInKilobytes = fileSizeInBytes / 1024;
-        const fileSizeInMegabytes = fileSizeInKilobytes / 1024;
+        // const fileSizeInBytes = file.size;
+        // const fileSizeInKilobytes = fileSizeInBytes / 1024;
+        // const fileSizeInMegabytes = fileSizeInKilobytes / 1024;
 
         reader.onload = (e) => {
             const arrayBuffer = e.target.result;
@@ -144,7 +155,7 @@ const Board = ({ }) => {
                 title,
                 header,
                 data,
-                size: fileSizeInMegabytes,
+                size: file.size,
                 error: false,
                 date: new Date(),
             };
@@ -208,7 +219,7 @@ const Board = ({ }) => {
                 cells: data.data.data.length,
                 cols: data.data.header.length,
                 data: data.data.data,
-                position: data.position
+                // position: data.position
             }
         });
 
@@ -218,12 +229,89 @@ const Board = ({ }) => {
 
 
 
+    const [filterOptions, setFilterOptions] = useState({})
+
+    useEffect(() => {
+        const uri = iniVector({
+            workspaceId: user.id,
+            projectId: 'vector'
+        })
+
+        setFilterOptions({
+            id: uri,
+            name: 'vector',
+            filter: {
+                //igual que lo que ya teniamos
+            }
+        })
+
+
+    }, [])
+
+
+    // -------------------------------------------------    
+
+
+
+    const handleScroll = () => {
+        console.log('edmiwidkeyUsekeyUse', keyUse)
+        if (!keyUse) {
+            const flowContainer = flowContainerRef.current;
+            const container = containerRef.current;
+            clearTimeout(scrollTimer);
+
+            scrollTimer = setTimeout(() => {
+                container.scrollTop = flowContainer.scrollHeight;
+            }, 3000);
+        }
+    };
+
+    const handleMouseEnter = () => {
+        handleScroll(true);
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(scrollTimer);
+    };
+
+    const handleKeyPress = (e) => {
+        const container = containerRef.current;
+        // const flowContainer = flowContainerRef.current;
+        if (e.key === 'ArrowUp') {
+            console.log('wrifrufu')
+            // setKeyUse(true)
+            setKeyUse((prevKeyUse) => !prevKeyUse)
+            container.scrollTop = 0;
+        }
+    };
+
+    useEffect(() => {
+        const flowContainer = flowContainerRef.current;
+        const container = containerRef.current;
+
+        // Añade eventos de scroll, mouse y teclado
+        container.addEventListener('scroll', handleScroll);
+        container.addEventListener('mouseenter', handleMouseEnter);
+        container.addEventListener('mouseleave', handleMouseLeave);
+        window.addEventListener('keydown', handleKeyPress);
+
+        // Limpia los eventos al desmontar el componente
+        return () => {
+            container.removeEventListener('scroll', handleScroll);
+            container.removeEventListener('mouseenter', handleMouseEnter);
+            container.removeEventListener('mouseleave', handleMouseLeave);
+            window.removeEventListener('keydown', handleKeyPress);
+        };
+    }, []);
 
 
 
 
     return (
-        <div className={styles.container}>
+        <div
+            ref={containerRef}
+            className={styles.container}
+        >
             <div className={styles.TopBar}>
                 <div className={styles.filter}>
                     <button
@@ -241,6 +329,7 @@ const Board = ({ }) => {
                             <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.8 4H5.2a1 1 0 0 0-.7 1.7l5.3 6 .2.7v4.8c0 .2 0 .4.2.4l3 2.3c.3.2.8 0 .8-.4v-7.1c0-.3 0-.5.2-.7l5.3-6a1 1 0 0 0-.7-1.7Z" />
                         </svg>`}
                             data={['', '']}
+                            options={filterOptions}
                         />
 
                         <button
@@ -323,20 +412,31 @@ const Board = ({ }) => {
                         className={`${styles.vector} ${data.id == dimension?.id && styles.active}`}
                         onClick={() => handleLoadData(data)}
                     >
-                        <label className={styles.title}>
-                            {data.title}
-                        </label>
-                        <div className={styles.current}>
-                            {data.size}
-                            <div>
+                        <div className={styles.top}>
+                            <label className={styles.title}>
+                                {data.title}
+                            </label>
+                            <div className={styles.dimension}>
                                 ({`${data.cols}x${data.cells}`})
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm6-2a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm0 0h-1a5 5 0 0 1-5-5v-.5" />
+                                </svg>
                             </div>
                         </div>
-                        <div className={styles.info}>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7.6 8.5h8m-8 3.5H12m7.1-7H5c-.2 0-.5 0-.6.3-.2.1-.3.3-.3.6V15c0 .3 0 .5.3.6.1.2.4.3.6.3h4l3 4 3-4h4.1c.2 0 .5 0 .6-.3.2-.1.3-.3.3-.6V6c0-.3 0-.5-.3-.6a.9.9 0 0 0-.6-.3Z" />
-                            </svg>
-                            {data.date}
+                        <div className={styles.bottom}>
+                            <div className={styles.info}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                {calculateTimeAgo(data.date)}
+                            </div>
+                            <div className={styles.current}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 6c0 1.657-3.134 3-7 3S5 7.657 5 6m14 0c0-1.657-3.134-3-7-3S5 4.343 5 6m14 0v6M5 6v6m0 0c0 1.657 3.134 3 7 3s7-1.343 7-3M5 12v6c0 1.657 3.134 3 7 3s7-1.343 7-3v-6" />
+                                </svg>
+
+                                {formatBytes(data.size)}
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -344,7 +444,7 @@ const Board = ({ }) => {
                     className={styles.ButtonAddData}
                     onClick={() => handleAddData()}
                 >
-                    <svg c xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9V4c0-.6-.4-1-1-1H9a1 1 0 0 0-.8.3l-4 4a1 1 0 0 0-.2.6V20c0 .6.4 1 1 1h4M9 3v4c0 .6-.4 1-1 1H4m11 6v4m-2-2h4m3 0a5 5 0 1 1-10 0 5 5 0 0 1 10 0Z" />
                     </svg>
                     Insertar datos
@@ -352,7 +452,7 @@ const Board = ({ }) => {
             </div>
             <div className={styles.BoardFlow}>
                 <div
-                    ref={boardContainerRef}
+                    ref={flowContainerRef}
                     className={styles.board}
                 >
                     {show == 'flow' ? (
@@ -361,7 +461,7 @@ const Board = ({ }) => {
                         <VectorAddon />
                     ) : show == 'board' ? (
                         <VectorBoard />
-                    ) : ( 
+                    ) : (
                         <VectorTable data={dataSheet} />
                     )}
                 </div>
