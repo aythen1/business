@@ -13,6 +13,7 @@ import {
   moveFile,
   deleteFolders,
   deleteFiles,
+  makeGlacier,
 } from "@/actions/assets";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 import { getCurrentDateFormatted } from "../../assetsAux";
@@ -137,6 +138,13 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         pathDepured,
       })
     );
+  };
+  const handleMakeGlacier = () => {
+    if (fileToCopy !== "") {
+      const { directoryCopied } = fileToCopy;
+
+      dispatch(makeGlacier(directoryCopied));
+    }
   };
   const handleDropTrash = () => {
     console.log("DROP TRASH");
@@ -499,6 +507,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           <p className={style.drive_option_text}>Destacados</p>
         </div>
         <div
+          onDrop={handleMakeGlacier}
+          onDragOver={(e) => e.preventDefault()}
           className={style.drive_option}
           onClick={() => {
             handleNavigate("glaciar");
