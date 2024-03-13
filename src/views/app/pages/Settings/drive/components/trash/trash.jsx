@@ -222,24 +222,14 @@ export default function Page({
     const selectedIndex = selectedFolders.findIndex(
       (selectedId) => selectedId.Key === directory.Key
     );
-    let previousDirectory = directory.Key.split("/");
-    previousDirectory.pop();
-    console.log(previousDirectory.join("/"));
     if (selectedIndex !== -1) {
       // Si el directorio ya está seleccionado, lo quitamos de la lista
       setSelectedFolders(
         selectedFolders.filter((_, index) => index !== selectedIndex)
       );
     } else {
-      const isFolder = categoryFiles.find(
-        (item) => item.Key === previousDirectory.join("/") + "/"
-      );
-      if (isFolder) {
-        setSelectedFolders([...selectedFolders, directory, isFolder]);
-      } else {
-        // Agregamos el directorio a la lista de seleccionados
-        setSelectedFolders([...selectedFolders, directory]);
-      }
+      // Agregamos el directorio a la lista de seleccionados
+      setSelectedFolders([...selectedFolders, directory]);
     }
   };
 
@@ -360,41 +350,83 @@ export default function Page({
   };
 
   // Función auxiliar para buscar y agregar elementos coincidentes a toDelete
-  const addMatchingElements = (sourceArray, selectedFolder, toDelete) => {
-    const matchingElements = sourceArray.filter(
-      (element) => element.Key === selectedFolder.Key
-    );
-    return toDelete.concat(matchingElements);
-  };
+  // const addMatchingElements = (sourceArray, selectedFolder, toDelete) => {
+  //   const matchingElements = sourceArray.filter(
+  //     (element) => element.Key === selectedFolder.Key
+  //   );
+  //   return toDelete.concat(matchingElements);
+  // };
 
-  const iterateFilesToDelete = (action) => {
-    let toDelete = [];
+  // const iterateFilesToDelete = (action) => {
+  //   let toDelete = [];
 
-    selectedFolders.forEach((selectedFolder) => {
-      if (action === "delete") {
-        // Agregar elementos coincidentes de Versions y DeleteMarkers
-        toDelete = addMatchingElements(
-          directoriesTrash.Versions,
-          selectedFolder,
-          toDelete
-        );
-        toDelete = addMatchingElements(
-          directoriesTrash.DeleteMarkers,
-          selectedFolder,
-          toDelete
-        );
-        dispatch(deleteFiles({ folders: toDelete, act: action }));
-      } else if (action === "restore") {
-        // Para "delete", solo se consideran los DeleteMarkers
-        toDelete = addMatchingElements(
-          directoriesTrash.DeleteMarkers,
-          selectedFolder,
-          toDelete
-        );
-        dispatch(deleteFiles({ folders: toDelete, act: action }));
+  //   selectedFolders.forEach((selectedFolder) => {
+  //     if (action === "delete") {
+  //       toDelete = addMatchingElements(
+  //         directoriesTrash.Versions,
+  //         selectedFolder,
+  //         toDelete
+  //       );
+  //       toDelete = addMatchingElements(
+  //         directoriesTrash.DeleteMarkers,
+  //         selectedFolder,
+  //         toDelete
+  //       );
+  //       dispatch(deleteFiles({ folders: toDelete, act: action }));
+  //     } else if (action === "restore") {
+  //       // Para "delete", solo se consideran los DeleteMarkers
+  //       toDelete = addMatchingElements(
+  //         directoriesTrash.DeleteMarkers,
+  //         selectedFolder,
+  //         toDelete
+  //       );
+  //       dispatch(deleteFiles({ folders: toDelete, act: action }));
+  //     }
+  //   });
+  // };
+
+  // funcion aux para buscar y agregar elementos coincidentes a arrayToDelete
+  const addMatchingElements = (
+    Versions,
+    DeleteMarkers,
+    selectedFolder,
+    arrayToDelete,
+    act
+  ) => {
+    const allElements =
+      act === "delete" ? [...Versions, ...DeleteMarkers] : DeleteMarkers;
+    console.log({ allElements, selectedFolder });
+    allElements.forEach((element) => {
+      console.log("me ejecute");
+      if (element.Key.startsWith(selectedFolder.Key)) {
+        arrayToDelete.push(element);
+        console.log({ arrayToDelete });
       }
     });
   };
+  const iterateFilesToDelete = (act) => {
+    let filesToDelete = [];
+    console.log({ selectedFolders });
+    selectedFolders.forEach((selectedFolder) => {
+      const elementName = selectedFolder.Key.split("/").filter(Boolean).pop();
+      const isFile = regexExtensiones.test(elementName);
+      // utilizamos la misma función auxiliar para añadir a los arrays correspondientes
+      addMatchingElements(
+        directoriesTrash.Versions,
+        directoriesTrash.DeleteMarkers,
+        selectedFolder,
+        filesToDelete,
+        act
+      );
+    });
+    // ahora podemos hacer el dispatch con los objetos modificados
+    if (filesToDelete.length) {
+      dispatch(deleteFiles({ folders: filesToDelete, act }));
+      // console.log({ folders: filesToDelete, act });
+    }
+  };
+
+  const handleDropFiles = () => {};
 
   // / / / / / / / / / / / / / / / / / / / u s e E F F E C T / / / / / / / / / / / / / / / / / / / / / / / /
 
@@ -605,7 +637,9 @@ export default function Page({
             copyFolder,
             cutFolder,
             duplicateFolder,
-            true
+            true,
+            handleDropFiles,
+            loading
           )}
         </div>
       </div>

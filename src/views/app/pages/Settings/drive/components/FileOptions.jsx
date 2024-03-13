@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./FolderOptions.module.css";
 // import { IoTrashOutline, IoSettingsOutline } from "react-icons/io5";
 import { obtainFileData, copyFile } from "@/actions/assets";
@@ -16,7 +16,7 @@ const FileOptions = ({
   const dispatch = useDispatch();
   const componentRef = useRef(null);
   const { x, y } = position;
-
+  const { file } = useSelector((state) => state.assets);
   const handleDuplicateFile = () => {
     const extensionList = Object.keys(icons);
     function addCopyToFileName() {
@@ -83,6 +83,12 @@ const FileOptions = ({
       className={styles.folderOptionsContainer}
       style={style}
     >
+      <div
+        className={styles.option}
+        onClick={() => window.open(file, "_blank")}
+      >
+        Ver
+      </div>
       <div className={styles.option} onClick={() => handleCopyFile("copy")}>
         Copy
         {/* <IoSettingsOutline size={17} color="#00f" /> */}

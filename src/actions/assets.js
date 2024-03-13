@@ -313,16 +313,18 @@ export const asd = createAsyncThunk("assets/asd", async (folders) => {
 // Borrar un conjunto de archivos en Scaleway
 export const deleteFolders = createAsyncThunk(
   "assets/deleteFolders",
-  async (folders, { dispatch }) => {
+  async ({ folders, act }, { dispatch }) => {
     try {
       const userId = "1234";
       console.log(folders);
-      // const { data } = await apiBackend.put(`/assets/delete-folders`, {
-      //   id: userId,
-      //   folders,
-      // });
-      // dispatch(filterFolder(path))
-      return folders;
+      const { data } = await apiBackend.put(`/assets/delete-folders`, {
+        id: userId,
+        folders,
+      });
+      // dispatch(filterFolder(path));
+      const objectData = { folders, act };
+
+      return objectData;
     } catch (error) {
       throw new Error(error);
     }
@@ -339,7 +341,6 @@ export const makeGlacier = createAsyncThunk(
         fileName,
         StorageClass: "GLACIER",
       };
-      console.log({ body });
       const { data } = await apiBackend.put("/assets/glacier", body);
       return { fileName, data: data.data };
     } catch (error) {
@@ -350,7 +351,8 @@ export const makeGlacier = createAsyncThunk(
 // Borrar un conjunto de archivos en Scaleway
 export const restoreGlacier = createAsyncThunk(
   "assets/restoreGlacier",
-  async (fileName, { dispatch }) => {
+  async (fileName) => {
+    console.log(fileName);
     try {
       const userId = "1234";
       const body = {

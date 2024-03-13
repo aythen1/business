@@ -76,6 +76,7 @@ export default function Page({
   const [folderOptions, setFolderOptions] = useState({});
   const [recentFilesOptions, setRecentFilesOptions] = useState({});
   const [isDragginFile, setIsDragginFile] = useState(false);
+  const [isDragginFolder, setIsDragginFolder] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -156,7 +157,7 @@ export default function Page({
   const handleMakeGlacier = () => {
     if (category === "glaciar") {
       dispatch(restoreGlacier(selectedFolders[0].Key));
-      // console.log(true, { category });
+      console.log(selectedFolders[0].Key);
     } else {
       // console.log(false, { category });
       dispatch(makeGlacier(selectedFolders[0].Key));
@@ -223,7 +224,9 @@ export default function Page({
     dispatch(obtainFileData({ action: "reset" }));
   };
   const sendFileToTrash = (path, Size) => {
-    dispatch(deleteFile({ path, VersionId: "", Size }));
+    // dispatch(deleteFile({ path, VersionId: "", Size }));
+    const folders = [{ Key: path, VersionId: "" }];
+    dispatch(deleteFiles({ folders, act: "trash" }));
   };
 
   const handleFolderClickBack = (folderName) => {
@@ -271,7 +274,7 @@ export default function Page({
   };
 
   const handleDelete = async () => {
-    await dispatch(deleteFolders(selectedFolders));
+    await dispatch(deleteFolders({ folders: selectedFolders, act: "trash" }));
 
     setSelectedFolders([]);
     setSelectAll(false);
@@ -312,11 +315,12 @@ export default function Page({
 
     // ahora podemos hacer el dispatch con los objetos modificados
     if (modifiedFilesToDelete.length) {
-      console.log({ modifiedFilesToDelete, modifiedFolderToDelete });
       dispatch(deleteFiles({ folders: modifiedFilesToDelete, act: "trash" }));
     }
     if (modifiedFolderToDelete.length) {
-      dispatch(deleteFolders(modifiedFolderToDelete));
+      dispatch(
+        deleteFolders({ folders: modifiedFolderToDelete, act: "trash" })
+      );
     }
   };
 
@@ -506,14 +510,17 @@ export default function Page({
           fileName: directory.Key,
         })
       );
-      // dispatch(
-      //   getElementTag({
-      //     type: "image",
-      //     tag: "img",
-      //     tagName: "img",
-      //     rol: "default",
-      //   })
-      // );
+    } else {
+      setIsDragginFolder(true);
+
+      dispatch(
+        obtainFileData({
+          directoryCopied: directory.Key,
+          folderNameCopied: folderName,
+          file: directory,
+          action: "copyFolder",
+        })
+      );
     }
   };
 

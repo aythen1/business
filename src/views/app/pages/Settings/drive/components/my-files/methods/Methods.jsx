@@ -129,6 +129,8 @@ export const renderFolders = (
       : convertToMegabytes(calculateFolderSize(directory.Key, categoryFiles));
 
     const handleContextMenu = (e) => {
+      handleFileClick(directory.Key);
+
       e.preventDefault();
       const x = e.clientX;
       const y = e.clientY;
@@ -140,14 +142,56 @@ export const renderFolders = (
         return newOptions;
       });
     };
-
     let isDeleting = false;
-    if (pending?.DELETE_FILES?.length) {
-      isDeleting = pending?.DELETE_FILES?.some(
+    let isGlaciering = false;
+    let isRestorting = false;
+
+    const filesArray = Array.isArray(pending?.DELETE_FILES)
+      ? pending?.DELETE_FILES
+      : [];
+    const directoriesArray = Array.isArray(pending?.DELETE_DIRECTORY)
+      ? pending?.DELETE_DIRECTORY
+      : [];
+
+    const glacierArray = Array.isArray(pending?.MAKE_GLACIER)
+      ? pending?.MAKE_GLACIER
+      : [];
+    const restortingArray = Array.isArray(pending?.RESTORE_GLACIER)
+      ? pending?.RESTORE_GLACIER
+      : [];
+
+    if (restortingArray.length) {
+      isRestorting = restortingArray.some((file) => file === directory.Key);
+    }
+    if (glacierArray.length) {
+      isGlaciering = glacierArray.some((file) => file === directory.Key);
+    }
+    if (filesArray.length || directoriesArray.length) {
+      const isInDeleteFiles = filesArray.some(
         (file) => file.Key === directory.Key
       );
+      const isInDeleteDirectory = directoriesArray.some(
+        (directoryItem) => directoryItem.Key === directory.Key
+      );
+
+      // Establece isDeleting a true si alguna condición es verdadera
+      isDeleting = isInDeleteFiles || isInDeleteDirectory;
     }
-    console.log({ Key: directory.Key, isDeleting });
+
+    let previousDirectory = directory.Key.endsWith("/")
+      ? directory.Key.slice(0, -1)
+      : directory.Key;
+    previousDirectory = previousDirectory.split("/");
+    previousDirectory.pop();
+    let existPreviousDirectory = folders.some(
+      (folder) => folder.Key === previousDirectory.join("/") + "/"
+    );
+    console.log({
+      folderName,
+      previous: previousDirectory.join("/") + "/",
+      folders,
+    });
+    if (isTrash && existPreviousDirectory) return <></>;
     return (
       <div
         key={index}
@@ -161,6 +205,8 @@ export const renderFolders = (
         <div
           className={style.drive_clickeable_folder_container}
           onClick={() => {
+            if (isDeleting) return; // Si isDeleting es true, no hace nada
+
             isFile
               ? handleFileClick(directory.Key)
               : handleFolderClick(directory.Key);
@@ -196,7 +242,7 @@ export const renderFolders = (
               : formatLastModified(directory.LastModified)}
           </div>
           <span style={{ display: "flex", width: "60px" }}>
-            {isDeleting && <p>Borrando..</p>}
+            {(isDeleting || isGlaciering || isRestorting) && <p>Espere..</p>}
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
             {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
