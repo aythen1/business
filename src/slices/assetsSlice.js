@@ -171,11 +171,11 @@ export const assetsSlice = createSlice({
         switch (act) {
           case "delete":
           case "trash":
+          case "restore":
             const loadingItems = folders.map((f) => ({
               Key: f.Key,
               VersionId: f.VersionId,
             }));
-            console.log({ loadingItems });
             state.loading[types.DELETE_DIRECTORY] = [
               ...state.loading[types.DELETE_DIRECTORY],
               ...loadingItems,
@@ -186,20 +186,22 @@ export const assetsSlice = createSlice({
         }
       })
       .addCase(deleteFolders.fulfilled, (state, action) => {
-        const { folders } = action.payload;
+        const { folders, act } = action.payload;
 
         const deletedKeys = folders.map((deletedFolder) => deletedFolder.Key);
 
         // Actualizar las propiedades IsLatest de los archivos coincidentes sin filtrarlos fuera
         state.directoriesTrash.Versions.forEach((file) => {
           if (deletedKeys.includes(file.Key)) {
-            file.IsLatest = false; // Actualiza IsLatest a false para los archivos coincidentes
+            file.IsLatest = act === "delete" || act === "trash" ? false : true;
           }
         });
-        state.directoriesTrash.DeleteMarkers = [
-          ...state.directoriesTrash.DeleteMarkers,
-          ...folders,
-        ];
+        if (act === "trash") {
+          state.directoriesTrash.DeleteMarkers = [
+            ...state.directoriesTrash.DeleteMarkers,
+            ...folders,
+          ];
+        }
         state.loading = { ...state.loading, [types.DELETE_DIRECTORY]: false };
       })
 
@@ -304,6 +306,7 @@ export const assetsSlice = createSlice({
         switch (act) {
           case "delete":
           case "trash":
+          case "restore":
             const loadingItems = folders.map((f) => ({
               Key: f.Key,
               VersionId: f.VersionId,

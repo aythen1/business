@@ -224,7 +224,9 @@ export default function Page({
     dispatch(obtainFileData({ action: "reset" }));
   };
   const sendFileToTrash = (path, Size) => {
-    dispatch(deleteFile({ path, VersionId: "", Size }));
+    // dispatch(deleteFile({ path, VersionId: "", Size }));
+    const folders = [{ Key: path, VersionId: "" }];
+    dispatch(deleteFiles({ folders, act: "trash" }));
   };
 
   const handleFolderClickBack = (folderName) => {
@@ -313,7 +315,6 @@ export default function Page({
 
     // ahora podemos hacer el dispatch con los objetos modificados
     if (modifiedFilesToDelete.length) {
-      console.log({ modifiedFilesToDelete, modifiedFolderToDelete });
       dispatch(deleteFiles({ folders: modifiedFilesToDelete, act: "trash" }));
     }
     if (modifiedFolderToDelete.length) {

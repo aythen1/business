@@ -143,6 +143,7 @@ export const renderFolders = (
       });
     };
     let isDeleting = false;
+    let isRestoring = false;
 
     const filesArray = Array.isArray(pending?.DELETE_FILES)
       ? pending?.DELETE_FILES
@@ -162,7 +163,20 @@ export const renderFolders = (
       // Establece isDeleting a true si alguna condición es verdadera
       isDeleting = isInDeleteFiles || isInDeleteDirectory;
     }
-    console.log({ Key: directory.Key, isDeleting });
+    let previousDirectory = directory.Key.endsWith("/")
+      ? directory.Key.slice(0, -1)
+      : directory.Key;
+    previousDirectory = previousDirectory.split("/");
+    previousDirectory.pop();
+    let existPreviousDirectory = folders.some(
+      (folder) => folder.Key === previousDirectory.join("/") + "/"
+    );
+    console.log({
+      folderName,
+      previous: previousDirectory.join("/") + "/",
+      folders,
+    });
+    if (isTrash && existPreviousDirectory) return <></>;
     return (
       <div
         key={index}
@@ -213,7 +227,7 @@ export const renderFolders = (
               : formatLastModified(directory.LastModified)}
           </div>
           <span style={{ display: "flex", width: "60px" }}>
-            {isDeleting && <p>Borrando..</p>}
+            {isDeleting && <p>Espere..</p>}
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
             {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
