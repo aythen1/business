@@ -341,7 +341,6 @@ export const makeGlacier = createAsyncThunk(
         fileName,
         StorageClass: "GLACIER",
       };
-      console.log({ body });
       const { data } = await apiBackend.put("/assets/glacier", body);
       return { fileName, data: data.data };
     } catch (error) {
@@ -352,7 +351,8 @@ export const makeGlacier = createAsyncThunk(
 // Borrar un conjunto de archivos en Scaleway
 export const restoreGlacier = createAsyncThunk(
   "assets/restoreGlacier",
-  async (fileName, { dispatch }) => {
+  async (fileName) => {
+    console.log(fileName);
     try {
       const userId = "1234";
       const body = {

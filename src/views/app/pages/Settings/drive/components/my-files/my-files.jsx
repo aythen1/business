@@ -157,7 +157,7 @@ export default function Page({
   const handleMakeGlacier = () => {
     if (category === "glaciar") {
       dispatch(restoreGlacier(selectedFolders[0].Key));
-      // console.log(true, { category });
+      console.log(selectedFolders[0].Key);
     } else {
       // console.log(false, { category });
       dispatch(makeGlacier(selectedFolders[0].Key));

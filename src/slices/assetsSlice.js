@@ -249,9 +249,20 @@ export const assetsSlice = createSlice({
           [types.DELETE_FILE]: action.payload,
         };
       })
-      .addCase(makeGlacier.pending, (state) => {
-        state.loading = { ...state.loading, [types.MAKE_GLACIER]: true };
+      .addCase(makeGlacier.pending, (state, action) => {
         state.error = { ...state.error, [types.MAKE_GLACIER]: "" };
+
+        const fileName = action.meta.arg;
+        state.error = { ...state.error, [types.MAKE_GLACIER]: "" };
+
+        if (!Array.isArray(state.loading[types.MAKE_GLACIER])) {
+          state.loading[types.MAKE_GLACIER] = [];
+        }
+
+        state.loading[types.MAKE_GLACIER] = [
+          ...state.loading[types.MAKE_GLACIER],
+          fileName,
+        ];
       })
       .addCase(makeGlacier.fulfilled, (state, action) => {
         const { fileName, data } = action.payload;
@@ -273,9 +284,18 @@ export const assetsSlice = createSlice({
           [types.MAKE_GLACIER]: action.payload,
         };
       })
-      .addCase(restoreGlacier.pending, (state) => {
-        state.loading = { ...state.loading, [types.RESTORE_GLACIER]: true };
+      .addCase(restoreGlacier.pending, (state, action) => {
         state.error = { ...state.error, [types.RESTORE_GLACIER]: "" };
+
+        const fileName = action.meta.arg;
+        console.log(fileName);
+        if (!Array.isArray(state.loading[types.RESTORE_GLACIER])) {
+          state.loading[types.RESTORE_GLACIER] = [];
+        }
+        state.loading[types.RESTORE_GLACIER] = [
+          ...state.loading[types.RESTORE_GLACIER],
+          fileName,
+        ];
       })
       .addCase(restoreGlacier.fulfilled, (state, action) => {
         const { fileName } = action.payload;

@@ -143,7 +143,8 @@ export const renderFolders = (
       });
     };
     let isDeleting = false;
-    let isRestoring = false;
+    let isGlaciering = false;
+    let isRestorting = false;
 
     const filesArray = Array.isArray(pending?.DELETE_FILES)
       ? pending?.DELETE_FILES
@@ -152,6 +153,19 @@ export const renderFolders = (
       ? pending?.DELETE_DIRECTORY
       : [];
 
+    const glacierArray = Array.isArray(pending?.MAKE_GLACIER)
+      ? pending?.MAKE_GLACIER
+      : [];
+    const restortingArray = Array.isArray(pending?.RESTORE_GLACIER)
+      ? pending?.RESTORE_GLACIER
+      : [];
+
+    if (restortingArray.length) {
+      isRestorting = restortingArray.some((file) => file === directory.Key);
+    }
+    if (glacierArray.length) {
+      isGlaciering = glacierArray.some((file) => file === directory.Key);
+    }
     if (filesArray.length || directoriesArray.length) {
       const isInDeleteFiles = filesArray.some(
         (file) => file.Key === directory.Key
@@ -163,6 +177,7 @@ export const renderFolders = (
       // Establece isDeleting a true si alguna condición es verdadera
       isDeleting = isInDeleteFiles || isInDeleteDirectory;
     }
+
     let previousDirectory = directory.Key.endsWith("/")
       ? directory.Key.slice(0, -1)
       : directory.Key;
@@ -227,7 +242,7 @@ export const renderFolders = (
               : formatLastModified(directory.LastModified)}
           </div>
           <span style={{ display: "flex", width: "60px" }}>
-            {isDeleting && <p>Espere..</p>}
+            {(isDeleting || isGlaciering || isRestorting) && <p>Espere..</p>}
             {isMarker && <StarComponent color="rgb(187, 164, 0)" />}
             {isPriority && <PriorityComponent color="rgb(187, 164, 0)" />}
             {directory?.StorageStatus === "pending" && <p>Pendiente</p>}
