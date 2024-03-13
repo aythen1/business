@@ -76,6 +76,7 @@ export default function Page({
   const [folderOptions, setFolderOptions] = useState({});
   const [recentFilesOptions, setRecentFilesOptions] = useState({});
   const [isDragginFile, setIsDragginFile] = useState(false);
+  const [isDragginFolder, setIsDragginFolder] = useState(false);
   const [recentFiles, setRecentFiles] = useState([]);
   const [filters, setFilters] = useState({});
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -508,14 +509,17 @@ export default function Page({
           fileName: directory.Key,
         })
       );
-      // dispatch(
-      //   getElementTag({
-      //     type: "image",
-      //     tag: "img",
-      //     tagName: "img",
-      //     rol: "default",
-      //   })
-      // );
+    } else {
+      setIsDragginFolder(true);
+
+      dispatch(
+        obtainFileData({
+          directoryCopied: directory.Key,
+          folderNameCopied: folderName,
+          file: directory,
+          action: "copyFolder",
+        })
+      );
     }
   };
 

@@ -11,6 +11,8 @@ import {
   uploadFile,
   selectCategory,
   moveFile,
+  deleteFolders,
+  deleteFiles,
 } from "@/actions/assets";
 import { setCurrentFolder } from "@/slices/assetsSlice";
 import { getCurrentDateFormatted } from "../../assetsAux";
@@ -64,9 +66,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state.persistedReducer.user)
   // const user = JSON.parse(localStorage.getItem('user')).user
-  const { currentFolder, loading, searchFiles, fileToCopy } = useSelector(
-    (state) => state.assets
-  );
+  const { currentFolder, loading, searchFiles, fileToCopy, folderToCopy } =
+    useSelector((state) => state.assets);
   const [nameFolder, setNameFolder] = useState("");
   const [newPopup, setNewPopup] = useState(isNew || false);
   const [newSubPopup, setSubNewPopup] = useState(false);
@@ -137,6 +138,32 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
       })
     );
   };
+  const handleDropTrash = () => {
+    console.log("DROP TRASH");
+    if (fileToCopy !== "" && folderToCopy === "") {
+      let filesToDelete = [fileToCopy?.file];
+      const modifiedFilesToDelete = filesToDelete.map((item) => ({
+        ...item,
+        VersionId: "",
+      }));
+      console.log({ modifiedFilesToDelete });
+      if (modifiedFilesToDelete.length) {
+        dispatch(deleteFiles({ folders: modifiedFilesToDelete, act: "trash" }));
+      }
+    } else if (folderToCopy !== "" && fileToCopy === "") {
+      let folderToDelete = [folderToCopy?.file];
+      const modifiedFolderToDelete = folderToDelete.map((item) => ({
+        ...item,
+        VersionId: "",
+      }));
+      if (modifiedFolderToDelete.length) {
+        dispatch(
+          deleteFolders({ folders: modifiedFolderToDelete, act: "trash" })
+        );
+      }
+    }
+  };
+
   const handleFolderInputChange = (event) => {
     const files = event.target.files;
     let foldersPaths = new Set();
@@ -485,6 +512,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         </div>
         <div
           className={style.drive_option}
+          onDrop={handleDropTrash}
+          onDragOver={(e) => e.preventDefault()}
           onClick={() => {
             handleNavigate("trash");
             dispatch(selectCategory("trash"));
