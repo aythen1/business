@@ -14,14 +14,13 @@
 .drive_header_left_title_container {
   display: inline-flex;
   align-items: center;
-  padding: 5px 0px;
   gap: 8px;
   cursor: pointer;
 }
 
 .drive_header_left_title {
   color: var(--text-primary);
-  font-size: 22px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 400;
   line-height: 28px;

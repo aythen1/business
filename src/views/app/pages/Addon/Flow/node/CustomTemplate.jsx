@@ -113,12 +113,9 @@ export default memo(({ id, data, isConnectable, }) => {
 
   useEffect(() => {
     const currentNode = nodes.find(node => node.id === id);
-
     if (currentNode) {
-      console.log('currentNode', currentNode.position)
       setPosition(currentNode.position);
     }
-
   }, [])
 
 

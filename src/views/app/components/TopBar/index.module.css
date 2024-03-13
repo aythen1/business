@@ -135,7 +135,7 @@
   position: static;
 }
 .component-7 {
-  background: var(--background-button-topbar);
+  background: var(--background-secondary);
   border-radius: 5px;
   padding: 6px 10px;
   display: flex;
@@ -145,7 +145,7 @@
   justify-content: flex-start;
   cursor: pointer;
   &:hover{
-    background:  var(--background-button-selected-topbar);
+    background:  var(--background);
   }
 }
 .informe {
@@ -182,7 +182,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  background: var(--background-button-topbar);
+  background: var(--background-secondary);
   cursor: pointer;
   box-shadow: inset 0px 0px 22px -4px var(--color-primary-0);
   
@@ -201,12 +201,7 @@
     background: var(--color-primary-2);
   }
 }
-.dark {
-  color: #979797;
-  text-align: center;
-  font-family: var(--bold-10-font-family, "Inter-Bold", sans-serif);
-  font-size: 15px;
-}
+
 .frame-1171276725 {
   display: flex;
   flex-direction: column;
@@ -241,19 +236,41 @@
   gap: 8px;
   cursor: pointer;
   border-radius: 5px;
+  font-size: 14px;
+  font-family: "Inter-Bold", sans-serif;
+  color: var(--text-color-secondary);
   &:hover{
-    background:  var(--background-button-selected-topbar);
+    background:  var(--background-secondary) !important;
+    color: #979797 !important;
   }
 }
 
-.selected {
-  background: var(--background-button-selected-topbar);
-  box-shadow: var(--shadows-gray-1-level-box-shadow, 0px 1px 3px 0px rgba(96, 108, 128, 0.05) );
-}
+
 .sun-solid {
   width: 16px;
   height: 16px;
   overflow: hidden;
+}
+
+.group2 {
+  height: auto;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.selected {
+  /* background: var(--background-button-selected-topbar); */
+  background: var(--color-primary-0);
+  box-shadow: var(--color-primary-0, 0px 1px 3px 0px rgba(96, 108, 128, 0.05) );
+  color: var(--background);
+  .sun-solid{
+    fill: currentColor;
+  }
+  .group,
+  .group2{
+    fill: currentColor;
+  }
 }
 .group {
   overflow: visible;
@@ -261,12 +278,7 @@
   height: 100%;
   margin-bottom: 3px;
 }
-.light {
-  color: #979797;
-  text-align: center;
-  font-family: var(--bold-10-font-family, "Inter-Bold", sans-serif);
-  font-size: 14px;
-}
+
 .moon-solid {
   width: 16px;
   height: 16px;
@@ -274,12 +286,7 @@
     left: 2px;
     position: relative;
 }
-.group2 {
-  height: auto;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
+
 
 
 .visibleMobile{

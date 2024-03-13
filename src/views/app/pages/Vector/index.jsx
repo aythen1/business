@@ -7,6 +7,9 @@ import styles from './index.module.css'
 
 
 
+import Table from '../Settings/iam/table'
+
+
 import Board from './board'
 
 
@@ -29,7 +32,8 @@ import {
 import {
   iniVector,
   fetchsVector,
-  fetchVector
+  fetchVector,
+  deleteVector
 } from '@/actions/vector'
 
 
@@ -67,10 +71,13 @@ const Vector = ({ }) => {
   const [positionToolTip, setPositionToolTip] = useState({ top: 0, left: 0 })
 
 
+  const [stateTable, setStateTable] = useState('')
 
-  useEffect(() => {
-    console.log('vectors', vectors)
-  }, [vectors])
+
+
+  // useEffect(() => {
+  //   console.log('vectors', vectors)
+  // }, [vectors])
 
 
   useEffect(() => {
@@ -93,6 +100,22 @@ const Vector = ({ }) => {
     if (vectors.length == 0) fetchsItems()
   }, [])
 
+  const fetchsItems = async () => {
+    console.log('vecttototo')
+    let id = iniVector({
+      workspaceId: user.id,
+      projectId: 'vector',
+    })
+
+    try {
+      await dispatch(fetchsVector({
+        id,
+        name: 'vectors'
+      }))
+    } catch (err) {
+      console.log('Err', err)
+    }
+  }
 
 
 
@@ -110,7 +133,10 @@ const Vector = ({ }) => {
   const handleToolTipMouseEnter = (e) => {
     setIsToolTipHovered(true)
     setPositionToolTip({ top: e.clientY, left: e.clientX })
-    setTextToolTip(e.target.dataset.tooltip)
+    console.log('eeee', e.target.getAttribute('datatooltip'))
+    console.log('ua', e.target.dataset.datatooltip)
+    const value = e.target.getAttribute('datatooltip')
+    setTextToolTip(value)
   }
 
   const handleToolTipMouseLeave = () => {
@@ -119,61 +145,46 @@ const Vector = ({ }) => {
 
 
 
-  const handleMoreInfo = () => { }
+  // const handleMoreInfo = () => { }
 
-  const handlePowerOff = () => { }
+  // const handlePowerOff = () => { }
 
-  const handleReboot = () => { }
+  // const handleReboot = () => { }
 
 
-  const handleDeleteBoard = (id) => {
-    // dispatch(deleteBoard(id))
-  }
+  // const handleDeleteBoard = (id) => {
+  //   // dispatch(deleteBoard(id))
+  // }
 
-  const Filters = () => {
-    return (
-      <div className={styles.filters}>
-        <IconArrowUp />
-        <IconArrowDown />
-      </div>
-    )
-  }
+  // const Filters = () => {
+  //   return (
+  //     <div className={styles.filters}>
+  //       <IconArrowUp />
+  //       <IconArrowDown />
+  //     </div>
+  //   )
+  // }
 
 
 
   /* checkbox */
-  const [selectedVectors, setSelectedVectors] = useState([]);
+  // const [selectedVectors, setSelectedVectors] = useState([]);
 
-  const handleCheckboxChange = (index) => {
-    setSelectedVectors((prevSelectedVectors) => {
-      const newSelectedVectors = [...prevSelectedVectors];
-      newSelectedVectors[index] = !newSelectedVectors[index];
-      return newSelectedVectors;
-    });
-  };
+  // const handleCheckboxChange = (index) => {
+  //   setSelectedVectors((prevSelectedVectors) => {
+  //     const newSelectedVectors = [...prevSelectedVectors];
+  //     newSelectedVectors[index] = !newSelectedVectors[index];
+  //     return newSelectedVectors;
+  //   });
+  // };
 
-  const handleSelectAllChange = () => {
-    const allSelected = selectedVectors.every((isSelected) => isSelected);
-    setSelectedVectors(new Array(vectors.length).fill(!allSelected));
-  };
+  // const handleSelectAllChange = () => {
+  //   const allSelected = selectedVectors.every((isSelected) => isSelected);
+  //   setSelectedVectors(new Array(vectors.length).fill(!allSelected));
+  // };
 
 
   /* visible settings */
-  const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
-
-  const togglePopupSettings = (boardIndex) => {
-    setVisiblePopupSettings((prevVisiblePopups) => ({
-      ...prevVisiblePopups,
-      [boardIndex]: !prevVisiblePopups[boardIndex]
-    }))
-  }
-
-  const closePopup = (boardIndex) => {
-    setVisiblePopupSettings((prevVisiblePopups) => ({
-      ...prevVisiblePopups,
-      [boardIndex]: false
-    }))
-  }
 
 
   const handleVector = () => {
@@ -201,6 +212,89 @@ const Vector = ({ }) => {
       }))
     }
   }, [vectorId])
+
+
+
+  const handleDelete = (id) => {
+    if (id) {
+      
+      let uri = iniVector({
+        workspaceId: user.id,
+        projectId: 'vector'
+      })
+
+
+      console.log('vectorId', id)
+
+      dispatch(deleteVector({
+        id: uri,
+        name: 'vectors',
+        data: {
+          id
+        }
+      }))
+    }
+  }
+
+  const handleDuply = () => {
+    alert(1)
+
+  }
+
+  const handleCopyPath = () => {
+    alert(1)
+
+  }
+
+  const handleEdit = () => {
+    alert(1)
+
+  }
+
+
+
+  // -------------------------------------------------------------------------
+
+  const propsFunctions = {
+    handleToolTipMouseEnter,
+    handleToolTipMouseLeave,
+    handleClickVector
+  }
+
+
+  const propsSettings = {
+    handleDelete,
+    handleDuply,
+    handleCopyPath,
+    handleEdit
+  }
+
+  //   return {
+  //   };
+  // };
+
+
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      dispatch(setVector(null));
+      navigate(`/${'es'}/app/settings/vector`);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+
+
+
+
+
 
   return (
     <div>
@@ -235,131 +329,37 @@ const Vector = ({ }) => {
                   <BackgroundVector />
                 </div>
               </div>
-              <div
-                className={
-                  (selectedVectors.filter((selected) => selected).length >= 1
-                    ? styles.activeCheckbox
-                    : '') +
-                  ' ' +
-                  styles.listBoards
-                }
-              >
-                <div className={styles.header}>
-                  <div className={styles.headerCheckBox}>
-                    <input
-                      type="checkbox"
-                      checked={selectedVectors.every((isSelected) => isSelected)}
-                      onChange={handleSelectAllChange}
-                    />
-                  </div>
-                  <div className={styles.headerName}>
-                    Vector
-                    <Filters />
-                  </div>
-                  <div className={styles.headerIP}>
-                    Dimension
-                    <Filters />
-                  </div>
-                  <div className={styles.headerCreated}>
-                    Agentes
-                    <Filters />
-                  </div>
-                </div>
-                <div className={styles.tableVectors}>
-                  {vectors.map((vector, index) => (
-                    <div key={index} className={styles.boardsList}>
-                      <div className={styles.boardCheckBox}>
-                        <input
-                          type="checkbox"
-                          checked={selectedVectors[index]}
-                          onChange={() => handleCheckboxChange(index)}
-                        />
-                      </div>
-                      <div
-                        className={styles.boardName}
-                        onClick={() => handleClickVector(vector)}
-                      >
-                        <span
-                          className={styles.dot}
-                          datatooltip={'Running'}
-                          onMouseEnter={handleToolTipMouseEnter}
-                          onMouseLeave={handleToolTipMouseLeave}
-                        ></span>
-                        <IconServer width={'30'} height={'30'} />
-                        <div className={styles.title}>
-                          <b>{vector?.title || 'Not title'}</b>
-                          <span>{vector?.description || 'Not description'}</span>
-                        </div>
-                        <div
-                          datatooltip={'Move to routed IP to support IP mobility'}
-                          onMouseEnter={handleToolTipMouseEnter}
-                          onMouseLeave={handleToolTipMouseLeave}
-                        >
-                          <IconImportant width={'30'} height={'30'} />
-                        </div>
-                      </div>
-                      <div className={styles.boardIP}>
-                        {vector.vector['0'] || 'Not Assigned'}
-                        <button
-                          className={styles.buttonCopy}
-                          datatooltip={'Copy'}
-                          onMouseEnter={handleToolTipMouseEnter}
-                          onMouseLeave={handleToolTipMouseLeave}
-                        >
-                          <IconCopy width={'20'} height={'20'} />
-                        </button>
-                      </div>
-                      <div
-                        className={styles.boardCreatedAt}
-                        datatooltip={'15 de diciembre'}
-                        onMouseEnter={handleToolTipMouseEnter}
-                        onMouseLeave={handleToolTipMouseLeave}
-                      >
-                        15 days ago
-                      </div>
-                      <div className={styles.boardMove}>
-                        <button className={styles.button}>Move Ip</button>
-                      </div>
-                      <div className={styles.boardSettings}>
-                        <button
-                          className={styles.button}
-                          onClick={() => togglePopupSettings(index)}
-                        >
-                          <IconSettings width={'30'} height={'30'} />
-                        </button>
-                        {visiblePopupSettings[index] && (
-                          <ul
-                            className={styles.popupSettings}
-                            onMouseLeave={() => closePopup(index)}
-                          >
-                            <li onClick={() => handleMoreInfo()} className={styles.hr}>
-                              More info
-                            </li>
-                            <li onClick={() => handlePowerOff()}>
-                              Resume
-                            </li>
-                            <li onClick={() => handleReboot()}>
-                              Reboot
-                            </li>
-                            <li onClick={() => handleDeleteBoard(board.id)}>
-                              Delete
-                            </li>
-                          </ul>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <div>
+                <Table
+                  fetchs={fetchsItems}
+                  items={vectors}
+                  setStateTable={setStateTable}
+                  handleAdd={() => dispatch(setModal(<ModalAddVector />))}
 
-              {isToolTipHovered && (
-                <div
-                  className={styles.popupToolTip}
-                  style={{ top: positionToolTip.top, left: positionToolTip.left }}
                 >
-                  {textToolTip}
-                </div>
-              )}
+                  <header>
+                    Vectores
+                  </header>
+                  <item component={(props) => <ComponentVector fn={propsFunctions} {...props} />} >
+                    Vector
+                  </item>
+                  <item component={(props) => <ComponentDimension fn={propsFunctions} {...props} />} >
+                    Dimension
+                  </item>
+                  <item component={(props) => <ComponentSize {...props} />} >
+                    Size
+                  </item>
+                  <item component={(props) => <ComponentAgents {...props} />} >
+                    Agentes
+                  </item>
+                  <item component={(props) => <ComponentCreatedAt fn={propsFunctions} {...props} />} >
+                    CreatedAt
+                  </item>
+                  <item component={(props) => <ComponentSettings fn={propsSettings} {...props} />} >
+                    &nbsp;
+                  </item>
+                </Table>
+              </div>
             </div>
           ) : (
             <div className={styles.noneVector}>
@@ -395,3 +395,149 @@ const Vector = ({ }) => {
 }
 
 export default Vector
+
+
+
+
+
+
+
+const ComponentVector = (props) => {
+  return (
+    <div
+      className={styles.vectorName}
+      onClick={() => props.fn.handleClickVector(props.item)}
+    >
+      <span
+        className={styles.dot}
+        datatooltip={'Running'}
+        onMouseEnter={props.fn.handleToolTipMouseEnter}
+        onMouseLeave={props.fn.handleToolTipMouseLeave}
+      ></span>
+      <IconServer width={'30'} height={'30'} />
+      <div className={styles.title}>
+        <b>{props.item?.title || 'Not title'}</b>
+        <span>{props.item?.description || 'Not description'}</span>
+      </div>
+      <div
+        datatooltip={'15 de diciembre'}
+        onMouseEnter={props.fn.handleToolTipMouseEnter}
+        onMouseLeave={props.fn.handleToolTipMouseLeave}
+      >
+        <div>
+          <IconImportant width={'30'} height={'30'} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ComponentDimension = (props) => {
+  return (
+    <div className={styles.vectorIP}>
+      {props.item.vector['0'] || 'Not Assigned'}
+      <button
+        className={styles.buttonCopy}
+        datatooltip={'Copy'}
+        onMouseEnter={props.fn.handleToolTipMouseEnter}
+        onMouseLeave={props.fn.handleToolTipMouseLeave}
+      >
+        <IconCopy width={'20'} height={'20'} />
+      </button>
+    </div>
+  )
+}
+
+const ComponentSize = (props) => {
+  return (
+    <div
+      className={styles.vectorSize}
+    >
+      <label>
+        13kb
+      </label>
+    </div>
+  )
+}
+
+const ComponentAgents = (props) => {
+  return (
+    <div
+      className={styles.vectorAgents}
+    >
+      <div>
+        A
+      </div>
+      <div>
+        B
+      </div>
+      <div>
+        C
+      </div>
+    </div>
+  )
+}
+
+const ComponentCreatedAt = (props) => {
+  return (
+    <div
+      className={styles.vectorCreatedAt}
+      datatooltip={'15 de diciembre'}
+      onMouseEnter={props.fn.handleToolTipMouseEnter}
+      onMouseLeave={props.fn.handleToolTipMouseLeave}
+    >
+      15 days ago
+    </div>
+  )
+}
+
+const ComponentSettings = (props) => {
+
+  const [visiblePopupSettings, setVisiblePopupSettings] = useState({})
+
+  const togglePopupSettings = (boardIndex) => {
+    setVisiblePopupSettings((prevVisiblePopups) => ({
+      ...prevVisiblePopups,
+      [boardIndex]: !prevVisiblePopups[boardIndex]
+    }))
+  }
+
+  const closePopup = (boardIndex) => {
+    setVisiblePopupSettings((prevVisiblePopups) => ({
+      ...prevVisiblePopups,
+      [boardIndex]: false
+    }))
+  }
+
+
+
+  return (
+    <div className={styles.vectorSettings}>
+      <button
+        className={styles.button}
+        onClick={() => togglePopupSettings(props.item.id)}
+      >
+        <IconSettings width={'30'} height={'30'} />
+      </button>
+      {visiblePopupSettings[props.item.id] && (
+        <ul
+          className={styles.popupSettings}
+          onMouseLeave={() => closePopup(props.item.id)}
+        >
+          <li onClick={() => props.fn.handleDelete(props.item.id)}>
+            Eliminar
+          </li>
+          <li onClick={() => props.fn.handleDuply()}>
+            Duplicar
+          </li>
+          <li onClick={() => props.fn.handleCopyPath(props.item.id)}>
+            Copiar ruta
+          </li>
+          <li onClick={() => props.fn.handleEdit()} className={styles.hr}>
+            Editar
+          </li>
+        </ul>
+      )}
+    </div>
+  )
+}

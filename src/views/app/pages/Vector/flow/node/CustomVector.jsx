@@ -27,7 +27,7 @@ import {
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
   const dispatch = useDispatch()
 
-  const {
+  const { 
     dimension
   } = useSelector((state) => state.vector)
 
@@ -46,13 +46,15 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
   useEffect(() => {
-    if (dimension) {
-      const nodePosition = dimension.position;
+    if (dimension && dimension.id == id) {
+      // console.log('eee', id, nodePosition)
+      const node = nodes.filter((node) => node.id === id)[0]
 
       const reactFlowElement = document.querySelector('.react-flow');
       if (reactFlowElement) {
-        const x = nodePosition.x + 300
-        const y = nodePosition.y + 200
+        const x = node.position.x + 300
+        const y = node.position.y + 200
+        
 
         const zoom = 0.9
 
@@ -72,7 +74,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
     if (filter) {
       setFilter(null)
     } else {
-      setFilter('info')
+      setFilter('table')
     }
 
     const node = nodes.filter((node) => node.id === id)[0]
@@ -119,6 +121,18 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
 
+  // useEffect(() => {
+  //   const currentNode = nodes.find(node => node.id === id);
+  //   if (currentNode) {
+  //     // setPosition(currentNode.position);
+  //     console.log('currentNode', currentNode)
+  //   }
+  // }, [])
+
+
+
+
+
   return (
     <>
       {id}
@@ -141,6 +155,8 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         <div
           className={styles.boxVector}
           onClick={(e) => handleSelectVector(e)}
+          onDoubleClick={() => setFilter('agent')}
+
           onContextMenu={(e) => {
             e.preventDefault();
             setShowContextMenu(true);

@@ -23,7 +23,7 @@ const Vector = ({
         // alert(`Posición del ratón: (${mouseX}, ${mouseY})`);
 
         setTimeout(function(){
-            navigate(`/${'es'}/app/vector/3f6376b1-8e12-4870-8833-4307348b3db9`)
+            navigate(`/${'es'}/app/vector/08e0cd4c-5832-4411-9f17-d0ca9683448b`)
         }, 1800)
     };
 

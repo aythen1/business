@@ -100,7 +100,11 @@ async function _deleteVector(req, res) {
   const { id, name } = req.params
   const { data } = req.body
 
+  console.log('dddd', data)
+
   const resp = await deleteVector(id, name, data)
+
+  console.log('deletedeledele', resp)
 
   return res.status(200).send(data)
 }

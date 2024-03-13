@@ -64,7 +64,7 @@ const Settings = ({ }) => {
     if (value == 'support') {
       navigate(`/${'es'}/app/support`);
     } else if (value == 'vector') {
-      navigate(`/${'es'}/app/vector`);
+      navigate(`/${'es'}/app/settings/vector`);
     } else if (value == 'board') {
       dispatch(setDashboard(null))
       navigate(`/${'es'}/app/settings/${value}`);
@@ -103,7 +103,7 @@ const Settings = ({ }) => {
         </button>
         <button
           style={{ marginLeft: 'auto' }}
-          className={tag === 'test' ? styles.selected : ''}
+          className={tag === 'vector' ? styles.selected : ''}
           onClick={() => selectTag('vector')}
         >
           Aythen DB

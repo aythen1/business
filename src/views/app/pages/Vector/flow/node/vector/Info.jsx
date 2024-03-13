@@ -3,9 +3,15 @@ import React, { } from "react";
 import styles from './Info.module.css'
 
 
-import IconExcel from '../assets/icon-excel.svg'
-import IconWord from '../assets/icon-word.svg'
+// import IconExcel from '../assets/icon-excel.svg'
+// import IconWord from '../assets/icon-word.svg'
+
+import IconExcel from '../../../../Settings/drive/assets/icons/XSL.svg'
+import IconWord from '../../../../Settings/drive/assets/icons/DOC.svg'
 import IconOther from '../assets/icon-other.svg'
+
+
+
 
 export default ({ data, setFilter }) => {
     const handleClickData = () => {
@@ -44,7 +50,7 @@ export default ({ data, setFilter }) => {
                 </div>
                 <div className={styles.form}>
                     <b>
-                        Quien tiene acceso a este dato
+                        Quién tiene acceso a este dato
                     </b>
                     <div className={styles.input}>
                         <input

@@ -45,6 +45,8 @@ import {
     fetchsVector,
 } from '@/actions/vector'
 
+import { ModalAddVector } from '../Vector/ModalVector.jsx';
+
 
 
 
@@ -225,7 +227,8 @@ const Home = ({
     const [listVector, setListVector] = useState([])
 
     const handleAddVector = () => {
-        navigate('/es/app/settings/drive')
+        // navigate('/es/app/settings/drive')
+        dispatch(setModal(<ModalAddVector />))
     }
 
     const handleClickVector = () => {

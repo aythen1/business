@@ -1,93 +1,203 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+// import './App.css';
 
-const NFCReaderWriter = () => {
-  const [nfcData, setNfcData] = useState(null);
-  const [nfcSupported, setNfcSupported] = useState(true);
+const TreeNode = ({ node, onAddChild, onDelete, onToggle, onDragStart, onDragOver, onDrop }) => {
+  const [newChildText, setNewChildText] = useState('');
 
-  useEffect(() => {
-    const handleNFCReading = async (event) => {
-      try {
-        const message = event.message;
-
-        // Procesar datos de la etiqueta NFC
-        const records = message.records.map((record) => {
-          return {
-            recordType: record.recordType,
-            data: record.data ? record.data.text() : null,
-          };
-        });
-
-        setNfcData(records);
-
-        // Mostrar alerta cuando se detecta una etiqueta
-        alert('¡Etiqueta NFC detectada!');
-      } catch (error) {
-        console.error('Error al leer datos NFC:', error);
-      }
-    };
-
-    if ('NDEFReader' in window) {
-      const nfcReader = new NDEFReader();
-
-      nfcReader.addEventListener('reading', handleNFCReading);
-
-      nfcReader
-        .scan()
-        .then(() => {
-          console.log('Esperando la lectura de una etiqueta NFC...');
-        })
-        .catch((error) => {
-          console.error('Error al iniciar la lectura NFC:', error);
-        });
-
-      return () => {
-        nfcReader.removeEventListener('reading', handleNFCReading);
-      };
-    } else {
-      console.error('La API Web NFC no está soportada en este navegador.');
-      setNfcSupported(false);
-    }
-  }, []);
-
-  const handleNFCWrite = async () => {
-    try {
-      const writer = new NDEFWriter();
-      const message = new NDEFMessage([
-        new NDEFRecord('text/plain', new TextEncoder().encode('Datos para escribir')),
-      ]);
-
-      await writer.write(message);
-
-      // Mostrar alerta cuando se escriben datos en la etiqueta
-      alert('¡Datos escritos en la etiqueta NFC!');
-      console.log('Datos escritos en la etiqueta NFC.');
-    } catch (error) {
-      console.error('Error al escribir datos NFC:', error);
+  const handleAddChild = () => {
+    if (newChildText.trim() !== '') {
+      onAddChild(node.id, newChildText);
+      setNewChildText('');
     }
   };
 
+  const handleDelete = () => {
+    onDelete(node.id);
+  };
+
+  const handleToggle = () => {
+    onToggle(node.id);
+  };
+
+  const handleDragStart = (e) => {
+    e.dataTransfer.setData('text/plain', node.id);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    onDragOver(node.id);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    onDrop(node.id);
+  };
+
   return (
-    <div>
-      <h2>Lectura y Escritura NFC</h2>
-
-      {nfcSupported ? (
-        <div>
-          <div>
-            <h3>Datos NFC Leídos:</h3>
-            {nfcData ? (
-              <pre>{JSON.stringify(nfcData, null, 2)}</pre>
-            ) : (
-              <p>Esperando la lectura de una etiqueta NFC...</p>
-            )}
-          </div>
-
-          <button onClick={handleNFCWrite}>Escribir en la Etiqueta NFC</button>
-        </div>
-      ) : (
-        <p>La API Web NFC no está soportada en este navegador.</p>
+    <div
+      className="tree-node"
+      style={{ marginLeft: `${node.depth * 20}px` }}
+      draggable
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+    >
+      <span>{node.text}</span>
+      <button onClick={handleAddChild}>Añadir hijo</button>
+      <button onClick={handleDelete}>Eliminar</button>
+      <button onClick={handleToggle}>{node.expanded ? 'Contraer' : 'Expandir'}</button>
+      {node.expanded && (
+        <ul>
+          {node.children.map((child) => (
+            <TreeNode
+              key={child.id}
+              node={child}
+              onAddChild={onAddChild}
+              onDelete={onDelete}
+              onToggle={onToggle}
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              onDrop={onDrop}
+            />
+          ))}
+        </ul>
       )}
     </div>
   );
 };
 
-export default NFCReaderWriter;
+const App = () => {
+  const [tree, setTree] = useState({
+    id: 'root',
+    text: 'Root',
+    depth: 0,
+    expanded: true,
+    children: [
+      { id: '1', text: 'Item 1', depth: 1, expanded: false, children: [] },
+      { id: '2', text: 'Item 2', depth: 1, expanded: false, children: [] },
+    ],
+  });
+
+  const traverseTree = (currentNode, nodeId, callback) => {
+    if (currentNode.id === nodeId) {
+      callback(currentNode);
+    } else if (currentNode.children) {
+      currentNode.children.forEach((child) => traverseTree(child, nodeId, callback));
+    }
+  };
+
+  const handleAddChild = (parentId, childText) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      traverseTree(newTree, parentId, (parent) => {
+        const newChild = {
+          id: `${parentId}-${parent.children.length + 1}`,
+          text: childText,
+          depth: parent.depth + 1,
+          expanded: false,
+          children: [],
+        };
+        if (!parent.children) {
+          parent.children = [];
+        }
+        parent.children.push(newChild);
+      });
+      return newTree;
+    });
+  };
+
+  const handleDelete = (nodeId) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      let parent;
+      traverseTree(newTree, nodeId, (currentNode) => {
+        parent = currentNode;
+      });
+
+      if (parent) {
+        parent.children = parent.children.filter((child) => child.id !== nodeId);
+      }
+      return newTree;
+    });
+  };
+
+  const handleToggle = (nodeId) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      traverseTree(newTree, nodeId, (currentNode) => {
+        currentNode.expanded = !currentNode.expanded;
+      });
+      return newTree;
+    });
+  };
+
+  const handleDragStart = (draggedNodeId) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      traverseTree(newTree, draggedNodeId, (draggedNode) => {
+        draggedNode.isDragging = true;
+      });
+      return newTree;
+    });
+  };
+
+  const handleDragOver = (targetNodeId) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      traverseTree(newTree, targetNodeId, (targetNode) => {
+        targetNode.isOver = true;
+      });
+      return newTree;
+    });
+  };
+
+  const handleDrop = (targetNodeId) => {
+    setTree((prevTree) => {
+      const newTree = { ...prevTree };
+      let draggedNode;
+      traverseTree(newTree, (node) => node.isDragging, (node) => {
+        draggedNode = node;
+      });
+
+      if (draggedNode) {
+        traverseTree(newTree, draggedNode.id, (node) => {
+          node.isDragging = false;
+        });
+
+        let targetNode;
+        traverseTree(newTree, targetNodeId, (node) => {
+          targetNode = node;
+        });
+
+        if (targetNode) {
+          draggedNode.depth = targetNode.depth + 1;
+          targetNode.children.push(draggedNode);
+        }
+      }
+
+      // Reset drag and drop states
+      traverseTree(newTree, (node) => node.isDragging || node.isOver, (node) => {
+        node.isDragging = false;
+        node.isOver = false;
+      });
+
+      return newTree;
+    });
+  };
+
+  return (
+    <div>
+      <TreeNode
+        node={tree}
+        onAddChild={handleAddChild}
+        onDelete={handleDelete}
+        onToggle={handleToggle}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      />
+    </div>
+  );
+};
+
+export default App;

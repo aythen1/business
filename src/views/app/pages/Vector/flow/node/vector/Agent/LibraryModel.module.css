@@ -1,0 +1,58 @@
+.modal{
+    max-width: 800px;
+    svg{
+        width: 10px;
+    }
+}
+
+
+
+.notification{
+    background: var(--color-primary-4);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    svg{
+        width: 20px;
+    }
+}
+
+
+.search{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--color-primary-4);
+    svg{
+        width: 14px;
+    }    
+    input{
+        background: transparent;
+        outline: none;
+    }
+    ul{
+        display: none;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+    }
+}
+
+
+.container{
+    display: grid;
+    grid-template-columns: 200px 1fr 100px;
+}
+
+
+
+.addCode{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: yellow;
+}

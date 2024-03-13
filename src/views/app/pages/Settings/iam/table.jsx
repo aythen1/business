@@ -121,7 +121,9 @@ const Table = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(fetchs({}))
+        console.log('wfiurhurhgu')
+        // await dispatch(fetchs({}))
+        fetchs({})
 
       } catch (err) {
         console.log(err);

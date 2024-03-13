@@ -1,45 +1,104 @@
-.modal{
-    width: 350px;
-    margin: 0 auto;
+.modal {
+  width: 350px;
+  margin: 0 auto;
 
-    .header{
-        h3{
+  .header {
+    h3 {
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+  .type {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 
-        }
-        p{
-            font-size: 16px;
-        }
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      position: relative;
     }
-    .type{
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        label{
-            display: flex;
-            gap: 4px;
-            justify-content: flex-start;
-            align-items: center;
-            input{
 
-            }
-        }
+    .checkbox-remember {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      outline: none;
+      margin-right: 8px;
+      position: relative;
+      z-index: 1;
     }
-    .adjunt{
-        margin-top: 10px;
-        p{
-            font-size: 14px;
-        }
-        ul{
-            border-top: 1px solid var(--border-color);
-            padding-top: 10px;
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            li{
-                padding: 10px;
-                background: var(--border-color);
-            }
-        }
+
+    .checkbox-remember:checked {
+      background-color: var(--color-primary-0);
+      border-color: var(--color-primary-0);
     }
+
+    .checkbox-remember::before {
+      content: "\2713";
+      font-size: 13px;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    .checkbox-remember:checked::before {
+      opacity: 1;
+    }
+  }
+  .adjunt {
+    margin-top: 10px;
+    p {
+      font-size: 14px;
+    }
+    ul {
+      border-top: 1px solid var(--border-color);
+      padding-top: 10px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      li {
+        padding: 10px;
+        border-radius: 10px;
+        background: var(--color-primary-4);
+      }
+    }
+  }
+
+  .buttons {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: rgb(255, 74, 74);
+      color: #fff;
+      border-radius: 8px;
+      &.addBackup {
+        background-color: var(--color-primary-1);
+        &:hover {
+          background-color: var(--color-primary-0);
+        }
+      }
+      &:hover {
+        background-color: rgb(245, 54, 54);
+      }
+    }
+  }
 }

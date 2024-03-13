@@ -14,8 +14,14 @@ export default ({ data, setFilter }) => {
 
     useEffect(() => {
         if (!dgxlRef.current.grid) {
-            dgxlRef.current.grid = new DataGridXL(dgxlRef.current,{ data: data.data});
+            console.log('nenenene', data.data)
+            // setTimeout(() => {
+                console.log('111', data.data)
+                dgxlRef.current.grid = new DataGridXL(dgxlRef.current, { data: data.data });
+
+            // }, 2000)
         }
+
     }, [data.data]);
 
     const handleClickReturn = () => {
@@ -31,21 +37,21 @@ export default ({ data, setFilter }) => {
         <>
             <div className={styles.App}>
                 <div className={styles.buttons}>
-                <button 
-                    className={styles.return}
-                    onClick={() => handleClickReturn()}
-                >
-                    Atrás
-                </button>
-                <button 
-                    className={styles.upload}
-                    onClick={() => handleClickUpload()}
-                >
-                    Subir
-                </button>
+                    <button
+                        className={styles.return}
+                        onClick={() => handleClickReturn()}
+                    >
+                        Atrás
+                    </button>
+                    <button
+                        className={styles.upload}
+                        onClick={() => handleClickUpload()}
+                    >
+                        Subir
+                    </button>
                 </div>
                 {state == 'table' ? (
-                    <div ref={dgxlRef}  />
+                    <div ref={dgxlRef} style={{height: '300px'}} />
                 ) : (
                     <Upload />
                 )}

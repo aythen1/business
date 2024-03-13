@@ -20,12 +20,12 @@ export default ({ data, setFilter }) => {
             <div className={styles.modal}>
                 <div className={styles.header}>
                     <h2>
-                        Automatiza Lancedb
+                        Ajustes del vector
                     </h2>
                 </div>
                 <div className={styles.banner}>
                     <p>
-                        Si es otro multimedia puedes hacerlo visible a todo el mundo
+                        Edita tu configuración del vector con el tipo de dato
                     </p>
                     <div className={styles.buttons}>
                         <button>
@@ -44,14 +44,14 @@ export default ({ data, setFilter }) => {
                 </div>
                 <div className={styles.form}>
                     <b>
-                        Quien tiene acceso a este dato
+                        Quién puede acceder al vector:
                     </b>
                     <div className={styles.input}>
                         <input
                             type="checkbox"
                         />
                         <span>
-                            Datos a todo el mudno
+                            Acceso público
                         </span>
                     </div>
                     <div className={styles.input}>
@@ -59,8 +59,7 @@ export default ({ data, setFilter }) => {
                             type="checkbox"
                         />
                         <span>
-
-                            Datos desde gpt
+                            Acceso desde el link
                         </span>
                     </div>
                     <div className={styles.input}>
@@ -68,8 +67,7 @@ export default ({ data, setFilter }) => {
                             type="checkbox"
                         />
                         <span>
-
-                            Datos con llave a esa persona
+                            Acceso a todo el IAM
                         </span>
                     </div>
                 </div>
