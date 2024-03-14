@@ -1,15 +1,25 @@
 import React from 'react'
-
+import { useDispatch } from 'react-redux'
 
 import styles from './LogBackup.module.css'
 
+
+import {
+    deleteBackupVector,
+    addBackupVector
+} from '@/actions/vector'
+
+
 const LogBackup = ({ }) => {
 
+    const dispatch = useDispatch()
+
     const handleDeleteBackup = () => {
-
+        dispatch(deleteBackupVector({ }))
     }
-
+    
     const handleAddBackup = () => {
+        dispatch(addBackupVector({ }))
 
     }
 

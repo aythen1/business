@@ -20,6 +20,7 @@ import ChatBot from './components/ChatBot';
 import { Modal, Notification } from './components/Modal';
 import NotFound from '../pages/NotFound'
 
+import Meet from './pages/Meet'
 import DashBoard from './pages/DashBoard'
 
 import Support from './pages/Support'
@@ -177,6 +178,7 @@ export const App = ({ }) => {
           <Routes>
             <Route path="board/*" element={<DashBoard />} />
             <Route path="/*" element={<Outlet />}>
+              <Route path="meet/:room" element={<Meet />} />
               <Route path="iam" element={<SettingsIAM />} />
 
               <Route path="" element={<Settings />} />

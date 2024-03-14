@@ -333,6 +333,80 @@ async () => {
 
 
 
+export const duplyVector = 
+createAsyncThunk('vector/duplyVector',
+async ({ id, name, data }) => {
+  try {
+    const token = localStorage.getItem('token')
+    
+    const res = await apiBackend.post(
+      `/vector/duply/${id}/${name}`,{
+        data
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }
+    )
+
+
+    return res.data
+  } catch (error) {
+    console.error('Error:', error)
+  }
+})
+
+
+
+
+export const addBackupVector = 
+createAsyncThunk('vector/addBackupVector',
+async ({ id, name }) => {
+  try {
+    const token = localStorage.getItem('token')
+    
+    const res = await apiBackend.post(
+      `/vector/backup/${id}/${name}`,{
+        
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }
+    )
+
+
+    return res.data
+  } catch (error) {
+    console.error('Error:', error)
+  }
+})
+
+
+export const deleteBackupVector = 
+createAsyncThunk('vector/deleteBackupVector',
+async ({ id, name }) => {
+  try {
+    const token = localStorage.getItem('token')
+    
+    const res = await apiBackend.delete(
+      `/vector/backup/${id}/${name}`,{
+        
+      },{
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }
+    )
+
+    return res.data
+  } catch (error) {
+    console.error('Error:', error)
+  }
+})
+
+
+
 
 
 

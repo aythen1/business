@@ -1,3 +1,6 @@
+
+import { isValidElement } from 'react'
+
 import {
   convertToMegabytes,
   calculateFolderSize,
@@ -21,13 +24,12 @@ export const Filters = ({ name, sortOrder, handleSelectFilter }) => {
   return (
     <div
       className={`${style.sortOrder} 
-          ${
-            sortOrder.name !== name
-              ? ""
-              : sortOrder.order == "asc"
-              ? style.bottom
-              : style.top
-          }
+          ${sortOrder.name !== name
+          ? ""
+          : sortOrder.order == "asc"
+            ? style.bottom
+            : style.top
+        }
           `}
       onClick={() => {
         handleSelectFilter(name, sortOrder.order === "asc" ? "dsc" : "asc");
@@ -216,9 +218,8 @@ export const renderFolders = (
             <div>
               <input
                 type="checkbox"
-                className={`${style.input} ${
-                  selectedFolders.length > 0 ? "" : style.hidden
-                }`}
+                className={`${style.input} ${selectedFolders.length > 0 ? "" : style.hidden
+                  }`}
                 checked={selectedFolders.some(
                   (selectedFolder) => selectedFolder.Key === directory.Key
                 )}
@@ -228,7 +229,14 @@ export const renderFolders = (
                 }}
               />
             </div>
-            <img src={icon} style={{ width: 16 }} />
+            {isValidElement(icon) ? (
+              <p>
+
+                hello world
+              </p>
+            ) : (
+              <img src={icon} style={{ width: 16 }} />
+            )}
             <p className={style.drive_folder_title}>{folderName}</p>
           </div>
           {isTrash !== true && (
@@ -394,12 +402,17 @@ export const renderRecentFiles = (
         <div className={style.icon}>
           <div className={style.file}>
             <div className={style.vector}>
-              <img
-                src={icon}
-                width={25}
-                height={25}
-                alt={fileExtension || "default"}
-              />
+              {/* |{JSON.stringify(icon)}| */}
+              {isValidElement(icon) ? (
+                icon
+              ) : (
+                <img
+                  src={icon}
+                  width={25}
+                  height={25}
+                  alt={fileExtension || "default"}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -409,21 +422,23 @@ export const renderRecentFiles = (
             <div className={style.kb}>{size}</div>
           </div>
         </div>
-        {folderOptions[index] && (
-          <FileOptions
-            setShowFolderOption={(value) =>
-              setFolderOptions((prevOptions) => ({
-                ...prevOptions,
-                [index]: value,
-              }))
-            }
-            handleDeleteFolder={sendFileToTrash}
-            folderName={fileName}
-            directory={file}
-            position={position}
-          />
-        )}
-      </div>
+        {
+          folderOptions[index] && (
+            <FileOptions
+              setShowFolderOption={(value) =>
+                setFolderOptions((prevOptions) => ({
+                  ...prevOptions,
+                  [index]: value,
+                }))
+              }
+              handleDeleteFolder={sendFileToTrash}
+              folderName={fileName}
+              directory={file}
+              position={position}
+            />
+          )
+        }
+      </div >
     );
   });
 };

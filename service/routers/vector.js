@@ -15,9 +15,14 @@ const {
   loadVector,
   deleteVector,
   removeVector,
+  duplyVector,
+
   openVector,
   getVector,
   getAllVector,
+
+  addBackupVector,
+  deleteBackupVector,
 } = require('../controllers/vector')
 
 routerVector
@@ -27,6 +32,7 @@ routerVector
   .post('/share/:id', authenticateToken, shareFileVector)
 
   .post('/file', authenticateToken, openVector)
+  .post('/duply/:id/:name', authenticateToken, duplyVector)
   .post('/load/:id/:name', authenticateToken, loadVector)
 
   .delete('/:id/:name', authenticateToken, deleteVector)
@@ -34,6 +40,8 @@ routerVector
   .post('/:id/:name', authenticateToken, getVector)
   .get('/', authenticateToken, getAllVector)
 
+  .post('/backup/:id/:name', authenticateToken, addBackupVector)
+  .delete('/backup/:id/:name', authenticateToken, deleteBackupVector)
 
 module.exports = routerVector
 

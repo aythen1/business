@@ -2,18 +2,24 @@ const { catchedAsync, response } = require("../utils/err");
 const lancedb = require("vectordb");
 const fs = require("fs");
 const path = require("path");
+const archiver = require('archiver');
 const allSchemas = require("../services/lancedb/schema");
 
 const {
   addVector,
   updateVector,
   getVector,
+
   deleteVector,
+  duplyVector,
   removeVector,
 
   generateEmptyObjectFromSchema,
   validateAgainstSchema,
 } = require("../services/lancedb");
+
+const { sendEmail } = require("../services/email");
+
 
 const decodeVector = (base64Str) => {
   const str = atob(base64Str);
@@ -21,6 +27,14 @@ const decodeVector = (base64Str) => {
   const [workspaceId, projectId] = str.split("/");
   return { workspaceId, projectId };
 };
+
+const encodeVector = (id) => {
+  const str = `${id}`
+  const base64Str = btoa(str)
+  return base64Str
+}
+
+
 
 async function _addVector(req, res) {
   const { id, name, data } = req.body;
@@ -83,9 +97,9 @@ function _deleteDirSync(directorio) {
       const stats = fs.statSync(rutaArchivo);
 
       if (stats.isDirectory()) {
-        eliminarDirectorioSync(rutaArchivo) 
+        eliminarDirectorioSync(rutaArchivo)
       } else {
-        fs.unlinkSync(rutaArchivo) 
+        fs.unlinkSync(rutaArchivo)
       }
     });
 
@@ -108,6 +122,56 @@ async function _deleteVector(req, res) {
 
   return res.status(200).send(data)
 }
+
+
+async function _duplyVector(req, res) {
+  const { id, name } = req.params
+  const { data } = req.body
+
+  console.log('dddd', name)
+
+  const resp = await duplyVector(id, name, [0, 0], data)
+
+  const nodes = JSON.parse(resp.nodes)
+
+  const vectorNodes = []
+
+  for (var i = 0; i < nodes.length; i++) {
+    const node = nodes[i]
+
+    // let id = iniVector({
+    //     path0: 'addon',
+    //     path1: addonId,
+    //     path2: node.id
+    // })
+
+    console.log('node', data.id, node.id)
+    const uri = encodeVector(`${'vector'}/${data.id}/${node.id}`)
+
+    const vector = await getVector(
+      uri,
+      'vector',
+      [0, 0]
+    )
+    console.log('dde2e', vector)
+
+    if (vector !== 400) {
+      vectorNodes.push(vector)
+    }
+  }
+
+
+
+  const respVector = await addVector(id, name, (vector = [0, 0]), resp);
+
+
+
+
+  console.log('respVector', respVector)
+
+  return res.status(200).send(respVector[0])
+}
+
 
 async function _removeVector(req, res) {
   const { id, name } = req.params
@@ -282,6 +346,8 @@ const shareFileVector2 = async (req, res) => {
     res.status(500).json({ error: "Error interno del servidor." });
   }
 };
+
+
 const shareFileVector = async (req, res) => {
   const { user } = req;
   const { id } = req.params;
@@ -388,6 +454,49 @@ const shareFileVector = async (req, res) => {
   }
 };
 
+
+
+
+
+
+const addBackupVector = async (req, res, next) => {
+  const { options } = req.body
+
+
+  const sourceFolder = 'data/vector/test/test/addons.lance';
+  const backupFolder = 'data/backup';
+  
+  try {
+    // Crear la ruta completa del archivo ZIP
+    const zipFileName = '14-03-2024.zip';
+    const zipFilePath = path.join(backupFolder, zipFileName);
+  
+    // Crear un archivo ZIP
+    const archive = archiver('zip', { zlib: { level: 9 } });
+    const output = fs.createWriteStream(zipFilePath);
+    archive.pipe(output);
+  
+    // Agregar el contenido del directorio original al archivo ZIP
+    archive.directory(sourceFolder, false);
+  
+    // Finalizar el archivo ZIP
+    archive.finalize();
+  
+    console.log('Archivo ZIP creado con éxito en:', zipFilePath);
+  } catch (error) {
+    console.error('Error al crear el archivo ZIP:', error);
+  }
+
+}
+
+const deleteBackupVector = (req, res, next) => {
+
+  return res.send(200).send('delete')
+}
+
+
+
+
 module.exports = {
   addVector: catchedAsync(_addVector),
   updateVector: catchedAsync(_updateVector),
@@ -396,10 +505,15 @@ module.exports = {
 
   loadVector: catchedAsync(_loadVector),
   deleteVector: catchedAsync(_deleteVector),
+  duplyVector: catchedAsync(_duplyVector),
+
   removeVector: catchedAsync(_removeVector),
   openVector: catchedAsync(_openVector),
   getVector: catchedAsync(_getVector),
   getAllVector: catchedAsync(_getAllVector),
+
+  addBackupVector: catchedAsync(addBackupVector),
+  deleteBackupVector: catchedAsync(deleteBackupVector),
 };
 
 // const loadVector = async (req, res) => {

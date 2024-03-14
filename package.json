@@ -9,6 +9,7 @@
         "@react-querybuilder/dnd": "^6.5.5",
         "@reduxjs/toolkit": "^2.0.1",
         "@tldraw/tldraw": "^1.29.2",
+        "archiver": "^7.0.1",
         "aws-sdk": "^2.1545.0",
         "axios": "^1.6.5",
         "canvas-size": "^1.2.6",

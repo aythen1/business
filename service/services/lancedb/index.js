@@ -165,6 +165,7 @@ const generateEmptyObjectFromSchema = (schema, data = {}) => {
 
   return emptyObject;
 };
+
 async function addVector(id, name, vector = [0, 0], data, relations) {
   // id base64
   const { path0, path1, path2 } = decodeVector(id);
@@ -527,7 +528,8 @@ async function getVector(id, name, vector = [0, 0], conditions = []) {
     const query = await tbl.search(vector).where(searchQuery).execute();
     return query;
   } catch (error) {
-    return error;
+    // return error;
+    return 400;
   }
 }
 
@@ -566,7 +568,7 @@ async function getFile(path, vector = [2, 2]) {
 async function deleteVector(id, name, data) {
   const { path0, path1, path2 } = decodeVector(id);
   const uri = "data/vector/" + path0 + "/" + path1;
-  
+
   console.log('dataaaa', path0, path1, path2, data.id)
   const db = await lancedb.connect(uri);
   const tbl = await db.openTable(name);
@@ -601,6 +603,32 @@ async function removeVector(id, name) {
   response(res, 200, { data: 200 });
 }
 
+async function duplyVector(id, name, vector = [0, 0], data) {
+  const { path0, path1 } = decodeVector(id);
+
+  const uri = "data/vector/" + path0 + "/" + path1;
+
+  try {
+    const db = await lancedb.connect(uri);
+    const tbl = await db.openTable(name);
+
+    const conditions = [{ field: "id", operator: "==", value: data.id }];    
+    const searchQuery = generateSearchString(conditions);
+
+    if (searchQuery.error) {
+      return searchQuery;
+    }
+
+
+    const query = await tbl.search(vector).where(searchQuery).execute();
+    return query[0];
+  } catch (error) {
+    return error;
+  }
+
+  // response(res, 200, { data: 200 });
+}
+
 function removePathname(path) {
   try {
     const folder = fs.readdirSync(path);
@@ -610,14 +638,13 @@ function removePathname(path) {
       const stats = fs.statSync(pathname);
 
       if (stats.isDirectory()) {
-        eliminarDirectorioSync(pathname); // Recursivamente eliminar directorios internos
+        eliminarDirectorioSync(pathname);
       } else {
-        fs.unlinkSync(pathname); // Eliminar archivo
+        fs.unlinkSync(pathname);
       }
     });
 
-    fs.rmdirSync(path); // Eliminar el directorio vacío
-    //   console.log(`Directorio ${directorio} eliminado exitosamente.`)
+    fs.rmdirSync(path);
   } catch (err) {
     //   console.error(`Error al eliminar el directorio ${directorio}: ${err}`)
   }
@@ -627,8 +654,10 @@ module.exports = {
   addVector,
   updateVector,
   getVector,
+
   deleteVector,
   removeVector,
+  duplyVector,
 
   generateEmptyObjectFromSchema,
   validateAgainstSchema,
