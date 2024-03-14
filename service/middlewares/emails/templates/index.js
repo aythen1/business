@@ -1,5 +1,6 @@
 // const config = require('../../../config')
 
+const dataBackupEmail = require("./backup-email");
 // const dataAds = require("./ads");
 const dataConfirmEmail = require("./confirm-email");
 const dataRecoverPassword = require("./recover-password");

@@ -15,11 +15,13 @@ import gif from "./assets/icons/GIF.svg";
 import html from "./assets/icons/HTML.svg";
 import iso from "./assets/icons/ISO.svg";
 import javs from "./assets/icons/JAVS.svg";
+import JPEG from "./assets/icons/JPEG";
 import jpeg from "./assets/icons/JPEG.svg";
 import mdb from "./assets/icons/MDB.svg";
 import mid from "./assets/icons/MID.svg";
 import mov from "./assets/icons/MOV.svg";
 import mp3 from "./assets/icons/MP3.svg";
+import MP4 from "./assets/icons/MP4";
 import mp4 from "./assets/icons/MP4.svg";
 import mpeg from "./assets/icons/MPEG.svg";
 import pdf from "./assets/icons/PDF.svg";
@@ -33,7 +35,8 @@ import raw from "./assets/icons/RAW.svg";
 import rss from "./assets/icons/RSS.svg";
 import svg from "./assets/icons/SVG.svg";
 import tiff from "./assets/icons/TIFF.svg";
-import txt from "./assets/icons/TXT.svg";
+import TXT from "./assets/icons/TXT";
+// import txt from "./assets/icons/TXT.svg";
 import wav from "./assets/icons/WAV.svg";
 import wma from "./assets/icons/WMA.svg";
 import xml from "./assets/icons/XML.svg";
@@ -292,13 +295,13 @@ export const icons = {
   html,
   iso,
   javs,
-  jpeg,
-  jpg: jpeg,
+  jpeg: <JPEG />,
+  jpg: <JPEG />,
   mdb,
   mid,
   mov,
   mp3,
-  mp4,
+  mp4: <MP4 />,
   mpeg,
   pdf,
   png,
@@ -311,7 +314,7 @@ export const icons = {
   rss,
   svg,
   tiff,
-  txt,
+  txt: <TXT />,
   wav,
   wma,
   xml,

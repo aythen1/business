@@ -7,6 +7,8 @@ import {
   addVectorData,
 
   deleteVector,
+  duplyVector,
+
   fetchsVector,
   fetchVector,
 } from '@/actions/vector'
@@ -71,6 +73,10 @@ const vectorSlice = createSlice({
         state.vectors = state.vectors.filter(vector => vector.id !== id);
 
         state.vector = null;
+      })
+      .addCase(duplyVector.fulfilled, (state, action) => {
+        // console.log('2200', action.payload)
+        state.vectors.push(action.payload)
       })
 
   },

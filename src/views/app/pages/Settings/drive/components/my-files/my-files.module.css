@@ -138,15 +138,13 @@
     align-items: center;
     justify-content: center;
     .vector {
-      height: 10px;
       /* margin-top: 90%; */
+      margin-top: 36px;
       img {
         width: 45px;
       }
       svg {
-        width: 60px;
-        height: 0px;
-        margin-top: -20px;
+        width: 50px;
       }
     }
   }

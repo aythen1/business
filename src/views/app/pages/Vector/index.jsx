@@ -33,7 +33,8 @@ import {
   iniVector,
   fetchsVector,
   fetchVector,
-  deleteVector
+  deleteVector,
+  duplyVector
 } from '@/actions/vector'
 
 
@@ -100,21 +101,23 @@ const Vector = ({ }) => {
     if (vectors.length == 0) fetchsItems()
   }, [])
 
-  const fetchsItems = async () => {
-    console.log('vecttototo')
-    let id = iniVector({
-      workspaceId: user.id,
-      projectId: 'vector',
-    })
+  
 
-    try {
-      await dispatch(fetchsVector({
-        id,
-        name: 'vectors'
-      }))
-    } catch (err) {
-      console.log('Err', err)
-    }
+  const fetchsItems = async () => {
+    // console.log('vecttototo')
+    // let id = iniVector({
+    //   workspaceId: user.id,
+    //   projectId: 'vector',
+    // })
+
+    // try {
+    //   await dispatch(fetchsVector({
+    //     id,
+    //     name: 'vectors'
+    //   }))
+    // } catch (err) {
+    //   console.log('Err', err)
+    // }
   }
 
 
@@ -217,14 +220,10 @@ const Vector = ({ }) => {
 
   const handleDelete = (id) => {
     if (id) {
-      
       let uri = iniVector({
         workspaceId: user.id,
         projectId: 'vector'
       })
-
-
-      console.log('vectorId', id)
 
       dispatch(deleteVector({
         id: uri,
@@ -236,9 +235,24 @@ const Vector = ({ }) => {
     }
   }
 
-  const handleDuply = () => {
-    alert(1)
+  
 
+  const handleDuply = (id) => {
+    if (id) {
+      console.log('iuse', user.id)
+      let uri = iniVector({
+        workspaceId: user.id,
+        projectId: 'vector'
+      })
+
+      dispatch(duplyVector({
+        id: uri,
+        name: 'vectors',
+        data: {
+          id
+        }
+      }))
+    }
   }
 
   const handleCopyPath = () => {
@@ -527,7 +541,7 @@ const ComponentSettings = (props) => {
           <li onClick={() => props.fn.handleDelete(props.item.id)}>
             Eliminar
           </li>
-          <li onClick={() => props.fn.handleDuply()}>
+          <li onClick={() => props.fn.handleDuply(props.item.id)}>
             Duplicar
           </li>
           <li onClick={() => props.fn.handleCopyPath(props.item.id)}>
