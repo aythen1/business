@@ -359,7 +359,10 @@
 }
 
 .drive_folder_title {
+  text-wrap: nowrap;
+  overflow: hidden;
   display: inline-flex;
+  max-width: 200px;
   align-items: center;
   color: var(--textContent);
   font-size: 13px;
