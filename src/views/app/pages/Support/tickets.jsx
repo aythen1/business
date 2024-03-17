@@ -23,7 +23,7 @@ import {
 
 const Tickets = () => {
     const organization = {
-        title: 'Basic',
+        title: 'Lite',
         plan: 'Free',
         time: 'Available 24/7',
         type: 'Online',
@@ -73,20 +73,20 @@ const Tickets = () => {
                         className={`${tag !== 'open' && styles.desactive}`}
                         onClick={() => setTag('open')}
                     >
-                        Open tickets
+                        Ticket Abiertos
                     </button>
                     <button 
                         className={`${tag !== 'closed' && styles.desactive}`}
                         onClick={() => setTag('closed')}
                     >
-                        Closed tickets
+                        Tickets Cerrados
                     </button>
                 </div>
                 <button 
                     className={styles['create']}
                     onClick={() => handleModalTicket()}
                 >
-                    + Create a ticket
+                    + Crear ticket
                 </button>
             </div>
             <div className={styles.header}>
@@ -106,10 +106,10 @@ const Tickets = () => {
                     </div>
                     <div className={styles.item}>
                         <b>
-                            Current Plan
+                            Plan Actual
                         </b>
                         <label className={styles.plan}>
-                            { organization.title || 'Basic' }
+                            { organization.title || 'Lite' }
                         </label>
                         <p>
                             { organization.plan || 'Free' }
@@ -117,7 +117,7 @@ const Tickets = () => {
                     </div>
                     <div className={styles.item}>
                         <b>
-                            Tickets and Live Chat
+                            Disponibilidad de tickets
                         </b>
                         <p>
                             { organization.time || 'Available 24/7' }
@@ -128,7 +128,7 @@ const Tickets = () => {
                             { organization.type || 'Online' }
                         </b>
                         <label className={styles.label}>
-                            Available from silver plan
+                            Soporte de PLAN LITE
                         </label>
                     </div>
                     <div className={styles.item}>
@@ -136,7 +136,7 @@ const Tickets = () => {
                             { organization.time || 'Technical Account Manager' }
                         </b>
                         <label className={styles.label}>
-                            Available from gold plan
+                        Soporte de PLAN LITE
                         </label>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ const Tickets = () => {
                     setStateTable={setStateTable}
                 >
                     <header>
-                        Account Tickets
+                        Ticket
                     </header>
                     <item>
                         Ticket Id

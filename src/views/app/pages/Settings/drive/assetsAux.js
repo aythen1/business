@@ -1,47 +1,47 @@
-import ai from "./assets/icons/AI.svg";
 import ay from "./assets/icons/LAMBDA.svg";
-import avi from "./assets/icons/AVI.svg";
-import bmp from "./assets/icons/BMP.svg";
-import crd from "./assets/icons/CRD.svg";
-import csv from "./assets/icons/CSV.svg";
-import dll from "./assets/icons/DLL.svg";
-import doc from "./assets/icons/DOC.svg";
-import docx from "./assets/icons/DOCX.svg";
-import dwg from "./assets/icons/DWG.svg";
-import eps from "./assets/icons/EPS.svg";
-import exe from "./assets/icons/EXE.svg";
-import flv from "./assets/icons/FLV.svg";
-import gif from "./assets/icons/GIF.svg";
-import html from "./assets/icons/HTML.svg";
-import iso from "./assets/icons/ISO.svg";
-import javs from "./assets/icons/JAVS.svg";
+
+import AI from "./assets/icons/AI";
+import AVI from "./assets/icons/AVI";
+import BMP from "./assets/icons/BMP";
+import CRD from "./assets/icons/CRD";
+import CSV from "./assets/icons/CSV";
+import DLL from "./assets/icons/DLL";
+import DOC from "./assets/icons/DOC";
+import DOCX from "./assets/icons/DOCX";
+import DWG from "./assets/icons/DWG";
+import EPS from "./assets/icons/EPS";
+import EXE from "./assets/icons/EXE";
+import FLV from "./assets/icons/FLV";
+import GIF from "./assets/icons/GIF";
+import HTML from "./assets/icons/HTML";
+import ISO from "./assets/icons/ISO";
+import JAVS from "./assets/icons/JAVS";
 import JPEG from "./assets/icons/JPEG";
-import jpeg from "./assets/icons/JPEG.svg";
-import mdb from "./assets/icons/MDB.svg";
-import mid from "./assets/icons/MID.svg";
-import mov from "./assets/icons/MOV.svg";
-import mp3 from "./assets/icons/MP3.svg";
+import MDB from "./assets/icons/MDB";
+import MID from "./assets/icons/MID";
+import MOV from "./assets/icons/MOV";
+import MP3 from "./assets/icons/MP3";
 import MP4 from "./assets/icons/MP4";
-import mp4 from "./assets/icons/MP4.svg";
-import mpeg from "./assets/icons/MPEG.svg";
-import pdf from "./assets/icons/PDF.svg";
-import png from "./assets/icons/PNG.svg";
-import ppt from "./assets/icons/PPT.svg";
-import ps from "./assets/icons/PS.svg";
-import psd from "./assets/icons/PSD.svg";
-import pub from "./assets/icons/PUB.svg";
-import rar from "./assets/icons/RAR.svg";
-import raw from "./assets/icons/RAW.svg";
-import rss from "./assets/icons/RSS.svg";
-import svg from "./assets/icons/SVG.svg";
-import tiff from "./assets/icons/TIFF.svg";
+import mp4 from "./assets/icons/MP4";
+import MPEG from "./assets/icons/MPEG";
+import PDF from "./assets/icons/PDF";
+import PNG from "./assets/icons/PNG";
+import PPT from "./assets/icons/PPT";
+import PS from "./assets/icons/PS";
+import PSD from "./assets/icons/PSD";
+import PUB from "./assets/icons/PUB";
+import RAR from "./assets/icons/RAR";
+import RAW from "./assets/icons/RAW";
+import RSS from "./assets/icons/RSS";
+import SVG from "./assets/icons/SVG";
+import TIFF from "./assets/icons/TIFF";
 import TXT from "./assets/icons/TXT";
 // import txt from "./assets/icons/TXT.svg";
-import wav from "./assets/icons/WAV.svg";
-import wma from "./assets/icons/WMA.svg";
-import xml from "./assets/icons/XML.svg";
-import xsl from "./assets/icons/XSL.svg";
-import zip from "./assets/icons/ZIP.svg";
+import WAV from "./assets/icons/WAV";
+import WMA from "./assets/icons/WMA";
+import XML from "./assets/icons/XML";
+import XSL from "./assets/icons/XSL";
+import ZIP from "./assets/icons/ZIP";
 
 export function convertToMegabytes(valueInKilobytes) {
   if (valueInKilobytes < 0.5) {
@@ -277,49 +277,49 @@ export function formatLastModified(lastModified) {
 }
 
 export const icons = {
-  ai,
   json: ay,
   ay,
-  avi,
-  bmp,
-  crd,
-  csv,
-  dll,
-  doc,
-  docx,
-  dwg,
-  eps,
-  exe,
-  flv,
-  gif,
-  html,
-  iso,
-  javs,
+  ai: <AI />,
+  avi: <AVI />,
+  bmp: <BMP />,
+  crd: <CRD />,
+  csv: <CSV />,
+  dll: <DLL />,
+  doc: <DOC />,
+  docx: <DOCX />,
+  dwg: <DWG />,
+  eps: <EPS />,
+  exe: <EXE />,
+  flv: <FLV />,
+  gif: <GIF />,
+  html: <HTML />,
+  iso: <ISO />,
+  javs: <JAVS />,
   jpeg: <JPEG />,
   jpg: <JPEG />,
-  mdb,
-  mid,
-  mov,
-  mp3,
+  mdb: <MDB />,
+  mid: <MID />,
+  mov: <MOV />,
+  mp3: <MP3 />,
   mp4: <MP4 />,
-  mpeg,
-  pdf,
-  png,
-  ppt,
-  ps,
-  psd,
-  pub,
-  rar,
-  raw,
-  rss,
-  svg,
-  tiff,
+  mpeg: <MPEG />,
+  pdf: <PDF />,
+  png: <PNG />,
+  ppt: <PPT />,
+  ps: <PS />,
+  psd: <PSD />,
+  pub: <PUB />,
+  rar: <RAR />,
+  raw: <RAW />,
+  rss: <RSS />,
+  svg: <SVG />,
+  tiff: <TIFF />,
   txt: <TXT />,
-  wav,
-  wma,
-  xml,
-  xsl,
-  zip,
+  wav: <WAV />,
+  wma: <WMA />,
+  xml: <XML />,
+  xsl: <XSL />,
+  zip: <ZIP />,
 };
 
 const extensions = Object.keys(icons);

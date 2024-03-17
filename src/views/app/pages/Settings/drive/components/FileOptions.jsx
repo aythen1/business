@@ -90,15 +90,15 @@ const FileOptions = ({
         Ver
       </div>
       <div className={styles.option} onClick={() => handleCopyFile("copy")}>
-        Copy
+        Coiar
         {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div className={styles.option} onClick={() => handleCopyFile("cut")}>
-        Cut
+        Cortar
         {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div className={styles.option} onClick={handleDuplicateFile}>
-        Duplicate
+        Duplicar
         {/* <IoSettingsOutline size={17} color="#00f" /> */}
       </div>
       <div
@@ -108,7 +108,7 @@ const FileOptions = ({
         }}
         className={styles.option}
       >
-        Delete File
+        Borrar Archivo
         {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>

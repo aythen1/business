@@ -10,13 +10,18 @@ import styles from './CustomVector.module.css'
 import { useGraph } from '../index';
 
 import VectorTable from './vector/Table'
+import VectorUpload from './vector/Upload'
+import VectorBackup from './vector/Backup'
 import VectorInfo from './vector/Info'
-import VectorAgent from './vector/Agent'
+// import VectorAgent from './vector/Agent'
+// import VectorInfo from './vector/Info'
 
-import VectorSQL from './vector/SQL'
+// import VectorSQL from './vector/SQL'
 
+import ModalVector from '../../modal'
 
-import IconExcel from './assets/icon-excel.svg'
+// import IconExcel from './assets/icon-excel.svg'
+import IconExcel from '../../../Settings/drive/assets/icons/XSL.jsx'
 
 
 import {
@@ -24,15 +29,25 @@ import {
 } from '@/slices/vectorSlice'
 
 
+import {
+  setModal
+} from '@/slices/iamSlice'
+
+import {
+  calculateTimeAgo,
+  formatBytes
+} from '@/utils'
+
+
 export default memo(({ id, data, isConnectable, sourcePosition }) => {
   const dispatch = useDispatch()
 
-  const { 
+  const {
     dimension
   } = useSelector((state) => state.vector)
 
 
-  const { nodes, edges, setNodes, setEdges } = useGraph();
+  const { nodes, edges, setNodes, setEdges, addNode } = useGraph();
 
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [filter, setFilter] = useState('')
@@ -54,7 +69,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       if (reactFlowElement) {
         const x = node.position.x + 300
         const y = node.position.y + 200
-        
+
 
         const zoom = 0.9
 
@@ -65,7 +80,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
 
-  const handleSelectVector =  (e) => {
+  const handleSelectVector = (e) => {
     const selectedElements = document.querySelectorAll(`.${styles.selected}`);
     selectedElements.forEach((element) => {
       element.classList.remove(styles.selected);
@@ -129,13 +144,33 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
   //   }
   // }, [])
 
+  const handleSetFilter = (e, filter) => {
+    e.stopPropagation()
+    setFilter(filter)
+  }
 
+
+  const handleAddNode = (e) => {
+    e.stopPropagation()
+    dispatch(setModal(null))
+    addNode()
+  }
+  
+  const handleDimension = (e) => {
+    e.stopPropagation()
+    dispatch(setModal(<ModalVector />))
+  }
+  
+  const handleCode = (e) => {
+    e.stopPropagation()
+    dispatch(setModal(null))
+  }
 
 
 
   return (
     <>
-      {id}
+      {/* {id} */}
       <Handle
         id={id}
         type="target"
@@ -153,50 +188,87 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       )}
       <div className={styles.customVector}>
         <div
-          className={styles.boxVector}
+          className={`${styles.boxVector} ${filter && styles.active} ${(filter == 'table' || filter == 'graph') && styles.maxWidth}`}
           onClick={(e) => handleSelectVector(e)}
-          onDoubleClick={() => setFilter('agent')}
-
+          onDoubleClick={(e) => handleSetFilter(e, 'agent')}
           onContextMenu={(e) => {
             e.preventDefault();
             setShowContextMenu(true);
           }}
         >
           <div className={styles.logo}>
-            <img src={IconExcel} />
+            {/* <img src={IconExcel} /> */}
+            <IconExcel />
           </div>
           <div className={styles.info}>
             <div className={styles.top}>
               <p>
                 {data.title ? data.title : 'Not found'}
               </p>
+
+              <div className={styles.label}>
+              <span className={styles.time}>
+                {data.date ? calculateTimeAgo(data.date) : '-'}
+              </span>
               <label>
-                {data.size ? data.size : '0kb'}
+                {data.size ? formatBytes(data.size) : '0kb'}
               </label>
+              </div>
             </div>
             <div className={styles.bottom}>
-              <span>
-                {data.date ? JSON.stringify(data.date) : '-'}
-              </span>
-              <b>
-                IN OUT
-              </b>
+              <div className={styles.buttons}>
+                <button onClick={(e) => handleSetFilter(e, 'table')}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 6c0 1.657-3.134 3-7 3S5 7.657 5 6m14 0c0-1.657-3.134-3-7-3S5 4.343 5 6m14 0v6M5 6v6m0 0c0 1.657 3.134 3 7 3s7-1.343 7-3M5 12v6c0 1.657 3.134 3 7 3s7-1.343 7-3v-6" />
+                  </svg>
+                </button>
+                <button
+                  className={styles.return}
+                  onClick={(e) => handleSetFilter(e, 'graph')}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z" />
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.5 3c-.169 0-.334.014-.5.025V11h7.975c.011-.166.025-.331.025-.5A7.5 7.5 0 0 0 13.5 3Z" />
+                  </svg>
+                </button>
+                <button
+                  className={styles.upload}
+                  onClick={(e) => handleSetFilter(e, 'settings')}
+                >
+                  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 13V4M7 14H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-2m-1-5-4 5-4-5m9 8h.01" />
+                  </svg>
+
+                </button>
+                <button onClick={(e) => handleAddNode(e)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8V4Zm2 2h.01v.01H10V6Zm2-2h.01v.01H12V4Zm8 8h.01v.01H20V12Zm-2 2h.01v.01H18V14Zm2 2h.01v.01H20V16Z" />
+                  </svg>
+                </button>
+                <button onClick={(e) => handleDimension(e)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m8 9 3 3-3 3m5 0h3M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z" />
+                  </svg>
+                </button>
+              </div>
+              
             </div>
           </div>
         </div>
+        <div>
+          {filter == 'table' ? (
+            <VectorTable id={id} data={data} />
+          ) : filter == 'upload' ? (
+            <VectorUpload />
+            ) : filter == 'backup' ? (
+            <VectorBackup />
+          ) : filter == 'settings' && (
+            <VectorInfo setFilter={setFilter} />
+          )}
+        </div>
       </div>
 
-      <div>
-        {filter == 'table' ? (
-          <VectorTable id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'sql' ? (
-          <VectorSQL id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'info' ? (
-          <VectorInfo id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'agent' && (
-          <VectorAgent id={id} data={data} setFilter={setFilter} />
-        )}
-      </div>
+
     </>
   );
 });

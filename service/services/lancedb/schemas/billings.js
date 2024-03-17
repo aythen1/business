@@ -4,6 +4,7 @@ const schemaBillings =  {
         id: { type: 'string', format: 'uuid' },
         type: { type: 'string' },
         name: { type: 'string' },
+        token: { type: 'string' },
         email: { type: 'string' },
         limit: { type: 'number', default: 0 },
         iban: { type: 'string' },

@@ -190,7 +190,7 @@ const Board = ({ }) => {
 
 
             let id = iniVector({
-                workspaceId: user.id,
+                workspaceId: user?.id,
                 projectId: 'vector'
             })
 
@@ -233,7 +233,7 @@ const Board = ({ }) => {
 
     useEffect(() => {
         const uri = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             projectId: 'vector'
         })
 
@@ -251,10 +251,7 @@ const Board = ({ }) => {
 
     // -------------------------------------------------    
 
-
-
     const handleScroll = () => {
-        console.log('edmiwidkeyUsekeyUse', keyUse)
         if (!keyUse) {
             const flowContainer = flowContainerRef.current;
             const container = containerRef.current;
@@ -286,7 +283,7 @@ const Board = ({ }) => {
     };
 
     useEffect(() => {
-        const flowContainer = flowContainerRef.current;
+        // const flowContainer = flowContainerRef.current;
         const container = containerRef.current;
 
         // Añade eventos de scroll, mouse y teclado
@@ -294,6 +291,7 @@ const Board = ({ }) => {
         container.addEventListener('mouseenter', handleMouseEnter);
         container.addEventListener('mouseleave', handleMouseLeave);
         window.addEventListener('keydown', handleKeyPress);
+        window.addEventListener('keydown', handleKeyDown);
 
         // Limpia los eventos al desmontar el componente
         return () => {
@@ -301,8 +299,28 @@ const Board = ({ }) => {
             container.removeEventListener('mouseenter', handleMouseEnter);
             container.removeEventListener('mouseleave', handleMouseLeave);
             window.removeEventListener('keydown', handleKeyPress);
+            window.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
+
+
+
+    const handleKeyDown = (e) => {
+        const container = containerRef.current;
+        console.log('keyUsekeyUsekeyUse', keyUse)
+
+        if (e.key === 'Escape') {
+            if (!keyUse) {
+                setKeyUse((prevKeyUse) => !prevKeyUse)
+                console.log('keykey', keyUse)
+                container.scrollTop = 0;
+            } else {
+                dispatch(setVector(null));
+                navigate(`/${'es'}/app/settings/vector`);
+             }
+        }
+    };
+
 
 
 

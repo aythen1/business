@@ -2,13 +2,18 @@ const dataNewAccount = {}
 
 
 dataNewAccount['es'] = {
-  logoBrand: "[Nombre del Miembro del Equipo] se ha unido",
+  logoBrand: "Bienvenido/a, te acaban de invitar",
   company: "https://via.placeholder.com/78x17",
   header: "Hola [Nombre del Cliente]",
-  text: "¡Tu miembro del equipo, [Nombre del Miembro del Equipo], se ha unido a tu proyecto! Inícialo asignándole una tarea.",
+  text: `💌 Parece que a alguien le gustas. Te acaban de invitar a trabajar de manera conjunta en un proyecto. 
+<br/><br/>
+🏹 Entra [aquí] para poder acceder. 
+<br/><br/>
+  💯 Confían firmemente en que tu experiencia y habilidades podrán agregar un valor significativo a entender los datos del negocio.
+  `,
   "faceNameJobtitle.rebecaJohnson": "Rebeca Johnson",
   "faceNameJobtitle.projectManager": "Gerente de Proyecto",
-  buttonText: "Asignar una tarea",
+  buttonText: "Unirte ahora",
 };
 
 dataNewAccount['en'] = {

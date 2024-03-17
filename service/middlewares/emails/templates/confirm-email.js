@@ -2,11 +2,22 @@ const dataConfirmEmail = {}
 
 
 dataConfirmEmail['es'] = {
-  "trialEndedEmail": "Nuevo periodo de prueba de X días de [Nombre del Producto]",
+  "header": " Algunas cosas son mejores juntas. ",
   "hiCustomerName": "Hola [Nombre del Cliente]",
-  "text": "Sabemos que el momento es crucial. Por eso, nos complace ofrecerte una extensión de X días en tu prueba gratuita de [Nombre del Producto] Premium. ¿Quieres seguir utilizando tus funciones premium como [Característica Premium] y [Característica Premium] durante aún más tiempo? Actualiza ahora por solo $XX al mes y tenlo todo siempre que quieras, donde quieras.",
-  "upgradeNowButtonText": "Actualizar ahora",
-  "cancelAnytimeFor": "Cancela en cualquier momento, por cualquier razón"
+  "text": `👋 ¡Bienvenido/a a nuestra plataforma! 
+<br /><br />
+🔥 Estamos encantados de tenerte con nosotros y queremos asegurarnos de que te sientas como en casa desde el primer momento. 
+<br /><br />
+🗂️ Con nuestra plataforma, tendrás acceso a una amplia gama de herramientas y recursos que te ayudarán a alcanzar tus objetivos de manera más eficiente. 
+<br /><br />
+🧭 Entiende tus datos, analiza, estructura, pregunta y representa gráficamente todo lo que necesites gracias a nuestra tecnología
+<br /><br />
+🛟 Si tienes alguna pregunta o necesitas ayuda para empezar, no dudes en ponerte en contacto con nuestro equipo de soporte, ¡estamos aquí para ayudarte en lo que necesites!
+<br /><br />
+  🎉 ¡Gracias por unirte a nosotros!
+  `,
+  "confirmEmail": "Entra aquí",
+  // "cancelAnytimeFor": "Cancela en cualquier momento, por cualquier razón"
 }
 
 dataConfirmEmail['en'] = {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
+import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -52,10 +53,11 @@ import {
 
 
 const Vector = ({ }) => {
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-
+  const { t } = useTranslation()
   const { vectorId } = useParams()
 
   const { user } = useSelector((state) => state.iam)
@@ -84,7 +86,7 @@ const Vector = ({ }) => {
   useEffect(() => {
     const fetchsItems = async () => {
       let id = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector',
       })
 
@@ -101,7 +103,7 @@ const Vector = ({ }) => {
     if (vectors.length == 0) fetchsItems()
   }, [])
 
-  
+
 
   const fetchsItems = async () => {
     // console.log('vecttototo')
@@ -202,7 +204,7 @@ const Vector = ({ }) => {
     console.log('vectorId', vectorId)
     if (vectorId) {
       let id = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector'
       })
 
@@ -221,7 +223,7 @@ const Vector = ({ }) => {
   const handleDelete = (id) => {
     if (id) {
       let uri = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector'
       })
 
@@ -235,13 +237,13 @@ const Vector = ({ }) => {
     }
   }
 
-  
+
 
   const handleDuply = (id) => {
     if (id) {
       console.log('iuse', user.id)
       let uri = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector'
       })
 
@@ -289,20 +291,6 @@ const Vector = ({ }) => {
 
 
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      dispatch(setVector(null));
-      navigate(`/${'es'}/app/settings/vector`);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
 
 
@@ -326,14 +314,13 @@ const Vector = ({ }) => {
                 </div>
                 <div className={styles.alertBoardText}>
                   <b>
-                    Crear un nuevo vector para tu proyecto
+                    {t('vector.t1')}
                   </b>
                   <p>
-                    Un vector permite guardar datos locales, conectarlos en la nube, con serverless
-                    poderlos entender y crear de una forma más personalizada nunca antes imaginada.
+                  {t('vector.t2')}
                     <a onClick={() => handleVector()}>
-                      Nuevo vector
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    {t('vector.t3')}
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
                       </svg>
                     </a>
@@ -352,22 +339,22 @@ const Vector = ({ }) => {
 
                 >
                   <header>
-                    Vectores
+                  {t('vector.t4')}
                   </header>
                   <item component={(props) => <ComponentVector fn={propsFunctions} {...props} />} >
-                    Vector
+                  {t('vector.t5')}
                   </item>
                   <item component={(props) => <ComponentDimension fn={propsFunctions} {...props} />} >
-                    Dimension
+                  {t('vector.t6')}
                   </item>
                   <item component={(props) => <ComponentSize {...props} />} >
-                    Size
+                  {t('vector.t7')}
                   </item>
                   <item component={(props) => <ComponentAgents {...props} />} >
-                    Agentes
+                  {t('vector.t8')}
                   </item>
                   <item component={(props) => <ComponentCreatedAt fn={propsFunctions} {...props} />} >
-                    CreatedAt
+                  {t('vector.t9')}
                   </item>
                   <item component={(props) => <ComponentSettings fn={propsSettings} {...props} />} >
                     &nbsp;
@@ -377,23 +364,20 @@ const Vector = ({ }) => {
             </div>
           ) : (
             <div className={styles.noneVector}>
-              <h2>Vectors</h2>
+              <h2>{t('vector.t10')}</h2>
               <div className={styles.boxNoneVector}>
                 <img width="240" alt="" src={NoneVector} />
                 <p>
-                  Create a high-performance Kubernetes cluster in just a few clicks,
-                  scale effortlessly and focus on your applications with Kapsule.
-                  Want to manage nodes from different providers? Discover the power
-                  of centralized Kubernetes management with Kosmos.
+                {t('vector.t11')}
                 </p>
                 <button onClick={handleAddVector}>
                   <svg viewBox="0 0 24 24">
                     <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
                   </svg>
-                  Create Vector
+                  {t('vector.t12')}
                 </button>
                 <a onClick={() => handleSupport()}>
-                  Board Quickstart Documentation
+                {t('vector.t13')}
                   <svg viewBox="0 0 24 24">
                     <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
                   </svg>

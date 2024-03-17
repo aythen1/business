@@ -22,9 +22,12 @@ import {
 import {
     setModal
 } from '@/slices/iamSlice'
+import { useTranslation } from 'react-i18next';
 
 
 const Billing = ({ }) => {
+    const { t } = useTranslation()
+
     const dispatch = useDispatch()
 
     const [isActive, setIsActive] = useState(false)
@@ -47,6 +50,7 @@ const Billing = ({ }) => {
         region: '',
 
         limit: 0,
+        token: '',
         email: '',
         vat: '',
         paymentmethod: ''
@@ -55,6 +59,7 @@ const Billing = ({ }) => {
 
     useEffect(() => {
         if (billing) {
+            console.log('billing', billing)
             const address = JSON.parse(billing?.billings?.address || "{}")
 
             setState({
@@ -113,6 +118,7 @@ const Billing = ({ }) => {
 
     useEffect(() => {
         const fetchsItems = async () => {
+            console.log('111')
             dispatch(fetchsBilling({}))
         }
 
@@ -160,7 +166,7 @@ const Billing = ({ }) => {
 
     const sendEmail = () => {
         dispatch(sendMail({
-            email: 'start-premium'
+            email: 'invite-friends'
         }))
     }
 
@@ -210,7 +216,7 @@ const Billing = ({ }) => {
             )}
             <div className={styles.containerInformation}>
                 <h2 className={styles.title}>
-                    Información de Cuenta
+                    {t('billing.t1')}
                 </h2>
                 {state?.name ? (
                     <div className={styles.boxInformation}>
@@ -227,7 +233,7 @@ const Billing = ({ }) => {
                                 </div>
                                 <div>
                                     {state.type}<br />
-                                    Currency {state.currency}<br />
+                                    {t('billing.t2')} {state.currency}<br />
                                     {state.iban}
                                 </div>
                             </div>
@@ -236,7 +242,7 @@ const Billing = ({ }) => {
                             onClick={() => handleClickEdit()}
                             className={styles.button}
                         >
-                            Editar
+                            {t('billing.t3')}
                         </button>
                     </div>
                 ) : (
@@ -244,14 +250,13 @@ const Billing = ({ }) => {
                         <div>
 
                             <p>
-                                Rellena los datos de usuario para verificar tu cuenta y poder entrar en las aplicaciones
-                                con tus credenciales.
+                                {t('billing.t4')}
                             </p>
                             <button
                                 onClick={() => handleClickEdit()}
                                 className={styles.button}
                             >
-                                Insertar información
+                                {t('billing.t5')}
                             </button>
                         </div>
 
@@ -261,7 +266,7 @@ const Billing = ({ }) => {
 
             <div className={styles.containerConsumption}>
                 <h2 className={styles.title}>
-                    VectorDB
+                    {t('billing.t6')}
                 </h2>
                 <div className={styles.boxConsumption}>
                     <SettingsCurrentConsumption />
@@ -270,16 +275,16 @@ const Billing = ({ }) => {
 
             <div className={styles.containerContact}>
                 <h2 className={styles.title}>
-                    Email de contacto
+                    {t('billing.t7')}
                 </h2>
                 <div className={styles.boxContact}>
                     <span className={styles.text}>
-                        You can add a billing contact if you want invoices to be sent to a specific address each month.
+                        {t('billing.t8')}
                     </span>
                     <div className={styles.grid2}>
                         <div className={styles.input}>
                             <label>
-                                Billing email
+                                {t('billing.t9')}
                             </label>
                             <input
                                 type='text'
@@ -289,8 +294,10 @@ const Billing = ({ }) => {
                             />
                         </div>
                         <div className={styles.button}>
-                            <button >
-                                Save
+                            <button
+                                onClick={() => handleClickEdit()}
+                            >
+                                {t('billing.t10')}
                             </button>
                         </div>
                     </div>
@@ -298,27 +305,29 @@ const Billing = ({ }) => {
             </div>
             <div className={styles.containerContact}>
                 <h2 className={styles.title}>
-                    Token de GPT
+                    {t('billing.t12')}
                 </h2>
                 <div className={styles.boxContact}>
                     <span className={styles.text}>
-                        You can create a GPT token to uniquely identify and authenticate your API requests.
+                        {t('billing.t13')}
                     </span>
                     <div className={styles.grid2}>
                         <div className={styles.input}>
                             <label>
-                                Token
+                                {t('billing.t14')}
                             </label>
                             <input
                                 type='text'
                                 placeholder={'sk-***'}
-                                value={state.email}
-                                onChange={(e) => handleInputChange(e, 'email')}
+                                value={state.token}
+                                onChange={(e) => handleInputChange(e, 'token')}
                             />
                         </div>
                         <div className={styles.button}>
-                            <button >
-                                Save
+                            <button
+                                onClick={() => handleClickEdit()}
+                            >
+                                {t('billing.t15')}
                             </button>
                         </div>
                     </div>
@@ -326,25 +335,24 @@ const Billing = ({ }) => {
             </div>
             <div className={styles.containerAlerts}>
                 <h2 className={styles.title}>
-                    Límite de banca
+                    {t('billing.t16')}
                 </h2>
                 <div className={styles.boxAlerts}>
                     <div className={styles.alert}>
                         <div>
-                            Billing alerts only provide a rough estimate of what may be charged to your monthly invoice. Additional costs
-                            related to your usage before.
+                            {t('billing.t17')}
                         </div>
                         <p className={styles.text}>
-
+                            wrrecv
                         </p>
                     </div>
                     <div className={styles.inputContainer}>
                         <div className={styles.toggle}>
-                            Set bulling alerts at
+                            {t('billing.t18')}
                         </div>
                         <div className={styles.input}>
                             <label className={styles.label}>
-                                Monthly Billing
+                                {t('billing.t19')}
                             </label>
                             <div className={styles.grid2}>
                                 <div className={styles.value}>
@@ -359,24 +367,29 @@ const Billing = ({ }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={styles.button}>
-                        <button className={styles.buttonStyle}>
-                            <svg className={styles.icon} viewBox="0 0 24 24">
-                                <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
-                            </svg>
-                            Create billing alert
-                        </button>
+                        <div className={styles.button}>
+                            <button 
+                                className={styles.buttonStyle}
+                                onClick={() => handleClickEdit()}
+                            >
+                                <svg className={styles.icon} viewBox="0 0 24 24">
+                                    <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
+                                </svg>
+                                {t('billing.t20')}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className={styles.containerVat}>
                 <h2 className={styles.title}>
-                    VAT identification number
+                    {t('billing.t21')}
+
                 </h2>
                 <div className={styles.boxContact}>
                     <span className={styles.text}>
-                        Enter your VAT ID number to remove VAT from your monthly bill. Why do we need your VAT number?
+                        {t('billing.t22')}
+
                     </span>
                     <div className={styles.grid2}>
                         <div className={styles.input}>
@@ -391,8 +404,11 @@ const Billing = ({ }) => {
                             />
                         </div>
                         <div className={styles.button}>
-                            <button onClick={() => sendEmail()}>
-                                Save (send email)
+                            <button
+                                // onClick={() => sendEmail()}
+                                onClick={() => handleClickEdit()}
+                            >
+                                {t('billing.t23')}
                             </button>
                         </div>
                     </div>
@@ -400,15 +416,15 @@ const Billing = ({ }) => {
             </div>
             <div className={styles.containerPayment}>
                 <h2 className={styles.title}>
-                    Métodos de pago
+                    {t('billing.t24')}
                 </h2>
                 <div className={styles.boxPayment}>
                     <p className={styles.text}>
-                        Add and select your preferred payment method. When will I be charged?
+                        {t('billing.t25')}
                     </p>
                     <div className={styles.form}>
                         <p className={styles.text}>
-                            Select your default payment method:
+                            {t('billing.t26')}
                         </p>
                         <div className={styles.input}>
                             <div className={styles.credit}>
@@ -436,11 +452,11 @@ const Billing = ({ }) => {
             </div>
             <div className={styles.containerNotification}>
                 <h2 className={styles.title}>
-                    Notificaciones de cuenta
+                    {t('billing.t27')}
                 </h2>
                 <div className={styles.boxNotification}>
                     <p className={styles.text}>
-                        Select and configure your notification preferences. When will notifications be sent to you?
+                        {t('billing.t28')}
                     </p>
                     <div className={styles.form}>
                         <div className={styles.input}>
@@ -450,7 +466,7 @@ const Billing = ({ }) => {
                                     checked={state.paymentmethod === 'card'}
                                     onChange={(e) => handleInputChange('card', 'paymentmethod')}
                                 />
-                                Email Notifications
+                                {t('billing.t30')}
                             </div>
                             <div className={styles.type}>
                                 <input
@@ -458,7 +474,7 @@ const Billing = ({ }) => {
                                     checked={state.paymentmethod === 'sepa'}
                                     onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
                                 />
-                                Daily Reminders
+                                {t('billing.t31')}
                             </div>
                             <div className={styles.type}>
                                 <input
@@ -466,7 +482,7 @@ const Billing = ({ }) => {
                                     checked={state.paymentmethod === 'sepa'}
                                     onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
                                 />
-                                Special Event Notifications:
+                                {t('billing.t32')}
                             </div>
                             <div className={styles.type}>
                                 <input
@@ -474,7 +490,7 @@ const Billing = ({ }) => {
                                     checked={state.paymentmethod === 'sepa'}
                                     onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
                                 />
-                                Private Message Notifications:
+                                {t('billing.t33')}
                             </div>
                             <div className={styles.type}>
                                 <input
@@ -482,7 +498,7 @@ const Billing = ({ }) => {
                                     checked={state.paymentmethod === 'sepa'}
                                     onChange={(e) => handleInputChange('sepa', 'paymentmethod')}
                                 />
-                                App Update Notifications:
+                                {t('billing.t34')}
                             </div>
                         </div>
                     </div>
@@ -490,11 +506,11 @@ const Billing = ({ }) => {
             </div>
             <div id="invoice" className={styles.containerInvoices}>
                 <h2 className={styles.title}>
-                    Facturas enviadas
+                    {t('billing.t34')}
                 </h2>
                 <div className={styles.boxInvoices}>
                     <p className={styles.text}>
-                        Your invoices are listed below. Read the billing FAQ
+                        {t('billing.t35')}
                     </p>
                     <div className={styles.table}>
                         <Table
@@ -504,28 +520,28 @@ const Billing = ({ }) => {
                             handleAdd={handleAddInvoice}
                         >
                             <header>
-                                Facturas enviadas
+                                {t('billing.t36')}
                             </header>
                             <item>
-                                Month
+                                {t('billing.t37')}
                             </item>
                             <item>
-                                Year
+                                {t('billing.t38')}
                             </item>
                             <item>
-                                Number
+                                {t('billing.t39')}
                             </item>
                             <item>
-                                Payment method
+                                {t('billing.t40')}
                             </item>
                             <item>
-                                Status
+                                {t('billing.t41')}
                             </item>
                             <item>
-                                Total (Vat incl.)
+                                {t('billing.t42')}
                             </item>
                             <item>
-                                Download
+                                {t('billing.t43')}
                             </item>
                         </Table>
                     </div>
@@ -543,11 +559,14 @@ export default Billing
 
 
 const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
+    const { t } = useTranslation()
+
     const [input, setInput] = useState(state)
     const [isActive, setIsActive] = useState(state.name.length > 5)
 
     const handleClickAccept = () => {
         setState(input)
+        console.log('statee', input)
         setEditContact(true)
     }
 
@@ -579,7 +598,7 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
     return (
         <div className={styles.modal}>
             <h2 className={styles.title}>
-                Editar el nombre de la cuenta
+                {t('billing.x1')}
             </h2>
             <div className={styles.container}>
                 <div className={styles.items}>
@@ -590,96 +609,96 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                         onChange={(e) => handleInputChange(e, 'corporate')}
                     />
                     <b>
-                        This is a corporate account
+                        {t('billing.x2')}
                     </b>
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Company name
+                        {t('billing.x3')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Company Name'}
+                        placeholder={t('billing.x3')}
                         value={input.name}
                         onChange={(e) => handleInputChange(e, 'name')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Street Address
+                        {t('billing.x4')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Street Address'}
+                        placeholder={t('billing.x4')}
                         value={input.address1}
                         onChange={(e) => handleInputChange(e, 'address1')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Street Address 2
+                        {t('billing.x5')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Street Address 2'}
+                        placeholder={t('billing.x5')}
                         value={input.address2}
                         onChange={(e) => handleInputChange(e, 'address2')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Postal Code
+                        {t('billing.x6')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Postal Code'}
+                        placeholder={t('billing.x6')}
                         value={input.zip}
                         onChange={(e) => handleInputChange(e, 'zip')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        City
+                        {t('billin7.x1')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'City'}
+                        placeholder={t('billing.x7')}
                         value={input.city}
                         onChange={(e) => handleInputChange(e, 'city')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Country
+                        {t('billing.x8')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Country'}
+                        placeholder={t('billing.x8')}
                         value={input.country}
                         onChange={(e) => handleInputChange(e, 'country')}
                     />
                 </div>
                 <div className={styles.input}>
                     <label>
-                        Region
+                        {t('billing.x9')}
                     </label>
                     <input
                         required
                         type="text"
                         spellCheck="false"
-                        placeholder={'Region'}
+                        placeholder={t('billing.x9')}
                         value={input.region}
                         onChange={(e) => handleInputChange(e, 'region')}
                     />
@@ -691,7 +710,7 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                     <button
                         className={`${isActive && styles.active}`}
                     >
-                        Confirm changes
+                        {t('billing.x10')}
                     </button>
                 </div>
             </div>

@@ -5,6 +5,8 @@ const GraphContext = createContext();
 export const useGraph = () => useContext(GraphContext);
 
 export const GraphProvider = ({ children }) => {
+  let addNode = {}
+  
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
 
@@ -17,6 +19,7 @@ export const GraphProvider = ({ children }) => {
     setEdges,
     selectedEdge,
     setSelectedEdge,
+    addNode
   };
 
   return (

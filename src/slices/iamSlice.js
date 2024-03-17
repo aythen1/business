@@ -66,7 +66,7 @@ const iamSlice = createSlice({
 
     modal: null,
     openModal: false,
-    openNotification: true,
+    openNotification: false,
     openMenuLeft: false,
     openMenuRight: false,
     openChatBot: false,
@@ -92,6 +92,7 @@ const iamSlice = createSlice({
       }
     },
     setNotification: (state, action) => {
+      console.log('settntvit', action.payload)
       if (action.payload) {
         state.openNotification = true;
         // state.notification = action.payload;

@@ -259,7 +259,7 @@ export const AddonFlow = ({
 
     const saveNode = async () => {
         let id = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             // projectId: 'vector',
             projectId: addonId,
         })
@@ -549,7 +549,7 @@ export const AddonFlow = ({
 
     // --------------------------------
 
-    const [backgroundVariant, setBackgroundVariant] = useState(typeBackground.dots)
+    const [backgroundVariant, setBackgroundVariant] = useState(typeBackground.lines)
 
     const handleTypeBackground = () => {
         const currentVariant = backgroundVariant[0].variant;

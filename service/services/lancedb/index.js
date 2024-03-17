@@ -296,7 +296,7 @@ async function addVector(id, name, vector = [0, 0], data, relations) {
   return results;
 }
 
-async function updateVector(id, name, vector = [0, 0], data) {
+async function updateVector(id, name, vector = [0, 0], data, relations) {
   const { path0, path1, path2 } = decodeVector(id);
 
   let uri = "";
@@ -313,13 +313,16 @@ async function updateVector(id, name, vector = [0, 0], data) {
 
     const schemaExists = allSchemas.hasOwnProperty(name);
     if (schemaExists) {
-      schema = allSchemas[name];
+      if (!data.id) data.id = uuidv4();
+      // schema = allSchemas[name];
+      schema = addRelationsToSchema(allSchemas[name]);
     } else {
       console.log("103k349j4ij");
       // return "El esquema no existe";
       if (!data.id) data.id = uuidv4();
       schema = addRelationsToSchema(generateSchemaFromObject(data));
     }
+
 
     // Valida el objeto 'data' contra el esquema correspondiente
     const validObj = validateAgainstSchema(data, schema);
@@ -361,18 +364,25 @@ async function updateVector(id, name, vector = [0, 0], data) {
       updatedRecord.vector = vector;
       // console.log('udpatedRecord', updatedRecord)
 
+      if (relations) {
+        updatedRecord.relations = {};
+        updatedRecord.relations = JSON.stringify(
+          addRelationsToData(updatedRecord.relations, relations)
+        );
+      }
+
       await tbl.update({ where: searchString, values: updatedRecord });
 
       return updatedRecord;
     } else {
       console.log("no se encontro");
-      const resp = await addVector(id, name, (vector = [0, 0]), data);
+      const resp = await addVector(id, name, (vector = [0, 0]), data, relations);
 
       return resp[0];
     }
   } catch (error) {
     // console.log('ERROR', error)
-    const resp = await addVector(id, name, (vector = [0, 0]), data);
+    const resp = await addVector(id, name, (vector = [0, 0]), data, relations);
     // console.log('rrerr', resp)
     // console.log('respresprespresprespresp', resp)
     return resp[0];
@@ -445,7 +455,6 @@ const getGraphVector = async (uri, conditions, _vector) => {
   const dbs = generateGraphSql(conditions);
 
   // console.log('result', dbs)
-
   let vector = _vector;
   let current = [];
   let data = {};
@@ -465,35 +474,38 @@ const getGraphVector = async (uri, conditions, _vector) => {
       const tbl = await db.openTable(name);
 
       const query = await tbl.search([0, 0]).where(filter).execute();
+// console.log('qerryrry', name, filter, query, query.length)
+      
+      if(query.length == 0){
+        // not exist 
+        console.log('not exist') 
+      }else{
+        const resp = variable.reduce(
+          (obj, key) => ({ ...obj, [key]: query[0][key] }),
+          {}
+        );
 
-      const resp = variable.reduce(
-        (obj, key) => ({ ...obj, [key]: query[0][key] }),
-        {}
-      );
-
-      vector = query[0].vector;
-      filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`;
-
-      if (Object.keys(data).length === 0) {
-        // console.log('query', resp)
-        // when not exist
-        data = resp;
-      } else {
-        //when exist
-
-        path = current.slice(1).join(".");
-
-        console.log("path", data, path, resp);
-
-        eval(`data.${path} = resp`);
-
-        // data[path][name] = resp
-        // console.log('query', resp)
+        vector = query[0].vector;
+        filter = `relations LIKE '%"${name}_id":"${resp.id}"%'`;
+  
+        if (Object.keys(data).length === 0) {
+          // when not exist
+          data = resp;
+        } else {
+          //when exist
+          path = current.slice(1).join(".");
+          // console.log("path", data, path, resp);
+          eval(`data.${path} = resp`);
+          // data[path][name] = resp
+          // console.log('query', resp)
+        }
       }
     } catch (err) {
       console.log("er", err);
     }
   }
+
+  // console.log('data', data)
 
   return data;
 };

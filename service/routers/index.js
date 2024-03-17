@@ -11,6 +11,8 @@ const routerAddon = require('./addon')
 const routerAssets = require('./assets')
 const routerVector = require('./vector')
 const routerChatbot = require('./chatbot')
+const routerSys = require('./sys')
+const routerStripe = require('./stripe')
 
 
 
@@ -24,6 +26,8 @@ mainRouter.use('/addon', routerAddon)
 mainRouter.use('/assets', routerAssets)
 mainRouter.use('/vector', routerVector)
 mainRouter.use('/chatbot', routerChatbot)
+mainRouter.use('/sys', routerSys)
+mainRouter.use('/stripe', routerStripe)
 
 
 module.exports = mainRouter

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef  } from 'react'
-import ReactFlow, { getBezierPath, EdgeText } from 'reactflow';
+import React, { useState, useEffect, useRef } from 'react'
+import ReactFlow, { Position, getSmoothStepPath, getStraightPath, getBezierPath, EdgeText } from 'reactflow';
 import { useGraph } from '../index';
 
 import styles from './CustomEdge.module.css'
@@ -7,12 +7,12 @@ import styles from './CustomEdge.module.css'
 const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style = {} }) => {
     const edgeRef = useRef(null);
 
-    const { 
-        nodes, 
-        edges, 
-        setNodes, 
-        setEdges, 
-        selectedEdge, 
+    const {
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        selectedEdge,
         setSelectedEdge
     } = useGraph();
 
@@ -37,22 +37,44 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
     }, [selectedEdge, id]);
 
 
+    console.log("sourceX:", sourceX);
+    console.log("sourceY:", sourceY);
+    console.log("sourcePosition:", sourcePosition);
+    console.log("targetX:", targetX);
+    console.log("targetY:", targetY);
+
+
+
+
+    const [path] = getSmoothStepPath({
+        sourceX: sourceX,
+        sourceY: sourceY,
+        sourcePosition: Position.Right,
+        targetX: targetX,
+        targetY: targetY,
+        targetPosition: Position.Top,
+    });
+
+
+
+
+
 
     return (
-        <>  
+        <>
             <path
                 ref={edgeRef}
                 id={id}
-                d={getBezierPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
+                d={path}
                 style={style}
                 className={`react-flow__edge-path ${selectedEdge == id ? 'selected' : ''}`}
                 onClick={handleClick}
             />
+
             <path
                 ref={edgeRef}
                 id={id}
-                d={getBezierPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
-                style={style}
+                d={path}
                 className={`react-flow__edge-path edge-path-line ${selectedEdge == id ? 'selected' : ''}`}
                 onClick={handleClick}
             />
