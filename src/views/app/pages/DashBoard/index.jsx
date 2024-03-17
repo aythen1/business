@@ -30,9 +30,12 @@ import {
 
 
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 
 const Dashboard = ({ }) => {
+  const { t } = useTranslation()
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -288,12 +291,9 @@ const Dashboard = ({ }) => {
                 </div>
                 <div className={styles.alertBoardText}>
                   <p>
-                    Before moving to a ROUTED IP, ensure no static network
-                    configuration is in use, and your ‘scaleway-ecosystem’ and
-                    ‘cloud-init’ packages are updated. Note that Boards with a
-                    bootscript are not compatible with routed IPs.
+                    {t('dashboard.t1')}
                     <a onClick={() => handleClickSupport()}>
-                      Using routed IPs
+                      {t('dashboard.t2')}
                       <svg viewBox="0 0 24 24">
                         <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path>
                       </svg>

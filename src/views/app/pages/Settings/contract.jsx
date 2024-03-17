@@ -4,9 +4,12 @@ import { useNavigate } from 'react-router-dom'
 import styles from './contract.module.css'
 
 import Table from './iam/table'
+import { useTranslation } from 'react-i18next'
 
 
 const Contract = ({ }) => {
+    const { t } = useTranslation()
+
     const navigate = useNavigate()
 
     const [stateTable, setStateTable] = useState('')
@@ -47,7 +50,7 @@ const Contract = ({ }) => {
     return (
         <div className={styles.container}>
             <h2 className={styles.title}>
-                Organization: Aythen
+                {t('contracts.t1')}: Aythen
             </h2>
             <div className={styles.box}>
                 <Table
@@ -56,26 +59,26 @@ const Contract = ({ }) => {
                     setStateTable={setStateTable}
                 >
                     <header>
-                        Account Contracts
+                        {t('contracts.t2')}
                     </header>
                     <item filter="title">
-                        Name
+                        {t('contracts.t3')}
                     </item>
                     <item>
-                        Status
+                        {t('contracts.t4')}
                     </item>
                     <item filter="date" name="date">
-                        End At
+                        {t('contracts.t5')}
                     </item>
                     <item size="100" filter="download">
-                        Download
+                        {t('contracts.t6')}
                     </item>
                 </Table>
             </div>
             <div className={styles.footer}>
-                Learn more about
+                {t('contracts.t7')}
                 <a onClick={() => onClickSupport()}>
-                    How to change the account language
+                    {t('contracts.t8')}
                     <svg viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
                 </a>
             </div>

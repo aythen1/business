@@ -249,7 +249,7 @@ export const AddonFlow = ({
 
     const saveNode = async () => {
         let id = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             // projectId: 'vector',
             projectId: addonId,
         })

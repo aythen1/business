@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import styles from "./index.module.css";
+import { useNavigate } from 'react-router-dom';
+
 
 
 import SelectFlags from '@/views/app/pages/shared/SelectFlags'
+import styles from "./index.module.css";
 
 
 import {
@@ -26,6 +28,7 @@ export const MenuLeftUser = ({
 }) => {
   const { user } = useSelector((state) => state.iam);
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [inputValues, setInputValues] = useState();
 
@@ -119,6 +122,8 @@ export const MenuLeftUser = ({
       },
     });
 
+    navigate(`/${'en'}/app/settings/home`)
+
   };
 
 
@@ -142,20 +147,19 @@ export const MenuLeftUser = ({
     generateColorRandom(),
   ]);
 
-
   const handleColorClick = (index) => {
-    if (index == 0) return false;
-
-    const color = colors[index]
-    localStorage.setItem('themeColor', color)
-    dispatch(setThemeColor(color))
-
-    const updatedColors = [...colors];
-    updatedColors[0] = color;
-    updatedColors[index] = generateColorRandom();
-    setColors(updatedColors);
-  }
-
+    if (index === 0) return false;
+  
+    const color = colors[index];
+    localStorage.setItem('themeColor', color);
+    dispatch(setThemeColor(color));
+  
+    setColors(prevColors => {
+      return prevColors.map((col, i) => {
+        return i === 0 ? color : generateColorRandom();
+      });
+    });
+  };
 
 
 

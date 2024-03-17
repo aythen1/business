@@ -26,9 +26,9 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
   const handleSelectVector = () => {
-    if(filter){
+    if (filter) {
       setFilter(null)
-    }else{
+    } else {
       setFilter('info')
     }
   }
@@ -79,7 +79,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         style={{ left: -10, top: 25, background: "#555" }}
         isConnectable={isConnectable}
       />
-      <Handle        type="source"
+      <Handle type="source"
         position="right"
         style={{ right: -10, top: 25, background: "#555" }}
         isConnectable={isConnectable}
@@ -87,7 +87,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
       {showContextMenu && (
         <ContextMenu onDuplicate={handleDuplicate} onDelete={handleDelete} />
       )}
-      <div 
+      <div
         className={styles.customVector}
         onClick={() => handleSelectVector()}
         onContextMenu={(e) => {
@@ -118,15 +118,31 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         </div>
       </div>
       <div>
-        {filter == 'data' ? (
-          <VectorData id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'sql' ? (
-          <VectorSQL id={id} data={data} setFilter={setFilter} />
-        ) : filter == 'schema' ? (
-          <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes}/>
-        ) : filter == 'info' && (
-          <VectorInfo id={id} data={data} setFilter={setFilter} />
-        )}
+        <div className={styles.buttons}>
+          <button
+            className={styles.return}
+            onClick={() => handleClickReturn()}
+          >
+            Atrás
+          </button>
+          <button
+            className={styles.upload}
+            onClick={() => handleClickUpload()}
+          >
+            Subir
+          </button>
+        </div>
+        <div>
+          {filter == 'data' ? (
+            <VectorData id={id} data={data} setFilter={setFilter} />
+          ) : filter == 'sql' ? (
+            <VectorSQL id={id} data={data} setFilter={setFilter} />
+          ) : filter == 'schema' ? (
+            <VectorSchema id={id} data={data} setFilter={setFilter} setNodes={setNodes} />
+          ) : filter == 'info' && (
+            <VectorInfo id={id} data={data} setFilter={setFilter} />
+          )}
+        </div>
       </div>
     </>
   );

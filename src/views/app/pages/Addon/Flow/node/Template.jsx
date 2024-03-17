@@ -396,6 +396,7 @@ const Template = ({
 
 
     let filteredComponent = dataComponents.filter(item =>
+        item.href.toLowerCase().includes(searchComponent.toLowerCase()) ||
         item.title.toLowerCase().includes(searchComponent.toLowerCase()) ||
         item.description.toLowerCase().includes(searchComponent.toLowerCase())
     );

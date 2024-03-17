@@ -102,7 +102,7 @@ const FolderOptions = ({
         className={isCopyActive ? styles.option : styles.optionDisabled}
         onClick={handlePaste}
       >
-        Paste
+        Pegar
         {/* <IoSettingsOutline */}
         {/* size={17}
           color={isCopyActive ? "#00f" : "#525252"}
@@ -112,14 +112,14 @@ const FolderOptions = ({
         className={styles.option}
         onClick={() => handleCopyFolder("copyFolder")}
       >
-        Copy
+        Copiar
         {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
         className={styles.option}
         onClick={() => handleCopyFolder("cutFolder")}
       >
-        Cut
+        Cortar
         {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
@@ -129,7 +129,7 @@ const FolderOptions = ({
           setShowFolderOption(false);
         }}
       >
-        Duplicate
+        Duplicar
         {/* <IoSettingsOutline size={17} color={"#00f"} /> */}
       </div>
       <div
@@ -139,7 +139,7 @@ const FolderOptions = ({
         }}
         className={styles.option}
       >
-        Delete Folder
+        Borrar Carpeta
         {/* <IoTrashOutline size={17} color="#D0342C" /> */}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useCallback, useState, useEffect, useRef  } from 'react';
+import { createContext, useContext, useCallback, useState, useEffect, useRef } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -30,6 +30,10 @@ import {
     addVectorData,
     updateVector,
 } from '@/actions/vector'
+
+import {
+    setNotification
+} from '@/slices/iamSlice'
 
 
 
@@ -153,6 +157,8 @@ export default function App({ }) {
         const newNode = {
             id: uuidv4(),
             type: 'selectorGPT',
+            sourcePosition: "bottom",
+            targetPosition: "top",
             data: {
                 prompt: 'An input node',
                 value: '',
@@ -164,7 +170,6 @@ export default function App({ }) {
             },
             date: new Date(),
             position: { x: newX, y: newY },
-            sourcePosition: 'right',
         };
 
         setNodes((prevNodes) => [...prevNodes, newNode]);
@@ -172,11 +177,20 @@ export default function App({ }) {
         const newEdge = {
             id: uuidv4(),
             source: lastNode.id,
-            target: newNode.id,
+            target: newNode.id
         };
 
         setEdges((prevEdges) => [...prevEdges, newEdge]);
     };
+
+
+    // const defaultEdgeOptions = {
+    //     type: "default",
+    //     pathOptions: {
+    //       borderRadius: 60,
+    //       offset: 40
+    //     },
+    //   };
 
 
 
@@ -185,7 +199,7 @@ export default function App({ }) {
     // ---------------------------------
     const saveNode = async () => {
         let id = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             projectId: 'vector',
         })
 
@@ -217,12 +231,14 @@ export default function App({ }) {
     }
 
     // ------------------------------
-    const handleDrop = (e) => {
+    const handleDrop = async (e) => {
         e.preventDefault()
         if (e.target.getAttribute('refs') == 'schema') {
             e.stopPropagation()
             return false
         }
+
+        dispatch(setNotification(true))
 
 
         const file = e.dataTransfer.files[0];
@@ -271,11 +287,17 @@ export default function App({ }) {
             const newNode = {
                 id: uuidv4(),
                 type: 'selectorVector',
+                sourcePosition: "right",
+                targetPosition: "left",
                 data: table,
                 position: { x: newX, y: newY }
             };
 
             setNodes((prevElements) => [...prevElements, newNode]);
+
+            setTimeout(() => {
+                dispatch(setNotification(false))
+            }, 2000)
         };
 
         reader.readAsArrayBuffer(file);
@@ -380,6 +402,7 @@ export default function App({ }) {
         setEdges,
         selectedEdge,
         setSelectedEdge,
+        addNode
     };
 
 
@@ -454,6 +477,7 @@ export default function App({ }) {
                 onDragOver={(e) => e.preventDefault()}
             >
                 <ReactFlow
+                    // defaultEdgeOptions={defaultEdgeOptions}
                     nodes={nodes}
                     edges={edges}
                     fitView
@@ -496,9 +520,7 @@ export default function App({ }) {
                         >
                             <ButtonSave />
                         </button>
-                        <button
-                            onClick={addNode}
-                        >
+                        <button>
                             <ButtonAdd addNode={addNode} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
                         <button style={{ marginLeft: 'auto' }}>
@@ -699,13 +721,13 @@ const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
         await addNode(lastNode)
 
         if (lastNode) {
-            newY = lastNode.position.y;
-            newX = lastNode.position.x + lastNode.width + 100
+            newY = lastNode.position.y + 200
+            newX = lastNode.position.x + 100
         }
 
         setTimeout(function () {
             window.requestAnimationFrame(() => {
-                setCenter(newX + 100, newY + 160, { zoom: 1.6, duration: 500 })
+                setCenter(newX, newY, { zoom: 1.2, duration: 500 })
             })
         }, 100)
     }

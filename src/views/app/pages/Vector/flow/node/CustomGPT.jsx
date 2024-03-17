@@ -657,7 +657,7 @@ export default memo(({ id, data, isConnectable, }) => {
 
   return (
     <>
-      {id}
+      {/* {id} */}
       <Handle
         id={`${id}_top`}
         type="target"

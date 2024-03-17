@@ -236,7 +236,6 @@ export const fetchsBilling = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-
       return response.data;
     } catch (error) {
       console.log("Error: ", error.response.data.message);

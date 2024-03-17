@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -16,6 +17,7 @@ import Billing from './billing'
 import Contract from './contract'
 import Drive from './drive'
 import Bank from './bank'
+import Support from './support'
 
 import Vector from '../Vector'
 
@@ -23,6 +25,7 @@ import Vector from '../Vector'
 
 
 const SettingsPath = ({ }) => {
+ 
   const { settingsTag } = useParams();
 
   let content;
@@ -50,11 +53,13 @@ const SettingsPath = ({ }) => {
 
 
 const Settings = ({ }) => {
-  const dispatch = useDispatch()
+  const { t } = useTranslation();
   const { settingsTag } = useParams();
 
-
+  const dispatch = useDispatch()
   const navigate = useNavigate();
+
+
   const [tag, setTag] = useState(settingsTag || 'home');
 
 
@@ -62,7 +67,7 @@ const Settings = ({ }) => {
     setTag(value);
 
     if (value == 'support') {
-      navigate(`/${'es'}/app/support`);
+      navigate(`/${'es'}/app/settings/support`);
     } else if (value == 'vector') {
       navigate(`/${'es'}/app/settings/vector`);
     } else if (value == 'board') {
@@ -81,38 +86,38 @@ const Settings = ({ }) => {
           onClick={() => selectTag('home')}
           className={tag === 'home' ? styles.selected : ''}
         >
-          Home
+          {t('settings.t1')}
         </button>
         <button
           className={tag === 'drive' ? styles.selected : ''}
           onClick={() => selectTag('drive')}
-        >
-          Mis documentos
+          >
+          {t('settings.t2')}
         </button>
         <button
           className={tag === 'billing' ? styles.selected : ''}
           onClick={() => selectTag('billing')}
-        >
-          Billing
+          >
+          {t('settings.t3')}
         </button>
         <button
           className={tag === 'contracts' ? styles.selected : ''}
           onClick={() => selectTag('contracts')}
-        >
-          Contracts
+          >
+          {t('settings.t4')}
         </button>
         <button
           style={{ marginLeft: 'auto' }}
           className={tag === 'vector' ? styles.selected : ''}
           onClick={() => selectTag('vector')}
-        >
-          Aythen DB
+          >
+          {t('settings.t5')}
         </button>
         <button
           className={tag === 'support' ? styles.selected : ''}
           onClick={() => selectTag('support')}
-        >
-          Support
+          >
+          {t('settings.t6')}
         </button>
       </div>
       <div>

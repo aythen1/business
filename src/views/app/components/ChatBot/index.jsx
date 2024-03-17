@@ -170,7 +170,7 @@ const ChatBot = ({
   const handleAddMessage = async (value, type = 'text') => {
     const newMessage = await detectBot(value, type)
     const obj = {
-      workspaceId: user.id,
+      workspaceId: user?.id,
       projectId: chatbot.id
     }
 

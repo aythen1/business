@@ -17,6 +17,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { createRoot } from 'react-dom/client';
 
+import Admin from './admin';
 import Test from './test';
 
 import DynamicRoute from './DynamicRoute';
@@ -165,6 +166,11 @@ const Layout = () => {
           <Provider store={store}>
             <BrowserRouter>
               <Routes>
+                <Route
+                  path="/:lng/admin"
+                  element={<Admin />}
+                />
+
                 <Route
                   path="/:lng/test"
                   element={<Test />}

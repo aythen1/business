@@ -148,6 +148,7 @@
     .boxNoneTable {
       margin-top: 10px;
       border: 1px solid var(--border-color);
+      color: var(--text-color-secondary);
       border-radius: 5px;
       padding: 20px 20%;
       display: flex;

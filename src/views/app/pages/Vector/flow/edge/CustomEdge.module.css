@@ -1,20 +1,24 @@
 :global(.react-flow__edge-path) {
-    stroke: #282727; 
-    fill: none;
-    stroke-width: 1px; 
-  
-    :global(&.selected){
-        stroke: var(--color-primary-0) !important;
-    }
+  stroke: var(--color-primary-2) !important;
+  fill: none;
+  stroke-width: 3px;
+
+  /* &.selected{ */
+}
+:global(.react-flow__edge.selected .react-flow__edge-path) {
+  stroke: var(--color-primary-0) !important;
 }
 
+/* :global(.react-flow__edge.selected .react-flow__edge-path, .react-flow__edge:focus .react-flow__edge-path, .react-flow__edge:focus-visible .react-flow__edge-path) {
+    stroke: var(--color-primary-0) !important;
+} */
 
-:global(.edge-path-line) {
+/* :global(.edge-path-line) {
+  stroke: blue !important;
+  fill: none;
+  stroke-width: 30px;
+
+  :global(&.selected) {
     stroke: transparent !important;
-    fill: none;
-    stroke-width: 30px; 
-
-    :global(&.selected){
-        stroke: transparent !important;
-    }
-}
+  }
+} */

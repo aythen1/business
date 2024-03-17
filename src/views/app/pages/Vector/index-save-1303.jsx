@@ -76,7 +76,7 @@ const Vector = ({ }) => {
   useEffect(() => {
     const fetchsItems = async () => {
       let id = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector',
       })
 
@@ -191,7 +191,7 @@ const Vector = ({ }) => {
     console.log('vectorId', vectorId)
     if (vectorId) {
       let id = iniVector({
-        workspaceId: user.id,
+        workspaceId: user?.id,
         projectId: 'vector'
       })
 

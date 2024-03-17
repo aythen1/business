@@ -2,10 +2,17 @@
 const dataInviteFriends = {}
 
 dataInviteFriends['es'] = {
-  "logoBrand": "Algunas cosas son mejores juntas",
+  "logoBrand": "Quien tiene un amigo tiene un tesoro",
   "company": "https://via.placeholder.com/78x17",
   "header": "Hola [Nombre del Cliente]",
-  "text": "¡Gracias por continuar tu viaje con nosotros! Para mostrar nuestro agradecimiento, aquí tienes una oferta exclusiva\nInvita a un amigo a unirse a ti en [Nombre del Producto], ¡y ambos recibirán [Recompensa]!",
+  "text": `🤯 ¡Tenemos una gran noticia para ti! 
+<br /><br />
+🤝 Como agradecimiento por ser parte de nuestra comunidad, te ofrecemos 30 días adicionales gratuitos en tu suscripción por cada amigo que invites y se una a nuestra plataforma. 
+<br /><br />
+⏰ No hay límite para la cantidad de amigos que puedes invitar, así que ¡invita a todos tus amigos y disfruta de más tiempo gratuito juntos! 
+<br /><br />
+🔗 ¡Comparte tu enlace único de invitación hoy mismo y comienza a disfrutar de los beneficios adicionales!
+  `,
   "buttonText": "Invitar a un amigo"
 }
 

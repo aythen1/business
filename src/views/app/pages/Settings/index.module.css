@@ -1,7 +1,7 @@
 
 .main{
     max-width: 900px;
-    margin: 10px auto;
+    margin: 0px auto;
     padding: 10px 20px;
 }
 
@@ -15,7 +15,7 @@
     button{
         background: var(--background-button-topbar);
         border-radius: 5px;
-        padding: 6px 10px;
+        padding: 2px 10px;
         display: flex;
         flex-direction: row;
         gap: 10px;

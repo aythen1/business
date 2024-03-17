@@ -1,28 +1,28 @@
+
 const dataStartPremium = {}
 
 dataStartPremium['es'] = {
-  text0: "Prueba [Nombre del Producto] Premium gratis durante 30 días",
-  text1: "Hola [Nombre del Cliente]",
-  text2: `¿Sabías que los miembros premium obtienen más [XX] y alcanzan [YY] el doble de rápido que los miembros básicos? Descubre todas
-  las increíbles funciones que esperan ser desbloqueadas`,
-  text3: `Individuos`,
-  text4: `Prueba premium gratis`,
-  text5: `30 días gratis, cancela en cualquier momento, por cualquier razón`,
-};
-  
+  "trialStartEmail": "¡Bienvenido a tu prueba de 7 días!",
+  "hiCustomerName": "¡Hola [Nombre]!",
+  "text": `😊 Esperamos que te encuentres genial. 
+<br/><br/>
+🎉 ¡Estamos emocionados de que hayas decidido probar nuestra plataforma durante 7 días de manera gratuita! Seguro que te encantará lo que tenemos para ofrecerte. 
+<br/><br/>
+🧭 No dudes en explorar todas las funciones y posibilidades que tenemos disponibles para ti. 
+<br/><br/>
+🆘 Si tienes alguna pregunta o necesitas ayuda en cualquier momento, nuestro equipo de soporte está aquí para ayudarte.
+<br/><br/>
+  🥂 ¡Disfruta al máximo de tu prueba gratuita y no dudes en compartirnos tus comentarios!
+  `,
+  "button": "Aceptar ahora"
+}
 
 dataStartPremium['en'] = {
-    text0: "Try [Product Name] Premium for 30 days at no charge",
-    text1: "Hi [Customer Name]",
-    text2: `Did you know that premium members get more [XX] and reach [YY] twice as fast as basic members? Check out all
-    the great features waiting to be unlocked`,
-    text3: `Individuals`,
-    text4: `Try premium free`,
-    text5: `30 days free, cancel anytime, for any reason`,
-  
-  };
-  
-  module.exports = dataStartPremium;
-  
-  
-  
+  "trialStartEmail": "New X-day trial from [Product Name]",
+  "hiCustomerName": "Hi [Customer Name]",
+  "text": "We know that timing is key. That’s why we’re happy to offer you a X-day extension on your free trial of [Product Name] Premium. Want to keep using your [Premium Feature] and [Premium Feature] for even longer? Upgrade now for only $XX / month and have it all whenever, wherever you want.",
+  "upgradeNowButtonText": "Upgrade now",
+  "cancelAnytimeFor": "Cancel anytime, for any reason"
+}
+
+module.exports = dataStartPremium;

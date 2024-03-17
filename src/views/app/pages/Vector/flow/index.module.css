@@ -28,6 +28,7 @@
     border-radius: 6px;
     width: 40px;
     height: 40px;
+    outline: none;
     .button {
       display: flex;
       flex-direction: column;
@@ -39,7 +40,6 @@
       padding: 3px 8px;
       border-radius: 6px;
       background: var(--color-primary-4);
-      outline: none;
       span{
         display: none;
         color: #fff;

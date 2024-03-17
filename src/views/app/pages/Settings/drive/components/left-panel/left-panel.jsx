@@ -48,8 +48,10 @@ import { listMvps } from "./listMvps";
 import { setModal } from "@/slices/iamSlice";
 
 import ModalLanceDb from "./ModalLanceDb";
+import { useTranslation } from "react-i18next";
 
 export default function DriveLeftPanel({ isNew, setIsNew }) {
+  const { t } = useTranslation()
   const params = useParams();
   // const router = useRouter()
   const navigate = useNavigate();
@@ -315,7 +317,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           </svg>
           <input
             type="text"
-            placeholder="Search documentation"
+            placeholder={t('drive.t1')}
             id="searchFile"
             className={style.drive_input}
             onChange={(e) => dispatch(setSearchFiles(e.target.value))}
@@ -332,7 +334,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           onClick={() => setNewPopup(!newPopup)}
           className={style.drive_create_new}
         >
-          + Crear nuevo
+          + {t('drive.t2')}
         </p>
 
         <div
@@ -351,7 +353,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           >
             <img src={Folder} width={25} height={25} />
 
-            <p>Nueva carpeta</p>
+            <p>{t('drive.t3')}</p>
           </div>
           <div
             onClick={() => {
@@ -361,7 +363,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           >
             <img src={Folder} width={25} height={25} />
 
-            <p>Nuevo lanceDB</p>
+            <p>{t('drive.t4')}</p>
           </div>
           <div
             onClick={() => {
@@ -373,7 +375,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             className={style.drive_create_new_option}
           >
             <img src={file1} width={25} height={25} />
-            <p>Subir archivo</p>
+            <p>{t('drive.t5')}</p>
             <input
               type="file"
               ref={fileInputRef}
@@ -390,7 +392,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             className={style.drive_create_new_option}
           >
             <img src={file1} width={25} height={25} />
-            <p>Subir carpeta</p>
+            <p>{t('drive.t5')}</p>
             <input
               type="file"
               ref={folderInputRef}
@@ -423,7 +425,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
                     }`}
                   >
                     <img src={item.path} width={28} height={28} />
-                    <p>Use {item.title}</p>
+                    <p>{t('drive.t7')} {item.title}</p>
                   </div>
                 ))}
               </div>
@@ -443,7 +445,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
               dispatch(setCurrentFolder(draveId + "/"));
             }}
           >
-            Mis documentos
+            {t('drive.t8')}
           </p>
         </div>
         <div
@@ -456,7 +458,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         >
           <img src={IconAddon} />
           <p className={style.drive_option_text}>Addons</p>
-          <label className={style.drive_option_label}>Soon</label>
+          <label className={style.drive_option_label}>{t('drive.t10')}</label>
         </div>
         <div
           onDrop={handleSetPriority}
@@ -469,7 +471,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           }}
         >
           <img src={IconPriority} />
-          <p className={style.drive_option_text}>Prioritarios</p>
+          <p className={style.drive_option_text}>{t('drive.t11')}</p>
         </div>
         <div
           className={style.drive_option}
@@ -480,7 +482,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           }}
         >
           <img src={IconGroup} />
-          <p className={style.drive_option_text}>Compartidos</p>
+          <p className={style.drive_option_text}>{t('drive.t12')}</p>
         </div>
         <div
           className={style.drive_option}
@@ -491,7 +493,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           }}
         >
           <img src={IconTime} />
-          <p className={style.drive_option_text}>Recientes</p>
+          <p className={style.drive_option_text}>{t('drive.t13')}</p>
         </div>
         <div
           onDrop={handleSetMarker}
@@ -504,7 +506,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           }}
         >
           <img src={IconStar} />
-          <p className={style.drive_option_text}>Destacados</p>
+          <p className={style.drive_option_text}>{t('drive.t14')}</p>
         </div>
         <div
           onDrop={handleMakeGlacier}
@@ -518,7 +520,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
         >
           <img src={IconGlaciar} />
           <p className={style.drive_option_text}>Glaciar</p>
-          <label className={style.drive_option_label}>Soon</label>
+          <label className={style.drive_option_label}>{t('drive.t10')}</label>
         </div>
         <div
           className={style.drive_option}
@@ -531,7 +533,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
           }}
         >
           <img src={IconTrash} />
-          <p className={style.drive_option_text}>Eliminados</p>
+          <p className={style.drive_option_text}>{t('drive.t15')}</p>
         </div>
       </div>
 
@@ -549,7 +551,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
                 alignItems: "center",
               }}
             >
-              <p style={{ fontSize: "18px" }}>Un momento...</p>
+              <p style={{ fontSize: "18px" }}>{t('drive.t17')}</p>
             </div>
           ) : (
             <>
@@ -557,7 +559,7 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
                 style={{ borderBottom: "1px solid #c6c6c6" }}
                 className={style.drive_modal_title_container}
               >
-                <p className={style.drive_modal_title}>Nueva carpeta</p>
+                <p className={style.drive_modal_title}>{t('drive.t3')}</p>
               </div>
               <div style={{ padding: "10px" }}>
                 <div className={style.drive_modal_name_container} tabIndex="0">
@@ -580,13 +582,13 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
                     setModalIsOpen(false);
                   }}
                 >
-                  Cancelar
+                  {t('drive.t18')}
                 </span>
                 <span
                   onClick={handleCreateNewFolder}
                   style={{ color: "blue", cursor: "pointer" }}
                 >
-                  Crear
+                  {t('drive.t19')}
                 </span>
               </div>
             </>

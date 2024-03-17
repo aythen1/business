@@ -2,11 +2,15 @@ const dataRecoverPassword = {}
 
 
 dataRecoverPassword['es'] = {
-  "trialEndedEmail": "Nuevo periodo de prueba de X días de [Nombre del Producto]",
+  "header": "¿Necesitas recuperar tu contraseña verdad?",
   "hiCustomerName": "Hola [Nombre del Cliente]",
-  "text": "Sabemos que el momento es crucial. Por eso, nos complace ofrecerte una extensión de X días en tu prueba gratuita de [Nombre del Producto] Premium. ¿Quieres seguir utilizando tus funciones premium como [Característica Premium] y [Característica Premium] durante aún más tiempo? Actualiza ahora por solo $XX al mes y tenlo todo siempre que quieras, donde quieras.",
-  "upgradeNowButtonText": "Actualizar ahora",
-  "cancelAnytimeFor": "Cancela en cualquier momento, por cualquier razón"
+  "text": `🧐 Hemos notado que has tenido algunos problemas para acceder a tu cuenta. 
+  ¡No te preocupes! Estamos aquí para ayudarte a recuperar tu contraseña y que puedas 
+  volver a disfrutar de todos los beneficios que nuestra plataforma tiene para ofrecerte. 
+<br/><br/>
+  ▶️ Por favor, sigue este enlace para restablecer tu contraseña: 
+  `,
+  "confirmEmail": "Ir al enlace"
 }
 
 

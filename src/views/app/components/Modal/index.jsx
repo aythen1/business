@@ -104,15 +104,20 @@ export const Notification = ({ }) => {
   // }, []);
 
 
+//   useEffect(() => {
+// console.log('wqefor3nuhf', openNotification)
+//   }, [openNotification])
+
+
+const [items, setItems] = useState([{
+  type: 'success',
+  status: 'deny'
+}])
+
 
   console.log('opennotification', openNotification)
   if (!openNotification) return null;
 
-
-  const [items, setItems] = useState([{
-    type: 'success',
-    status: 'deny'
-  }])
 
 
   return (

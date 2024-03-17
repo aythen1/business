@@ -72,7 +72,7 @@ export const ModalAddVector = ({ }) => {
 
     const handleNewVector = async () => {
         let id = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             projectId: 'vector',
         })
         const data = {
@@ -175,7 +175,7 @@ export const ModalVector = ({ vector }) => {
 
     const handleDeleteVector = () => {
         const id = iniVector({
-            workspaceId: user.id,
+            workspaceId: user?.id,
             projectId: 'vector',
         })
 

@@ -127,9 +127,9 @@ const updateDefault = async (req, res, next) => {
 
 const fetchsBilling = async (req, res, next) => {
   try {
-    console.log('11234')
     const { user } = req
     const path = encodeVector(ID)
+
 
     const options = `
    query {
@@ -140,7 +140,6 @@ const fetchsBilling = async (req, res, next) => {
       createdat
       isverified
       billings(limit: 5) {
-        id
         type
         name
         email
@@ -157,10 +156,10 @@ const fetchsBilling = async (req, res, next) => {
   }`;
 
     const resp = await getVector(path, options, [0, 0])
-
-
+console.log('reeee', resp)
     return res.status(200).send(resp)
   } catch (err) {
+    console.log('err', err)
     return res.status(500).send(err);
   }
 };
@@ -175,7 +174,7 @@ const updateBilling = async (req, res, next) => {
     const resp = await updateVector(path, 'billings', [0, 0], billing, { users: user })
     console.log('resp', resp)
 
-    return res.status(200).send(resp[0]);
+    return res.status(200).send(resp);
   } catch (err) {
     return res.status(500).send(err);
   }

@@ -2,6 +2,8 @@
 import style from "./my-files.module.css";
 import styles from "../left-panel/left-panel.module.css";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 import {
   Filters,
   renderFolders,
@@ -55,6 +57,8 @@ export default function Page({
   sortOrder,
   setFilteredFilesContainer,
 }) {
+
+  const { t } = useTranslation()
   const dispatch = useDispatch();
 
   const [showTypeDrive, setShowTypeDrive] = useState("cloud");
@@ -87,8 +91,8 @@ export default function Page({
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const [filtersData, setFiltersData] = useState([
-    { name: "Filter by:", type: "filter", view: false },
-    { name: "Sort by:", type: "sort", view: false },
+    { name: "Filtrar", type: "filter", view: false },
+    { name: "Ordenar", type: "sort", view: false },
   ]);
   const isGettingFolder = loading?.GET_ALL_DIRECTORIES === true;
 
@@ -672,24 +676,24 @@ export default function Page({
                   {filter.type === "sort" ? (
                     <>
                       <li onClick={() => handleSelectSort("Name", "asc")}>
-                        Name
+                        {t('drive.x1')}
                       </li>
                       <li
                         onClick={() => handleSelectSort("Last modified", "asc")}
                       >
-                        Last modified
+                        {t('drive.x2')}
                       </li>
                       {/* Agrega más opciones de sorteo aquí si es necesario */}
                     </>
                   ) : (
                     <>
                       <li onClick={() => handleSelectFilter(null, "selectAll")}>
-                        Seleccionar todos
+                      {t('drive.x3')}
                       </li>
                       <li
                         onClick={() => handleSelectFilter(null, "deselectAll")}
                       >
-                        Quitar todos
+                        {t('drive.x4')}
                       </li>
                       {Object.entries(icons).map(([iconName, iconPath]) => (
                         <li
@@ -716,15 +720,15 @@ export default function Page({
       <div className={style.drive_suggested_main}>
         <div className={style.drive_suggested_header}>
           {showTypeDrive == "cloud" ? (
-            <p className={style.drive_suggested_title}>Recent files</p>
+            <p className={style.drive_suggested_title}>{t('drive.x5')}</p>
           ) : (
-            <p className={style.drive_suggested_title}>LanceDB</p>
+            <p className={style.drive_suggested_title}>{t('drive.x6')}</p>
           )}
           {showTypeDrive == "cloud" ? (
-            <button onClick={() => setShowTypeDrive("db")}>View db</button>
+            <button onClick={() => setShowTypeDrive("db")}>{t('drive.x7')}</button>
           ) : (
             <button onClick={() => setShowTypeDrive("cloud")}>
-              View drive
+              {t('drive.x8')}
             </button>
           )}
         </div>
@@ -751,7 +755,7 @@ export default function Page({
             onClick={() => handleFolderClickBack(driveId)}
             className={style.drive_folders_title}
           >
-            Project
+            {t('drive.x9')}
           </span>
           {currentPath
             .split("/")
@@ -788,7 +792,7 @@ export default function Page({
                 checked={selectAll}
                 onChange={handleSelectAllChange}
               />
-              <p className={style.drive_folders_filters_title}>Name</p>
+              <p className={style.drive_folders_filters_title}>{t('drive.x10')}</p>
               <Filters
                 name="Name"
                 filters={filters}
@@ -798,7 +802,7 @@ export default function Page({
               />
             </div>
             <div className={style.drive_folder_size_container}>
-              <p className={style.drive_folders_filters_title}>Tamaño</p>
+              <p className={style.drive_folders_filters_title}>{t('drive.x12')}</p>
               <Filters
                 name="Size"
                 filters={filters}
@@ -809,7 +813,7 @@ export default function Page({
             </div>
             <div className={style.drive_folder_lastmodified_container}>
               <p className={style.drive_folders_filters_title}>
-                Último modificado
+              {t('drive.x13')}
               </p>
               <Filters
                 name="Last modified"
@@ -860,7 +864,7 @@ export default function Page({
               checked={selectAll}
               onChange={handleSelectAllChange}
             />
-            <p>{selectedFolders.length} items selected</p>
+            <p>{selectedFolders.length} {t('drive.x14')}</p>
           </div>
           <div>
             {selectedFolders.length < 2 &&
