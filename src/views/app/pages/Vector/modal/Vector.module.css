@@ -1,14 +1,10 @@
 .modal {
-  min-width: 80vw;
+  min-width: 90vw;
   background: var(--background);
-  box-shadow: 124px 141px 200px 30px var(--color-primary-0);
   border-radius: 10px;
-  animation: backgroundGradient 20s linear infinite;
-  padding: 6px;
   svg {
     width: 10px;
   }
-
 
   .header {
     display: flex;
@@ -17,10 +13,10 @@
     gap: 2px;
     background: var(--color-primary-4);
     /* box-shadow: 0px 0px 7px 11px var(--color-primary-0); */
-    padding: 6px;
+    padding: 4px;
     border-radius: 5px;
     margin-bottom: 4px;
-    .item{
+    .item {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -40,27 +36,26 @@
         color: var(--color-primary-4);
         border-radius: 2px;
       }
-      span{
-
+      span {
       }
-      button{
+      button {
         width: 20px;
         height: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 5px;
-        svg{
+        svg {
           width: 14px;
         }
-        &:hover{
+        &:hover {
           background: var(--color-primary-2);
-          svg{
+          svg {
             color: var(--color-primary-0);
           }
         }
       }
-      &:hover{
+      &:hover {
         background: var(--color-primary-3);
       }
     }
@@ -88,8 +83,9 @@
   justify-content: center;
   gap: 4px;
   padding: 2px 6px;
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--color-primary-1);
   background: var(--color-primary-4);
+  
   border-radius: 4px;
   .icon {
     width: 18px;
@@ -103,15 +99,19 @@
     width: 100%;
   }
   .npm {
+    color: var(--color-primary-3);
     svg {
       width: 18px;
       height: 18px;
       min-width: 18px;
+      color: currentColor;
+    }
+    &.active {
       color: var(--color-primary-0);
     }
     &:hover {
       svg {
-        color: var(--color-primary-3);
+        color: var(--color-primary-0);
       }
     }
   }
@@ -146,6 +146,7 @@
   justify-content: center;
   flex-direction: column;
   padding: 20px;
+  height: 100%;
   .buttons {
     display: flex;
     align-items: center;
@@ -158,7 +159,7 @@
       border-radius: 4px;
       background: var(--color-primary-1);
       color: var(--color-primary-4);
-      &:hover{
+      &:hover {
         background: var(--color-primary-0);
       }
     }
@@ -190,7 +191,7 @@
       svg {
         width: 20px;
       }
-      &:hover{
+      &:hover {
         background: var(--background);
       }
     }
@@ -290,25 +291,154 @@
 
 .menuRight {
   background: var(--background-secondary);
-  padding: 10px;
-}
-
-
-
-@keyframes backgroundGradient {
-	0% {
-		box-shadow: 124px 141px 200px 30px var(--color-primary-2);
-	}
-	25% {
-    box-shadow: 124px -141px 200px 30px var(--color-primary-3);
+  padding: 4px;
+ 
+  .scroll {
+    height: calc(100vh - 300px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    .dependency {
+      background: var(--background);
+      margin: 6px 0px;
+      padding: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover{
+        background: var(--background-secondary);
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .version {
+          padding: 2px 4px;
+          background: var(--color-primary-4);
+          color: var(--color-primary-0);
+          font-size: 12px;
+          font-weight: 600;
+        }
+        .score {
+          display: flex;
+          gap: 4px;
+          > div {
+            background: var(--color-primary-4);
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            font-size: 9px;
+            padding: 2px 4px;
+            height: 18px;
+            font-weight: 600;
+            color: var(--color-primary-0);
+            border-radius: 6px;
+            svg {
+              width: 10px;
+              color: var(--color-primary-0);
+            }
+          }
+        }
+      }
+      .description {
+        padding: 6px;
+        background: var(--background-secondary);
+        margin-bottom: 8px;
+        .name {
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .date {
+            color: var(--color-primary-0);
+            padding: 2px 10px;
+            background: var(--background);
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+          }
+        }
+        p {
+          font-size: 12px;
+        }
+      }
+      .author {
+        font-size: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 8px 0px;
+        > div {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          height: 14px;
+          font-size: 12px;
+          .logo {
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-primary-0);
+            svg {
+              color: var(--color-primary-4);
+              width: 12px;
+            }
+          }
+        }
+      }
+      .keywords {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 4px;
+        .none{
+          width: 0px;
+          height: 0px;
+          margin-left: -4px;
+        }
+        .tag {
+          border-radius: 4px;
+          padding: 2px 4px;
+          font-size: 10px;
+          font-weight: 600;
+          height: 16px;
+          line-height: 10px;
+          gap: 2px;
+          background: var(--color-primary-2);
+          color: var(--color-primary-4);
+          &.insecure{
+            background: var(--color-primary-0)
+          }
+          &.unstable{
+            background: var(--color-primary-0)
+          }
+        }
+      }
+      .link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 2px;
+        height: 16px;
+        padding-left: 5px;
+        svg {
+          width: 10px;
+          margin-top: 2px;
+        }
+        span {
+          font-size: 8px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+    }
   }
-	50% {
-    box-shadow: -124px 141px 200px 30px var(--color-primary-4);
-	}
-	75% {
-    box-shadow: -124px -141px 200px 30px var(--color-primary-3);
-	}
-	100% {
-		box-shadow: 124px 141px 200px 30px var(--color-primary-2);
-	}
+  .scroll::-webkit-scrollbar {
+    display: none;
+  }
 }
+
+

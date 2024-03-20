@@ -145,8 +145,11 @@ export default function App({ }) {
 
 
     // ------------------------------
-    const addNode = () => {
-        const lastNode = nodes[nodes.length - 1];
+    const addNode = (lastNode) => {
+        if (!lastNode) {
+            lastNode = nodes[nodes.length - 1];
+        }
+
         if (!lastNode) {
             console.error('No hay nodos existentes para conectar.');
             return;
@@ -468,6 +471,15 @@ export default function App({ }) {
 
 
 
+    const handleClickPreview = () => {
+        // setShow('addon')
+    }
+
+    const handleClickDashboard = () => {
+        // dispatch(setModal(<ModalVector vector={vector} />))
+    }
+
+
     return (
         <GraphContext.Provider value={value}>
             <div
@@ -510,40 +522,77 @@ export default function App({ }) {
                         size={backgroundVariant[1].size}
                         lineWidth={backgroundVariant[1].lineWidth}
                         variant={backgroundVariant[1].variant}
-                        color="var(--color-primary-3)"
+                        color="var(--color-primary-4)"
                     />
                     <div
                         className={styles.buttons} style={{ top: '18px' }}
                     >
-                        <button
-                            onClick={saveNode}
-                        >
-                            <ButtonSave />
-                        </button>
-                        <button>
-                            <ButtonAdd addNode={addNode} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                        <button style={{ marginLeft: 'auto' }}>
-                            <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                        <button>
-                            <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
-                        <button>
-                            <PositionComponent position="other" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
+                        <div>
+                            <button
+                                className={styles.buttonFlow}
+                                onClick={saveNode}
+                            >
+                                <ButtonSave />
+                            </button>
+                            <button
+                                className={styles.buttonFlow}
+                            >
+                                <ButtonAdd addNode={addNode} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            </button>
+                        </div>
+                        <div className={styles.buttonsConnect}>
+                            <label >
+                                Connected (2) DB
+                            </label>
+                            <button
+                                onClick={() => handleClickPreview()}
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    onClick={() => handleClickDashboard()}
+                                >
+                                    <path stroke="currentColor" strokeWidth="2" d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z" />
+                                    <path stroke="currentColor" strokeWidth="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                Dashboard
+                                <label>
+                                    New
+                                </label>
+                            </button>
+                        </div>
+                        <div>
+                            <button 
+                            className={styles.buttonFlow}
+                            style={{ marginLeft: 'auto' }}
+                            >
+                                <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            </button>
+                            <button
+                            className={styles.buttonFlow}
+                            >
+                                <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            </button>
+                            <button
+                            className={styles.buttonFlow}
+                            >
+                                <PositionComponent position="other" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            </button>
+                        </div>
                     </div>
                     <div className={styles.buttons} style={{ bottom: '22px' }}>
-                        <button>
+                        <button className={styles.buttonFlow}>
                             <ButtonPlus />
                         </button>
-                        <button>
+                        <button className={styles.buttonFlow}>
                             <ButtonLess />
                         </button>
-                        <button>
+                        <button className={styles.buttonFlow}>
                             <TypeBackground handleTypeBackground={handleTypeBackground} />
                         </button>
-                        <button style={{ marginLeft: 'auto' }}>
+                        <button
+                            className={styles.buttonFlow}
+                            style={{ marginLeft: 'auto' }}
+                        >
                             <ButtonMap setMiniMapVisible={setMiniMapVisible} />
                         </button>
                     </div>

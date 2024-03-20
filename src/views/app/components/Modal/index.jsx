@@ -46,11 +46,13 @@ export const Modal = ({ }) => {
 
   return (
     <div className={styles.overlay} onClick={handleOutsideClick}>
+      <div className={styles.modalContainer}>
       <div className={styles.modal} ref={modalRef}>
         <button className={styles.closeButton} onClick={handleCloseButtonClick}>
           &times;
         </button>
         {modal}
+      </div>
       </div>
     </div>
   );

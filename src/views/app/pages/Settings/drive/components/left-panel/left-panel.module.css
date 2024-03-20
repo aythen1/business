@@ -132,14 +132,18 @@
     padding: 8px 12px;
     gap: 16px;
     border-radius: 20px;
+    color: var(--text-color-secondary);
 
     img{
         width: 18px;
     }
+    svg{
+        width: 18px;
+    }
 
     &:hover {
-        background-color: #e5e5e5;
-        color: #000;
+        background-color: var(--background-secondary);
+        color: var(--text-color);
     }
 }
 
@@ -203,6 +207,9 @@
     img{
         width: 16px;
     }
+    svg{
+        width: 16px;
+    }
 
     p{
         font-size: 12px;
@@ -261,6 +268,10 @@
         img{
             width: 23px;
         }
+        svg{
+            width: 23px;
+        }
+        
         
         &.active{
             opacity: 1;

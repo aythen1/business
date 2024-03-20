@@ -229,7 +229,7 @@ const RenderUser = ({ item, filter, setStateTable }) => {
                 {imageError ? (
                     <div className={styles.initial}>
                         <span>
-                            {item.user.charAt(0)}
+                            {item.user?.charAt(0)}
                         </span>
                     </div>
                 ) : (

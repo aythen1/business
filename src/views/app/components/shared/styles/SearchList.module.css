@@ -8,6 +8,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 200px;
+    gap: 4px;
     svg{
         width: 20px;
     }
@@ -16,10 +18,11 @@
         padding: 4px;
         border: none;
         outline: none;
+        width: calc(100% - 25px);
     }
     ul{
         z-index: 999;
-        background: #000;
+        background: var(--background);
         width: 100%;
         position: absolute;
         display: flex;
@@ -40,5 +43,18 @@
                 background: var(--background);
             }
         }
+    }
+    .notFound{
+        z-index: 999;
+        width: 100%;
+        position: absolute;
+        top: 40px;
+        display: flex;
+        gap: 12px;
+        background: var(--background);
+        color: var(--text-color-secondary);
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px var(--background);
     }
 }

@@ -138,6 +138,7 @@
         border-radius: 2px;
         background: var(--background-input);
         border: 1px solid var(--border-color);
+        color: var(--text-color);
         padding: 2px;
         width: 100%;
         padding: 8px;
@@ -171,7 +172,6 @@
           border-radius: 4px;
           width: auto;
           align-items: center;
-          cursor: not-allowed;
           justify-content: center;
           outline-offset: 2px;
           font-size: 16px;
@@ -353,6 +353,7 @@
   }
   .boxNotification {
     border: 1px solid var(--border-color);
+    color: var(--text-color-secondary);
     border-radius: 4px;
     padding: 18px;
     margin-top: 14px;

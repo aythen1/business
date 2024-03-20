@@ -234,3 +234,18 @@
   display: inline-flex;
   flex-grow: 1;
 }
+
+@media only screen and (max-width: 600px) {
+  .main_drive {
+    /* flex-direction: column;
+    display: flex !important; */
+    grid-template-columns: 0px 100%;
+    .drive_left_panel {
+      width: 0px;
+      display: none;
+    }
+    .drive_content {
+      width: 96vw;
+    }
+  }
+}

@@ -13,7 +13,23 @@ const findInstructionsByKey = (shortcutKey) => {
     return foundKey ? foundKey.instructions : null;
 };
 
+
+export const dataAlt = [{
+    title: 'Data',
+    key: 'data',
+    description: `Lorem ipsum dolor et lorem urifo`
+},{
+    title: 'Edit',
+    key: 'edit',
+    description: `Lorem ipsum dolor et lorem urifo`
+},{
+    title: 'Addon',
+    key: 'addon',
+    description: `Lorem ipsum dolor et lorem urifo`
+}]
+
 export const keysAlt = [{
+    category: 'data',
     title: 'Refresh',
     key: 'alt+a',
     description: `New component`,
@@ -29,6 +45,7 @@ export const keysAlt = [{
         '¡Componente generado con éxito! Refresca para crear uno nuevo.'
     ]
 }, {
+    category: 'data',
     title: 'Text',
     key: 'alt+t',
     description: `News texts`,
@@ -43,6 +60,20 @@ export const keysAlt = [{
         '¡Textos generados con éxito! Refresca para crear nuevos.'
     ]
 }, {
+    category: 'data',
+    title: 'Vector',
+    key: 'alt+n',
+    description: `Vector component`,
+    instructions: [
+        'Iniciando la obtención de datos desde la base de datos...',
+        'Recuperando un vector dimensionado con información...',
+        'Conectando los datos al componente...',
+        'Ajustando la visualización según el vector...',
+        'Finalizando la conexión de datos...',
+        '¡Datos añadidos al componente con éxito!',
+    ]
+}, {
+    category: 'data',
     title: 'Images',
     key: 'alt+i',
     description: `News images`,
@@ -58,6 +89,7 @@ export const keysAlt = [{
         '¡Imágenes generadas con éxito! Refresca para crear nuevas.'
     ]
 }, {
+    category: 'data',
     title: 'Form',
     key: 'alt+f',
     description: `Insert form`,
@@ -73,22 +105,27 @@ export const keysAlt = [{
         '¡Formulario creado con éxito! Refresca para crear uno nuevo.'
     ]
 }, {
+    category: 'edit',
     title: 'Remove',
     key: 'alt+r',
-    description: ` `,
+    description: `Eliminar component`,
 }, {
+    category: 'edit',
     title: 'Copy',
     key: 'alt+c',
     description: `Copy component`
 }, {
+    category: 'edit',
     title: 'Pegar',
     key: 'alt+v',
     description: `Paste component`
 }, {
+    category: 'edit',
     title: 'Insertar',
     key: 'alt+a',
     description: `Insert component`,
 }, {
+    category: 'edit',
     title: 'Duplicar',
     key: 'alt+d',
     description: `Duplicate component`,
@@ -101,22 +138,12 @@ export const keysAlt = [{
         '¡Componente duplicado con éxito!',
     ]
 }, {
+    category: 'edit',
     title: 'Cortar',
     key: 'alt+x',
     description: `Cut component`,
 }, {
-    title: 'Vector',
-    key: 'alt+n',
-    description: `Vector component`,
-    instructions: [
-        'Iniciando la obtención de datos desde la base de datos...',
-        'Recuperando un vector dimensionado con información...',
-        'Conectando los datos al componente...',
-        'Ajustando la visualización según el vector...',
-        'Finalizando la conexión de datos...',
-        '¡Datos añadidos al componente con éxito!',
-    ]
-}, {
+    category: 'data',
     title: 'Colores',
     key: 'alt+u',
     description: `Color component`,
@@ -130,18 +157,22 @@ export const keysAlt = [{
         '¡Color añadido al componente con éxito!',
     ]
 }, {
+    category: 'addon',
     title: 'Tlweditor',
     key: 'alt+q',
     description: `Paint component`
 }, {
+    category: 'addon',
     title: 'Editor',
     key: 'alt+t',
     description: `Edit component`
 }, {
+    category: 'addon',
     title: 'Code',
     key: 'alt+e',
     description: `Code component`
 }, {
+    category: 'addon',
     title: 'Ajustes',
     key: 'alt+ctrl',
     description: `All actions`

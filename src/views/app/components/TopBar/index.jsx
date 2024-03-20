@@ -630,7 +630,10 @@ export const TopBar = ({
               </li>
               <li className={styles['item']}>
                 {themeMode == 'dark' ? (
-                  <button className={styles['button']}>
+                  <button 
+                  className={styles['button']}
+                  onClick={() => handleClickTheme('light')}
+                  >
                     <div className={styles['square']}>
                       <svg
                         className={styles["group2"]}
@@ -651,7 +654,10 @@ export const TopBar = ({
                     </span>
                   </button>
                 ) : (
-                  <button className={styles['button']}>
+                  <button 
+                  className={styles['button']}
+                  onClick={() => handleClickTheme('dark')}
+                  >
                     <div className={styles['square']}>
                       <svg
                         className={styles["group2"]}

@@ -86,9 +86,40 @@
 .inputCheckbox{
   opacity: 0;
   input{
-    width: 18px;
-    height: 18px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
     outline: none;
+    margin-right: 8px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  input:checked {
+    background-color: var(--color-primary-0);
+    border-color: var(--color-primary-0);
+  }
+  
+  input::before {
+    content: '\2713'; 
+    font-size: 13px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    opacity: 0; /* Inicialmente transparente */
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  input:checked::before {
+    opacity: 1; /* Hace el tick visible cuando el checkbox está marcado */
   }
 
   &:hover{

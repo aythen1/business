@@ -89,7 +89,10 @@ const LanguageSelector = ({ isLeft = false, isExtension = false, onSelectLanguag
             />
             <ul className={styles.list}>
               {filteredLanguages.map((language) => (
-                <li key={language.iso} onClick={() => handleSelectLanguage(language)}>
+                <li
+                  key={language.iso}
+                  onClick={() => handleSelectLanguage(language)}
+                >
                   <img src={language.flag} alt={language.name} />
                   {language.name}
                 </li>

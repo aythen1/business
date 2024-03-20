@@ -21,20 +21,20 @@ import { getCurrentDateFormatted } from "../../assetsAux";
 import style from "./left-panel.module.css";
 // import Image from 'next/image'
 // import Chevron from '../../../../../../../assets/Vector 161 (Stroke).svg'
-import IconGroup from "../../assets/IconGroup.svg";
+import IconGroup from "../../assets/IconGroup";
 // import IconSearch from "../../assets/search.svg";
 // import Info from "../../assets/Info.svg";
-import IconStar from "../../assets/IconStar.svg";
-import IconGlaciar from "../../assets/IconGlaciar.svg";
-import IconTrash from "../../assets/IconTrash.svg";
-import IconTime from "../../assets/IconTime.svg";
+import IconStar from "../../assets/IconStar";
+import IconGlaciar from "../../assets/IconGlaciar";
+import IconTrash from "../../assets/IconTrash";
+import IconTime from "../../assets/IconTime";
 
-import Folder from "../../assets/FolderFigma.svg";
-import file1 from "../../assets/File-to-upload.svg";
+import Folder from "../../assets/FolderFigma";
+import File1 from "../../assets/File-to-upload";
 
-import MyDocs from "../../assets/MyDocs.svg";
-import IconAddon from "../../assets/IconAddon.svg";
-import IconPriority from "../../assets/IconDashboard.svg";
+import MyDocs from "../../assets/MyDocs";
+import IconAddon from "../../assets/IconAddon";
+import IconPriority from "../../assets/IconDashboard";
 
 import { setSearchFiles } from "@/slices/assetsSlice";
 import Modal from "react-modal";
@@ -351,8 +351,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             }}
             className={style.drive_create_new_option}
           >
-            <img src={Folder} width={25} height={25} />
-
+            {/* <img src={Folder} width={25} height={25} /> */}
+            <Folder />
             <p>{t('drive.t3')}</p>
           </div>
           <div
@@ -361,7 +361,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             }}
             className={style.drive_create_new_option}
           >
-            <img src={Folder} width={25} height={25} />
+            {/* <img src={Folder} width={25} height={25} /> */}
+            <Folder />
 
             <p>{t('drive.t4')}</p>
           </div>
@@ -374,7 +375,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             }}
             className={style.drive_create_new_option}
           >
-            <img src={file1} width={25} height={25} />
+            {/* <img src={file1} width={25} height={25} /> */}
+            <File1 />
             <p>{t('drive.t5')}</p>
             <input
               type="file"
@@ -391,7 +393,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             }}
             className={style.drive_create_new_option}
           >
-            <img src={file1} width={25} height={25} />
+            {/* <img src={file1} width={25} height={25} /> */}
+            <File1 />
             <p>{t('drive.t5')}</p>
             <input
               type="file"
@@ -408,8 +411,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             onClick={() => handleClickMvp()}
             className={`${style.drive_create_new_option} ${style.drive_mvp_aythen}`}
           >
-            <img src={file1} width={25} height={25} />
-
+            {/* <img src={file1} width={25} height={25} /> */}
+            <File1 />
             <p>20 mvps aythen</p>
             <div
               className={`${style.drive_create_new_popup_container}
@@ -436,7 +439,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
 
       <div className={style.drive_options_container}>
         <div className={style.drive_option}>
-          <img src={MyDocs} />
+          {/* <img src={MyDocs} /> */}
+          <MyDocs />
           <p
             className={style.drive_option_text}
             onClick={() => {
@@ -456,7 +460,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             handleNavigate("addon");
           }}
         >
-          <img src={IconAddon} />
+          {/* <img src={IconAddon} /> */}
+          <IconAddon />
           <p className={style.drive_option_text}>Addons</p>
           <label className={style.drive_option_label}>{t('drive.t10')}</label>
         </div>
@@ -470,7 +475,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconPriority} />
+          {/* <img src={IconPriority} /> */}
+          <IconPriority />
           <p className={style.drive_option_text}>{t('drive.t11')}</p>
         </div>
         <div
@@ -481,7 +487,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconGroup} />
+          {/* <img src={IconGroup} /> */}
+          <IconGroup />
           <p className={style.drive_option_text}>{t('drive.t12')}</p>
         </div>
         <div
@@ -492,7 +499,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconTime} />
+          {/* <img src={IconTime} /> */}
+          <IconTime />
           <p className={style.drive_option_text}>{t('drive.t13')}</p>
         </div>
         <div
@@ -505,7 +513,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconStar} />
+          {/* <img src={IconStar} /> */}
+          <IconStar />
           <p className={style.drive_option_text}>{t('drive.t14')}</p>
         </div>
         <div
@@ -518,7 +527,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconGlaciar} />
+          {/* <img src={IconGlaciar} /> */}
+          <IconGlaciar />
           <p className={style.drive_option_text}>Glaciar</p>
           <label className={style.drive_option_label}>{t('drive.t10')}</label>
         </div>
@@ -532,7 +542,8 @@ export default function DriveLeftPanel({ isNew, setIsNew }) {
             dispatch(setCurrentFolder(draveId + "/"));
           }}
         >
-          <img src={IconTrash} />
+          {/* <img src={IconTrash} /> */}
+          <IconTrash />
           <p className={style.drive_option_text}>{t('drive.t15')}</p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 .container {
   max-width: 900px;
-  margin-top: 20px;
+  margin-top: 14px;
   border-top: 1px solid var(--border-color);
   padding-top: 10px;
   .header {
@@ -44,6 +44,7 @@
           font-size: 20px;
           display: flex;
           align-items: center;
+          color: var(--text-color);
           label {
             font-size: 10px;
             background: var(--color-primary-3);
@@ -62,6 +63,7 @@
         text-transform: uppercase;
         font-weight: 600;
         margin-top: -4px;
+        color: var(--text-color);
       }
       .access {
         display: flex;
@@ -95,7 +97,7 @@
       .filters {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         .inputs {
           display: flex;
           align-items: center;
@@ -108,6 +110,7 @@
             gap: 8px;
             padding: 4px 6px;
             svg {
+              color: var(--text-color);
               width: 20px;
             }
             input {
@@ -129,11 +132,13 @@
           font-size: 18px;
           /* font-weight: 600; */
           line-height: 22px;
+          color: var(--text-color);
         }
         .balance {
           display: flex;
           justify-content: space-between;
           align-items: center;
+          color: var(--text-color-secondary);
           div {
             display: flex;
             flex-direction: column;
@@ -184,23 +189,39 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        background: var(--color-primary-5);
+        border-radius: 6px;
+        padding: 20px 14px;
+        margin-top: 10px;
         .qr {
-          width: 200px;
-          height: 200px;
-          background: red;
           display: flex;
           align-items: center;
           justify-content: center;
+          margin-bottom: 10px;
+        }
+        .text {
+          font-size: 14px;
+          font-weight: 600;
+          width: 90%;
+          text-align: center;
+          margin-bottom: 8px;
+          color: var(--text-color-secondary);
         }
         .link {
+          width: 90%;
           display: flex;
           align-items: center;
-          gap: 2px;
+          gap: 6px;
+          color: var(--text-color-secondary);
           svg {
-            width: 20px;
+            color: var(--text-color);
+            width: 18px;
           }
           a {
-            font-size: 16px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
       }
@@ -209,10 +230,12 @@
         flex-direction: column;
         gap: 10px;
         background: var(--color-primary-4);
+        color: var(--text-color-secondary);
         margin-top: 10px;
         padding: 10px;
         border-radius: 8px;
         h3 {
+          color: var(--text-color);
           font-size: 18px;
           line-height: 22px;
         }
@@ -271,6 +294,7 @@
           h3 {
             font-size: 18px;
             line-height: 22px;
+            color: var(--text-color);
           }
           button {
             background: var(--color-primary-3);
@@ -324,5 +348,12 @@
         }
       }
     }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .board {
+    flex-direction: column;
+    display: flex !important;
   }
 }

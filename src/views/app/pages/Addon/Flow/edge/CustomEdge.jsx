@@ -41,36 +41,43 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
         strokeWidth: 2, // Adjust the stroke width as needed
       };
 
+
+      const [path] = getSmoothStepPath({
+        sourceX: sourceX,
+        sourceY: sourceY,
+        sourcePosition: sourcePosition,
+        targetX: targetX,
+        targetY: targetY,
+        targetPosition: targetPosition,
+    });
+
+
     return (
         <>  
-            {/* <path
+            <path
                 ref={edgeRef}
                 id={id}
-                d={getSmoothStepPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
+                d={path}
                 style={style}
                 className={`react-flow__edge-path ${selectedEdge == id ? 'selected' : ''}`}
                 onClick={handleClick}
-            /> */}
-            {/* <path
+            /> 
+            <path
                 ref={edgeRef}
                 id={id}
-                d={getSmoothStepPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
+                d={path}
                 style={style}
                 className={`react-flow__edge-path edge-path-smoothstep ${selectedEdge == id ? 'selected' : ''}`}
                 onClick={handleClick}
-            /> */}
-            {/* <path
-        d={getSmoothStepPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
-        style={style}
-        className="custom-edge-path"
-    /> */}
-      <path
+            />
+
+      {/* <path
         // d={getSmoothStepPath({ sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition })}
         style={{ ...style, ...edgePathStyle }}
         className={`react-flow__edge-path edge-path-smoothstep ${selectedEdge == id ? 'selected' : ''}`}
         // className="custom-edge-path"
       />
-            {/* <EdgeText
+            <EdgeText
                 x={(sourceX + targetX) / 2}
                 y={(sourceY + targetY) / 2}
                 label={id}

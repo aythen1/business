@@ -402,3 +402,14 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+
+
+@media only screen and (max-width: 600px) {
+  .frame-2087328701{
+    .image{
+      width: 200px;
+      height: 200px;
+    }
+  }
+}

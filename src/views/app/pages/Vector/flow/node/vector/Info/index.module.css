@@ -14,9 +14,11 @@
     border-radius: 8px;
     padding: 12px;
     p {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: var(--color-primary-0);
+      font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--color-primary-0);
+      
     }
     .buttons {
       display: flex;
@@ -47,13 +49,18 @@
       .desactive {
         opacity: 0.8;
         background: var(--color-primary-5);
-        color: var(--color-primary-3);
+        color: var(--color-primary-2);
         font-weight: 600;
       }
     }
   }
 
   .form {
+    color: var(--text-color-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
     b {
       font-size: 16px;
       font-weight: 600;
@@ -127,14 +134,14 @@
     button {
       width: 100%;
       padding: 10px;
-      background: var(--color-primary-0);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 18px;
       border-radius: 8px;
       font-weight: 600;
-
+      background: var(--color-primary-3);
+      
       &.bot {
-        background: #000;
+        background: var(--color-primary-0);
         color: #ffffff;
       }
     }

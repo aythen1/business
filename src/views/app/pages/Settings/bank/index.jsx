@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import QRCode from 'qrcode.react';
 
 
@@ -10,10 +10,13 @@ import Table from '../iam/table'
 
 import BankCard from './assets/card.svg'
 
+import { useTranslation } from 'react-i18next';
+
 
 const Bank = ({ }) => {
+    const { t } = useTranslation();
 
-    const [stateTable, setStateTable] = useState('')
+    const [stateTable, setStateTable] = useState()
 
 
     const [contracts, setContracts] = useState([{
@@ -37,7 +40,33 @@ const Bank = ({ }) => {
     const [resultQR, setResultQR] = useState('https://link.com');
 
 
+    // -----------------------------------------------------------------
+    const [bgColorQR, setBgColorQR] = useState('')
+    const [fgColorQR, setFgColorQR] = useState('')
+    
 
+    useEffect(() => {
+            setBgColorQR(getComputedStyle(document.documentElement).getPropertyValue('--color-primary-1'));
+            // const fgColorQR = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-4');
+
+            const theme = localStorage.getItem('darkMode')
+            console.log('theme', theme)
+            if(theme == 'dark'){
+                setFgColorQR('#000000');
+            }else{
+                setFgColorQR('#FFFFFF');
+
+            }
+    }, [])
+
+
+    // useEffect(() => {
+    //     if (darkMode) {
+    //       console.log('El modo oscuro está activado');
+    //     } else {
+    //       console.log('El modo oscuro está desactivado');
+    //     }
+    //   }, [darkMode]);
 
 
     return (
@@ -51,7 +80,7 @@ const Bank = ({ }) => {
                     </div>
                     <div className={styles.info}>
                         <b className={styles.title}>
-                            Total income
+                            {t('bank.t1')}
                         </b>
                         <div className={styles.subtitle}>
                             <b>
@@ -71,7 +100,7 @@ const Bank = ({ }) => {
                     </div>
                     <div className={styles.info}>
                         <b className={styles.title}>
-                            Total Outcome
+                            {t('bank.t2')}
                         </b>
                         <div className={styles.subtitle}>
                             <b>
@@ -86,7 +115,7 @@ const Bank = ({ }) => {
                 <div className={styles.box}>
                     <div>
                         <div className={styles.title2}>
-                            Gestiona tus accesos
+                            {t('bank.t3')}
                         </div>
                         <div className={styles.access}>
                             {['A', 'B'].map((user, index) => {
@@ -107,7 +136,7 @@ const Bank = ({ }) => {
                             <div>
                                 <input
                                     type="text"
-                                    placeholder="Search for anything"
+                                    placeholder={t('bank.t4')}
                                 />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
@@ -119,7 +148,7 @@ const Bank = ({ }) => {
                                 </svg>
                                 <input
                                     type="text"
-                                    placeholder="Search for anything"
+                                    placeholder={t('bank.t4')}
                                 />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m8 10 4 4 4-4" />
@@ -154,12 +183,12 @@ const Bank = ({ }) => {
                 <div className={styles.right}>
                     <div className={styles.card}>
                         <h3>
-                            My Card
+                        {t('bank.t6')}
                         </h3>
                         <div className={styles.balance}>
                             <div>
                                 <span>
-                                    Card Balance
+                                {t('bank.t7')}
                                 </span>
                                 <b>
                                     $15,594.015
@@ -167,10 +196,10 @@ const Bank = ({ }) => {
                             </div>
                             <div>
                                 <span>
-                                    Status
+                                {t('bank.t8')}
                                 </span>
                                 <button>
-                                    Active
+                                {t('bank.t9')}
                                 </button>
                             </div>
                         </div>
@@ -179,17 +208,25 @@ const Bank = ({ }) => {
                         </div>
                         <div className={styles.buttons}>
                             <button className={styles.manage}>
-                                Manage
+                            {t('bank.t10')}
                             </button>
                             <button>
-                                Transfer
+                            {t('bank.t11')}
                             </button>
                         </div>
                     </div>
                     <div className={styles.affiliate}>
                         <div className={styles.qr}>
-                            <QRCode value={resultQR} />
+                            <QRCode
+                                value={resultQR}
+                                size={130}
+                                bgColor={bgColorQR}
+                                fgColor={fgColorQR}
+                            />
                         </div>
+                        <p className={styles.text}>
+                        {t('bank.t12')}
+                        </p>
                         <div className={styles.link}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961" />
@@ -201,7 +238,7 @@ const Bank = ({ }) => {
                     </div>
                     <div className={styles.security}>
                         <h3>
-                            Security
+                        {t('bank.t13')}
                         </h3>
                         <div className={styles.item}>
                             <div>
@@ -211,7 +248,7 @@ const Bank = ({ }) => {
 
                             </div>
                             <span>
-                                Tarjeta activa
+                            {t('bank.t14')}
                             </span>
                             <div className={styles.toggle}>
                                 checbox
@@ -225,17 +262,17 @@ const Bank = ({ }) => {
 
                             </div>
                             <span>
-                                Key
+                            {t('bank.t15')}
                             </span>
                             <button>
-                                change
+                            {t('bank.t16')}
                             </button>
                         </div>
                     </div>
                     <div className={styles.information}>
                         <div className={styles.top}>
                             <h3>
-                                Information
+                            {t('bank.t17')}
                             </h3>
                             <button>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -251,7 +288,7 @@ const Bank = ({ }) => {
                                             <path fillRule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clipRule="evenodd" />
                                         </svg>
                                     </div>
-                                    Localidad
+                                    {t('bank.t18')}
                                 </div>
                                 <div className={styles.content}>
                                     Sta. Perpetua
@@ -264,7 +301,7 @@ const Bank = ({ }) => {
                                             <path fillRule="evenodd" d="M7 2a2 2 0 0 0-2 2v1a1 1 0 0 0 0 2v1a1 1 0 0 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1c0 1.1.9 2 2 2h11a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H7Zm3 8a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm-1 7a3 3 0 0 1 3-3h2a3 3 0 0 1 3 3c0 .6-.4 1-1 1h-6a1 1 0 0 1-1-1Z" clipRule="evenodd" />
                                         </svg>
                                     </div>
-                                    Direccion
+                                    {t('bank.t19')}
                                 </div>
                                 <div className={styles.content}>
                                     Passatge. Pere 124
@@ -278,7 +315,7 @@ const Bank = ({ }) => {
                                             <path fillRule="evenodd" d="M12.3 3.3a1 1 0 0 1 1.4 0L16.4 6h-2.8l-1.3-1.3a1 1 0 0 1 0-1.4Zm.1 2.7L9.7 3.3a1 1 0 0 0-1.4 0L5.6 6h6.8ZM4.6 7A2 2 0 0 0 3 9v10c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2h-4a5 5 0 0 1 0-10h4a2 2 0 0 0-1.5-2h-13Z" clipRule="evenodd" />
                                         </svg>
                                     </div>
-                                    Wallet
+                                    {t('bank.t20')}
                                 </div>
                                 <div className={styles.content}>
                                     6H46URR8wSR4416c

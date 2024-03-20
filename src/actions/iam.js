@@ -1019,13 +1019,14 @@ export const fetchsLog = createAsyncThunk(
 
 export const sendMail = createAsyncThunk(
   "iam/sendMail",
-  async ({ email }, { dispatch }) => {
+  async ({ email, options }, { dispatch }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await apiBackend.post(
         "/iam/send/mail",
         {
           email,
+          options
         },
         {
           headers: {

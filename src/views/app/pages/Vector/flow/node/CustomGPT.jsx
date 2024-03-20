@@ -40,7 +40,7 @@ function convertToCSV(data) {
 
 
 export default memo(({ id, data, isConnectable, }) => {
-  const { nodes, edges, setNodes, setEdges, setSelectedEdge } = useGraph();
+  const { nodes, edges, setNodes, setEdges, setSelectedEdge, addNode } = useGraph();
 
   const { prompt, value, error, handles } = data;
 
@@ -653,25 +653,59 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
 
+  ///
+  const [isConnect, setIsConnect] = useState(false);
+
+  const onBottomMouseDown = () => {
+    setIsConnect(true);
+    console.log('frirf', isConnect);
+  };
+
+  const onBottomConnect = (params) => {
+    if (params.source) {
+      setIsConnect(false);
+    }
+  };
+  
+  const handleMouseUp = () => {
+    if (isConnect) {
+      const lastNode = nodes.find((node) => node.id === id);
+      addNode(lastNode);
+      setIsConnect(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isConnect]);
 
 
   return (
-    <>
+    <div>
       {/* {id} */}
       <Handle
         id={`${id}_top`}
         type="target"
         position="top"
-        style={{ top: -10, background: "#555" }}
+        style={{ top: -8 }}
+        className={styles.handleTop}
         isConnectable={isConnectable}
-      />
+        />
       <Handle
         id={`${id}_bottom`}
         type="source"
         position="bottom"
-        style={{ bottom: -10, top: "auto", background: "#555" }}
+        style={{ bottom: -8 }}
+        className={styles.handleBottom}
         isConnectable={isConnectable}
-      />
+        onMouseDown={onBottomMouseDown}
+        onConnect={(params) => {
+          onBottomConnect(params); 
+        }}
+        />
       {isContextMenuOpen && (
         <ContextMenu
           x={contextMenuPosition.x}
@@ -681,7 +715,6 @@ export default memo(({ id, data, isConnectable, }) => {
           onClose={() => setIsContextMenuOpen(false)}
         />
       )}
-      |{JSON.stringify(isError)}|
       {!gptActive ? (
         <div
           className={`${styles.desactiveGPT} ${isError && styles.error}`}
@@ -782,7 +815,7 @@ export default memo(({ id, data, isConnectable, }) => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 });
 

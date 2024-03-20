@@ -13,6 +13,7 @@ import VectorTable from './vector/Table'
 import VectorUpload from './vector/Upload'
 import VectorBackup from './vector/Backup'
 import VectorInfo from './vector/Info'
+import VectorBoard from './vector/Board'
 // import VectorAgent from './vector/Agent'
 // import VectorInfo from './vector/Info'
 
@@ -49,7 +50,10 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
   const { nodes, edges, setNodes, setEdges, addNode } = useGraph();
 
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
   const [showContextMenu, setShowContextMenu] = useState(false);
+
+
   const [filter, setFilter] = useState('')
 
   const { zoomIn, zoomOut, setCenter } = useReactFlow();
@@ -155,17 +159,36 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
     dispatch(setModal(null))
     addNode()
   }
-  
+
   const handleDimension = (e) => {
     e.stopPropagation()
     dispatch(setModal(<ModalVector />))
   }
-  
+
   const handleCode = (e) => {
     e.stopPropagation()
     dispatch(setModal(null))
   }
 
+  // ----------------------------------------------------
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showContextMenu && !event.target.closest('.contextMenu')) {
+        setShowContextMenu(false);
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showContextMenu]);
+  
+  // ----------------------------------------------------
+  const handleTitle = (e) => {
+    e.stopPropagation()
+  }
 
 
   return (
@@ -175,16 +198,24 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
         id={id}
         type="target"
         position="left"
-        style={{ left: -10, top: 25, background: "#555" }}
+        style={{ left: '-8px' }}
+        className={styles.handleLeft}
         isConnectable={isConnectable}
       />
-      <Handle type="source"
+      <Handle 
+        type="source"
         position="right"
-        style={{ right: -10, top: 25, background: "#555" }}
+        style={{ right: '-8px' }}
+        className={styles.handleRight}
         isConnectable={isConnectable}
       />
       {showContextMenu && (
-        <ContextMenu onDuplicate={handleDuplicate} onDelete={handleDelete} />
+        <ContextMenu
+          x={contextMenuPosition.x}
+          y={contextMenuPosition.y}
+          onDuplicate={handleDuplicate}
+          onDelete={handleDelete}
+        />
       )}
       <div className={styles.customVector}>
         <div
@@ -193,6 +224,12 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
           onDoubleClick={(e) => handleSetFilter(e, 'agent')}
           onContextMenu={(e) => {
             e.preventDefault();
+
+            const boundingBox = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - boundingBox.left;
+            const y = e.clientY - boundingBox.top;
+
+            setContextMenuPosition({ x, y });
             setShowContextMenu(true);
           }}
         >
@@ -202,17 +239,20 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
           </div>
           <div className={styles.info}>
             <div className={styles.top}>
-              <p>
-                {data.title ? data.title : 'Not found'}
-              </p>
-
+                <input
+                  type="text"
+                  spellCheck="false"
+                  onClick={(e) => handleTitle(e)}
+                  onDoubleClick={(e) => handleTitle(e)}
+                  value={data.title || 'Not found'}
+                />
               <div className={styles.label}>
-              <span className={styles.time}>
-                {data.date ? calculateTimeAgo(data.date) : '-'}
-              </span>
-              <label>
-                {data.size ? formatBytes(data.size) : '0kb'}
-              </label>
+                <span className={styles.time}>
+                  {data.date ? calculateTimeAgo(data.date) : '-'}
+                </span>
+                <label>
+                  {data.size ? formatBytes(data.size) : '0kb'}
+                </label>
               </div>
             </div>
             <div className={styles.bottom}>
@@ -224,7 +264,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
                 </button>
                 <button
                   className={styles.return}
-                  onClick={(e) => handleSetFilter(e, 'graph')}
+                  onClick={(e) => handleSetFilter(e, 'board')}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6.025A7.5 7.5 0 1 0 17.975 14H10V6.025Z" />
@@ -251,7 +291,7 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
                   </svg>
                 </button>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -260,8 +300,10 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
             <VectorTable id={id} data={data} />
           ) : filter == 'upload' ? (
             <VectorUpload />
-            ) : filter == 'backup' ? (
+          ) : filter == 'backup' ? (
             <VectorBackup />
+          ) : filter == 'board' ? (
+            <VectorBoard />
           ) : filter == 'settings' && (
             <VectorInfo setFilter={setFilter} />
           )}
@@ -276,9 +318,9 @@ export default memo(({ id, data, isConnectable, sourcePosition }) => {
 
 
 
-const ContextMenu = ({ onDuplicate, onDelete }) => {
+const ContextMenu = ({ x, y, onDuplicate, onDelete }) => {
   return (
-    <div className={styles.contextMenu}>
+    <div className={styles.contextMenu} style={{ top: y, left: x }} >
       <ul>
         <li onClick={onDuplicate}>
           Duplicar

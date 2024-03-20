@@ -1,15 +1,22 @@
 .container {
-  padding: 10px;
-  height: calc(100vh - 55px);
+  padding: 0px 10px;
+  height: calc(100vh - 45px);
   overflow-y: scroll;
   overflow-x: hidden;
 
-
-  .TopBar {
+  .TopVectors {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 12px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin: 0px -20px;
+    padding-top: 8px;
+    padding-left: 15px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     .filter {
       position: relative;
       display: flex;
@@ -41,64 +48,18 @@
         }
       }
     }
-    .buttons {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 14px;
-      label {
-        background: var(--color-primary-4);
-        font-size: 10px;
-        padding: 2px 8px;
-        border-radius: 4px;
-        color: var(--color-primary-0);
-      }
-      button {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 4px;
-        border: 1px solid var(--border-color);
-        color: var(--text-color-secondary);
-        svg {
-          width: 18px;
-          color: var(--text-color);
-        }
-        &:hover {
-          color: var(--text-color);
-        }
-      }
-    }
-  }
-
-  .TopVectors {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    margin: 0px -20px;
-    padding-top: 8px;
-    padding-left: 30px;
-    &::-webkit-scrollbar {
-      display: none;
-    }
     .team {
       min-width: 180px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       gap: 12px;
-      margin-bottom: 10px;
       .avatar {
         position: relative;
         top: 6px;
         .initial {
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -114,13 +75,11 @@
           }
         }
         .buttonStatus {
-          width: 50px;
-          height: 50px;
           position: absolute;
           top: -10px;
           left: -10px;
-          width: 18px;
-          height: 18px;
+          width: 14px;
+          height: 14px;
           border-radius: 4px;
           display: flex;
           align-items: center;
@@ -128,7 +87,7 @@
           background: var(--color-primary-0);
           box-shadow: 0px 0px 6px 0px var(--color-primary-0);
           svg {
-            width: 14px;
+            width: 12px;
             color: var(--color-primary-4);
           }
         }
@@ -156,6 +115,12 @@
             cursor: pointer;
             width: 12px;
           }
+          > div {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 120px;
+          }
         }
       }
     }
@@ -167,7 +132,7 @@
       position: relative;
       cursor: pointer;
       color: var(--text-color-secondary);
-      .top{
+      .top {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -177,7 +142,7 @@
           font-weight: 600;
           color: #c0c0c0;
         }
-        .dimension{
+        .dimension {
           font-size: 10px;
           display: flex;
           align-items: center;
@@ -189,13 +154,13 @@
           font-weight: 700;
           border-radius: 3px;
           color: var(--color-primary-0);
-          svg{
+          svg {
             color: var(--color-primary-0);
             width: 12px;
           }
         }
       }
-      .bottom{
+      .bottom {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -206,7 +171,7 @@
           font-size: 10px;
           font-weight: 600;
           line-height: 16px;
-          svg{
+          svg {
             width: 12px;
           }
         }
@@ -264,7 +229,7 @@
   }
 
   .BoardFlow {
-    height: calc(100vh - 60px);
+    height: calc(100vh - 115px);
     background: var(--background);
     border-radius: 6px;
     border: 1px solid var(--border-color);

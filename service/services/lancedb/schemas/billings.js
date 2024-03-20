@@ -11,6 +11,11 @@ const schemaBillings =  {
         currency: { type: 'string' },
         vat: { type: 'string' },
         paymentmethod: { type: 'string', enum: ['credit', 'sepa'] },
+        
+        theme_color: { type: 'string' },
+        theme_dark: { type: 'string' },
+        token_gpt: { type: 'string' },
+        
         address: { 
             type: 'string',
             default: '{}'

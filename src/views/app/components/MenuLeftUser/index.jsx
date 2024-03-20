@@ -122,7 +122,8 @@ export const MenuLeftUser = ({
       },
     });
 
-    navigate(`/${'en'}/app/settings/home`)
+    navigate(`/${language.iso}/app/settings/home`)
+    location.reload()
 
   };
 

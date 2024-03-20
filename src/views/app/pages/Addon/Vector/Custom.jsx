@@ -53,12 +53,22 @@ const AddonCustom = ({ addon }) => {
     const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
-            value = e.target.value;
+            // value = e.target.value;
+            value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
         }
 
-        if (property === 'title' || property === 'href') {
+        // if (e.target) {
+        // }
+
+        if (property == 'ispublic') {
+            console.log('wfierfrwjfi public', value)
+            setState((prevState) => ({
+                ...prevState,
+                [property]: value,
+            }));
+        } else if (property === 'title' || property === 'href') {
             const isValidTitle = state.title.trim().length > 5;
-            const isValidHref = state.href.trim().length > 2; 
+            const isValidHref = state.href.trim().length > 2;
 
             setIsActive(isValidTitle && isValidHref);
 
@@ -176,17 +186,32 @@ const AddonCustom = ({ addon }) => {
                 </div>
             )}
             <div className={`${styles.maxHeight} ${styles._400}`}>
-                <p className={styles.textBold}>
-                    Enter the title for addon.
-                </p>
-                <div className={styles.input}>
-                    <input
-                        type="text"
-                        spellCheck="false"
-                        value={state.title}
-                        placeholder={'Select title of addon'}
-                        onChange={(e) => handleInputChange(e, 'title')}
-                    />
+                <div className={styles.topInfo}>
+                    <div className={styles.squareApp}>
+                        {!state.ispublic ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fillRule="evenodd" d="M8 10V7a4 4 0 1 1 8 0v3h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1Zm2-3a2 2 0 1 1 4 0v3h-4V7Zm2 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clipRule="evenodd" />
+                            </svg>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fillRule="evenodd" d="M15 7a2 2 0 1 1 4 0v4a1 1 0 1 0 2 0V7a4 4 0 0 0-8 0v3H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V7Zm-5 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clipRule="evenodd" />
+                            </svg>
+                        )}
+                    </div>
+                    <div className={styles.info}>
+                        <p className={styles.textBold}>
+                            Enter the title for addon.
+                        </p>
+                        <div className={styles.input}>
+                            <input
+                                type="text"
+                                spellCheck="false"
+                                value={state.title}
+                                placeholder={'Select title of addon'}
+                                onChange={(e) => handleInputChange(e, 'title')}
+                            />
+                        </div>
+                    </div>
                 </div>
                 <p className={styles.textBold} style={{ marginTop: 8 }}>
                     Enter the href for addon.
@@ -228,21 +253,23 @@ const AddonCustom = ({ addon }) => {
                         <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
                     </div>
                     <div style={{ marginTop: '10px' }}>
-                        <div className={styles.checkbox}>
+                        <div className={styles.checkboxContainer}>
                             <input
                                 type="checkbox"
-                                name="available"
+                                name="isavailable"
+                                className={styles.checkbox}
                                 checked={state.isavailable}
-                                onChange={(e) => handleInputChange(e.target.name, 'available')}
+                                onChange={(e) => handleInputChange(e, 'isavailable')}
                             />
                             Available addon applications.
                         </div>
-                        <div className={styles.checkbox}>
+                        <div className={styles.checkboxContainer}>
                             <input
                                 type="checkbox"
-                                name="public"
+                                name="ispublic"
+                                className={styles.checkbox}
                                 checked={state.ispublic}
-                                onChange={(e) => handleInputChange(e.target.name, 'public')}
+                                onChange={(e) => handleInputChange(e, 'ispublic')}
                             />
                             Public addon for applications.
                         </div>

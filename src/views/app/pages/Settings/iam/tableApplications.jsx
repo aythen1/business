@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,12 +24,13 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
-import { useNavigate } from 'react-router-dom';
 
 
 const TableApplications = ({
   applications
 }) => {
+  const { t } = useTranslation()
+
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -75,9 +78,9 @@ const TableApplications = ({
     <div className={styles.container}>
       <div className={styles.grid2}>
         <p className={styles.text}>
-          Below is a list of applications in this Organization. You can view more information about each application.
+        {t('iam.apps.t1')}
           <a onClick={() => handleClickSupport()}>
-            What are applications?
+          {t('iam.apps.t2')}
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
         </p>
@@ -86,7 +89,7 @@ const TableApplications = ({
           className={styles.button}
         >
           <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg>
-          Create App
+          {t('iam.apps.t3')}
         </button>
       </div>
       <div>
@@ -98,7 +101,7 @@ const TableApplications = ({
 
         >
           <header>
-            Applications
+          {t('iam.apps.t4')}
           </header>
           <item>
             Name
@@ -165,6 +168,8 @@ const ComponentPolices = (props) => {
 
 
 const PopupModalApp = ({ styles }) => {
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
 
@@ -179,6 +184,8 @@ const PopupModalApp = ({ styles }) => {
 
 
   const handleInputChange = (e, property) => {
+    const { t } = useTranslation()
+    
     let value = e;
     if (e.target) {
       value = e.target.value;
@@ -221,7 +228,7 @@ const PopupModalApp = ({ styles }) => {
   return (
     <div className={styles.modal}>
       <h2 className={styles.title} style={{ marginTop: -14 }}>
-        Create an Application
+      {t('iam.apps.t5')}
       </h2>
       <div className={styles.gird2}>
         <div>
@@ -231,11 +238,11 @@ const PopupModalApp = ({ styles }) => {
         </div>
         <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
-            Enter a name and optional description
+          {t('iam.apps.t6')}
           </h2>
           <div className={styles.input}>
             <label>
-              Name
+            {t('iam.apps.t7')}
             </label>
             <input
               placeholder='applications-pricelesss-beaver'
@@ -249,15 +256,15 @@ const PopupModalApp = ({ styles }) => {
           <div className={styles.info}>
             <svg viewBox="0 0 24 24"><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
             <p>
-              Your application name can only contain alphanumeric characters, dots and dashes.
+            {t('iam.apps.t8')}
             </p>
           </div>
           <div className={styles.input}>
             <label>
-              Description
+            {t('iam.apps.t9')}
             </label>
             <input
-              placeholder={'Description'}
+              placeholder={t('iam.apps.t9')}
               value={state.description}
               onChange={(e) => handleInputChange(e, 'description')}
             />
@@ -272,10 +279,10 @@ const PopupModalApp = ({ styles }) => {
         </div>
         <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
-            Enter key value tags (optional)
+          {t('iam.apps.t10')}
           </h2>
           <p className={styles.text}>
-            Key value tags help you organize your applications. You can assign up to 10 tags per application.
+          {t('iam.apps.t11')}
           </p>
           <AddTag
             handleInputChange={handleInputChange}
@@ -290,7 +297,7 @@ const PopupModalApp = ({ styles }) => {
         </div>
         <div style={{ width: '100%' }}>
           <h2 className={styles.title}>
-            Enter key value tags (optional)
+          {t('iam.apps.t12')}
           </h2>
           <div className={styles.input}>
             <input placeholder={'Select a policy'} />
@@ -302,7 +309,7 @@ const PopupModalApp = ({ styles }) => {
           className={`${isActive ? styles.active : ''}`}
           onClick={() => handleAddApplication()}
         >
-          Create application
+          {t('iam.apps.t13')}
         </button>
       </div>
     </div>
