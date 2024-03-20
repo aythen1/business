@@ -31,6 +31,7 @@ import domtoimage from 'dom-to-image';
 
 
 import {
+  dataAlt,
   keysAlt,
 
   addButtonsToElement,
@@ -57,7 +58,7 @@ import {
 // import Template from "../Flow/node/Template";
 
 
-
+import styles from './index.module.css'
 
 export const AddonEditor = ({
   addonId,
@@ -309,7 +310,7 @@ export const AddonEditor = ({
 
       handleViewEditor(dispatch, ModalViewComponent, image);
     }
-    
+
   });
   // E -: Abre para editar el código
   useHotkeys('alt+e', () => {
@@ -359,8 +360,27 @@ export const AddonEditor = ({
   // -------------------------------------------------
 
   const handleSettingsComponent = (keysAlt, keyFrequency) => {
-    dispatch(setModal(<ModalKeysActions keysAlt={keysAlt} keyFrequency={keyFrequency} />))
+    dispatch(setModal(<ModalKeysActions dataAlt={dataAlt} keysAlt={keysAlt} keyFrequency={keyFrequency} />))
   }
+
+  // ------------------------------------------------
+
+  const handleButtonLayer = () => {
+    setTemplate({})
+
+    const newUrl = `/${'es'}/app/addon/${addonId}`;
+    window.history.pushState({}, '', newUrl);
+  };
+
+  const handleButtonInfo = () => {
+    console.log('info')
+    handleSettingsComponent(keysAlt, keyFrequency);
+    // setTemplate({})
+    // // navigate(`/${'es'}/app/addon/${addonId}`)
+
+    // const newUrl = `/${'es'}/app/addon/${addonId}`;
+    // window.history.pushState({}, '', newUrl);
+  };
 
 
 
@@ -371,6 +391,28 @@ export const AddonEditor = ({
       }}
       className=""
     >
+      <div className={styles.buttons} style={{ top: '70px' }} >
+        <button >
+          <ButtonLeft />
+        </button>
+        <button >
+          <ButtonRight />
+        </button>
+        <button style={{ marginLeft: 'auto' }}>
+          <ButtonTop />
+        </button>
+        <button>
+          <ButtonBottom />
+        </button>
+      </div>
+      <div className={styles.buttons} style={{ bottom: '22px' }}>
+        <button>
+          <ButtonLayer onClick={handleButtonLayer} />
+        </button>
+        <button style={{ marginLeft: 'auto' }}>
+          <ButtonInfo onClick={handleButtonInfo} />
+        </button>
+      </div>
       <div
         ref={containerRef}
         style={{ background: '#fff' }}
@@ -390,4 +432,139 @@ export const AddonEditor = ({
 
 
 
+
+
+
+const ButtonLayer = ({onClick}) => {
+ 
+  return (
+    <div
+      className={styles.button}
+      onClick={onClick}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.005 11.19V12l6.998 4.042L19 12v-.81M5 16.15v.81L11.997 21l6.998-4.042v-.81M12.003 3 5.005 7.042l6.998 4.042L19 7.042 12.003 3Z" />
+      </svg>
+
+      <span>
+        Layer
+      </span>
+    </div>
+  )
+}
+
+
+
+
+const ButtonInfo = ({onClick}) => {
+  return (
+    <div
+      className={styles.button}
+      onClick={onClick}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+      <span>
+        Info
+      </span>
+    </div>
+  )
+}
+
+
+
+const ButtonBottom = () => {
+  const handleButtonLeft = () => {
+    console.log('1234')
+  };
+
+  return (
+    <div
+      className={styles.button}
+      onClick={handleButtonLeft}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7" />
+      </svg>
+
+
+
+      <span>
+        bottom
+      </span>
+    </div>
+  )
+}
+
+
+
+const ButtonTop = () => {
+  const handleButtonLeft = () => {
+    console.log('1234')
+  };
+
+  return (
+    <div
+      className={styles.button}
+      onClick={handleButtonLeft}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 15 7-7 7 7" />
+      </svg>
+
+
+      <span>
+        top
+      </span>
+    </div>
+  )
+}
+
+
+
+
+const ButtonRight = () => {
+  const handleButtonLeft = () => {
+    console.log('1234')
+  };
+
+  return (
+    <div
+      className={styles.button}
+      onClick={handleButtonLeft}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m9 5 7 7-7 7" />
+      </svg>
+
+      <span>
+        right
+      </span>
+    </div>
+  )
+}
+
+
+
+const ButtonLeft = () => {
+  const handleButtonLeft = () => {
+    console.log('1234')
+  };
+
+  return (
+    <div
+      className={styles.button}
+      onClick={handleButtonLeft}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
+      </svg>
+
+      <span>
+        left
+      </span>
+    </div>
+  )
+}
 

@@ -266,6 +266,7 @@ export const AddonFlow = ({
 
             for (var j = 0; j < components.length; j++) {
                 const component = components[j]
+                console.log('node>component:', node.id, component)
 
                 arr.push({
                     id: component.id,
@@ -314,7 +315,7 @@ export const AddonFlow = ({
         }
 
 
-        // console.log('addon addon addon', data)
+        console.log('addon addon addon', data)
         // // Realizar un map sobre los nodos y agregar los componentes utilizando addVectorData
         // data.nodes.map(async (node) => {
         //     const { components, id } = node.data; // Ajusta según la estructura de tus nodos

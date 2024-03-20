@@ -118,14 +118,14 @@ export default ({ id, data: _data, setFilter, setNodes }) => {
     <>
       <div className={styles.modal} >
         <div className={styles.header}>
-          <div >
-            <label className={`${step >= 1 && styles.active}`}>
+          <div  className={`${step >= 1 && styles.active}`}>
+            <label>
               1
             </label>
             Upload file
           </div>
-          <div >
-            <label className={`${step >= 2 && styles.active}`}>
+          <div  className={`${step >= 2 && styles.active}`}>
+            <label >
               2
             </label>
             Select header row

@@ -94,9 +94,9 @@ const Template = ({
     });
 
 
-    useEffect(() => {
-        console.log('remplate', template)
-    }, [template])
+    // useEffect(() => {
+    //     console.log('remplate', template)
+    // }, [template])
 
 
     // useEffect(() => {

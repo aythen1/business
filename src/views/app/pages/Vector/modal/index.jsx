@@ -14,7 +14,7 @@ import styles from './index.module.css'
 
 
 const Agent = ({ }) => {
-    const [tab, setTab] = useState('ienfo')
+    const [tab, setTab] = useState('info')
     const [content, setContent] = useState()
 
     const dispatch = useDispatch()
@@ -27,12 +27,11 @@ const Agent = ({ }) => {
             setContent(<Vector />)
         }
 
-        // dispatch(setModal(content))
     }, [tab])
 
 
     return (
-        <div className={styles.modal}>
+        <div className={styles.modal} style={{height: '100%'}}>
             {content}
         </div>
     )

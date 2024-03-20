@@ -148,6 +148,9 @@ const fetchsBilling = async (req, res, next) => {
         currency
         vat
         paymentmethod
+        theme_color
+        theme_dark
+        token_gpt
         address
         upgradedat
         createdat
@@ -768,14 +771,16 @@ const fetchsLog = async (req, res) => {
 
 const sendMail = async (req, res, next) => {
   try {
+    const { user } = req
     const { email, options } = req.body
-    console.log('senddd email')
+    console.log('senddd email', options.backgroundColor)
     let template = email || 'confirm-email'
 
     // const resp = sendEmail('info@aythen.com', template, { token: '1234' })
 
     const resp = sendEmail('info@aythen.com', template, {
-      backgroundColor: options?.backgroundColor || 'red'
+      backgroundColor: options?.backgroundColor || 'red',
+      id: user.id
     })
 
 

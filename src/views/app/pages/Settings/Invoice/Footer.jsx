@@ -27,7 +27,7 @@ const Info = styled.div`
 
   span {
     padding: 0 5px;
-    color: black;
+    color: var(--text-color-secondary);
 
     &:last-child {
       padding-right: 0;

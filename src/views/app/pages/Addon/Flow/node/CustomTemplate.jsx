@@ -313,21 +313,60 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
 
+  ///
+  const [isConnect, setIsConnect] = useState(false);
+
+  const onBottomMouseDown = () => {
+    setIsConnect(true);
+    console.log('frirf', isConnect);
+  };
+
+  const onBottomConnect = (params) => {
+    if (params.source) {
+      setIsConnect(false);
+    }
+  };
+  
+  const handleMouseUp = () => {
+    if (isConnect) {
+      const lastNode = nodes.find((node) => node.id === id);
+      
+      addNode(lastNode);
+      setIsConnect(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isConnect]);
+
+
+
+
   return (
     <>
       <Handle
         id={`${id}_top`}
         type="target"
         position="top"
-        style={{ top: -10, background: "#555" }}
+        className={styles.handleTop}
+        style={{ top: -10 }}
         isConnectable={isConnectable}
       />
       <Handle
         id={`${id}_bottom`}
         type="source"
         position="bottom"
-        style={{ bottom: -10, top: "auto", background: "#555" }}
+        className={styles.handleBottom}
+        style={{ bottom: -10 }}
         isConnectable={isConnectable}
+        onMouseDown={onBottomMouseDown}
+        onConnect={(params) => {
+          onBottomConnect(params); 
+        }}
       />
       <div className={styles.box}>
         <Vector

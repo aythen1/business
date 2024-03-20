@@ -333,6 +333,14 @@
   flex-basis: 300px;
   width: 300px;
 
+  svg{
+    width: 24px;
+    height: 24px;
+    margin-bottom: -5px;
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+
   input {
     width: 15px;
     height: 15px;

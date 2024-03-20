@@ -12,7 +12,11 @@
   align-items: center;
   z-index: 9999999;
 }
-
+.modalContainer {
+  padding: 14px;
+  background: var(--background);
+  border-radius: 14px;
+}
 .modal {
   position: relative;
   color: var(--text-color);
@@ -20,6 +24,7 @@
   background: var(--color-primary-5);
   padding: 14px;
   border-radius: 10px;
+  animation: backgroundGradient 20s linear infinite;
 }
 .modal::-webkit-scrollbar {
   display: none;
@@ -64,7 +69,6 @@
     border-bottom: 2px solid var(--color-primary-0);
     background: var(--color-primary-1);
     width: 100%;
-
   }
   .buttons {
     display: flex;
@@ -150,5 +154,26 @@
   }
   100% {
     background-position: 100% 50%;
+  }
+}
+
+
+
+
+@keyframes backgroundGradient {
+  0% {
+    box-shadow: 50px 50px 150px 10px var(--color-primary-2);
+  }
+  25% {
+    box-shadow: 50px -50px 150px 10px var(--color-primary-3);
+  }
+  50% {
+    box-shadow: -50px 50px 150px 10px var(--color-primary-4);
+  }
+  75% {
+    box-shadow: -50px -141px 150px 10px var(--color-primary-3);
+  }
+  100% {
+    box-shadow: 50px 50px 150px 10px var(--color-primary-2);
   }
 }

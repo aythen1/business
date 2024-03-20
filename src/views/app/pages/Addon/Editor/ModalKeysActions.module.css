@@ -1,5 +1,18 @@
 .modal {
   width: 400px;
+  /* width: 400px; */
+
+  h2{
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  p{
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 }
 
 .keys {
@@ -26,7 +39,6 @@
     > div {
       display: flex;
       flex-direction: column;
-      gap: 2px;
       b {
         font-size: 10px;
         text-transform: uppercase;

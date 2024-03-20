@@ -20,12 +20,12 @@
     padding: 32px;
     z-index: 1;
 
-    .background{
+    .background {
       position: absolute;
       width: 550px;
       bottom: 0px;
       right: 0px;
-      z-index: 0;
+      z-index: -1;
     }
 
     .containerBoxQuery {
@@ -393,7 +393,7 @@
 
             padding: 8px;
             border-radius: 4px;
-            svg{
+            svg {
               width: 14px;
               fill: var(--text-color-secondary);
             }
@@ -447,9 +447,6 @@
   }
 }
 
-
-
-
 .modal {
   width: 500px;
   .search {
@@ -473,7 +470,7 @@
   .list {
     max-height: 400px;
     overflow-y: scroll;
-    
+
     .topic {
       display: grid;
       .title {
@@ -487,7 +484,7 @@
         margin: 6px 0px;
         padding: 6px 2px;
       }
-      .grid2{
+      .grid2 {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 16px;
@@ -531,6 +528,18 @@
       &.deny {
         background: var(--color-primary-4);
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    padding: 0px 10px;
+    .boxPopular {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    .containerTrid {
+      grid-template-columns: 1fr !important;
     }
   }
 }

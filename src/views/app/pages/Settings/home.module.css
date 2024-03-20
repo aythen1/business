@@ -356,10 +356,11 @@
   }
 
   .li2 {
+    justify-content: flex-start;
+    gap: 5px;
     height: auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     color: var(--text-color-secondary);
     width: 100%;
     display: flex;
@@ -385,8 +386,55 @@
     &:hover {
       background: var(--background-secondary);
     }
-
-    div {
+    
+    .Status{
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      >div{
+        width: 12px;
+        height: 5px;
+        border-radius: 10px;
+        background: var(--background-secondary);
+      }
+      &.desactive{
+        >div{
+          background: var(--color-primary-4);
+        }
+      }
+      &.working{
+        >div:nth-child(1){
+          background: #ff2d2d69;
+        }
+        >div:nth-child(2){
+          background: #fff39a69;
+        }
+        >div{
+          background: var(--color-primary-1);
+        }
+      }
+      &.active{
+        >div{
+          background: var(--color-primary-1);
+        }
+      }
+      &.default{
+        >div:nth-child(1),
+        >div:nth-child(2){
+          background: var(--color-primary-0);
+        }
+        >div{
+          background: var(--color-primary-2);
+        }
+      }
+      &.warning{
+        >div{
+          background: #fff39a69;
+        }
+      }
+      
+    }
+    .Info {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -398,6 +446,7 @@
       }
     }
     button {
+      margin-left: auto;
       width: 26px;
       height: 26px;
       display: flex;
@@ -821,9 +870,16 @@
 
   .containerBanner {
     .paragraph {
-      margin-bottom: 100px;
+      margin-bottom: 30px;
+      width: 99% !important;
+      .cards_v1{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
     }
   }
+
 
   .gird2 {
     grid-template-columns: repeat(1, 1fr);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 
 import styles from './index.module.css'
 
@@ -23,6 +23,7 @@ const IAM = ({
     logs
   } = useSelector((state) => state.iam)
 
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [selectedTab, setSelectedTab] = useState('users')
 
@@ -36,12 +37,12 @@ const IAM = ({
         <div
           className={styles.back}
           onClick={() => handleClickHome()}
-        > 
+        >
           <svg viewBox="0 0 16 16" ><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
-          Back to home
+          {t('iam.header.t1')}
         </div>
         <h2 className={styles.title}>
-          Identity and Access Managmenet (IAM)
+          {t('iam.header.t2')}
         </h2>
       </div>
 
@@ -51,7 +52,7 @@ const IAM = ({
             onClick={() => setSelectedTab('users')}
             className={`${styles.tab} ${selectedTab === 'users' ? styles.selected : ''}`}
           >
-            Users
+            {t('iam.header.t3')}
             {users.length > 0 && (
               <label>
                 {users.length}
@@ -62,7 +63,7 @@ const IAM = ({
             onClick={() => setSelectedTab('applications')}
             className={`${styles.tab} ${selectedTab === 'applications' ? styles.selected : ''}`}
           >
-            Applications
+            {t('iam.header.t4')}
             {applications.length > 0 && (
               <label>
                 {applications.length}
@@ -73,7 +74,7 @@ const IAM = ({
             onClick={() => setSelectedTab('polices')}
             className={`${styles.tab} ${selectedTab === 'polices' ? styles.selected : ''}`}
           >
-            Polices
+            {t('iam.header.t5')}
             {polices.length > 0 && (
               <label>
                 {polices.length}
@@ -84,7 +85,7 @@ const IAM = ({
             onClick={() => setSelectedTab('apis')}
             className={`${styles.tab} ${selectedTab === 'apis' ? styles.selected : ''}`}
           >
-            API Keys
+            {t('iam.header.t6')}
             {apis.length > 0 && (
               <label>
                 {apis.length}
@@ -95,7 +96,7 @@ const IAM = ({
             onClick={() => setSelectedTab('logs')}
             className={`${styles.tab} ${selectedTab === 'logs' ? styles.selected : ''}`}
           >
-            Logs
+            {t('iam.header.t7')}
             {logs.length > 0 && (
               <label>
                 {logs.length}

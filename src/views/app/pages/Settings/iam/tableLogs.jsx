@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Table from './table'
 import styles from './index.module.css'
@@ -20,7 +22,6 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
-import { useNavigate } from 'react-router-dom';
 
 
 
@@ -28,6 +29,8 @@ import { useNavigate } from 'react-router-dom';
 const TableLogs = ({
   logs
 }) => {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -96,9 +99,9 @@ const TableLogs = ({
     <div className={styles.container}>
       <div className={styles.grid2}>
         <p className={styles.text}>
-          Below is the list of your IAM resource logs. IAM resources can be IAM users, applications, groups, API keys and policies. You can get more details about each of them.
+        {t('iam.logs.t1')}
           <a onClick={() => handleClickSupport()}>
-            How to understand my logs?
+          {t('iam.logs.t2')}
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
         </p>
@@ -108,50 +111,50 @@ const TableLogs = ({
           <input
             type="text"
             spellCheck="false"
-            placeholder={'Filter by exact IAM resource ID'}
+            placeholder={t('iam.logs.t3')}
           />
         </div>
         <div className={styles.input}>
           <label>
-            Date
+          {t('iam.logs.t4')}
           </label>
           <input
             type="text"
             spellCheck="false"
-            placeholder={'Fecha de iam'}
+            placeholder={t('iam.logs.t5')}
           />
         </div>
         <div className={styles.input}>
           <label>
-            Category
+          {t('iam.logs.t6')}
           </label>
           <input
             type="text"
             spellCheck="false"
-            placeholder={'category'}
+            placeholder={t('iam.logs.t7')}
           />
         </div>
         <div className={styles.input}>
           <label>
-            Action
+          {t('iam.logs.t8')}
           </label>
           <input
             type="text"
             spellCheck="false"
-            placeholder={'Action'}
+            placeholder={t('iam.logs.t9')}
           />
         </div>
         <div className={styles.button}>
           <button
             onClick={() => handleAddLog()}
           >
-            Add
+            {t('iam.logs.t10')}
           </button>
           <button
             onClick={() => handleResetLog()}
             className={styles.reset}
           >
-            Reset
+            {t('iam.logs.t11')}
           </button>
         </div>
         <div className={styles.button}>
@@ -159,7 +162,7 @@ const TableLogs = ({
             onClick={() => alert(1)}
             className={styles.filter}
           >
-            Filter
+            {t('iam.logs.t12')}
           </button>
         </div>
       </div>
@@ -171,7 +174,7 @@ const TableLogs = ({
           handleAdd={() => dispatch(setModal(<PopupModalLogs styles={stylesModal} />))}
         >
           <header>
-            Logs
+          {t('iam.logs.t13')}
           </header>
           <item>
             Name
@@ -200,10 +203,12 @@ export default TableLogs
 
 
 const PopupModalLogs = ({ styles }) => {
+  const { t } = useTranslation()
+  
   return (
     <div className={styles.modal}>
       <h2 className={styles.title} style={{ marginTop: -10 }}>
-        Logs information
+      {t('iam.logs.t14')}
       </h2>
       <div className={styles.girdBox2}>
         <div className={`${styles.item} ${styles.gird1}`}>
@@ -221,29 +226,29 @@ const PopupModalLogs = ({ styles }) => {
         </div>
         <div className={styles.item}>
           <label>
-            Status
+          {t('iam.logs.t15')}
           </label>
           <div className={styles.gird2}>
             <div className={styles.dot}></div>
             <span>
-              Activated
+            {t('iam.logs.t16')}
             </span>
           </div>
         </div>
         <div className={styles.item}>
           <label>
-            Type
+          {t('iam.logs.t17')}
           </label>
           <div>
             <div></div>
             <span>
-              Guest
+            {t('iam.logs.t18')}
             </span>
           </div>
         </div>
         <div className={styles.item}>
           <label>
-            Joined on:
+          {t('iam.logs.t19')}:
           </label>
           <div>
             <span>
@@ -253,7 +258,7 @@ const PopupModalLogs = ({ styles }) => {
         </div>
         <div className={styles.item}>
           <label>
-            Last login:
+          {t('iam.logs.t20')}:
           </label>
           <div>
             <span>
@@ -264,15 +269,15 @@ const PopupModalLogs = ({ styles }) => {
       </div>
       <div className={styles.containerRemove}>
         <h2 className={styles.title}>
-          Remove Log
+        {t('iam.logs.t21')}
         </h2>
         <div className={`${styles.box} ${styles.gird2}`}>
           <p className={styles.text}>
-            Removing a log from this Organization automatically deletes their API keys, and any policies directly attached to them will be left orphaned.
+          {t('iam.logs.t22')}
           </p>
           <div className={styles.button}>
             <button className={styles.delete}>
-              Remove log
+            {t('iam.logs.t23')}
             </button>
           </div>
         </div>

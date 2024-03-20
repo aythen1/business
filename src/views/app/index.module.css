@@ -20,7 +20,7 @@ body {
   overflow-y: scroll;
   overflow-x: hidden;
   height: calc(100vh - 45px);
-  padding-top: 14px;
+  /* padding-top: 14px; */
   position: relative;
   width: 100%;
   .Board {
@@ -121,5 +121,14 @@ body {
 @media (min-width: 1200px) {
   .Container {
     zoom: 1.2;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .MenuLeft{
+    width: 100% !important;
+    .MenuLeftUser {
+      width: 90% !important;
+    }
   }
 }

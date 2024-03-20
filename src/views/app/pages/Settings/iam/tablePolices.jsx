@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,13 +19,14 @@ import {
 import {
   setModal
 } from '@/slices/iamSlice'
-import { useNavigate } from 'react-router-dom';
 
 
 
 const TablePolices = ({
   polices
 }) => {
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ const TablePolices = ({
 
   const handleClickSupport = () => {
     navigate(`/${'es'}/app/support`)
-}
+  }
 
 
   const initialValue = {
@@ -53,9 +56,9 @@ const TablePolices = ({
     <div className={styles.container}>
       <div className={styles.grid2}>
         <p className={styles.text}>
-          This is a list of the policies in this Organization. You can view more information about each policy.
+          {t('iam.polices.t1')}
           <a onClick={() => handleClickSupport()}>
-            What are policies?
+            {t('iam.polices.t2')}
             <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
           </a>
         </p>
@@ -64,7 +67,7 @@ const TablePolices = ({
           className={styles.button}
         >
           <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg>
-          Create Policy
+          {t('iam.polices.t3')}
         </button>
       </div>
       <div>
@@ -76,7 +79,7 @@ const TablePolices = ({
 
         >
           <header>
-            Polices
+            {t('iam.polices.t4')}
           </header>
           <item>
             Name
@@ -94,6 +97,8 @@ export default TablePolices
 
 
 const PopupModalRules = ({ styles }) => {
+  const { t } = useTranslation()
+  
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
 
@@ -132,7 +137,7 @@ const PopupModalRules = ({ styles }) => {
       target: 'none',
     }
 
-    dispatch(addPolice({police: data}))
+    dispatch(addPolice({ police: data }))
     dispatch(setModal(null))
   }
 
@@ -140,22 +145,21 @@ const PopupModalRules = ({ styles }) => {
   return (
     <div className={styles.modal}>
       <h2 className={styles.title} styles={{ marginTop: -14 }}>
-        Rules
+        {t('iam.polices.t5')}
       </h2>
       <p className={styles.text}>
-        A rule consists of a scope (eg. Project level or Organization level) and one or more permission sets (eg. "list all Instances").
-        Rules, therefore, define the actions that principals (users, applications and groups) can perform on resources within the selected scope.
+        {t('iam.polices.t6')}
         <a className={styles.ancle}>
-          Learn more about rules.
+          {t('iam.polices.t7')}
           <svg viewBox="0 0 24 24"><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
         </a>
       </p>
       <div className={styles.box}>
         <div className={styles.gird2}>
           <h2 className={styles.title}>
-            Rule #1
+            {t('iam.polices.t8')}
           </h2>
-          <div className={styles.buttonItem} style={{marginLeft: 'auto'}}>
+          <div className={styles.buttonItem} style={{ marginLeft: 'auto' }}>
             {true ? (
               <div className={styles.buttonItem}>
                 <button className={`${styles.xs} ${styles.edit}`}>
@@ -179,18 +183,17 @@ const PopupModalRules = ({ styles }) => {
               1
             </label>
             <b className={styles.textBold}>
-              Cope
+              {t('iam.polices.t9')}
             </b>
           </div>
           <div>
             {true ? (
               <div className={styles.info}>
                 <label>
-                  Organization
+                  {t('iam.polices.t10')}
                 </label>
-                  <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
-                  IAM and billing permission sets can only be selected at Organization level.
-             
+                <svg viewBox="0 0 24 24" ><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"></path></svg>
+                {t('iam.polices.t11')}
               </div>
             ) : (
               <div>
@@ -199,10 +202,10 @@ const PopupModalRules = ({ styles }) => {
                     <input type="checkbox" />
                     <div>
                       <span>
-                        Access to resources
+                        {t('iam.polices.t12')}
                       </span>
                       <p>
-                        Give access to resources (Instances, Object Storage, Databases, etc) in your Projects.
+                        {t('iam.polices.t13')}
                       </p>
                       <input />
                     </div>
@@ -211,16 +214,16 @@ const PopupModalRules = ({ styles }) => {
                     <input type="checkbox" />
                     <div>
                       <span>
-                        Access to Organization features
+                        {t('iam.polices.t14')}
                       </span>
                       <p>
-                        Give access to IAM, billing, support and abuse tickets and project management, all handled at Organization level.
+                        {t('iam.polices.t15')}
                       </p>
                     </div>
                   </div>
                 </div>
                 <button>
-                  Validate
+                  {t('iam.polices.t16')}
                 </button>
               </div>
             )}
@@ -232,23 +235,23 @@ const PopupModalRules = ({ styles }) => {
               2
             </label>
             <b className={styles.textBold}>
-              Permission sets
+            {t('iam.polices.t17')}
             </b>
           </div>
           <div className={styles.info}>
             <label>
-              OrganizationManager
+            {t('iam.polices.t18')}
             </label>
           </div>
         </div>
       </div>
       <div className={styles.button}>
-        <button 
+        <button
           onClick={() => handleAddPolice()}
           className={styles.active}
         >
           <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg>
-          Add rule
+          {t('iam.polices.t19')}
         </button>
       </div>
     </div>

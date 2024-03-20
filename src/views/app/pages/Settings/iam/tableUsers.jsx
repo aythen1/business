@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Table from './table'
 import styles from './index.module.css'
@@ -17,13 +19,14 @@ import {
 import {
     setModal
 } from '@/slices/iamSlice'
-import { useNavigate } from 'react-router-dom';
 
 
 
 const TableUsers = ({
     users
 }) => {
+    const { t } = useTranslation()
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -57,9 +60,9 @@ const TableUsers = ({
         <div className={styles.container}>
             <div className={styles.grid2}>
                 <p className={styles.text}>
-                    Below is a list of users in this Organization. You can view more information about each user.
+                {t('iam.users.t1')}
                     <a onClick={() => handleClickSupport()}>
-                        What are users?
+                    {t('iam.users.t2')}
                         <svg viewBox="0 0 24 24" ><path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"></path></svg>
                     </a>
                 </p>
@@ -68,7 +71,7 @@ const TableUsers = ({
                     className={styles.button}
                 >
                     <svg viewBox="0 0 24 24"><path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg>
-                    Add user
+                    {t('iam.users.t3')}
                 </button>
             </div>
             <div>
@@ -79,7 +82,7 @@ const TableUsers = ({
                     handleAdd={() => dispatch(setModal(<PopupModalAddUser styles={stylesModal} />))}
                 >
                     <header>
-                        Users
+                        Usuario
                     </header>
                     <item filter="checkbox" size="50">
 
@@ -116,6 +119,8 @@ export default TableUsers
 
 
 const PopupModalAddUser = ({ styles }) => {
+    const { t } = useTranslation()
+    
     const dispatch = useDispatch()
     const [isActive, setIsActive] = useState(false)
 
@@ -169,10 +174,10 @@ const PopupModalAddUser = ({ styles }) => {
     return (
         <div className={styles.modal}>
             <h2 className={styles.title} style={{ marginTop: -10 }}>
-                Invite user(s)
+            {t('iam.users.t4')}
             </h2>
             <p className={styles.textBold}>
-                Enter the email address of each user to invite, separated by commas.
+            {t('iam.users.t5')}
             </p>
             <textarea
                 placeholder={'mails@example.com'}
@@ -181,16 +186,16 @@ const PopupModalAddUser = ({ styles }) => {
                 onChange={(e) => handleInputChange(e, 'email')}
             />
             <h2 className={styles.title}>
-                Enter key value tags
+            {t('iam.users.t6')}
             </h2>
             <p className={styles.text1}>
-                Key value tags helps you organize your users. You can assign up to 10 tags per user.
+            {t('iam.users.t7')}
             </p>
             <AddTag
                 handleInputChange={handleInputChange}
             />
             <p className={styles.textBold}>
-                Add to an existing group (optional)
+            {t('iam.users.t8')}
             </p>
             <div className={styles.input}>
                 <input
@@ -204,7 +209,7 @@ const PopupModalAddUser = ({ styles }) => {
                     onClick={() => handleAddUser()}
                     className={`${styles.desactive} ${isActive ? styles.active : ''}`}
                 >
-                    Invite
+                    {t('iam.users.t9')}
                 </button>
             </div>
         </div>
@@ -225,7 +230,7 @@ const PopupModalUser = ({ styles, user }) => {
     return (
         <div className={styles.modal}>
             <h2 className={styles.title} style={{ marginTop: -10 }}>
-                User information
+            {t('iam.users.t10')}
             </h2>
             <div className={styles.girdBox2}>
                 <div className={`${styles.item} ${styles.gird1}`}>
@@ -243,29 +248,29 @@ const PopupModalUser = ({ styles, user }) => {
                 </div>
                 <div className={styles.item}>
                     <label>
-                        Status
+                    {t('iam.users.t11')}
                     </label>
                     <div className={styles.gird2}>
                         <div className={styles.dot}></div>
                         <span>
-                            Activated
+                        {t('iam.users.t12')}
                         </span>
                     </div>
                 </div>
                 <div className={styles.item}>
                     <label>
-                        Type
+                    {t('iam.users.t13')}
                     </label>
                     <div>
                         <div></div>
                         <span>
-                            Guest
+                        {t('iam.users.t14')}
                         </span>
                     </div>
                 </div>
                 <div className={styles.item}>
                     <label>
-                        Joined on:
+                    {t('iam.users.t15')}:
                     </label>
                     <div>
                         <span>
@@ -275,7 +280,7 @@ const PopupModalUser = ({ styles, user }) => {
                 </div>
                 <div className={styles.item}>
                     <label>
-                        Last login:
+                    {t('iam.users.t16')}:
                     </label>
                     <div>
                         <span>
@@ -287,18 +292,18 @@ const PopupModalUser = ({ styles, user }) => {
             <AddTag />
             <div className={styles.containerRemove}>
                 <h2 className={styles.title}>
-                    Remove user
+                {t('iam.users.t17')}
                 </h2>
                 <div className={`${styles.box} ${styles.gird2}`}>
                     <p className={styles.text}>
-                        Removing a user from this Organization automatically deletes their API keys, and any policies directly attached to them will be left orphaned.
+                    {t('iam.users.t18')}
                     </p>
                     <div className={styles.button}>
                         <button
                             onClick={() => handleClickRemoveUser()}
                             className={styles.delete}
                         >
-                            Remove user
+                           {t('iam.users.t19')}
                         </button>
                     </div>
                 </div>

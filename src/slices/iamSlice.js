@@ -155,7 +155,9 @@ const iamSlice = createSlice({
         state.billing = action.payload
         // state.billing = action.payload
         console.log("fetchsBillingfetchsBilling,", action.payload);
-        state.billing = action.payload;
+        if(action.payload.billings){
+          state.billing = action.payload.billings;
+        }
       })
       .addCase(updateBilling.fulfilled, (state, action) => {
         state.billing = action.payload;

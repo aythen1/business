@@ -3,6 +3,7 @@
   margin-top: 15px;
   padding: 12px;
   width: 450px;
+  color: var(--text-color-secondary);
   border: var(--border-color);
   background: var(--background);
   box-shadow: 0px 5px 22px -9px var(--color-primary-0);
@@ -13,6 +14,7 @@
       color: var(--color-primary-0);
     }
     p {
+      color: var(--text-color);
       font-size: 16px;
     }
   }
@@ -67,9 +69,7 @@
   }
   .adjunt {
     margin-top: 10px;
-    p {
-      font-size: 14px;
-    }
+ 
     ul {
       border-top: 1px solid var(--border-color);
       padding-top: 10px;

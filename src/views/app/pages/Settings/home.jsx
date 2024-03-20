@@ -24,9 +24,11 @@ import IconExcel from './drive/assets/icons/XSL.jsx'
 
 
 import SettingsCurrentConsumption from '../shared/settingsCurrentConsumption'
+import { ModalAddVector } from '../Vector/ModalVector.jsx';
 
 import {
-    fetchsDefault
+    fetchsDefault,
+    sendMail
 } from '@/actions/iam'
 
 import {
@@ -43,12 +45,12 @@ import {
 
 
 
+
 import {
     iniVector,
     fetchsVector,
 } from '@/actions/vector'
 
-import { ModalAddVector } from '../Vector/ModalVector.jsx';
 
 
 import {
@@ -271,6 +273,15 @@ const Home = ({
     }, [])
 
 
+    // const sendEmail = () => {
+
+    //     dispatch(sendMail({
+    //         email: 'start-premium',
+    //         options: {
+    //             backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--color-primary-0')
+    //         }
+    //     }))
+    // }
 
 
     return (
@@ -281,6 +292,11 @@ const Home = ({
                     : Aythen
                 </div>
                 <div id="step1" className={styles["containerButton"]}>
+                    {/* <button
+                    onClick={() => sendEmail()}
+                    >
+                        save email
+                    </button> */}
                     <button onClick={() => handleClickBank()}>
                         {t('home.t2')}
                     </button>
@@ -341,6 +357,7 @@ const Home = ({
                             //     </div>
                             // </div>
                             <div
+                                key={index}
                                 className={styles.boxVector}
                                 onClick={(e) => handleClickVector(vector)}
                             >
@@ -433,7 +450,7 @@ const Home = ({
                                     className={styles["li2"]}
                                     onClick={() => handleModalAddAddon()}
                                 >
-                                    <div>
+                                    <div className={styles["Info"]}>
                                         <div className={styles["IconPlus"]}>
                                             <IconPlus />
                                         </div>
@@ -452,7 +469,13 @@ const Home = ({
                                     className={styles["li2"]}
                                     onClick={() => handleClickAddon(item)}
                                 >
-                                    <div>
+                                    <div className={`${styles["Status"]} ${styles.working}`}>
+                                        <div />
+                                        <div />
+                                        <div />
+                                        <div />
+                                    </div>
+                                    <div className={styles["Info"]}>
                                         <div className={styles['IconAddon']}>
                                             <IconInstance />
                                         </div>
@@ -479,7 +502,7 @@ const Home = ({
                                 {t('home.t10')}
                             </p>
                             <label>
-                            {t('home.t11')}
+                                {t('home.t11')}
                             </label>
                             <div className={styles["buttons"]}>
                                 <button
@@ -513,11 +536,11 @@ const Home = ({
                 <div className={styles["containerChangelog"]}>
                     <div className={styles["title"]}>
                         <h2>
-                        {t('home.t15')}
+                            {t('home.t15')}
                         </h2>
                         <a onClick={() => handleClickSupport()}>
-                        {t('home.t16')}
-                            
+                            {t('home.t16')}
+
                             <svg viewBox="0 0 24 24" className={styles.svg} >
                                 <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
                             </svg>
@@ -550,7 +573,7 @@ const Home = ({
                         </h2>
                         <a onClick={() => handleClickSupport()}>
                             {t('home.t18')}
-                            
+
                             <svg viewBox="0 0 24 24" className={styles.svg} >
                                 <path d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
                             </svg>

@@ -1,4 +1,4 @@
-import ay from "./assets/icons/LAMBDA.svg";
+import AY from "./assets/icons/LAMBDA";
 
 import AI from "./assets/icons/AI";
 import AVI from "./assets/icons/AVI";
@@ -277,8 +277,8 @@ export function formatLastModified(lastModified) {
 }
 
 export const icons = {
-  json: ay,
-  ay,
+  json: <AY />,
+  ay: <AI/>,
   ai: <AI />,
   avi: <AVI />,
   bmp: <BMP />,

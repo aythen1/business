@@ -453,8 +453,6 @@ export const AddonFlow = ({
 
 
         if (lastNode) {
-
-            console.log('lastNode', lastNode)
             if (direction == 'row') {
                 newY = lastNode.position.y;
                 newX = lastNode.position.x + lastNode.width + 100
@@ -627,7 +625,7 @@ export const AddonFlow = ({
                         size={backgroundVariant[1].size}
                         lineWidth={backgroundVariant[1].lineWidth}
                         variant={backgroundVariant[1].variant}
-                        color="var(--color-primary-3)"
+                        color="var(--color-primary-4)"
                     />
                     <div className={styles.buttons} style={{ top: '18px' }} >
                         <button onClick={saveNode} >

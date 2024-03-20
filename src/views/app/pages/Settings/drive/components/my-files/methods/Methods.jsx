@@ -230,10 +230,7 @@ export const renderFolders = (
               />
             </div>
             {isValidElement(icon) ? (
-              <p>
-
-                hello world
-              </p>
+              icon
             ) : (
               <img src={icon} style={{ width: 16 }} />
             )}

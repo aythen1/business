@@ -9,7 +9,7 @@ const InvoiceTableContainer = styled.table`
   th {
     text-align: left;
     color: #999;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var(--border-color);
     padding: 10px 0 15px 0;
     font-size: 0.75em;
     text-transform: uppercase;
@@ -33,7 +33,7 @@ const InvoiceTableContainer = styled.table`
 
     tbody tr:last-child td {
       padding-bottom: 25px;
-      border-bottom: 2px solid #ddd;
+      border-bottom: 2px solid var(--border-color);
     }
   }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import ReactFlow, { Position, getSmoothStepPath, getStraightPath, getBezierPath, EdgeText } from 'reactflow';
+import ReactFlow, { getSmoothStepPath, getStraightPath, getBezierPath, EdgeLabelRenderer, BaseEdge, EdgeText } from 'reactflow';
 import { useGraph } from '../index';
 
 import styles from './CustomEdge.module.css'
@@ -13,7 +13,8 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
         setNodes,
         setEdges,
         selectedEdge,
-        setSelectedEdge
+        setSelectedEdge,
+        addNode
     } = useGraph();
 
     const handleClick = () => {
@@ -37,31 +38,52 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
     }, [selectedEdge, id]);
 
 
-    console.log("sourceX:", sourceX);
-    console.log("sourceY:", sourceY);
-    console.log("sourcePosition:", sourcePosition);
-    console.log("targetX:", targetX);
-    console.log("targetY:", targetY);
 
-
-
-
-    const [path] = getSmoothStepPath({
+    const [path, labelX, labelY] = getSmoothStepPath({
         sourceX: sourceX,
         sourceY: sourceY,
-        sourcePosition: Position.Right,
+        sourcePosition: sourcePosition,
         targetX: targetX,
         targetY: targetY,
-        targetPosition: Position.Top,
+        targetPosition: targetPosition,
     });
 
+    const onEdgeClick = (evt) => {
+        evt.stopPropagation();
+        const edgeIndex = Object.values(edges).findIndex(edge => edge.id === id);
+        const edge = edges[edgeIndex]
+        console.log('currentIndex', id, edge)
+        // Obtener el último nodo
 
-
-
-
+        const nodeIndex = Object.values(nodes).findIndex(node => node.id === edge.source);
+        const lastNode = nodes[nodeIndex]
+        console.log('lastNode', nodes, edge.source, lastNode)
+        addNode(lastNode)
+    };
 
     return (
         <>
+            {/* <BaseEdge path={path} style={style} /> */}
+            <EdgeLabelRenderer>
+                <div
+                    style={{
+                        position: 'absolute',
+                        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+                        fontSize: 12,
+                        // everything inside EdgeLabelRenderer has no pointer events by default
+                        // if you have an interactive element, set pointer-events: all
+                        pointerEvents: 'all',
+                    }}
+                    className="nodrag nopan"
+                >
+                    <button className={styles.addEdge} onClick={onEdgeClick}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
+                        </svg>
+                    </button>
+                </div>
+            </EdgeLabelRenderer>
+
             <path
                 ref={edgeRef}
                 id={id}
@@ -78,12 +100,22 @@ const CustomEdge = ({ id, sourceX, sourceY, targetX, targetY, sourcePosition, ta
                 className={`react-flow__edge-path edge-path-line ${selectedEdge == id ? 'selected' : ''}`}
                 onClick={handleClick}
             />
-            <EdgeText
+            {/* <EdgeText
                 x={(sourceX + targetX) / 2}
                 y={(sourceY + targetY) / 2}
-                label={id}
+                // label={id}
                 className="react-flow__edge-text"
-            />
+                label={(
+                    <div>
+                        ekdekifik
+                        <g
+                            className={styles.addEdge}
+                        >
+                            efowrfirifmik +
+                        </g>
+                    </div>
+                )}
+            /> */}
         </>
     );
 };

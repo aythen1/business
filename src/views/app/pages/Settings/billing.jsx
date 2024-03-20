@@ -14,8 +14,6 @@ import {
     updateBilling,
 
     fetchsInvoice,
-
-    sendMail
 } from '@/actions/iam'
 
 
@@ -60,18 +58,22 @@ const Billing = ({ }) => {
     useEffect(() => {
         if (billing) {
             console.log('billing', billing)
-            const address = JSON.parse(billing?.billings?.address || "{}")
+            const address = JSON.parse(billing?.address || "{}")
 
             setState({
-                id: billing.billings?.id || null,
-                type: billing.billings?.type || '',
-                name: billing.billings?.name || '',
-                email: billing.billings?.email || '',
-                limit: billing.billings?.limit || 0,
-                iban: billing.billings?.iban || '',
-                currency: billing.billings?.currency || '',
-                vat: billing.billings?.vat || '',
-                paymentmethod: billing.billings?.paymentmethod || 'credit',
+                id: billing?.id || null,
+                type: billing?.type || '',
+                name: billing?.name || '',
+                email: billing?.email || '',
+                limit: billing?.limit || 0,
+                iban: billing?.iban || '',
+                currency: billing?.currency || '',
+                vat: billing?.vat || '',
+                paymentmethod: billing?.paymentmethod || 'credit',
+                
+                theme_color: billing?.theme_color || '',
+                theme_dark: billing?.theme_dark || '',
+                token_gpt: billing?.token_gpt || '',
 
                 address1: address.address1 || '',
                 address2: address.address2 || '',
@@ -116,6 +118,11 @@ const Billing = ({ }) => {
     }
 
 
+    const handleClickSave = () => {
+        setEditContact(true)
+    }
+
+
     useEffect(() => {
         const fetchsItems = async () => {
             console.log('111')
@@ -138,6 +145,11 @@ const Billing = ({ }) => {
                 currency: state.currency || '',
                 vat: state.vat || '',
                 paymentmethod: state.paymentmethod || 'credit',
+
+                theme_color: state.theme_color || '',
+                theme_dark: state.theme_dark || '',
+                token_gpt: state.token_gpt || '',
+
                 address: {
                     steetaddress1: state.address1 || '',
                     steetaddress2: state.address2 || '',
@@ -163,12 +175,6 @@ const Billing = ({ }) => {
     }
 
 
-
-    const sendEmail = () => {
-        dispatch(sendMail({
-            email: 'invite-friends'
-        }))
-    }
 
 
     // -------------------------------------------------
@@ -289,6 +295,7 @@ const Billing = ({ }) => {
                             <input
                                 type='text'
                                 placeholder={'placeholder@demo.com'}
+                                spellCheck='false'
                                 value={state.email}
                                 onChange={(e) => handleInputChange(e, 'email')}
                             />
@@ -319,13 +326,14 @@ const Billing = ({ }) => {
                             <input
                                 type='text'
                                 placeholder={'sk-***'}
-                                value={state.token}
-                                onChange={(e) => handleInputChange(e, 'token')}
+                                spellCheck='false'
+                                value={state.token_gpt}
+                                onChange={(e) => handleInputChange(e, 'token_gpt')}
                             />
                         </div>
                         <div className={styles.button}>
                             <button
-                                onClick={() => handleClickEdit()}
+                                onClick={() => handleClickSave()}
                             >
                                 {t('billing.t15')}
                             </button>
@@ -358,17 +366,21 @@ const Billing = ({ }) => {
                                 <div className={styles.value}>
                                     <input
                                         placeholder={'1000'}
+                                        spellCheck='false'
                                         value={state.limit}
                                         onChange={(e) => handleInputChange(e, 'limit')}
                                     />
                                 </div>
                                 <div className={styles.current}>
-                                    <input value={'€'} />
+                                    <input
+                                        value={'€'}
+                                        spellCheck='false'
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div className={styles.button}>
-                            <button 
+                            <button
                                 className={styles.buttonStyle}
                                 onClick={() => handleClickEdit()}
                             >
@@ -399,6 +411,7 @@ const Billing = ({ }) => {
                             <input
                                 type='text'
                                 placeholder={'ESB61077863VAT'}
+                                spellCheck='false'
                                 value={state.vat}
                                 onChange={(e) => handleInputChange(e, 'vat')}
                             />
@@ -584,8 +597,6 @@ const ModalPopupContact = ({ styles, setEditContact, state, setState }) => {
                 setIsActive(false);
             }
         }
-
-
 
         setInput((prevState) => ({
             ...prevState,

@@ -69,9 +69,6 @@ const LogBackup = ({ }) => {
                 </div>
             </div>
             <div className={styles.adjunt}>
-                <p>
-                    Se te enviara un correo con la copia, quieres que te envemos una copia a otro email como adjuntoº
-                </p>
                 <ul>
                     <li>
                         email1@example.com

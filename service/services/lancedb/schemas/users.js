@@ -10,6 +10,7 @@ const schemaUsers = {
         address: { type: 'string', default: '{}' },
         phone: { type: 'string', default: '{}' },
         password: { type: 'string' },
+        
         isverified: { type: 'boolean', default: false },
         upgradedat: { type: 'string', format: 'date-time' },
         createdat: { type: 'string', format: 'date-time' },

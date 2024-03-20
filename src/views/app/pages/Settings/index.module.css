@@ -10,7 +10,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: -8px;
+    overflow-x: scroll;
 
     button{
         background: var(--background-button-topbar);
@@ -29,7 +29,8 @@
         font-weight: 500;
         font-family: sans-serif;
         color: var(--color-primary-2);
-        text-shadow: 0px 1px 4px var(--color-primary-2);
+        text-shadow: 0px 2px 4px var(--color-primary-3);
+        white-space: nowrap;
         &.selected{
             background: var(--color-primary-0);
             color: #fff;
@@ -43,4 +44,9 @@
             color: var(--color-primary-0);
         }
     }
+}
+
+
+.headerButtons::-webkit-scrollbar{
+    display: none;
 }

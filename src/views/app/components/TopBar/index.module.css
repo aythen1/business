@@ -354,7 +354,7 @@
       border: none;
       cursor: pointer;
       svg {
-        color: var(--text-primary);
+        color: #fff;
         width: 28px;
       }
     }
@@ -400,6 +400,9 @@
               background: var(--background-secondary);
               border-radius: 9px;
               box-shadow: 0px 3px 2px -1px var(--background);
+              .group2{
+                width: 20px;
+              }
             }
 
             label.pro {

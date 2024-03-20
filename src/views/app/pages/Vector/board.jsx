@@ -8,7 +8,7 @@ import * as xlsx from 'xlsx';
 import styles from './board.module.css'
 
 
-import VectorBoard from './board/'
+// import VectorBoard from './board/'
 import VectorTable from './table'
 import VectorFlow from './flow'
 import VectorAddon from './addon'
@@ -76,23 +76,14 @@ const Board = ({ }) => {
         navigate(`/${'es'}/app/settings/vector`)
     }
 
-    const handleClickPreview = () => {
-        setShow('addon')
-    }
-
-    const handleClickVector = () => {
-        setShow('flow')
-    }
-
-    const handleClickImport = (e) => {
-        e.stopPropagation()
-        setShow('import')
-    }
+   
 
 
-    const handleClickGraph = () => {
-        setShow('board')
-    }
+
+
+    // const handleClickGraph = () => {
+    //     setShow('board')
+    // }
 
 
     const handleLoadData = (item) => {
@@ -104,9 +95,7 @@ const Board = ({ }) => {
 
     // ----------------------------------------------------------------------------
 
-    const handleClickOption = () => {
-        dispatch(setModal(<ModalVector vector={vector} />))
-    }
+  
 
 
     const handleAddVector = () => {
@@ -251,73 +240,9 @@ const Board = ({ }) => {
 
     // -------------------------------------------------    
 
-    const handleScroll = () => {
-        if (!keyUse) {
-            const flowContainer = flowContainerRef.current;
-            const container = containerRef.current;
-            clearTimeout(scrollTimer);
-
-            scrollTimer = setTimeout(() => {
-                container.scrollTop = flowContainer.scrollHeight;
-            }, 3000);
-        }
-    };
-
-    const handleMouseEnter = () => {
-        handleScroll(true);
-    };
-
-    const handleMouseLeave = () => {
-        clearTimeout(scrollTimer);
-    };
-
-    const handleKeyPress = (e) => {
-        const container = containerRef.current;
-        // const flowContainer = flowContainerRef.current;
-        if (e.key === 'ArrowUp') {
-            console.log('wrifrufu')
-            // setKeyUse(true)
-            setKeyUse((prevKeyUse) => !prevKeyUse)
-            container.scrollTop = 0;
-        }
-    };
-
-    useEffect(() => {
-        // const flowContainer = flowContainerRef.current;
-        const container = containerRef.current;
-
-        // Añade eventos de scroll, mouse y teclado
-        container.addEventListener('scroll', handleScroll);
-        container.addEventListener('mouseenter', handleMouseEnter);
-        container.addEventListener('mouseleave', handleMouseLeave);
-        window.addEventListener('keydown', handleKeyPress);
-        window.addEventListener('keydown', handleKeyDown);
-
-        // Limpia los eventos al desmontar el componente
-        return () => {
-            container.removeEventListener('scroll', handleScroll);
-            container.removeEventListener('mouseenter', handleMouseEnter);
-            container.removeEventListener('mouseleave', handleMouseLeave);
-            window.removeEventListener('keydown', handleKeyPress);
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
-
-
     const handleKeyDown = (e) => {
-        const container = containerRef.current;
-        console.log('keyUsekeyUsekeyUse', keyUse)
-
         if (e.key === 'Escape') {
-            if (!keyUse) {
-                setKeyUse((prevKeyUse) => !prevKeyUse)
-                console.log('keykey', keyUse)
-                container.scrollTop = 0;
-            } else {
-                dispatch(setVector(null));
-                navigate(`/${'es'}/app/settings/vector`);
-             }
+            navigate(`/${'es'}/app/settings/vector`);
         }
     };
 
@@ -330,8 +255,12 @@ const Board = ({ }) => {
             ref={containerRef}
             className={styles.container}
         >
-            <div className={styles.TopBar}>
-                <div className={styles.filter}>
+            {/* <div className={styles.TopBar}>
+            </div> */}
+
+            {/***/}
+            <div className={styles.TopVectors}>
+            <div className={styles.filter}>
                     <button
                         className={styles.TopBack}
                         onClick={() => handleClickReturn()}
@@ -360,41 +289,6 @@ const Board = ({ }) => {
                         </button>
                     </div>
                 </div>
-                <div className={styles.buttons}>
-                    <label onClick={() => handleClickPreview()}>
-                        Connected (2) DB
-                    </label>
-                    <button
-                        onClick={() => handleClickGraph()}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" strokeWidth="2" d="M21 12c0 1.2-4 6-9 6s-9-4.8-9-6c0-1.2 4-6 9-6s9 4.8 9 6Z" />
-                            <path stroke="currentColor" strokeWidth="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                        Dashboard
-                        <label>
-                            New
-                        </label>
-                    </button>
-                    <button
-                        onClick={() => handleClickVector()}
-                    >
-                        Vector
-                    </button>
-                    <button
-                        onClick={() => handleClickOption()}
-                    >
-                        <svg
-                            onClick={(e) => handleClickImport(e)}
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        >
-                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2M12 4v12m0-12 4 4m-4-4L8 8" />
-                        </svg>
-                        Option
-                    </button>
-                </div>
-            </div>
-            <div className={styles.TopVectors}>
                 <div className={styles.team}>
                     <div className={styles.avatar}>
                         <div className={styles.initial}>
@@ -477,8 +371,6 @@ const Board = ({ }) => {
                         <VectorFlow />
                     ) : show == 'addon' ? (
                         <VectorAddon />
-                    ) : show == 'board' ? (
-                        <VectorBoard />
                     ) : (
                         <VectorTable data={dataSheet} />
                     )}

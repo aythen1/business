@@ -26,6 +26,35 @@
     }
   }
 
+  .topInfo{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    .squareApp{
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--color-primary-0);
+      border-radius: 8px;
+      svg{
+        fill: var(--color-primary-4);
+        width: 35px;
+        height: 35px;
+      }
+    }
+    .info{
+      width: calc(100% - 70px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+  }
+
   .container{
     width: 100%;
     display: flex;
@@ -141,14 +170,60 @@
   
 
   
-  .checkbox{
+  /* .checkbox{
     display: flex;
     align-items: center;
     gap: 4px;
     font-size: 12px;
     margin-bottom: 6px;
+  } */
+  
+  .checkboxContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 4px;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    outline: none;
+    margin-right: 8px;
+    position: relative;
+    z-index: 1;
   }
 
+
+  .checkbox:checked {
+    background-color: var(--color-primary-0);
+    border-color: var(--color-primary-0);
+  }
+  
+  .checkbox::before {
+    content: '\2713'; 
+    font-size: 13px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    opacity: 0; /* Inicialmente transparente */
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  .checkbox:checked::before {
+    opacity: 1; /* Hace el tick visible cuando el checkbox está marcado */
+  }
   
 
   .button{
