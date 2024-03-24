@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Route, Routes, Outlet, useParams, useNavigate } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
+// import { useNavigate } from 'react-dom'
 
 import './index.module.css'
 
@@ -22,7 +23,8 @@ import {
 const Addon = ({
 
 }) => {
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  // const dispatch = useDispatch()
 
   const [isEditor, setIsEditor] = useState({})
 
@@ -69,10 +71,11 @@ const Addon = ({
 
   useEffect(() => {
     if (isEditor.id) {
-      
       const newUrl = `/${'es'}/app/addon/${addonId}/${isEditor.id}`;
       window.history.pushState({}, '', newUrl);
-
+    } else {
+      const newUrl = `/${'es'}/app/addon/${addonId}`;
+      window.history.pushState({}, '', newUrl);
     }
   }, [isEditor])
 
@@ -82,15 +85,55 @@ const Addon = ({
   //     <Route path=":id/editor/:page" element={<AddonEditor/>} />
   //   </Route>
   // </Routes>
+  // const [isEscape, setIsEscape] = useState(false)
+  let isEscape = false
+  let timeEscape
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        if (isEditor.id) {
+          setIsEditor({})
+          window.history.pushState({}, '', `/${'es'}/app/addon/${addonId}`);
+        } else if (!isEscape) {
+          isEscape = true
+  
+          clearTimeout(timeEscape)
+          timeEscape = setTimeout(function () {
+            isEscape = false
+          }, 2000)
+        } else {
+          console.log('Ctrl + Esc presionado: Salir de la aplicación');
+          navigate(`/${'es'}/app/settings/home`)
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isEditor]);
+
+
 
   return (
     <div>
-      {isEditor.id ? (
-        <AddonEditor addonId={addonId} template={isEditor} setTemplate={setIsEditor} />
-      ) : (
-        <AddonFlow setIsEditor={setIsEditor} />
+      {isEditor.id && (
+        <AddonEditor
+          addonId={addonId}
+          template={isEditor}
+          setTemplate={setIsEditor}
+        />
       )}
-
+      <div
+        style={{ display: isEditor.id ? 'none' : 'block' }}
+      >
+        <AddonFlow
+          setIsEditor={setIsEditor}
+        />
+      </div>
     </div>
   )
 }

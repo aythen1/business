@@ -27,7 +27,7 @@ If it does not detect any element to create an html, it returns an element not f
 
 
 
-const addonGPT = async (token, components) => {
+const codeGPT = async (token, components) => {
     const systemPromptTailwind = `
 You are a skilled Tailwind CSS developer. 
 
@@ -84,7 +84,10 @@ Follow the following order to structure the code:
             if (result && result.choices && result.choices.length > 0) {
                 const assistantResponse = result.choices[0].message.content;
                 const html = await extractCodeBlocks(assistantResponse)
-                assistantResponses[index] = html[1]
+                assistantResponses[index] = {
+                    id: components[index].id,
+                    code: html[1]
+                }
             }
         }
 
@@ -103,7 +106,7 @@ Follow the following order to structure the code:
 
 
 
-const codeGPT = async (token, code, user) => {
+const _codeGPT = async (token, code, user) => {
     const systemPromptTailwind1 = `
     You are a skilled Tailwind CSS developer. 
     Users will provide you with low-fidelity wireframes of applications, 
@@ -396,7 +399,7 @@ const rpaGPT = async () => {
 
 
 module.exports = {
-    addonGPT: addonGPT,
+    addonGPT: _codeGPT,
     codeGPT: codeGPT,
     visionGPT: visionGPT,
     rpaGPT: rpaGPT

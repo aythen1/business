@@ -12,12 +12,11 @@ const ModalIdeComponent = ({ hoveredElement }) => {
         if (storedMode && storedMode == 'dark') {
             return 'vs-dark'
         }
-
         return 'vs-light'
     });
 
     // console.log('hoveredElement.outerHtml', hoveredElement.outerHTML)
-    const [html, setHtml] = useState(hoveredElement.outerHTML);
+    const [html, setHtml] = useState(identationCodes(hoveredElement.outerHTML));
 
     // useEffect(() => {
     //     console.log(editorRef.current);
@@ -144,3 +143,68 @@ const ModalIdeComponent = ({ hoveredElement }) => {
 
 
 export default ModalIdeComponent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const identationCodes = (code) => {
+  const addIdent = (text, size) => {
+    let identation = ''
+    for (let i = 0; i < size; i++) {
+      identation += '  '
+    }
+    return identation + text.trim() + '\n'
+  }
+
+  const codeLinesArray = code.split('\n')
+
+  let newCode = ''
+
+  const lvlArray = []
+
+  codeLinesArray.forEach((el) => {
+    const matchOpen = el.match(/<[^/>]+>|<[^/]+(?=$)/)
+    const matchClose = el.match(/<\/|\/>/)
+
+    if (matchOpen) {
+      if (!/^\s*$/.test(el)) {
+        lvlArray.push(el)
+        newCode += addIdent(el, lvlArray.length)
+      }
+    }
+    if (matchClose) {
+      if (!/^\s*$/.test(el)) {
+        newCode += addIdent(el, lvlArray.length)
+        lvlArray.pop()
+      }
+    }
+    if (!matchClose && !matchOpen) {
+      if (!/^\s*$/.test(el)) {
+        newCode += addIdent(el, lvlArray.length)
+      }
+    }
+  })
+
+  return newCode
+}

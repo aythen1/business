@@ -18,6 +18,7 @@ import ModalKeysActions from './ModalKeysActions'
 import ModalChatComponent from './ModalChatComponent'
 import ModalIdeComponent from './ModalIdeComponent'
 import ModalViewComponent from './ModalViewComponent'
+import ModalBlockElements from './ModalBlockElements'
 
 
 
@@ -26,6 +27,7 @@ import ModalViewComponent from './ModalViewComponent'
 import domtoimage from 'dom-to-image';
 
 
+import styles from './index.module.css'
 
 
 
@@ -34,6 +36,7 @@ import {
   dataAlt,
   keysAlt,
 
+  addSectionsToElement,
   addButtonsToElement,
   isLeavingToButtons,
   isAltKeyPressed,
@@ -44,6 +47,7 @@ import {
   handleChangeImages,
   handleAddForm,
   handleDeleteComponent,
+  handleOpenBlock,
   handleCopyComponent,
   handlePasteComponent,
   handleInsertComponent,
@@ -58,7 +62,10 @@ import {
 // import Template from "../Flow/node/Template";
 
 
-import styles from './index.module.css'
+
+
+
+
 
 export const AddonEditor = ({
   addonId,
@@ -70,11 +77,27 @@ export const AddonEditor = ({
 
   const [html, setHtml] = useState(null);
 
+  // html -----------------------------------------------------------
+  const [isMove, setIsMove] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredElement, setHoveredElement] = useState(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
+
 
   useEffect(() => {
     console.log('c=C=C=C=', template)
     if (template.content) {
       setHtml(template.content)
+
+      setTimeout(() => {
+        // console.log('teeee', template)
+        containerRef.current.scrollTop = template.offset - 350
+        // containerRef.current.classList.remove('loading')
+        containerRef.current.classList.remove(styles.loading);
+
+      }, 100)
+
     }
   }, [template])
 
@@ -112,12 +135,7 @@ export const AddonEditor = ({
   );
 
 
-  // html -----------------------------------------------------------
-  const [isMove, setIsMove] = useState(false)
-  const [isHovered, setIsHovered] = useState(false);
-  const [hoveredElement, setHoveredElement] = useState(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef(null);
+  // ----------------------------------------------------------------
 
   const handleMouseOver = (event) => {
     if (isAltKeyPressed()) {
@@ -156,12 +174,16 @@ export const AddonEditor = ({
     const currentElement = document.querySelector('.selectedComponent');
 
     if (currentElement) {
-      const parentElement = currentElement.parentElement;
+      let parentElement = currentElement.parentElement;
       const nextElement = currentElement.nextElementSibling;
       const prevElement = currentElement.previousElementSibling;
 
+      if (e.key === 'ArrowLeft') {
 
-      if (e.key === 'ArrowUp' && parentElement && parentElement !== document.body) {
+      } else if (e.key === 'ArrowRight') {
+
+      } else if (e.key === 'ArrowUp' && parentElement && parentElement !== document.body) {
+        console.log('prevElement', prevElement)
         if (prevElement) {
           if (prevElement.lastElementChild) {
             prevElement.lastElementChild.appendChild(currentElement);
@@ -172,48 +194,83 @@ export const AddonEditor = ({
           const grandparentElement = parentElement.parentElement;
           grandparentElement.insertBefore(currentElement, parentElement);
         }
-      } else if (e.key === 'ArrowDown' && nextElement) {
-        setIsMove(true)
+      } else if (e.key === 'ArrowDown') {
+        setIsMove(true);
 
-        if (!nextElement) {
-          parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
-        } else {
-          if (nextElement.children.length > 0) {
-            nextElement.insertBefore(currentElement, nextElement.firstElementChild);
-          } else {
-            parentElement.removeChild(currentElement);
-            nextElement.appendChild(currentElement);
+        let nextSiblingElement = currentElement.nextElementSibling;
+        let parentElement = currentElement.parentElement;
 
-            if (!nextElement.nextElementSibling) {
-              parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
-            }
-          }
+        // Verificar si hay un siguiente hermano
+        while (!nextSiblingElement && parentElement && parentElement !== document.body) {
+          // Si no hay un siguiente hermano y todavía hay un elemento padre, ascendemos un nivel
+          parentElement = parentElement.parentElement;
+          nextSiblingElement = parentElement.nextElementSibling;
+        }
+
+        if (nextSiblingElement) {
+          // Si encontramos un siguiente hermano, movemos el elemento actual al principio de ese contenedor
+          nextSiblingElement.insertBefore(currentElement, nextSiblingElement.firstElementChild);
         }
       }
     }
   };
 
 
+  // const handleKeyDown = (e) => {
+  //   e.preventDefault();
+  //   console.log('eee')
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+  //   const currentElement = document.querySelector('.selectedComponent');
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
+  //   if (currentElement) {
+  //     const parentElement = currentElement.parentElement;
+  //     const nextElement = currentElement.nextElementSibling;
+  //     const prevElement = currentElement.previousElementSibling;
 
 
+  //     if (e.key === 'ArrowUp' && parentElement && parentElement !== document.body) {
+  //       if (prevElement) {
+  //         if (prevElement.lastElementChild) {
+  //           prevElement.lastElementChild.appendChild(currentElement);
+  //         } else {
+  //           parentElement.insertBefore(currentElement, prevElement);
+  //         }
+  //       } else {
+  //         const grandparentElement = parentElement.parentElement;
+  //         grandparentElement.insertBefore(currentElement, parentElement);
+  //       }
+  //     } else if (e.key === 'ArrowDown' && nextElement) {
+  //       setIsMove(true)
 
-  useHotkeys('esc', () => {
-    console.log('1i3uhfu4ufhu4fu4', addonId)
-    setTemplate({})
-    // navigate(`/${'es'}/app/addon/${addonId}`)
+  //       if (!nextElement) {
+  //         parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
+  //       } else {
+  //         if (nextElement.children.length > 0) {
+  //           nextElement.insertBefore(currentElement, nextElement.firstElementChild);
+  //         } else {
+  //           parentElement.removeChild(currentElement);
+  //           nextElement.appendChild(currentElement);
 
-    const newUrl = `/${'es'}/app/addon/${addonId}`;
-    window.history.pushState({}, '', newUrl);
-  })
+  //           if (!nextElement.nextElementSibling) {
+  //             parentElement.parentElement.insertBefore(currentElement, parentElement.nextElementSibling);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
+
+
+
+
+
+  // useHotkeys('esc', () => {
+  //   setTemplate({})
+
+  //   // const newUrl = `/${'es'}/app/addon/${addonId}`;
+  //   // window.history.pushState({}, '', newUrl);
+  // })
+
 
   // -A: Refresh el componente devolviendo otro parecido pero con diferentes estilos y estructura
   useHotkeys('alt+a', async () => {
@@ -250,6 +307,12 @@ export const AddonEditor = ({
   useHotkeys('alt+c', () => {
     handleKeyClick('alt+c');
     handleCopyComponent(hoveredElement);
+  });
+  // -B: Open blocks
+  useHotkeys('alt+b', () => {
+    handleKeyClick('alt+b');
+    handleOpenBlock(dispatch, ModalBlockElements)
+
   });
   // -V: Pega el componente
   useHotkeys('alt+v', () => {
@@ -325,35 +388,68 @@ export const AddonEditor = ({
   // -alt+ctrl: Abrir ajustes de addons
   useHotkeys('alt+ctrl', () => {
     handleKeyClick('alt+ctrl');
-    console.log('rr', keysAlt)
     handleSettingsComponent(keysAlt, keyFrequency);
   });
 
 
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, []);
+
+
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, []);
+
+
 
   // Cambiar el cursor y agregar/quitar la clase en el body según el estado de la tecla Alt
+  let isAltCustomSection = false
+
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDownAlt = (event) => {
       if (event.key === 'Alt') {
+        if (!isAltCustomSection) {
+          isAltCustomSection = true
+          console.log('add alt')
+          const sections = document.querySelectorAll('.customSection')
+
+          console.log('sections', sections)
+          addSectionsToElement(sections)
+        }
         document.body.classList.add('pressAlt');
       }
     };
 
-    const handleKeyUp = (event) => {
+    const handleKeyUpAlt = (event) => {
       if (event.key === 'Alt') {
+        console.log('delete alt')
+        isAltCustomSection = false
+        // document.querySelectorAll('.customSections').forEach(element => element.remove());
         document.body.classList.remove('pressAlt');
       }
     };
 
     // Agregar listeners para eventos keydown y keyup
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
 
+    document.addEventListener('keydown', handleKeyDownAlt);
+    document.addEventListener('keyup', handleKeyUpAlt);
     // Limpiar al desmontar el componente
     return () => {
       document.body.classList.remove('pressAlt');
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
+
+      document.removeEventListener('keydown', handleKeyDownAlt);
+      document.removeEventListener('keyup', handleKeyUpAlt);
     };
   }, []);
 
@@ -367,9 +463,6 @@ export const AddonEditor = ({
 
   const handleButtonLayer = () => {
     setTemplate({})
-
-    const newUrl = `/${'es'}/app/addon/${addonId}`;
-    window.history.pushState({}, '', newUrl);
   };
 
   const handleButtonInfo = () => {
@@ -391,7 +484,7 @@ export const AddonEditor = ({
       }}
       className=""
     >
-      <div className={styles.buttons} style={{ top: '70px' }} >
+      {/* <div className={styles.buttons} style={{ top: '70px' }} >
         <button >
           <ButtonLeft />
         </button>
@@ -404,7 +497,7 @@ export const AddonEditor = ({
         <button>
           <ButtonBottom />
         </button>
-      </div>
+      </div> */}
       <div className={styles.buttons} style={{ bottom: '22px' }}>
         <button>
           <ButtonLayer onClick={handleButtonLayer} />
@@ -416,7 +509,7 @@ export const AddonEditor = ({
       <div
         ref={containerRef}
         style={{ background: '#fff' }}
-        className={`hoverable ${isHovered ? 'hovered' : ''}`}
+        className={`${styles.hoverable} ${styles.loading} ${isHovered ? 'hovered' : ''}`}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
         dangerouslySetInnerHTML={{ __html: html }}
@@ -435,8 +528,25 @@ export const AddonEditor = ({
 
 
 
-const ButtonLayer = ({onClick}) => {
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const ButtonLayer = ({ onClick }) => {
+
   return (
     <div
       className={styles.button}
@@ -456,7 +566,7 @@ const ButtonLayer = ({onClick}) => {
 
 
 
-const ButtonInfo = ({onClick}) => {
+const ButtonInfo = ({ onClick }) => {
   return (
     <div
       className={styles.button}
@@ -473,98 +583,4 @@ const ButtonInfo = ({onClick}) => {
 }
 
 
-
-const ButtonBottom = () => {
-  const handleButtonLeft = () => {
-    console.log('1234')
-  };
-
-  return (
-    <div
-      className={styles.button}
-      onClick={handleButtonLeft}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7" />
-      </svg>
-
-
-
-      <span>
-        bottom
-      </span>
-    </div>
-  )
-}
-
-
-
-const ButtonTop = () => {
-  const handleButtonLeft = () => {
-    console.log('1234')
-  };
-
-  return (
-    <div
-      className={styles.button}
-      onClick={handleButtonLeft}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 15 7-7 7 7" />
-      </svg>
-
-
-      <span>
-        top
-      </span>
-    </div>
-  )
-}
-
-
-
-
-const ButtonRight = () => {
-  const handleButtonLeft = () => {
-    console.log('1234')
-  };
-
-  return (
-    <div
-      className={styles.button}
-      onClick={handleButtonLeft}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m9 5 7 7-7 7" />
-      </svg>
-
-      <span>
-        right
-      </span>
-    </div>
-  )
-}
-
-
-
-const ButtonLeft = () => {
-  const handleButtonLeft = () => {
-    console.log('1234')
-  };
-
-  return (
-    <div
-      className={styles.button}
-      onClick={handleButtonLeft}
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7" />
-      </svg>
-
-      <span>
-        left
-      </span>
-    </div>
-  )
-}
 

@@ -7,6 +7,8 @@ export const useGraph = () => useContext(GraphContext);
 export const GraphProvider = ({ children }) => {
   const addNode = {}
   const setIsEditor = {}
+  const reactFlowWrapper = {}
+  const reactFlowInstance = {}
   
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -21,7 +23,9 @@ export const GraphProvider = ({ children }) => {
     selectedEdge,
     setSelectedEdge,
     addNode,
-    setIsEditor
+    setIsEditor,
+    reactFlowWrapper,
+    reactFlowInstance
   };
 
   return (

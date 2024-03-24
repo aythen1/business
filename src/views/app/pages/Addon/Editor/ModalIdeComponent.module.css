@@ -1,28 +1,28 @@
-
-.modal1{
-    width: 90vw;
+.modal1 {
+  width: 90vw;
 }
 
-:global(.scrollbar){
-    /* invisible scrollbar vertical fade */
-    width: 8px !important;
-}
-:global(.monaco-editor){
-    --vscode-editor-background: #000000 !important;
+:global(.scrollbar) {
+  /* invisible scrollbar vertical fade */
+  width: 8px !important;
 }
 
-:global(.margin-view-overlays){
-    width: 20px !important;
+:global(.vs-dark.monaco-editor) {
+  --vscode-editor-background: #000000 !important;
+}
+
+:global(.margin-view-overlays) {
+  width: 20px !important;
 }
 
 :global(.margin),
 :global(.current-line),
-:global(.line-numbers){
-    width: 20px !important;
+:global(.line-numbers) {
+  width: 20px !important;
 }
 
-:global(.monaco-scrollable-element){
-    left: 40px !important;
+:global(.monaco-scrollable-element) {
+  left: 40px !important;
 }
 
 /* [class^="modal"] {

@@ -49,7 +49,10 @@
     font-size: 60px;
     color: var(--color-primary-0);
     p {
-      margin-top: -20px;
+      margin-top: -15px;
+      font-size: 80px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
     &:hover {
       background: #ffffff;

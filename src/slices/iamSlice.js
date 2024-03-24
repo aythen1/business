@@ -7,6 +7,7 @@ import {
   setOpenModal,
   fetchsDefault,
   updateDefault,
+  fetchsBillingExpenses,
   fetchsBilling,
   updateBilling,
   fetchsInvoice,
@@ -49,6 +50,7 @@ const iamSlice = createSlice({
     user: null,
     users: [],
     billing: null,
+    expenses: null,
     token: null,
 
     vector: {},
@@ -149,6 +151,10 @@ const iamSlice = createSlice({
         if (arrayIndex !== -1) {
           state[table][arrayIndex] = data;
         }
+      })
+
+      .addCase(fetchsBillingExpenses.fulfilled, (state, action) => {
+        state.expenses = action.payload
       })
 
       .addCase(fetchsBilling.fulfilled, (state, action) => {

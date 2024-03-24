@@ -1,68 +1,37 @@
 
 import { createContext, useContext, useCallback, useState, useEffect, useRef } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import ELK from 'elkjs/lib/elk.bundled.js';
+
 
 import 'reactflow/dist/style.css';
-
 
 import { useOpenAI } from '../openai'
 
 import ReactFlow, { useReactFlow, MiniMap, Background, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
-// import * as xlsx from 'xlsx';
 
 import styles from './index.module.css'
 
-const GraphContext = createContext();
-export const useGraph = () => useContext(GraphContext);
 
 import CustomEdge from "./edge/CustomEdge";
 import CustomTemplate from "./node/CustomTemplate"
+import ELK from 'elkjs/lib/elk.bundled.js';
+
+import ConnectionLine from './connection/line';
+
 
 
 import {
     setStatus
 } from '@/slices/addonSlice'
 
-
-const panOnDrag = [1, 2];
-
-
-
-/*
-    Templates 
-    Es una parte que permite tener
-        - titulo
-        - description
-        - nodes
-        - edges
-
-    (name) => permite tener el nombre del addon 
-    para identificar la pagina es 
-    (title) => que sea el numero del href
-
-    /addon/href//title/[version]
-
-*/
-
 import {
     parseChartString,
     generatePromptTree
 } from './prompt'
 
-
-// import {
-//     fetchsVector,
-//     iniVector,
-
-//     addVectorData,
-//     updateVector,
-//     addVector
-// } from '@/actions/vector'
 
 
 import {
@@ -75,9 +44,11 @@ import {
 } from '@/actions/addon'
 
 
-// import { UnexpectedResponseException } from 'pdfjs-dist';
 
+const GraphContext = createContext();
+export const useGraph = () => useContext(GraphContext);
 
+const panOnDrag = [1, 2];
 
 const edgeTypes = {
     customEdge: CustomEdge
@@ -86,10 +57,6 @@ const edgeTypes = {
 const nodeTypes = {
     selectorTemplate: CustomTemplate,
 };
-
-
-
-
 
 const typeBackground = {
     cross: [{
@@ -132,15 +99,16 @@ const typeBackground = {
 export const AddonFlow = ({
     setIsEditor
 }) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { addonId } = useParams()
 
+
+    const { addonId } = useParams()
 
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
     const [selectedEdge, setSelectedEdge] = useState(false);
 
-    // const [dataVector, setDataVector] = useState([])
     const [miniMapVisible, setMiniMapVisible] = useState(false);
     const [zoomInitial, setZoomInitial] = useState(false);
 
@@ -148,76 +116,14 @@ export const AddonFlow = ({
     // ------------------------------
     const { user } = useSelector((state) => state.iam)
 
-
-
-    // const {
-    //     vector,
-    // } = useSelector((state) => state.vector)
     const {
         addon,
     } = useSelector((state) => state.addon)
-
-    // ------------------------------
-    useEffect(() => {
-        // const fetchItems = async () => {
-        //     let workspace = user.id
-        //     let project = 'addon' //template
-
-        //     let page = 'home'
-
-        //     let addon = 'user' //addon
-        //     let title = 'user' // href
-
-        //     const id = iniVector({
-        //         workspaceId: workspace,
-        //         projectId: project,
-        //     })
-
-        //     dispatch(fetchsVector({
-        //         id,
-
-        //         name: addon,
-        //         title
-        //     }))
-        // }
-
-        // const fetchItem = async () => {
-
-        //     const id = iniVector({
-        //         workspaceId: workspace,
-        //         projectId: project,
-        //     })
-
-        //     dispatch(fetchsVector({
-        //         id,
-
-        //         name: addon,
-        //         title
-        //     }))
-
-        // }
-
-        console.log('adddon fetch', addonId)
-
-        if (addonId) {
-            // console.log('search addon')
-            dispatch(fetchAddon(addonId))
-            dispatch(setStatus('active'))
-        } else {
-            // console.log('existe vector', vector)
-            // setNodes(JSON.parse(vector.nodes))
-            // setEdges(JSON.parse(vector.edges))
-        }
-
-    }, [addonId])
 
 
     useEffect(() => {
         const fetchItem = async () => {
             const nodes = JSON.parse(addon.nodes)
-            console.log('addon nodes', nodes)
-            setNodes(nodes)
-            setEdges(JSON.parse(addon.edges))
 
             for (var i = 0; i < nodes.length; i++) {
                 const node = nodes[i]
@@ -233,23 +139,19 @@ export const AddonFlow = ({
                     name: 'templates'
                 }))
 
-                console.log('fetch addons vector: ', resp)
-
                 if (resp.payload.length > 0) {
-                    setNodes((prevNodes) =>
-                        prevNodes.map((node) =>
-                            node.id === resp.payload[0].id
-                                ? { ...node, data: { ...node.data, components: JSON.parse(resp.payload[0].components) } }
-                                : node
-                        )
-                    );
+                    nodes[i].data.components = JSON.parse(resp.payload[0].components)
                 }
             }
+            setNodes(nodes)
+            setEdges(JSON.parse(addon.edges))
         }
 
-        console.log('addon', addon)
         if (addon.id) {
             fetchItem()
+        } else if (addonId) {
+            dispatch(fetchAddon(addonId))
+            dispatch(setStatus('active'))
         }
     }, [addon])
 
@@ -260,19 +162,18 @@ export const AddonFlow = ({
     const saveNode = async () => {
         let id = iniVector({
             workspaceId: user?.id,
-            // projectId: 'vector',
             projectId: addonId,
         })
 
-
-        for (var i = 0; i < nodes.length; i++) {
-            const node = nodes[i]
+        const updateNodes = JSON.parse(JSON.stringify(nodes))
+        console.log('nodes', nodes)
+        for (var i = 0; i < updateNodes.length; i++) {
+            const node = updateNodes[i]
+            console.log('node ->', node)
             const title = node.data.title
             const components = node.data.components
 
-            console.log('components', components)
-
-            nodes[i].data.components = []
+            updateNodes[i].data.components = []
 
             const arr = []
 
@@ -285,13 +186,16 @@ export const AddonFlow = ({
                     image: component.image,
                     code: component.code
                 })
+
+                console.log('===========', {
+                    id: component.id,
+                    text: component.text,
+                    image: component.image,
+                    code: component.code
+                })
+                // console.log('arr')
             }
 
-            console.log('===========', {
-                id: node.id,
-                title: title,
-                components: arr
-            })
 
             await dispatch(addVectorAddon({
                 addon: { id: addon.id },
@@ -301,76 +205,25 @@ export const AddonFlow = ({
                     components: arr
                 }
             }));
-            // delete components of node
 
-
-            // const vector = {
-            //     id: node.id,
-            //     components
-            // }
-            // data.push()
-
-            // console.log('vectors addon', vector)
-
-
-            // console.log('eeeeeeeeeeeeeeeeee', resp)
         }
 
 
         const data = {
             id: addon.id,
             // title: '1111',
-            nodes: nodes,
+            nodes: updateNodes,
             edges: edges
         }
 
+        console.log('!!!!!!', data)
 
-        // console.log('addon addon addon', data)
-        // // Realizar un map sobre los nodos y agregar los componentes utilizando addVectorData
-        // data.nodes.map(async (node) => {
-        //     const { components, id } = node.data; // Ajusta según la estructura de tus nodos
-
-        //     // Utilizar dispatch para agregar los componentes utilizando addVectorData
-        //     await dispatch(addVectorData({
-        //         id: `${id}_${uuidv4()}`, 
-        //         title: data.title, 
-        //         data: components, 
-        //         vector: 'addons' 
-        //     }));
-        // });
-
-        // console.log('save', data)
-
-
-        // await dispatch(addVectorData({
-        //     id,
-        //     title: dataVector[i].title,
-        //     data: dataVector[i].data,
-        //     vector
-        // }))
-
-
-        // for (var i = 0; i < dataVector.length; i++) {
-        // console.log('data vector', vector, '\n\n', dataVector[i])
-
-        // }
-
-        // setDataVector([])
-
-        // await dispatch(updateVector({
-        //     id,
-        //     name: 'addons',
-        //     data
-        // }))
 
         dispatch(updateAddon(data))
-
-
     }
 
 
     // ------------------------------
-
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [setNodes, nodes]
@@ -387,11 +240,6 @@ export const AddonFlow = ({
             const sourceNode = nodes.find((node) => node.id === source);
             const targetNode = nodes.find((node) => node.id === target);
 
-
-            // if (sourceNode.type == 'selector' && targetNode.type == 'selectorVector') {
-            //     return false
-            // }
-
             if (sourceNode && targetNode) {
                 const { type: sourceType } = sourceNode;
                 const { type: targetType } = targetNode;
@@ -399,14 +247,9 @@ export const AddonFlow = ({
                 if (sourceType == 'selectorTemplate') {
 
                 } else {
-
-                    // Determinar si el handle es top o bottom
                     const isTopHandle = sourceHandle.endsWith('_top')
-
-                    // Obtener el nombre del handle
                     const handleName = isTopHandle ? 'top_connectedNodeIds' : 'bottom_connectedNodeIds';
 
-                    // Actualizar connectedNodeIds dependiendo del tipo de nodo
                     if (sourceType === 'selectorTemplate') {
                         setNodes((prevNodes) => {
                             const updatedNodes = [...prevNodes];
@@ -417,22 +260,8 @@ export const AddonFlow = ({
                             return updatedNodes;
                         });
                     }
-                    // else if (targetType === 'selectorGPT') {
-                    //     setNodes((prevNodes) => {
-                    //         const updatedNodes = [...prevNodes];
-                    //         const targetNodeIndex = updatedNodes.findIndex((node) => node.id === target);
-                    //         if (targetNodeIndex !== -1) {
-                    //             updatedNodes[targetNodeIndex].data.handles[handleName].push(source);
-                    //         }
-                    //         return updatedNodes;
-                    //     });
-                    // }
                 }
             }
-
-            // setEdges((prevEdges) => addEdge(connection, prevEdges));
-            // const onConnect = useCallback((params)=> setEdges(addEdge({...params, type:"smoothstep"}, edges)) );
-
 
             setEdges(addEdge({ ...connection, type: "customEdge" }, edges))
 
@@ -442,23 +271,22 @@ export const AddonFlow = ({
 
 
     // -------------------------------------------------------
-
-
-
-
     const addNode = (lastNode = false, direction = 'row') => {
         let newX = 0
         let newY = 0
         let handles = {}
 
-
         if (lastNode) {
             if (direction == 'row') {
                 newY = lastNode.position.y;
                 newX = lastNode.position.x + lastNode.width + 100
-            } else {
-                newY = lastNode.position.y + lastNode.height;
+            } else if (direction == 'column') {
+                newY = lastNode.position.y + lastNode.height + 50;
                 newX = lastNode.position.x;
+            } else {
+                console.log('direction', direction)
+                newY = direction.x;
+                newX = direction.y;
             }
 
             handles = {
@@ -472,9 +300,6 @@ export const AddonFlow = ({
             type: 'selectorTemplate',
             dragHandle: '.custom-drag-handle',
             data: {
-                // prompt: 'An input node',
-                // value: '',
-                // label: 'hello',
                 title: '',
                 error: '',
                 handles,
@@ -484,7 +309,6 @@ export const AddonFlow = ({
             position: { x: newX, y: newY },
             sourcePosition: 'right',
         };
-
 
         setNodes((prevNodes) => [...prevNodes, newNode]);
 
@@ -498,42 +322,16 @@ export const AddonFlow = ({
             };
 
             setEdges((prevEdges) => [...prevEdges, newEdge]);
-
-            // setEdges(addEdge({...connection, type:"customEdge"}, edges))
-
         }
-
     };
 
 
-    const value = {
-        nodes,
-        edges,
-        setNodes,
-        setEdges,
-        selectedEdge,
-        setSelectedEdge,
-        addNode,
-        setIsEditor
-    };
+    // -----------------------------------------------------------
+    const reactFlowWrapper = useRef(null);
 
     const onDragStart = () => {
-        // Desactivar el arrastre en React Flow
         return false;
     };
-
-    // ----------------------------------------------------------
-    // const handleGraphLoad = (reactFlowInstance) => {
-    //     console.log('===========================')
-    //     // Realiza el setCenter u otras acciones cuando el componente se carga (onLoad)
-    //     const centerX = 20;
-    //     const centerY = 20;
-
-    //     reactFlowInstance.setCenter(centerX, centerY, { zoom: 1.0, duration: 500 });
-    // };
-
-
-    const reactFlowWrapper = useRef(null);
 
     useEffect(() => {
         if (reactFlowWrapper.current) {
@@ -546,7 +344,6 @@ export const AddonFlow = ({
 
 
     // --------------------------------
-
     const [backgroundVariant, setBackgroundVariant] = useState(typeBackground.lines)
 
     const handleTypeBackground = () => {
@@ -582,6 +379,36 @@ export const AddonFlow = ({
     }, []);
 
 
+
+    // ---------------------------------------------------------------
+    const [reactFlowInstance, setReactFlowInstance] = useState(null)
+
+    const handleReactFlowInit = (reactFlow) => {
+        setReactFlowInstance(reactFlow);
+    };
+
+
+    const defaultViewport = {
+        zoom: 0.01,
+        position: { x: 0, y: 0 }
+    };
+
+
+    // ---------------------------------------------------------------
+    const value = {
+        nodes,
+        edges,
+        setNodes,
+        setEdges,
+        selectedEdge,
+        setSelectedEdge,
+        addNode,
+        setIsEditor,
+        reactFlowWrapper,
+        reactFlowInstance
+    };
+
+
     return (
         <GraphContext.Provider value={value}>
             <div
@@ -591,11 +418,12 @@ export const AddonFlow = ({
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
+                    onInit={handleReactFlowInit}
                     fitView
-                    fitViewOptions={{
-                        maxZoom: 0.1
-                    }}
-                    // defaultZoom={4}
+                    minZoom={0.2}
+                    maxZoom={3}
+                    defaultZoom={defaultViewport.zoom}
+                    defaultPosition={defaultViewport.position}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     edgeTypes={edgeTypes}
@@ -606,9 +434,7 @@ export const AddonFlow = ({
                     selectionOnDrag
                     panOnDrag={panOnDrag}
                     selectionMode={SelectionMode.Partial}
-                // connectionLineType={ConnectionLineType.Step}
-                // connectionLineType={ConnectionLineType.SmoothStep}
-                // style={{ transform: 'none' }}
+                    connectionLineComponent={ConnectionLine}
                 >
                     <Background
                         id="1"
@@ -618,7 +444,6 @@ export const AddonFlow = ({
                         variant={backgroundVariant[0].variant}
                         color="var(--color-primary-4)"
                     />
-
                     <Background
                         id="2"
                         gap={backgroundVariant[1].gap}
@@ -629,7 +454,7 @@ export const AddonFlow = ({
                     />
                     <div className={styles.buttons} style={{ top: '18px' }} >
                         <button onClick={saveNode} >
-                            <ButtonSave />
+                            <ButtonSave save={false} />
                         </button>
                         <button >
                             <ButtonAdd addNode={addNode} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
@@ -638,14 +463,15 @@ export const AddonFlow = ({
                             <ButtonTree />
                         </button>
                         <button style={{ marginLeft: 'auto' }}>
-                            <PositionComponent position="left" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            <PositionComponent position="column" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
                         <button>
-                            <PositionComponent position="right" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
+                            <PositionComponent position="row" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
-                        <button>
-                            <PositionComponent position="other" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
-                        </button>
+                    </div>
+                    <div className={styles.barLoading}>
+                        <BarMana />
+                        <BarBalance />
                     </div>
                     <div className={styles.buttons} style={{ bottom: '22px' }}>
                         <button>
@@ -658,6 +484,9 @@ export const AddonFlow = ({
                             <TypeBackground handleTypeBackground={handleTypeBackground} />
                         </button>
                         <button style={{ marginLeft: 'auto' }}>
+                            <ButtonHeadMap setMiniMapVisible={setMiniMapVisible} />
+                        </button>
+                        <button >
                             <ButtonMap setMiniMapVisible={setMiniMapVisible} />
                         </button>
                     </div>
@@ -678,65 +507,6 @@ export const AddonFlow = ({
 
 
 
-
-
-const ZoomFunction = ({ direction }) => {
-    const { zoomIn, zoomOut } = useReactFlow();
-
-    useEffect(() => {
-        if (direction > 0) {
-            zoomIn();
-        } else if (direction) {
-            zoomOut();
-        }
-    }, [direction])
-
-    return null
-};
-
-
-
-const ZoomInitial = ({ nodes }) => {
-    const { fitView, setCenter } = useReactFlow();
-
-    useEffect(() => {
-        const waitForLoad = async () => {
-            if (fitView && setCenter) {
-                const lastNode = nodes[nodes.length - 1];
-
-                let newX = 0
-                let newY = 0
-
-                if (lastNode) {
-                    newY = lastNode.position.y;
-                    newX = lastNode.position.x + lastNode.width + 1
-                }
-
-                setCenter(newX - 200, newY + 270, { zoom: 0.8, duration: 500 });
-            }
-        };
-
-        waitForLoad();
-    }, [fitView, setCenter]);
-}
-
-
-
-const TypeBackground = ({ handleTypeBackground }) => {
-    return (
-        <div
-            className={styles.button}
-            onClick={handleTypeBackground}
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
-            </svg>
-            <span>
-                Styles
-            </span>
-        </div>
-    )
-}
 
 
 
@@ -786,6 +556,27 @@ const ButtonLess = () => {
             </svg>
             <span>
                 less
+            </span>
+        </div>
+    )
+}
+
+
+const ButtonHeadMap = ({ setMiniMapVisible }) => {
+    const handleButtonMap = () => {
+        setMiniMapVisible((prevVisible) => !prevVisible);
+    }
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleButtonMap}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a28.076 28.076 0 0 1-1.091 9M7.231 4.37a8.994 8.994 0 0 1 12.88 3.73M2.958 15S3 14.577 3 12a8.949 8.949 0 0 1 1.735-5.307m12.84 3.088A5.98 5.98 0 0 1 18 12a30 30 0 0 1-.464 6.232M6 12a6 6 0 0 1 9.352-4.974M4 21a5.964 5.964 0 0 1 1.01-3.328 5.15 5.15 0 0 0 .786-1.926m8.66 2.486a13.96 13.96 0 0 1-.962 2.683M7.5 19.336C9 17.092 9 14.845 9 12a3 3 0 1 1 6 0c0 .749 0 1.521-.031 2.311M12 12c0 3 0 6-2 9" />
+            </svg>
+            <span>
+                head map
             </span>
         </div>
     )
@@ -920,27 +711,93 @@ const ButtonTree = ({ save = false }) => {
 
 
 const ButtonSave = ({ save = true }) => {
+    console.log('save', save)
     return (
         <div>
             {save ? (
                 <div className={styles.button}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V9a3 3 0 0 0-3-3h-3m1.5-2-2 2 2 2" />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 3a3 3 0 0 0-1 5.83v6.34a3.001 3.001 0 1 0 2 0V15a2 2 0 0 1 2-2h1a5.002 5.002 0 0 0 4.927-4.146A3.001 3.001 0 0 0 16 3a3 3 0 0 0-1.105 5.79A3.001 3.001 0 0 1 12 11h-1c-.729 0-1.412.195-2 .535V8.83A3.001 3.001 0 0 0 8 3Z" />
                     </svg>
+
+
                     <span>
                         SAVE
                     </span>
                 </div>
             ) : (
                 <div className={styles.button}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m17 21-5-4-5 4V3.9c0-.2 0-.5.2-.6l.6-.3h8.4c.2 0 .4 0 .6.3l.2.6V21Z" />
+                    </svg> */}
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 8v8m0-8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V9a3 3 0 0 0-3-3h-3m1.5-2-2 2 2 2" />
                     </svg>
                     <span>
                         SAVED
                     </span>
                 </div>
             )}
+        </div>
+    )
+}
+
+
+
+const ZoomFunction = ({ direction }) => {
+    const { zoomIn, zoomOut } = useReactFlow();
+
+    useEffect(() => {
+        if (direction > 0) {
+            zoomIn();
+        } else if (direction) {
+            zoomOut();
+        }
+    }, [direction])
+
+    return null
+};
+
+
+
+const ZoomInitial = ({ nodes }) => {
+    const { fitView, setCenter } = useReactFlow();
+
+    useEffect(() => {
+        const waitForLoad = async () => {
+            if (fitView && setCenter) {
+                const lastNode = nodes[nodes.length - 1];
+
+                let newX = 0
+                let newY = 0
+
+                if (lastNode) {
+                    newY = lastNode.position.y;
+                    newX = lastNode.position.x + lastNode.width + 1
+                }
+
+                setCenter(newX - 200, newY + 270, { zoom: 0.8, duration: 500 });
+            }
+        };
+
+        waitForLoad();
+    }, [fitView, setCenter]);
+}
+
+
+
+const TypeBackground = ({ handleTypeBackground }) => {
+    return (
+        <div
+            className={styles.button}
+            onClick={handleTypeBackground}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m16 4 3 3H5v3m3 10-3-3h14v-3m-9-2.5 2-1.5v4" />
+            </svg>
+            <span>
+                Styles
+            </span>
         </div>
     )
 }
@@ -958,17 +815,23 @@ const elkOptions = {
     'elk.spacing.nodeNode': '240',
 };
 
+
 const getLayoutedElements = (nodes, edges, options = {}) => {
     const isHorizontal = options?.['elk.direction'] === 'RIGHT';
+    const numColumns = 5; // Número de columnas
+    const numRows = Math.ceil(nodes.length / numColumns); // Calcular el número de filas necesario
     const graph = {
         id: 'root',
         layoutOptions: options,
-        children: nodes.map((node) => ({
+        children: nodes.map((node, index) => ({
             ...node,
             targetPosition: isHorizontal ? 'left' : 'top',
             sourcePosition: isHorizontal ? 'right' : 'bottom',
             width: 150,
-            height: 50,
+            height: node.height,
+            // Calcular la posición x e y en función del índice y el número de columnas
+            x: isHorizontal ? index * 200 : Math.floor(index / numRows) * 200,
+            y: isHorizontal ? Math.floor(index / numRows) * 200 : (index % numRows) * 200,
         })),
         edges: edges,
     };
@@ -980,7 +843,6 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
                 ...node,
                 position: { x: node.x, y: node.y },
             })),
-
             edges: layoutedGraph.edges,
         }))
         .catch(console.error);
@@ -989,15 +851,15 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
 
 
 
-
-
 const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
     const { fitView, setCenter } = useReactFlow();
 
 
+    // const node = nodes[0]
+
     // const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
     const onLayout = useCallback(
-        ({ direction, useInitialNodes = false }) => {
+        ({ direction }) => {
             const opts = { 'elk.direction': direction, ...elkOptions };
             // const ns = useInitialNodes ? initialNodes : nodes;
             // const es = useInitialNodes ? initialEdges : edges;
@@ -1006,19 +868,31 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
                 setNodes(layoutedNodes);
                 setEdges(layoutedEdges);
 
-                window.requestAnimationFrame(() => {
-                    setCenter(0, 0, { zoom: 0.4, duration: 2000 })
-                });
+                // window.requestAnimationFrame(() => {
+                // setCenter(posX, posY, { zoom: 0.4, duration: 2000 })
+                // });
+                // setTimeout(() => {
+                let posX = 0
+                let posY = 0
+                if (layoutedNodes.length > 0) {
+                    let pos = layoutedNodes[0].position
+                    posX = pos.x
+                    posY = pos.y
+                }
+
+                setCenter(posX, posY, { zoom: 0.4, duration: 2000 })
+                // }, 200)
+                // window.requestAnimationFrame(() => fitView());
             });
         },
         [nodes, edges]
     );
 
     const onClick = () => {
-        if (position == 'left') {
-            onLayout({ direction: 'DOWN' })
-        } else {
+        if (position == 'column') {
             onLayout({ direction: 'RIGHT' })
+        } else {
+            onLayout({ direction: 'DOWN' })
         }
     }
 
@@ -1028,32 +902,23 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
         <div
             onClick={onClick}
         >
-            {position == 'left' ? (
+            {position == 'column' ? (
                 <div className={styles.button}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 5v14M9 5v14M4 5h16c.6 0 1 .4 1 1v12c0 .6-.4 1-1 1H4a1 1 0 0 1-1-1V6c0-.6.4-1 1-1Z" />
                     </svg>
                     <span>
-                        Table
+                        Column
                     </span>
                 </div>
 
-            ) : position == 'right' ? (
-                <div className={styles.button}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.1 4H5c-.5 0-.9.4-.9.9V9c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9V5c0-.5-.4-.9-.9-.9Zm10 0H15c-.5 0-.9.4-.9.9V9c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9V5c0-.5-.4-.9-.9-.9Zm-10 10H5c-.5 0-.9.4-.9.9V19c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9v-4c0-.5-.4-.9-.9-.9Zm10 0H15c-.5 0-.9.4-.9.9V19c0 .5.4.9.9.9h4c.5 0 .9-.4.9-.9v-4c0-.5-.4-.9-.9-.9Z" />
-                    </svg>
-                    <span>
-                        Vector
-                    </span>
-                </div>
-            ) : (
+            ) : position == 'row' && (
                 <div className={styles.button}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11.2v.8l7 4 7-4v-.8m-14 5v.8l7 4 7-4v-1M12 3 5 7l7 4 7-4-7-4Z" />
                     </svg>
                     <span>
-                        Map
+                        Row
                     </span>
                 </div>
             )}
@@ -1062,3 +927,46 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
 }
 
 
+
+
+
+
+const BarMana = () => {
+    return (
+        <div className={styles.barMana}>
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.line} />
+        </div>
+    )
+}
+
+const BarBalance = () => {
+    return (
+        <div className={styles.barBalance}>
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.line} />
+        </div>
+    )
+}

@@ -1,63 +1,61 @@
 /* Estilo por defecto (light-mode) */
 :root {
-    --background: #fff;
-    --background-secondary: #f9f8ff;
-    --background-input: #f4f3ff;
-    --background-alert: #ebebff;
-    --background-topbar: #fff;
-    --background-container: #f7f7f7;
-    --background-chatbot: #f0f2f5f7;
-    /* --background-button-topbar: #f0f2f5; */
-    /* --background-button-selected-topbar: #ffffff; */
+  --background: #fff;
+  --background-secondary: #f9f8ff;
+  --background-input: #f4f3ff;
+  --background-alert: #ebebff;
+  /* --background-topbar: #fff; */
+  /* --background-container: #f7f7f7; */
+  --background-chatbot: #f0f2f5f7;
+  /* --background-button-topbar: #f0f2f5; */
+  /* --background-button-selected-topbar: #ffffff; */
 
-    --background-banner: rgb(241, 238, 252);
+  --background-banner: rgb(241, 238, 252);
 
-    --background-modal: #ffffff;
-    --overlay: rgb(231 231 231 / 90%);
+  --background-modal: #ffffff;
+  --overlay: rgb(231 231 231 / 90%);
 
-    --text-primary: #000000;
-    --text-color: #060510;
-    --text-color-secondary: #231D4F;
-    --label-color: #d5d4dc;
-    --border-color: rgb(217, 218, 221);
+  --text-primary: #000000;
+  --text-color: #060510;
+  --text-color-secondary: #231d4f;
+  --label-color: #d5d4dc;
+  --border-color: rgb(217, 218, 221);
 
-
-    --color-primary-0: #000fff;
-    --color-primary-1: #d0d3ff;
-    --color-primary-2: rgb(229, 219, 253);
-    
-    
-  
+  --color-primary-0: #701bdd;
+  --color-primary-1: #8d49e4;
+  --color-primary-2: #a976eb;
+  --color-primary-3: #c6a4f1;
+  --color-primary-4: #e2d1f8;
+  --color-primary-5: #ffffff;
 }
 
 /* Estilo para dark-mode */
 body.dark-mode {
-    --background: #000;
-    --background-secondary: #0b0b0b;
-    --background-input: #151515;
-    --background-alert: #12122a;
-    --background-topbar: #000;
-    --background-container: #090808;
-    --background-chatbot: #0e0e0ef7;
-    /* --background-button-topbar: #161515; */
-    /* --background-button-selected-topbar: #100f0f; */
+  --background: #000;
+  --background-secondary: #0b0b0b;
+  --background-input: #151515;
+  --background-alert: #12122a;
+  /* --background-topbar: #000; */
+  /* --background-container: #090808; */
+  --background-chatbot: #0e0e0ef7;
+  /* --background-button-topbar: #161515; */
+  /* --background-button-selected-topbar: #100f0f; */
 
-    --background-banner: #1b1b1b;
+  --background-banner: #1b1b1b;
 
+  --background-modal: #000;
+  --overlay: #010101b3;
 
-    --background-modal: #000;
-    --overlay: #010101b3;
+  --text-primary: #fff3f3;
+  --text-color: #fff;
+  --text-color-secondary: #c3c3c3;
+  --label-color: #d5d4dc;
+  --border-color: #212121;
 
-
-    --text-primary: #fff3f3;
-    --text-color: #fff;
-    --text-color-secondary: #c3c3c3;
-    --label-color: #d5d4dc;
-    --border-color: #212121;
-
-    --color-primary-0: #000fff;
-    --color-primary-1: #020425;
-    --color-primary-2: rgb(229, 219, 253);
+  --color-primary-0: #701bdd;
+  --color-primary-1: #5a16b1;
+  --color-primary-2: #431085;
+  --color-primary-3: #2d0b58;
+  --color-primary-4: #16052c;
+  --color-primary-5: #000000;
 }
-
-
