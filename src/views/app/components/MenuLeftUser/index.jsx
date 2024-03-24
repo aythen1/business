@@ -196,6 +196,7 @@ export const MenuLeftUser = ({
         const canvas = document.createElement('canvas');
         canvas.width = scaledWidth;
         canvas.height = scaledHeight;
+        
 
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
@@ -279,7 +280,8 @@ export const MenuLeftUser = ({
           id="fileInput"
           style={{ display: 'none' }}
           onChange={handleFileChange}
-          accept="image/*"
+          // accept="image/*"
+          accept="image/jpeg, image/png"
         />
       </div>
       <div className={styles["inner-container"]}>

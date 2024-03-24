@@ -39,10 +39,10 @@ function generateToken(payload, remember = false) {
 }
 
 function generateToken(payload, remember = false) {
-  let expiresIn = '1h'; 
+  let expiresIn = '1h';
 
   if (remember) {
-    expiresIn = '365d'; 
+    expiresIn = '365d';
   }
 
   const token = jwt.sign(payload, secretKey, { expiresIn });
@@ -125,6 +125,31 @@ const updateDefault = async (req, res, next) => {
   }
 };
 
+
+
+const fetchsBillingExpenses = async (req, res, next) => {
+  try {
+    const { user } = req
+
+    const data = {
+      templates: 0,
+      components: 0,
+      storage: 0,
+      vectors: 0,
+      tokens: 0
+    }
+    
+    return res.status(200).send(data);
+  } catch (err) {
+    console.log('err', err)
+    return res.status(500).send(err);
+  }
+
+}
+
+
+
+
 const fetchsBilling = async (req, res, next) => {
   try {
     const { user } = req
@@ -159,7 +184,7 @@ const fetchsBilling = async (req, res, next) => {
   }`;
 
     const resp = await getVector(path, options, [0, 0])
-console.log('reeee', resp)
+    console.log('reeee', resp)
     return res.status(200).send(resp)
   } catch (err) {
     console.log('err', err)
@@ -211,7 +236,7 @@ const deleteInvoice = async (req, res) => {
     const path = encodeVector(ID)
     const resp = await deleteVector(path, 'invoices', id)
 
-    
+
     return res.status(200).send(id)
   } catch (err) {
     return res.status(500).send(err);
@@ -289,14 +314,13 @@ const avatarUser = async (req, res) => {
   const { id } = req.params;
   const path = encodeVector(ID);
 
-  
+
   const conditions = [
     { field: 'id', operator: '==', value: id }
   ];
 
 
   const resp = await getVector(path, 'users', [0, 0], conditions, false)
-
 
   if (resp.length == 0) {
     throw "Not exist user";
@@ -334,7 +358,7 @@ const updateUser = async (req, res, next) => {
 
     delete resp.avatar
 
-    
+
     const _token = await generateToken(resp)
 
     if (resp.isverified) {
@@ -688,7 +712,7 @@ const deleteApi = async (req, res) => {
     const path = encodeVector(ID)
     const resp = await deleteVector(path, 'apis', id)
 
-    
+
 
     return res.status(200).send(id)
   } catch (err) {
@@ -792,6 +816,9 @@ const sendMail = async (req, res, next) => {
 module.exports = {
   fetchsDefault: catchedAsync(fetchsDefault),
   updateDefault: catchedAsync(updateDefault),
+
+
+  fetchsBillingExpenses: catchedAsync(fetchsBillingExpenses),
 
   fetchsBilling: catchedAsync(fetchsBilling),
   updateBilling: catchedAsync(updateBilling),

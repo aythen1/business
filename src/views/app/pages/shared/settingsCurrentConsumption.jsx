@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react'
+
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { BarChart } from '@/views/graphs/render'
 
 import styles from './settingsCurrentConsumption.module.css'
 
 
+import {
+    fetchsBillingExpenses
+} from '@/actions/iam'
+
+
+
 const SettingsCurrentConsumption = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const value = {
@@ -15,40 +24,59 @@ const SettingsCurrentConsumption = () => {
     }
 
 
-    const [listPricing, setListPricing] = useState([])
-    
-    const initialList = [{
-        color: 'red',
-        title: 'Add user hace 2 segundos...', 
-        pricing: '70.99€'
-    },{
-        color: 'orange',
-        title: 'Add shop hace 2 segundos...', 
-        pricing: '0.99€'
-    },{
-        color: 'green',
-        title: 'Add employee hace 2 segundos...', 
-        pricing: '€70.99'
-    },{
-        color: 'blue',
-        title: 'Token use eye origin...', 
-        pricing: '0.99€'
-    },{
-        color: 'red',
-        title: '8 Eyes inserters...', 
-        pricing: '0.99€'
-    }]
+    const {
+        expenses
+    } = useSelector((state) => state.iam)
 
-    useEffect( () => {
-        setListPricing(initialList)
+
+    const [listPricing, setListPricing] = useState([])
+
+
+
+    useEffect(() => {
+        const fetchItem = async () => {
+            dispatch(fetchsBillingExpenses({}))
+        }
+
+        fetchItem()
     }, [])
+
+
+    useEffect(() => {
+        if(expenses){
+            const initialList = [{
+                color: 'var(--color-primary-0)',
+                title: 'Plantillas creadas',
+                pricing: expenses.templates
+            }, {
+                color: 'var(--color-primary-2)',
+                title: 'Componentes creados',
+                pricing: expenses.components
+            }, {
+                color: 'var(--color-primary-1)',
+                title: 'Almacen obtenido',
+                pricing: expenses.storage
+            }, {
+                color: 'var(--color-primary-0)',
+                title: 'Vectores usados',
+                pricing: expenses.vectors
+            }, {
+                color: 'var(--color-primary-3)',
+                title: 'Tokens consumidos',
+                pricing: expenses.tokens
+            }]
+
+            setListPricing(initialList)
+        }
+
+    }, [expenses])
 
 
     // --------------------------------------------------------
     const handleBilling = () => {
         navigate(`/${'es'}/app/settings/billing`)
     }
-    
+
     const handleInvoice = () => {
         navigate(`/${'es'}/app/settings/billing#invoice`)
     }
@@ -72,15 +100,17 @@ const SettingsCurrentConsumption = () => {
                 </div>
                 <div className={styles["listPricing"]}>
                     {listPricing.map((item, index) => {
-                        const colorStyle = styles[item.color] || {};
+                        // const colorStyle = styles[item.color] || {};
                         return (
                             <div
                                 key={index}
                                 className={styles["pricing"]}
                             >
-                                <div className={`${styles["dot"]} ${colorStyle}`}>
+                                <div
+                                    className={styles["dot"]}
+                                    style={{background: item.color}}
+                                />
 
-                                </div>
                                 <p className={styles["content"]}>
                                     {item.title}
                                 </p>

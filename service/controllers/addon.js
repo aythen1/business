@@ -7,8 +7,8 @@ const path = require('path')
 
 
 const {
-  addonGPT,
-  // codeGPT,
+  // addonGPT,
+  codeGPT,
   // visionGPT,
   // rpaGPT
 } = require('../services/gpt')
@@ -244,8 +244,8 @@ const codeAddon = async (req, res) => {
     const { token, components } = req.body
     const path = encodeVector(ID)
 
-    const resp = await addonGPT(token, components)
-
+    const resp = await codeGPT(token, components)
+    // console.log('===', resp)
 
     return res.status(200).send(resp)
 

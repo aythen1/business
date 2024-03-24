@@ -18,11 +18,11 @@ export const dataAlt = [{
     title: 'Data',
     key: 'data',
     description: `Lorem ipsum dolor et lorem urifo`
-},{
+}, {
     title: 'Edit',
     key: 'edit',
     description: `Lorem ipsum dolor et lorem urifo`
-},{
+}, {
     title: 'Addon',
     key: 'addon',
     description: `Lorem ipsum dolor et lorem urifo`
@@ -219,6 +219,53 @@ const deleteLoading = (token) => {
 
 
 
+export const addSectionsToElement = (sections) => {
+    const CustomSections = () => {
+        return (
+            <div class='_customSection'>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 15 7-7 7 7" />
+                    </svg>
+                </button>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7" />
+                    </svg>
+                </button>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m8 8-4 4 4 4m8 0 4-4-4-4m-2-3-4 14" />
+                    </svg>
+                </button>
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
+                    </svg>
+                </button>
+            </div>
+        );
+    };
+
+
+    console.log('ejdiewjifi', sections)
+    for (var i = 0; i < sections.length; i++) {
+        const sectionsDiv = document.createElement('div');
+        sectionsDiv.className = 'customSections notHover';
+        ReactDOM.render(<CustomSections />, sectionsDiv);
+        console.log('--------------')
+        sections[i].appendChild(sectionsDiv);
+
+    }
+    // sections.map((section, index) => {
+    //     console.log('sss', section)
+    // })
+};
+
+
+
+
+
 export const addButtonsToElement = (element, keys) => {
     const CustomButtons = () => {
         return (
@@ -346,22 +393,22 @@ const generateRandomString = (length) => {
 
 
 export const handleRefresh = async (hoveredElement) => {
-    try{
+    try {
         const tokenItem = insertLoading(hoveredElement, findInstructionsByKey('alt+a'))
-    
+
         document.querySelectorAll('.customButtons').forEach((buttonsDiv) => { buttonsDiv.remove() });
         document.querySelectorAll('.selectedComponent').forEach(element => element.classList.remove('selectedComponent'));
         const prompt =
             `Quiero que transformes este GPT manteniendo su esencia pero con algun cambio
     \n${hoveredElement.outerHTML}`
-    
+
         const content = await handleGPT({ prompt })
         const code = obtainContent(content)
-    
+
         hoveredElement.outerHTML = code;
-    
+
         deleteLoading(tokenItem)
-    }catch(e){
+    } catch (e) {
         throw e
     }
 
@@ -428,6 +475,13 @@ export const handleDeleteComponent = async (hoveredElement) => {
         hoveredElement.remove();
     }
 
+};
+
+
+
+
+export const handleOpenBlock = async (dispatch, Modal, data) => {
+    dispatch(setOpenModal(<Modal />))
 };
 
 
@@ -544,7 +598,7 @@ export const handlChatEditor = async (dispatch, Modal, data) => {
     console.log('Add to chat...');
 
     dispatch(setOpenModal(<Modal image={data} />))
-  };
+};
 
 
 

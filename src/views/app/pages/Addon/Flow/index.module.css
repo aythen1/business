@@ -4,7 +4,7 @@
   /* width: 350px !important; */
 }
 
-:global(.react-flow__attribution){
+:global(.react-flow__attribution) {
   display: none;
 }
 
@@ -40,14 +40,14 @@
       border-radius: 6px;
       background: var(--color-primary-4);
       outline: none;
-      span{
+      span {
         display: none;
         color: #fff;
         background: var(--color-primary-0);
         padding: 2px 8px;
         border-radius: 4px;
-        &:hover{
-          background-color: var(--background);;
+        &:hover {
+          background-color: var(--background);
           color: var(--color-primary-0);
           font-weight: 800;
           box-shadow: 0px 0px 10px 0px var(--color-primary-0);
@@ -55,7 +55,7 @@
       }
       &:hover {
         background: var(--color-primary-3);
-        span{
+        span {
           display: block;
         }
       }
@@ -68,5 +68,122 @@
     &:hover {
       background: var(--color-primary-3);
     }
+  }
+}
+
+.barLoading {
+  .barBalance {
+    position: fixed;
+    right: 12px;
+    width: 14px;
+    height: 300px;
+    z-index: 99999;
+    top: calc(50vh - 150px);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .bar {
+      border-radius: 0px;
+      background: var(--color-primary-0);
+      height: 2px;
+      zoom: 0.7;
+      transform: rotate(20deg);
+      width: 100%;
+      animation: neon 4s infinite;
+      &.active{
+        animation: neon1 4s infinite;
+        background: greenyellow;
+      }
+    }
+    .line{
+      border-radius: 4px;
+      background: var(--color-primary-0);
+      height: 80px;
+      width: 2px;
+      zoom: 0.7;
+      margin-left: auto;
+      margin-top: -4px;
+      animation: neon 3s infinite;      
+    }
+  }
+  .barMana {
+    position: fixed;
+    right: 12px;
+    width: 14px;
+    height: 300px;
+    z-index: 99999;
+    top: calc(50vh );
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    .bar {
+      border-radius: 0px;
+      background: var(--color-primary-0);
+      height: 2px;
+      zoom: 0.7;
+      transform: rotate(20deg);
+      width: 100%;
+      animation: neon 4s infinite;
+      &.active{
+        animation: neon1 4s infinite;
+        background: greenyellow;
+      }
+    }
+    .line{
+      border-radius: 4px;
+      background: var(--color-primary-0);
+      height: 80px;
+      width: 2px;
+      zoom: 0.7;
+      margin-left: auto;
+      margin-top: -4px;
+      animation: neon 3s infinite;      
+    }
+  }
+}
+
+
+
+:root {
+  --shadow-color: var(--color-primary-0);
+  --shadow-color-light: var(--color-primary-0);
+  --shadow-color-1: greenyellow;
+  --shadow-color-light-1: greenyellow;
+}
+
+
+@keyframes neon {
+  0% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+    0 0 3px var(--shadow-color-light), 0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
+    0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color), 0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
+  }
+  50% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+    0 0 5px var(--shadow-color-light), 0 0 15px var(--shadow-color-light), 0 0 25px var(--shadow-color-light),
+    0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 60px var(--shadow-color), 0 0 80px var(--shadow-color), 0 0 110px var(--shadow-color), 0 0 210px var(--shadow-color);
+  }
+  100% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light), -1px 1px 1px var(--shadow-color-light), 1px -1px 1px var(--shadow-color-light), 1px 1px 1px var(--shadow-color-light),
+    0 0 3px var(--shadow-color-light), 0 0 10px var(--shadow-color-light), 0 0 20px var(--shadow-color-light),
+    0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color), 0 0 50px var(--shadow-color), 0 0 70px var(--shadow-color), 0 0 100px var(--shadow-color), 0 0 200px var(--shadow-color);
+  }
+}
+
+@keyframes neon1 {
+  0% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light-1), -1px 1px 1px var(--shadow-color-light-1), 1px -1px 1px var(--shadow-color-light-1), 1px 1px 1px var(--shadow-color-light-1),
+    0 0 3px var(--shadow-color-light-1), 0 0 10px var(--shadow-color-light-1), 0 0 20px var(--shadow-color-light-1),
+    0 0 30px var(--shadow-color-1), 0 0 40px var(--shadow-color-1), 0 0 50px var(--shadow-color-1), 0 0 70px var(--shadow-color-1), 0 0 100px var(--shadow-color-1), 0 0 200px var(--shadow-color-1);
+  }
+  50% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light-1), -1px 1px 1px var(--shadow-color-light-1), 1px -1px 1px var(--shadow-color-light-1), 1px 1px 1px var(--shadow-color-light-1),
+    0 0 5px var(--shadow-color-light-1), 0 0 15px var(--shadow-color-light-1), 0 0 25px var(--shadow-color-light-1),
+    0 0 40px var(--shadow-color-1), 0 0 50px var(--shadow-color-1), 0 0 60px var(--shadow-color-1), 0 0 80px var(--shadow-color-1), 0 0 110px var(--shadow-color-1), 0 0 210px var(--shadow-color-1);
+  }
+  100% {
+    box-shadow: -1px -1px 1px var(--shadow-color-light-1), -1px 1px 1px var(--shadow-color-light-1), 1px -1px 1px var(--shadow-color-light-1), 1px 1px 1px var(--shadow-color-light-1),
+    0 0 3px var(--shadow-color-light-1), 0 0 10px var(--shadow-color-light-1), 0 0 20px var(--shadow-color-light-1),
+    0 0 30px var(--shadow-color-1), 0 0 40px var(--shadow-color-1), 0 0 50px var(--shadow-color-1), 0 0 70px var(--shadow-color-1), 0 0 100px var(--shadow-color-1), 0 0 200px var(--shadow-color-1);
   }
 }

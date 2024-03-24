@@ -1,14 +1,17 @@
 
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import styles from './index.module.css'
 
 import AddonData from './Data'
 import AddonCustom from './Custom'
-import AddonVersion from './Version'
+import AddonPath from './Path'
 
-const ModalVector = ({ modal: _modal, addon }) => {
+const ModalVector = ({ modal: _modal }) => {
     const [modal, setModal] = useState(_modal || 'custom')
+
+    const { addon } = useSelector((state) => state.addon)
 
     const handleClickCustom = () => {
         setModal('custom')
@@ -20,9 +23,8 @@ const ModalVector = ({ modal: _modal, addon }) => {
 
     }
 
-
-    const handleClickVersion = () => {
-        setModal('version')
+    const handleClickPath = () => {
+        setModal('path')
 
     }
 
@@ -42,12 +44,12 @@ const ModalVector = ({ modal: _modal, addon }) => {
                         </div>
                         <div
                             className={styles.data}
-                            onClick={() => handleClickVersion()}
+                            onClick={() => handleClickPath()}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path fillRule="evenodd" d="M5 6a3 3 0 1 1 4 2.8V9a4 4 0 0 0 4 4h.2a3 3 0 1 1 0 2H13a6 6 0 0 1-4-1.5v1.7a3 3 0 1 1-2 0V8.8A3 3 0 0 1 5 6Z" fill="evenodd" />
                             </svg>
-                            Version
+                            Path
                         </div>
                         <div
                             className={styles.data}
@@ -63,12 +65,13 @@ const ModalVector = ({ modal: _modal, addon }) => {
                     </div>
                 )}
             </div>
+            {modal}
             {modal == 'custom' ? (
                 <AddonCustom setModal={setModal} addon={addon} />
             ) : modal == 'data' ? (
                 <AddonData setModal={setModal} addon={addon} />
-            ) : modal == 'version' && (
-                <AddonVersion setModal={setModal} addon={addon} />
+            ) : modal == 'path' && (
+                <AddonPath setModal={setModal} addon={addon} />
             )}
         </div>
 

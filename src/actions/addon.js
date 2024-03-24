@@ -44,7 +44,7 @@ export const fetchAddon =
           }
         );
 
-        // console.log('resp', resp)
+        console.log('respeee', resp)
 
         return resp.data;
       } catch (error) {
@@ -240,11 +240,19 @@ export const codeAddon =
   createAsyncThunk('addon/codeAddon',
     async ({ components }, { dispatch }) => {
       try {
+
+        console.log('components', components)
         const token = localStorage.getItem('token')
         const tokenGPT = localStorage.getItem('token-gpt')
 
-        const arrComponents = components.map(component => component.text);
+        const arrComponents = components.filter(component => component.code === '').map(component => {
+          return {
+            id: component.id, 
+            text: component.text
+          }
+        });
 
+        console.log('arrComponents', arrComponents)
         const resp = await apiBackend.post(
           '/addon/code',
           {
@@ -257,8 +265,7 @@ export const codeAddon =
         }
         );
 
-
-
+        // console.log('resp: ', resp)
         return resp.data
       } catch (error) {
         console.log('error', error)

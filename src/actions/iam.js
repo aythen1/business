@@ -226,6 +226,28 @@ export const deleteInvoice = createAsyncThunk(
   }
 );
 
+export const fetchsBillingExpenses = createAsyncThunk(
+  "iam/fetchsBillingExpenses",
+  async ({}, { dispatch }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await apiBackend.get("/iam/billing/expenses", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('billing', response)
+      return response.data;
+    } catch (error) {
+      console.log("Error: ", error);
+      throw error.response.data.message;
+    }
+  }
+);
+
+
+
 export const fetchsBilling = createAsyncThunk(
   "iam/fetchsBilling",
   async ({}, { dispatch }) => {

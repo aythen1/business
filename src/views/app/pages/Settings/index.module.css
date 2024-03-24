@@ -13,7 +13,7 @@
     overflow-x: scroll;
 
     button{
-        background: var(--background-button-topbar);
+        background: var(--background-secondary);
         border-radius: 5px;
         padding: 2px 10px;
         display: flex;
@@ -29,7 +29,6 @@
         font-weight: 500;
         font-family: sans-serif;
         color: var(--color-primary-2);
-        text-shadow: 0px 2px 4px var(--color-primary-3);
         white-space: nowrap;
         &.selected{
             background: var(--color-primary-0);

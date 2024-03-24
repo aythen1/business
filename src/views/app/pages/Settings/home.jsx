@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 
-import 'intro.js/introjs.css';
-import { Steps } from 'intro.js-react';
+// import 'intro.js/introjs.css';
+// import { Steps } from 'intro.js-react';
 
 import styles from './home.module.css'
 
@@ -67,8 +67,6 @@ const Home = ({
 }) => {
     const { t } = useTranslation();
 
-
-
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
@@ -110,6 +108,7 @@ const Home = ({
     useEffect(() => {
         const fetchItems = async () => {
             await dispatch(fetchsAddon());
+            // await dispatch(fetchsBillingExpenses())
         };
 
         fetchItems();
@@ -125,9 +124,6 @@ const Home = ({
         setFilteredAddons(listAddons.slice(startIndex, endIndex));
     }, [pageAddons, listAddons]);
 
-    useEffect(() => {
-        setListAddons(addons);
-    }, [addons]);
 
     const onPrevAddons = () => {
         if (pageAddons > 1) {
@@ -237,12 +233,10 @@ const Home = ({
     const [listVector, setListVector] = useState([])
 
     const handleAddVector = () => {
-        // navigate('/es/app/settings/drive')
         dispatch(setModal(<ModalAddVector />))
     }
 
     const handleClickVector = (vector) => {
-
         navigate(`/${'es'}/app/vector/${vector.id}`)
     }
 
@@ -422,19 +416,19 @@ const Home = ({
                             </div>
                         ))}
                     </div>
-                    <BackgroundBanner className={styles["backgroundBanner"]} />
+                    <BackgroundBanner className={styles.backgroundBanner} />
                 </div>
             </div>
-            <div className={styles["gird2"]}>
+            <div className={styles.gird2}>
                 <div >
-                    <div className={styles["ul2"]} style={{ marginBottom: 12 }}>
-                        <h2 className={styles["title"]}>
+                    <div className={styles.ul2} style={{ marginBottom: 12 }}>
+                        <h2 className={styles.title}>
                             + Add-ons
                             <label>
                                 Pro
                             </label>
                         </h2>
-                        <div className={styles["buttonsPrev"]}>
+                        <div className={styles.buttonsPrev}>
                             <button onClick={() => onPrevAddons()}>
                                 <svg viewBox="0 0 16 16" className="css-133lu9h e1gt4cfo0"><path d="M5.3 8.7a1 1 0 0 1 0-1.4l4-4a1 1 0 1 1 1.4 1.4L7.42 8l3.3 3.3a1 1 0 0 1-1.42 1.4l-4-4Z"></path></svg>
                             </button>
@@ -444,21 +438,21 @@ const Home = ({
                         </div>
                     </div>
                     {filteredAddons.length > 0 && (
-                        <div className={styles["ul2"]} style={{ gridColumn: 'span 2' }}>
+                        <div className={styles.ul2} style={{ gridColumn: 'span 2' }}>
                             <div>
                                 <div
-                                    className={styles["li2"]}
+                                    className={styles.li2}
                                     onClick={() => handleModalAddAddon()}
                                 >
-                                    <div className={styles["Info"]}>
-                                        <div className={styles["IconPlus"]}>
+                                    <div className={styles.Info}>
+                                        <div className={styles.IconPlus}>
                                             <IconPlus />
                                         </div>
                                         <span>
                                             {t('home.t8')}
                                         </span>
                                     </div>
-                                    <b className={styles["LabelNew"]}>
+                                    <b className={styles.LabelNew}>
                                         {t('home.t9')}
                                     </b>
                                 </div>
@@ -466,20 +460,31 @@ const Home = ({
                             {filteredAddons.map((item, index) => (
                                 <div
                                     key={index}
-                                    className={styles["li2"]}
+                                    className={styles.li2}
                                     onClick={() => handleClickAddon(item)}
                                 >
-                                    <div className={`${styles["Status"]} ${styles.working}`}>
+                                    <div className={`${styles.Status} ${styles.working}`}>
                                         <div />
                                         <div />
                                         <div />
                                         <div />
                                     </div>
-                                    <div className={styles["Info"]}>
-                                        <div className={styles['IconAddon']}>
-                                            <IconInstance />
+                                    <div className={styles.Info}>
+                                        <div className={styles.IconAddon}>
+                                            {/* <IconInstance /> */}
+                                            {!item.ispublic ? (
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fillRule="evenodd" d="M8 10V7a4 4 0 1 1 8 0v3h1a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h1Zm2-3a2 2 0 1 1 4 0v3h-4V7Zm2 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clipRule="evenodd" />
+                                                </svg>
+                                            ) : (
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fillRule="evenodd" d="M15 7a2 2 0 1 1 4 0v4a1 1 0 1 0 2 0V7a4 4 0 0 0-8 0v3H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2V7Zm-5 6a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z" clipRule="evenodd" />
+                                                </svg>
+                                            )}
                                         </div>
+                                        <span>
                                         {item.title}
+                                        </span>
                                     </div>
                                     <button onClick={(e) => {
                                         e.stopPropagation()
@@ -497,21 +502,21 @@ const Home = ({
 
 
                     {listAddons.length == 0 && (
-                        <div className={styles["noneAddon"]}>
+                        <div className={styles.noneAddon}>
                             <p>
                                 {t('home.t10')}
                             </p>
                             <label>
                                 {t('home.t11')}
                             </label>
-                            <div className={styles["buttons"]}>
+                            <div className={styles.buttons}>
                                 <button
                                     onClick={() => handleModalAddAddon()}
                                 >
                                     {t('home.t12')}
                                 </button>
                                 <button
-                                    className={styles["buttonPremium"]}
+                                    className={styles.buttonPremium}
                                     onClick={() => handleClickPremium()}
                                 >
                                     {t('home.t13')}
@@ -520,21 +525,21 @@ const Home = ({
                         </div>
                     )}
                 </div>
-                <div className={styles["containerConsumption"]}>
-                    <h2 className={styles["title"]}>
+                <div className={styles.containerConsumption}>
+                    <h2 className={styles.title}>
                         {t('home.t14')}
                     </h2>
-                    <div className={styles["boxConsumption"]}>
+                    <div className={styles.boxConsumption}>
                         <SettingsCurrentConsumption />
                     </div>
                 </div>
             </div>
-            <div className={styles["box"]}>
+            <div className={styles.box}>
                 <DashBoard />
             </div>
-            <div className={styles["containerTrid"]}>
-                <div className={styles["containerChangelog"]}>
-                    <div className={styles["title"]}>
+            <div className={styles.containerTrid}>
+                <div className={styles.containerChangelog}>
+                    <div className={styles.title}>
                         <h2>
                             {t('home.t15')}
                         </h2>
@@ -546,9 +551,9 @@ const Home = ({
                             </svg>
                         </a>
                     </div>
-                    <div className={styles["boxChangelog"]}>
+                    <div className={styles.boxChangelog}>
                         <div
-                            className={styles["buttonsPrev"]}
+                            className={styles.buttonsPrev}
                             style={{
                                 position: 'absolute',
                                 top: 16,
@@ -566,8 +571,8 @@ const Home = ({
 
                     </div>
                 </div>
-                <div className={styles["containerNews"]}>
-                    <div className={styles["title"]}>
+                <div className={styles.containerNews}>
+                    <div className={styles.title}>
                         <h2>
                             {t('home.t17')}
                         </h2>
@@ -579,22 +584,22 @@ const Home = ({
                             </svg>
                         </a>
                     </div>
-                    <div className={styles["boxNews"]}>
+                    <div className={styles.boxNews}>
                         <News items={listNotes} />
                     </div>
                 </div>
-                <div className={styles["containerKey"]}>
-                    <div className={styles["boxKey"]}>
+                <div className={styles.containerKey}>
+                    <div className={styles.boxKey}>
 
-                        <div className={styles["icon"]}>
+                        <div className={styles.icon}>
                             <svg viewBox="0 0 16 16"><path d="M4.364 9.333c-.804 0-1.455-.671-1.455-1.5 0-.828.651-1.5 1.455-1.5.803 0 1.454.672 1.454 1.5 0 .829-.651 1.5-1.454 1.5zm4.109-3c-.597-1.747-2.211-3-4.11-3C1.954 3.333 0 5.348 0 7.833c0 2.486 1.954 4.5 4.364 4.5 1.898 0 3.512-1.252 4.109-3h3.163v3h2.91v-3H16v-3H8.473z"></path></svg>
                         </div>
-                        <b className={styles["text"]}>
+                        <b className={styles.text}>
                             {organization?.title || t('home.t19')}
                             {!organization?.subtitle && t('home.t20')}
 
                         </b>
-                        <p className={styles["paragraph"]}>
+                        <p className={styles.paragraph}>
                             En &nbsp;
                             {organization?.name || 'AYTHEN PRO'} &nbsp;
                             usamos &nbsp;
@@ -603,7 +608,7 @@ const Home = ({
                             {!organization?.subtitle && t('home.t21')}
                         </p>
                         <a
-                            className={styles["share"]}
+                            className={styles.share}
                             onClick={() => handleClickFirstAddon()}
                         >
                             <svg viewBox="0 0 24 24"><path d="M15 5l-1.41 1.41L18.17 11H2v2h16.17l-4.59 4.59L15 19l7-7-7-7z"></path></svg>
@@ -615,12 +620,12 @@ const Home = ({
                     </div>
                 </div>
             </div>
-            <Steps
+            {/* <Steps
                 enabled={stepsEnabled}
                 steps={steps}
                 initialStep={initialStep}
                 onExit={onExit}
-            />
+            /> */}
         </div>
     )
 }

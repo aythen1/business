@@ -7,6 +7,8 @@ const {
   fetchsDefault,
   updateDefault,
 
+  fetchsBillingExpenses,
+  
   fetchsBilling,
   updateBilling,
 
@@ -56,6 +58,9 @@ routerIAM
   .post("/load/default", authenticateToken, fetchsDefault)
   .put("/load/default", authenticateToken, updateDefault)
 
+
+  .get("/billing/expenses", authenticateToken, fetchsBillingExpenses)
+
   .get("/billing/fetchs", authenticateToken, fetchsBilling)
   .post("/billing/update", authenticateToken, updateBilling)
 
@@ -70,7 +75,7 @@ routerIAM
   .post("/user/decode", authenticateToken, decoderUser)
   .post("/user/login", loginUser)
   .post("/user/register", registerUser)
-  // .post('/user/upgrade', upgradeUser)
+
   .post("/user/upgrade", authenticateToken, upgradeUser)
   .post("/user", authenticateToken, updateUser)
   .post("/user/recover-password", recoverPasswordUser)

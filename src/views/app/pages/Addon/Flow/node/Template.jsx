@@ -1,8 +1,11 @@
 
 import React, { useRef, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import { useCallback } from 'react';
+
+import { useGraph } from '../index';
 
 
 import { useOpenAI } from '../../openai'
@@ -10,13 +13,14 @@ import { useOpenAI } from '../../openai'
 
 import { useDrag, useDrop } from 'react-dnd';
 
-import { DndProvider } from "react-dnd";
+// import { DndProvider } from "react-dnd";
 
-import { HTML5Backend } from 'react-dnd-html5-backend';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
 
 
 // import styles from '../Settings/iam/modal.module.css'
 import styles from './Template.module.css'
+import stylesLoader from './loader.module.css'
 
 import domtoimage from 'dom-to-image';
 
@@ -39,80 +43,49 @@ import {
 
 
 
-import AddTag from '@/views/app/pages/shared/AddTag'
-import { useNavigate } from 'react-router-dom';
-import { useEdges } from 'reactflow';
-
-
-
-const initialDescription =
-    `1. Header: Las 4 anclas de esta landingpage.
-2. Formulario: Teléfono, nombre, términos.
-3. Newsletter: Poner tu email.
-4. About Us: Un carousel con una foto y un texto.`
-
-
+// import AddTag from '@/views/app/pages/shared/AddTag'
+// import { useNavigate } from 'react-router-dom';
+// import { useEdges } from 'reactflow';
 
 
 const Template = ({
+    setTemplate,
     template,
     addTemplate,
     listComponents,
     setListComponents,
     setInternalUpdate,
     setTitle,
-    onEditor
+    onEditor,
+    setCenter
 }) => {
+    const textareaRefTitle = useRef(null);
+
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
 
-
-
-
-    // const {
-    //     addon
-    // } = useSelector((state) => state.addon)
-    // console.log('template', template)
 
     const textareaRef = useRef(null);
 
-    // const [isNewVector, setIsNewVector] = useState(vector?.id ? true : false);
     const [isLoading, setIsLoading] = useState(false)
     const [isActive, setIsActive] = useState(false)
 
     const [isImage, setIsImage] = useState(true)
 
 
-    const [state, setState] = useState({
-        id: template?.id || '',
-        version: template?.version || '0',
-        title: template?.title || '',
-        description: template?.description || initialDescription,
-        components: template?.code || [],
-        updatedAt: template?.updatedAt || new Date(),
-        createdAt: template?.createdAt || new Date(),
-    });
-
-
-    // useEffect(() => {
-    //     console.log('remplate', template)
-    // }, [template])
-
-
-    // useEffect(() => {
-    //     if (code) {
-    //         setIsLoading(false)
-    //         handleInputChange(code, 'code')
-    //         setPanel('leftBottom')
-    //     }
-    // }, [code])
-
-
+    // const [state, setState] = useState({
+    //     id: template?.id || '',
+    //     version: template?.version || '0',
+    //     title: template?.title || '',
+    //     description: template?.description || initialDescription,
+    //     components: template?.code || [],
+    //     updatedAt: template?.updatedAt || new Date(),
+    //     createdAt: template?.createdAt || new Date(),
+    // });
 
 
 
     // ---------------------------------------------------------------
-
     const handleInputChange = (e, property) => {
         let value = e;
         if (e.target) {
@@ -120,19 +93,19 @@ const Template = ({
         }
 
         if (property === 'title') {
-            // Verificar si el texto tiene una longitud mayor a cero
             const isValidText = value.trim().length > 0;
 
             setIsActive(listComponents.length > 0 && isValidText);
 
-            setState((prevState) => ({
+            setTemplate((prevState) => ({
                 ...prevState,
                 [property]: isValidText ? value : '',
             }));
 
             setTitle(value)
+            updateTextareaHeight()
         } else {
-            setState((prevState) => ({
+            setTemplate((prevState) => ({
                 ...prevState,
                 [property]: value,
             }));
@@ -140,17 +113,15 @@ const Template = ({
     };
 
 
-    const loadImage = (img, errorHandler) => {
-        return new Promise((resolve, reject) => {
-            img.onload = () => resolve(img);
-            img.onerror = () => {
-                // Llama a la función de manejo de error
-                errorHandler();
-                // Resuelve la promesa con un valor que indique que hubo un error
-                resolve(null);
-            };
-        });
-    };
+    // const loadImage = (img, errorHandler) => {
+    //     return new Promise((resolve, reject) => {
+    //         img.onload = () => resolve(img);
+    //         img.onerror = () => {
+    //             errorHandler();
+    //             resolve(null);
+    //         };
+    //     });
+    // };
 
 
     const notFoundDiv = document.createElement('div');
@@ -180,24 +151,14 @@ const Template = ({
             });
 
 
-            // Esperar a que todas las imágenes se carguen
-            // await Promise.all(imagePromises)
-
             try {
                 // Agregar el componente envuelto al cuerpo del documento
                 document.body.appendChild(wrappedComponent);
                 wrappedComponent.appendChild(tempDiv);
 
-                // Esperar antes de capturar la imagen
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
-                // Convertir el componente en una imagen
                 const image = await domtoimage.toPng(wrappedComponent);
-
-                // Hacer algo con la imagen (en este caso, imprimir en la consola)
-                console.log('image', image);
-
-
                 // Esperar un tiempo antes de pasar al siguiente componente
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -224,19 +185,30 @@ const Template = ({
             components: listComponents
         }))
 
+        // console.log('resp', resp)
+        setInternalUpdate(true)
 
-        console.log('payload', resp)
+        resp.payload.map((item, index) => {
+            setListComponents(prevListComponents => {
+                const updatedList = [...prevListComponents]; // Clonamos la lista original
+                updatedList[item.id - 1] = {
+                    ...updatedList[item.id - 1], // Mantenemos los valores anteriores del componente
+                    code: resp.payload[index].code // Actualizamos el código del componente en el índice específico
+                };
+                return updatedList;
+            });
 
-        let updatedListComponents = listComponents.map((component, index) => ({
-            ...component,
-            code: resp.payload[index]
-        }));
 
-        setListComponents(updatedListComponents)
+        })
 
-        await obtainImage(updatedListComponents)
+        // let updatedListComponents = listComponents.map((component, index) => ({
+        //     ...component,
+        //     code: resp.payload[index]
+        // }));
 
+        // setListComponents(updatedListComponents)
 
+        // await obtainImage(updatedListComponents)
         setIsLoading(false)
     }
 
@@ -258,32 +230,10 @@ const Template = ({
             textareaRef.current.style.height = 'auto'; // Restablecer la altura para recalcular
             textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
         }
-    }, [state.description]);
-
-
-    //
-    // const posPanel = (pos) => {
-    //     setPanel(pos)
-    // }
+    }, [template.description]);
 
 
 
-
-    // useEffect(() => {
-    //     if (template.components) {
-    //         let updatedComponents = template.components.map((component, index) => {
-    //             return {
-    //                 id: 1,
-    //                 text: component,
-    //                 image: '',
-    //                 code: ''
-    //             }
-    //         })
-    //         setListComponents(updatedComponents)
-    //     }
-
-    // }, [template.components])
-    // [
 
     const moveComponent = (fromIndex, toIndex) => {
         const newComponents = [...listComponents];
@@ -293,10 +243,10 @@ const Template = ({
         setListComponents(newComponents);
 
     };
-    
+
     const updateComponentText = (id, newText) => {
         const updatedComponents = listComponents.map((component) =>
-        component.id === id ? { ...component, text: newText } : component
+            component.id === id ? { ...component, text: newText } : component
         );
         setInternalUpdate(false)
         setListComponents(updatedComponents);
@@ -304,7 +254,7 @@ const Template = ({
     };
 
 
-    const handleClickAddComponent = async () => {
+    const handleAddComponent = async () => {
         const randomIndex = Math.floor(Math.random() * dataComponents.length);
         const randomComponent = dataComponents[randomIndex];
 
@@ -325,6 +275,7 @@ const Template = ({
                 });
         });
 
+        setInternalUpdate(true)
         await setListComponents(prevList => [
             ...prevList,
             {
@@ -384,26 +335,37 @@ const Template = ({
 
 
     const handleAddTemplate = () => {
-        console.log('ad template')
         addTemplate()
     }
 
 
 
     // -------------------------------------------------
-
     const [searchComponent, setSearchComponent] = useState('');
+    const [filteredComponent, setFilteredComponent] = useState([])
 
+    useEffect(() => {
+        if (searchComponent) {
+            let updatedComponent = dataComponents.filter(item =>
+                item.href.toLowerCase().includes(searchComponent.toLowerCase()) ||
+                item.title.toLowerCase().includes(searchComponent.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchComponent.toLowerCase())
+            );
 
-    let filteredComponent = dataComponents.filter(item =>
-        item.href.toLowerCase().includes(searchComponent.toLowerCase()) ||
-        item.title.toLowerCase().includes(searchComponent.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchComponent.toLowerCase())
-    );
+            // const currentNode = nodes.find(n => n.id === node.id);
+            console.log('template', template)
+            // console.log('updatedComponent', updatedComponent)
+            // const currentNode = nodes.find(node => node.id === template.id);
+            setCenter(template.position?.x + 100, template.position?.y + 150, { zoom: 1.6, duration: 500 })
+            // onEditor()
+
+            setFilteredComponent(updatedComponent)
+        }
+    }, [searchComponent])
+
 
 
     // ------------------------------------------------
-
     const handleMagicTitle = async () => {
         const prompt = generatePrompt(listComponents);
         const generatedTitle = await generateTitle(prompt);
@@ -413,8 +375,8 @@ const Template = ({
             title: generatedTitle,
         });
 
-        calculateRows(generatedTitle)
-
+        // calculateRows(generatedTitle)
+        updateTextareaHeight()
 
         if (generatedTitle.trim().length > 0 && listComponents.length > 0) {
             setIsActive(true)
@@ -441,9 +403,8 @@ const Template = ({
     };
 
 
-    const handleAddComponent = async (item) => {
+    const handleInsertComponent = async (item) => {
         setSearchComponent('')
-
 
         const image = await new Promise((resolve, reject) => {
             fetch(item.image)
@@ -475,11 +436,32 @@ const Template = ({
     }
 
     //
-    const calculateRows = (content) => {
-        const rows = content.split('\n').length;
-        const calculatedRows = rows > 1 ? rows : 2;
-        return calculatedRows;
+    // const calculateRows = (content) => {
+    //     // const rows = content.split('\n').length;
+    //     // console.log('rows', rows)
+    //     // const calculatedRows = rows > 1 ? rows : 1;
+    //     // return calculatedRows;
+
+    //     const lineHeight = 33; // Line-height en píxeles
+    //     const minHeight = 33; // Altura mínima de una fila en píxeles
+    //     const fontSize = 28; // Tamaño de la fuente en píxeles
+
+    //     // Calcula la altura total del contenido multiplicando el número de líneas por la altura de línea
+    //     const totalHeight = content.split('\n').length * lineHeight;
+
+    //     // Calcula el número de filas basado en la altura total del contenido y el tamaño de la fuente
+    //     const calculatedRows = Math.max(Math.ceil(totalHeight / fontSize), minHeight / lineHeight);
+
+    //     return calculatedRows;
+    // };
+    const updateTextareaHeight = () => {
+        if (textareaRefTitle.current) {
+            const { current } = textareaRefTitle;
+            current.style.height = 'auto'; // Resetea la altura a auto para recalcularla correctamente
+            current.style.height = `${current.scrollHeight}px`; // Establece la altura según el contenido
+        }
     };
+
 
 
     // ---------------------------------------------
@@ -491,18 +473,24 @@ const Template = ({
         setIsImage(false)
     }
 
+    const handleDoubleClickTemplate = (id) => {
+        let offset = 0;
 
-    // --------------------------------------------
-    const handleDoubleClickTemplate = () => {
-        onEditor()
-        // setIsEditor(true)
-        // navigate(`/${'es'}/app/addon/${'ddf97681-ca79-465d-bab2-c1c366dc0d2b'}/${'-'}`)
+        for (let i = 0; i <= id; i++) {
+            const element = document.getElementById(`component-${i}`);
+            if (element) {
+                const height = element.offsetHeight;
+                offset += height
+            }
+        }
+
+        onEditor(offset)
     }
 
 
     // ----------------------------------------------
     useEffect(() => {
-        if (state.title.trim().length > 0 && listComponents.length > 0) {
+        if (template.title?.trim().length > 0 && listComponents.length > 0) {
             setIsActive(true)
         } else {
             setIsActive(false)
@@ -518,12 +506,15 @@ const Template = ({
                 <div className={styles.input}>
                     <textarea
                         spellCheck="false"
-                        value={state.title}
-                        placeholder={'Enter title of addon'}
+                        value={template.title}
+                        placeholder={'Title of addon'}
                         onChange={(e) => handleInputChange(e, 'title')}
-                        className={styles.textArea} // Añade esta clase para aplicar estilos si es necesario
-                        rows={calculateRows(state.title)}
-                        style={{ minHeight: `${calculateRows(state.title) * 1}em` }}
+                        className={styles.textArea}
+                        ref={textareaRefTitle}
+                    // style={{height: '20px'}}
+                    // Añade esta clase para aplicar estilos si es necesario
+                    // rows={calculateRows(state.title)}
+                    // style={{ minHeight: `${calculateRows(state.title) * 1}em` }}
                     />
                     <button
                         className={styles.addMagicTitle}
@@ -574,7 +565,6 @@ const Template = ({
                                 </svg>
                             </button>
                         )}
-
                     </div>
                     {searchComponent && filteredComponent.length > 0 && (
                         <div className={styles.scroll}>
@@ -583,12 +573,10 @@ const Template = ({
                                     <li
                                         key={index}
                                         class={styles.addComponent}
-                                        onClick={() => handleAddComponent(item)}
+                                        onClick={() => handleInsertComponent(item)}
                                     >
                                         <h3>{item.title}</h3>
                                         <img src={item.image} />
-                                        {/* -
-                                        <p>{item.description}</p> */}
                                     </li>
                                 ))}
                             </ul>
@@ -635,25 +623,30 @@ const Template = ({
                 )}
                 <div
                     className={styles.items}
-                    onDoubleClick={() => handleDoubleClickTemplate()}
+                // onDoubleClick={() => handleDoubleClickTemplate()}
                 >
                     {listComponents.map((component, index) => (
                         <DraggableComponent
+                            templateId={template.id}
                             id={component.id}
                             key={component.id}
                             index={index}
+                            listComponents={listComponents}
+                            setListComponents={setListComponents}
+                            doubleClick={handleDoubleClickTemplate}
                             moveComponent={moveComponent}
                             updateComponentText={updateComponentText}
                             deleteComponent={deleteComponent}
                             updateTextareaRef={updateTextareaRef}
                             component={component}
                             isImage={isImage}
+                            isLoading={isLoading}
                         />
                     ))}
                 </div>
                 <div className={styles.addComponent}>
                     <button
-                        onClick={() => handleClickAddComponent()}
+                        onClick={() => handleAddComponent()}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5" />
@@ -677,7 +670,15 @@ export default Template
 
 
 
+
+
+
+
+
+
+
 const DraggableComponent = ({
+    templateId,
     id,
     component,
     index,
@@ -685,9 +686,14 @@ const DraggableComponent = ({
     updateComponentText,
     deleteComponent,
     updateTextareaRef,
-    isImage
+    isImage,
+    isLoading,
+    doubleClick,
+    listComponents,
+    setListComponents,
 }) => {
     const textareaRef = useRef(null);
+
     const [textareaHeight, setTextareaHeight] = useState('auto');
     const [isDragging, drag] = useDrag({
         type: 'card',
@@ -735,17 +741,13 @@ const DraggableComponent = ({
 
 
     // 
-
     const [contextMenuPosition, setContextMenuPosition] = useState(false);
     const [contextMenuVisible, setContextMenuVisible] = useState(false);
 
     const handleContextMenu = (event) => {
         event.preventDefault();
 
-        // Muestra el menú contextual
         setContextMenuVisible(true);
-
-        // Posiciona el menú en la posición del clic derecho
         setContextMenuPosition({
             top: event.clientY,
             left: event.clientX,
@@ -753,23 +755,54 @@ const DraggableComponent = ({
     };
 
     const handleMouseLeave = () => {
-        // Oculta el menú contextual al hacer hover fuera del área
         if (contextMenuVisible) {
             setContextMenuVisible(false);
         }
     };
 
+    // ----------------------------------------------
+    const [randomLoader, setRandomLoader] = useState('');
+
+    useEffect(() => {
+        const loaders = [
+            'loader29', 
+            'loader33', 
+            'loader34', 
+            'loader35', 
+            'loader36', 
+            'loader39', 
+            'loader40', 
+            'loader41', 
+            'loader42', 
+            'loader43', 
+            'loader44'];
+        const randomIndex = Math.floor(Math.random() * loaders.length);
+        setRandomLoader(loaders[randomIndex]);
+    }, []);
 
     return (
         <div
+            id={`component-${index}`}
             ref={(node) => drop(drag(node))}
             className={`${styles.draggableComponent} ${isDragging ? styles.dragging : ''}`}
             onContextMenu={handleContextMenu}
+            onDoubleClick={() => doubleClick(index)}
         >
             {isImage ? (
                 <div>
-                    {component.image ? (
-                        <div>
+                    {component.code ? (
+                        <div className={styles.templateComponent}>
+                            <div dangerouslySetInnerHTML={{ __html: component.code }} />
+                        </div>
+                    ) : component.image ? (
+                        <div
+                        className={`${isLoading && styles.loading}`}
+                        >
+                            {isLoading && (
+                                <div className={stylesLoader.loading}>
+                                    <div className={stylesLoader[randomLoader]} />
+                                </div>
+                            )}
                             <img src={component.image} alt="Component Image" />
                         </div>
                     ) : (
@@ -796,10 +829,16 @@ const DraggableComponent = ({
             )}
             {contextMenuVisible && (
                 <div
-                    className={styles.contextMenu}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <ModalContextMenu />
+                    <ModalContextMenu
+                        index={index}
+                        templateId={templateId}
+                        contextMenuPosition={contextMenuPosition}
+                        setContextMenuVisible={setContextMenuVisible}
+                        listComponents={listComponents}
+                        setListComponents={setListComponents}
+                    />
                 </div>
             )}
         </div>
@@ -808,30 +847,125 @@ const DraggableComponent = ({
 
 
 
-const ModalContextMenu = () => {
+const ModalContextMenu = ({
+    index,
+    templateId,
+    contextMenuPosition,
+    setContextMenuVisible,
+    listComponents,
+    setListComponents
+}) => {
+
+    const {
+        nodes,
+        setNodes,
+    } = useGraph();
+
+    const [position, setPosition] = useState({})
+
+    useEffect(() => {
+        console.log('eee', index, contextMenuPosition)
+
+        let offset = 0;
+
+        for (let i = 0; i < index; i++) {
+            const element = document.getElementById(`component-${i}`);
+            if (element) {
+                const height = element.offsetHeight;
+                offset += height
+            }
+        }
+
+        setPosition({
+            y: offset,
+            x: contextMenuPosition.x
+        })
+
+        console.log('offset', offset)
+
+    }, [])
+
+
     const handleDuplicate = () => {
-        alert(1)
+        const duplicatedComponent = { ...listComponents[index] };
+
+        const newListComponents = [
+            ...listComponents.slice(0, index + 1), // Componentes antes del duplicado
+            duplicatedComponent, // Componente duplicado
+            ...listComponents.slice(index + 1) // Componentes después del duplicado
+        ];
+
+        setListComponents(newListComponents);
+        setContextMenuVisible(false);
     }
 
     const handleCopy = () => {
-        alert(2)
+        const componentToCopy = listComponents[index];
+
+        // Convierte el componente a JSON y copia al portapapeles
+        const jsonString = JSON.stringify(componentToCopy);
+        navigator.clipboard.writeText(jsonString)
+        setContextMenuVisible(false);
     }
 
     const handlePaste = () => {
-        alert(3)
+
+        navigator.clipboard.readText()
+            .then((pastedText) => {
+                try {
+                    const parsedComponent = JSON.parse(pastedText);
+                    const newListComponents = [...listComponents];
+                    newListComponents[index] = parsedComponent;
+                    setListComponents(newListComponents);
+
+                    setContextMenuVisible(false);
+                } catch (error) {
+                    console.error('Error al analizar el componente pegado:', error);
+                }
+            })
+
+        setContextMenuVisible(false);
     }
 
     const handleEarse = () => {
-        alert(4)
+        const updatedComponents = listComponents.filter((_, i) => i !== index);
+
+        setListComponents(updatedComponents);
+        setContextMenuVisible(false);
     }
 
     const handleDelete = () => {
-        alert(5)
+        setNodes(prevNodes => prevNodes.filter(node => node.id !== templateId));
+        setContextMenuVisible(false);
+    }
+
+
+    const handleDuplicateTemplate = () => {
+        // Encontrar el nodo correspondiente a templateId
+        const templateNode = nodes.find(node => node.id === templateId);
+
+        console.log('templateNode', templateNode)
+        if (templateNode) {
+            // Copiar el nodo
+            const duplicatedNode = { ...templateNode };
+
+            // Asignar un nuevo ID al nodo duplicado para evitar duplicados
+            duplicatedNode.id = uuidv4()
+
+            // Agregar el nodo duplicado al estado de nodes
+            setNodes(prevNodes => [...prevNodes, duplicatedNode]);
+        }
     }
 
 
     return (
-        <div >
+        <div
+            className={styles.contextMenu}
+            style={{
+                top: position.y,
+                left: position.x
+            }}
+        >
             <ul>
                 <li onClick={() => handleDuplicate()} >
                     Duplicar
@@ -847,6 +981,9 @@ const ModalContextMenu = () => {
                 </li>
                 <li onClick={() => handleDelete()}>
                     Eliminar template
+                </li>
+                <li onClick={() => handleDuplicateTemplate()}>
+                    Duplicar template
                 </li>
             </ul>
         </div>

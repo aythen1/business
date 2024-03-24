@@ -26,7 +26,7 @@
 .container {
   width: 100%;
   gap: 30px;
-  overflow-y: hidden;
+  overflow: hidden;
   .panel {
     width: 200px;
     display: flex;
@@ -36,9 +36,9 @@
     color: #505053;
     /* position: absolute; */
     background: var(--background);
-    padding: 2px;
+    padding: 4px 2px;
     box-shadow: 0px 0px 20px 0px var(--background-secondary);
-    border-radius: 0px 0px 12px 12px;
+    border-radius: 0px;
     .maxHeight {
       height: calc(100% - 20px);
       overflow-y: scroll;
@@ -120,7 +120,7 @@
   min-height: 24px;
   background: var(--background);
   overflow: hidden;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   padding: 6px;
   .progress {
     position: absolute;
@@ -175,11 +175,13 @@
     background: transparent;
     border: none;
     outline: none;
-    font-size: 28px;
+    font-size: 24px;
     line-height: 33px;
     font-weight: 500;
+    height: 30px;
     resize: none;
-
+    color: var(--text-color);
+    min-height: 33px;
     &::-webkit-scrollbar {
       display: none;
     }
@@ -248,6 +250,7 @@
       }
     }
     .addImage{
+      outline: none;
       &:hover{
         color: var(--color-primary-0);
       }
@@ -317,6 +320,10 @@
   position: relative;
 }
 
+
+.templateComponent{
+  zoom: 0.35;
+}
 
 .noneImage{
   display: flex;
@@ -391,7 +398,7 @@
   button {
     width: 100%;
     display: inline-flex;
-    height: 40px;
+    height: 34px;
     padding: 4px 16px;
     flex-direction: row;
     gap: 8px;
@@ -404,7 +411,8 @@
     white-space: nowrap;
     text-decoration: none;
     font-size: 16px;
-    font-weight: 800;
+    font-weight: 700;
+    font-size: 13px;
     letter-spacing: 0px;
     line-height: 24px;
     border: none;
@@ -477,3 +485,15 @@
   /* border-radius: 4px 4px 0px 0px; */
   z-index: 999;
 }
+
+
+
+
+
+.draggableComponent{
+  position: relative;
+  .loading{
+    min-height: 100px;
+  }
+}
+
