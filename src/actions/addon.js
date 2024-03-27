@@ -44,7 +44,7 @@ export const fetchAddon =
           }
         );
 
-        console.log('respeee', resp)
+        // console.log('respeee', resp)
 
         return resp.data;
       } catch (error) {

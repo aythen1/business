@@ -8,7 +8,7 @@ import styles from './index.module.css'
 import Table from '../iam/table'
 
 
-import BankCard from './assets/card.svg'
+import BankCard from './assets/card'
 
 import { useTranslation } from 'react-i18next';
 
@@ -204,7 +204,8 @@ const Bank = ({ }) => {
                             </div>
                         </div>
                         <div className={styles.photo}>
-                            <img src={BankCard} />
+                            {/* <img src={BankCard} /> */}
+                            <BankCard />
                         </div>
                         <div className={styles.buttons}>
                             <button className={styles.manage}>

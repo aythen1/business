@@ -18,7 +18,7 @@ import ModalKeysActions from './ModalKeysActions'
 import ModalChatComponent from './ModalChatComponent'
 import ModalIdeComponent from './ModalIdeComponent'
 import ModalViewComponent from './ModalViewComponent'
-import ModalBlockElements from './ModalBlockElements'
+// import ModalBlockElements from './ModalBlockElements'
 
 
 
@@ -31,6 +31,10 @@ import styles from './index.module.css'
 
 
 
+import ModalElementHref from './ModalElementHref'
+import ModalElementText from './ModalElementText'
+import ModalElementColor from './ModalElementColor'
+import ModalElementImage from './ModalElementImage'
 
 import {
   dataAlt,
@@ -47,7 +51,7 @@ import {
   handleChangeImages,
   handleAddForm,
   handleDeleteComponent,
-  handleOpenBlock,
+  // handleOpenBlock,
   handleCopyComponent,
   handlePasteComponent,
   handleInsertComponent,
@@ -90,16 +94,38 @@ export const AddonEditor = ({
     if (template.content) {
       setHtml(template.content)
 
-      setTimeout(() => {
-        // console.log('teeee', template)
-        containerRef.current.scrollTop = template.offset - 350
-        // containerRef.current.classList.remove('loading')
-        containerRef.current.classList.remove(styles.loading);
 
-      }, 100)
+      // //
+      // setTimeout(() => {
+      //   // console.log('teeee', template)
+      //   containerRef.current.scrollTop = template.offset - 350
+      //   // containerRef.current.classList.remove('loading')
+      //   containerRef.current.classList.remove(styles.loading);
+
+      // }, 100)
 
     }
   }, [template])
+
+  useEffect(() => {
+    if (html) {
+      const targetElement = document.querySelector(`.customSection[tab-section="${template.index}"]`);
+      console.log('target element', targetElement)
+      // Verificar si se encontró el elemento
+      if (targetElement) {
+        // Calcular la posición vertical del elemento con respecto al viewport
+        const offsetTop = targetElement.offsetTop;
+        console.log('top', offsetTop)
+        containerRef.current.scrollTop = offsetTop
+        containerRef.current.classList.remove(styles.loading);
+        // Desplazarse hasta la posición del elemento
+        // window.scrollTo({
+        //   top: offsetTop,
+        //   behavior: 'smooth' // Desplazamiento suave
+        // });
+      }
+    }
+  }, [html])
 
   // handle -------------------------------------------------------
 
@@ -285,65 +311,116 @@ export const AddonEditor = ({
 
   // -T: Cambia los textos que detecte
   useHotkeys('alt+t', () => {
-    handleKeyClick('alt+t');
-    handleChangeTexts(hoveredElement);
+    try {
+      handleKeyClick('alt+t');
+      handleChangeTexts(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -I: Cambia las imagenes que detecte
   useHotkeys('alt+i', () => {
-    handleKeyClick('alt+i');
-    handleChangeImages(hoveredElement);
+    try {
+      handleKeyClick('alt+i');
+      handleChangeImages(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -F: Añade un formulario
   useHotkeys('alt+f', () => {
-    handleKeyClick('alt+f');
-    handleAddForm(hoveredElement);
+    try {
+      handleKeyClick('alt+f');
+      handleAddForm(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -R: Borra el componente
   useHotkeys('alt+r', () => {
-    handleKeyClick('alt+r');
-    handleDeleteComponent(hoveredElement);
+    try {
+      handleKeyClick('alt+r');
+      handleDeleteComponent(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -C: Copia el componente
   useHotkeys('alt+c', () => {
-    handleKeyClick('alt+c');
-    handleCopyComponent(hoveredElement);
+    try {
+      handleKeyClick('alt+c');
+      handleCopyComponent(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -B: Open blocks
-  useHotkeys('alt+b', () => {
-    handleKeyClick('alt+b');
-    handleOpenBlock(dispatch, ModalBlockElements)
-
-  });
+  // useHotkeys('alt+b', () => {
+  //   handleKeyClick('alt+b');
+  //   handleOpenBlock(dispatch, ModalBlockElements)
+  // });
   // -V: Pega el componente
   useHotkeys('alt+v', () => {
-    handleKeyClick('alt+v');
-    handlePasteComponent(hoveredElement);
+    try {
+      handleKeyClick('alt+v');
+      handlePasteComponent(hoveredElement);
+    } catch (e) {
+      
+    }
   });
 
   // -D: Duplica el componente
   useHotkeys('alt+d', () => {
-    handleKeyClick('alt+d');
-    handleDuplicateComponent(hoveredElement);
+    try {
+      handleKeyClick('alt+d');
+      handleDuplicateComponent(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -X: Corta el componente para insertarlo en otro lado
   useHotkeys('alt+x', () => {
-    handleKeyClick('alt+x');
-    handleCutComponent(hoveredElement);
+    try {
+      handleKeyClick('alt+x');
+      handleCutComponent(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -1..9: Inserta en el componente un valor del vector
   useHotkeys('alt+n', () => {
-    handleKeyClick('alt+n');
-    handleDataVector(hoveredElement);
+    try {
+      handleKeyClick('alt+n');
+      handleDataVector(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -U: Poner todo con colores primarios
   useHotkeys('alt+u', () => {
-    handleKeyClick('alt+u');
-    handleColorPrimary(hoveredElement);
+    try {
+      handleKeyClick('alt+u');
+      handleColorPrimary(hoveredElement);
+    } catch (e) {
+      
+    }
   });
   // -A: Abre para insertar un componente (menurightcomponent)
   useHotkeys('alt+o', () => {
-    handleKeyClick('alt+o');
-    handleInsertComponent(dispatch);
+    try {
+      handleKeyClick('alt+o');
+      handleInsertComponent(dispatch);
+    } catch (e) {
+      
+    }
+  });
+  // -A: Abre para insertar un componente (menurightcomponent)
+  useHotkeys('alt+p', () => {
+    // dispatch(setModal(<ModalElementHref />))
+    // dispatch(setModal(<ModalElementText />))
+    // dispatch(setModal(<ModalElementColor />))
+    dispatch(setModal(<ModalElementImage />))
+
   });
   // -Q: Abre para editar el componente en el chatbot
   useHotkeys('alt+q', async () => {
@@ -433,7 +510,7 @@ export const AddonEditor = ({
       if (event.key === 'Alt') {
         console.log('delete alt')
         isAltCustomSection = false
-        // document.querySelectorAll('.customSections').forEach(element => element.remove());
+        document.querySelectorAll('.customSections').forEach(element => element.remove());
         document.body.classList.remove('pressAlt');
       }
     };
@@ -508,7 +585,7 @@ export const AddonEditor = ({
       </div>
       <div
         ref={containerRef}
-        style={{ background: '#fff' }}
+        // style={{ background: '#fff' }}
         className={`${styles.hoverable} ${styles.loading} ${isHovered ? 'hovered' : ''}`}
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}

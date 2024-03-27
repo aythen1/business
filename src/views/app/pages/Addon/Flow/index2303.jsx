@@ -519,7 +519,7 @@ export const AddonFlow = ({
         <GraphContext.Provider value={value}>
             <div
                 ref={reactFlowWrapper}
-                style={{ width: '100%', height: 'calc(100vh - 55px)' }}
+                style={{ width: '100%', height: 'calc(100vh - 45px)' }}
             >
                 <ReactFlow
                     nodes={nodes}

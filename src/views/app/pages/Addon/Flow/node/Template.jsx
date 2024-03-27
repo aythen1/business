@@ -35,13 +35,15 @@ import {
     codeAddon
 } from '@/actions/addon'
 
+import {
+    setModal
+} from '@/slices/iamSlice'
 
 import {
     setCode
 } from '@/slices/addonSlice'
 
-
-
+import ModalTemplate from './ModalTemplate'
 
 // import AddTag from '@/views/app/pages/shared/AddTag'
 // import { useNavigate } from 'react-router-dom';
@@ -69,7 +71,6 @@ const Template = ({
 
     const [isLoading, setIsLoading] = useState(false)
     const [isActive, setIsActive] = useState(false)
-
     const [isImage, setIsImage] = useState(true)
 
 
@@ -197,8 +198,6 @@ const Template = ({
                 };
                 return updatedList;
             });
-
-
         })
 
         // let updatedListComponents = listComponents.map((component, index) => ({
@@ -473,10 +472,25 @@ const Template = ({
         setIsImage(false)
     }
 
-    const handleDoubleClickTemplate = (id) => {
+
+    const handleTemplate = (event, id) => {
+        console.log('template', template)
+        // const currentNode = nodes.find(n => n.id === node.id);
+        if (event.altKey) {
+            
+            handleDoubleTemplate(id)
+            console.log('La tecla "Alt" está presionada.');
+        } else {
+              setCenter(template.position.x, template.position.y+200, {zoom: 0.5, duration: 500})
+            console.log('La tecla "Alt" no está presionada.');
+          }
+    }
+
+
+    const handleDoubleTemplate = (index) => {
         let offset = 0;
 
-        for (let i = 0; i <= id; i++) {
+        for (let i = 0; i <= index; i++) {
             const element = document.getElementById(`component-${i}`);
             if (element) {
                 const height = element.offsetHeight;
@@ -484,7 +498,7 @@ const Template = ({
             }
         }
 
-        onEditor(offset)
+        onEditor(index, offset)
     }
 
 
@@ -496,6 +510,27 @@ const Template = ({
             setIsActive(false)
         }
     }, [listComponents])
+
+
+    // ----------------------------------------------
+
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+        console.log('template', template)
+        //         const node = nodes.filter((node) => node.id === id)[0]
+
+        const code = template.components.map(component => {
+            return component.code
+        }).join('\n')
+
+        dispatch(setModal(<ModalTemplate code={code} />))
+
+        // setContextMenuVisible(true);
+        // setContextMenuPosition({
+        //     top: event.clientY,
+        //     left: event.clientX,
+        // });
+    };
 
 
 
@@ -623,17 +658,19 @@ const Template = ({
                 )}
                 <div
                     className={styles.items}
+                    onContextMenu={handleContextMenu}
                 // onDoubleClick={() => handleDoubleClickTemplate()}
                 >
                     {listComponents.map((component, index) => (
                         <DraggableComponent
                             templateId={template.id}
+                            // listComponents={listComponents}
+                            // setListComponents={setListComponents}
                             id={component.id}
                             key={component.id}
                             index={index}
-                            listComponents={listComponents}
-                            setListComponents={setListComponents}
-                            doubleClick={handleDoubleClickTemplate}
+                            onClick={handleTemplate}
+                            doubleClick={handleDoubleTemplate}
                             moveComponent={moveComponent}
                             updateComponentText={updateComponentText}
                             deleteComponent={deleteComponent}
@@ -678,7 +715,9 @@ export default Template
 
 
 const DraggableComponent = ({
-    templateId,
+    // templateId,
+    // listComponents,
+    // setListComponents,
     id,
     component,
     index,
@@ -688,10 +727,12 @@ const DraggableComponent = ({
     updateTextareaRef,
     isImage,
     isLoading,
+    onClick,
     doubleClick,
-    listComponents,
-    setListComponents,
 }) => {
+
+    const dispatch = useDispatch()
+
     const textareaRef = useRef(null);
 
     const [textareaHeight, setTextareaHeight] = useState('auto');
@@ -741,40 +782,32 @@ const DraggableComponent = ({
 
 
     // 
-    const [contextMenuPosition, setContextMenuPosition] = useState(false);
-    const [contextMenuVisible, setContextMenuVisible] = useState(false);
+    // const [contextMenuPosition, setContextMenuPosition] = useState(false);
+    // const [contextMenuVisible, setContextMenuVisible] = useState(false);
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
 
-        setContextMenuVisible(true);
-        setContextMenuPosition({
-            top: event.clientY,
-            left: event.clientX,
-        });
-    };
 
-    const handleMouseLeave = () => {
-        if (contextMenuVisible) {
-            setContextMenuVisible(false);
-        }
-    };
+    // const handleMouseLeave = () => {
+    //     if (contextMenuVisible) {
+    //         setContextMenuVisible(false);
+    //     }
+    // };
 
     // ----------------------------------------------
     const [randomLoader, setRandomLoader] = useState('');
 
     useEffect(() => {
         const loaders = [
-            'loader29', 
-            'loader33', 
-            'loader34', 
-            'loader35', 
-            'loader36', 
-            'loader39', 
-            'loader40', 
-            'loader41', 
-            'loader42', 
-            'loader43', 
+            'loader29',
+            'loader33',
+            'loader34',
+            'loader35',
+            'loader36',
+            'loader39',
+            'loader40',
+            'loader41',
+            'loader42',
+            'loader43',
             'loader44'];
         const randomIndex = Math.floor(Math.random() * loaders.length);
         setRandomLoader(loaders[randomIndex]);
@@ -785,7 +818,8 @@ const DraggableComponent = ({
             id={`component-${index}`}
             ref={(node) => drop(drag(node))}
             className={`${styles.draggableComponent} ${isDragging ? styles.dragging : ''}`}
-            onContextMenu={handleContextMenu}
+            // onContextMenu={handleContextMenu}
+            onClick={(e) => onClick(e, index)}
             onDoubleClick={() => doubleClick(index)}
         >
             {isImage ? (
@@ -796,7 +830,7 @@ const DraggableComponent = ({
                         </div>
                     ) : component.image ? (
                         <div
-                        className={`${isLoading && styles.loading}`}
+                            className={`${isLoading && styles.loading}`}
                         >
                             {isLoading && (
                                 <div className={stylesLoader.loading}>
@@ -827,7 +861,7 @@ const DraggableComponent = ({
                     onChange={handleTextChange}
                 />
             )}
-            {contextMenuVisible && (
+            {/* {contextMenuVisible && (
                 <div
                     onMouseLeave={handleMouseLeave}
                 >
@@ -840,152 +874,152 @@ const DraggableComponent = ({
                         setListComponents={setListComponents}
                     />
                 </div>
-            )}
+            )} */}
         </div>
     );
 };
 
 
 
-const ModalContextMenu = ({
-    index,
-    templateId,
-    contextMenuPosition,
-    setContextMenuVisible,
-    listComponents,
-    setListComponents
-}) => {
+// const ModalContextMenu = ({
+//     index,
+//     templateId,
+//     contextMenuPosition,
+//     setContextMenuVisible,
+//     listComponents,
+//     setListComponents
+// }) => {
 
-    const {
-        nodes,
-        setNodes,
-    } = useGraph();
+//     const {
+//         nodes,
+//         setNodes,
+//     } = useGraph();
 
-    const [position, setPosition] = useState({})
+//     const [position, setPosition] = useState({})
 
-    useEffect(() => {
-        console.log('eee', index, contextMenuPosition)
+//     useEffect(() => {
+//         console.log('eee', index, contextMenuPosition)
 
-        let offset = 0;
+//         let offset = 0;
 
-        for (let i = 0; i < index; i++) {
-            const element = document.getElementById(`component-${i}`);
-            if (element) {
-                const height = element.offsetHeight;
-                offset += height
-            }
-        }
+//         for (let i = 0; i < index; i++) {
+//             const element = document.getElementById(`component-${i}`);
+//             if (element) {
+//                 const height = element.offsetHeight;
+//                 offset += height
+//             }
+//         }
 
-        setPosition({
-            y: offset,
-            x: contextMenuPosition.x
-        })
+//         setPosition({
+//             y: offset,
+//             x: contextMenuPosition.x
+//         })
 
-        console.log('offset', offset)
+//         console.log('offset', offset)
 
-    }, [])
-
-
-    const handleDuplicate = () => {
-        const duplicatedComponent = { ...listComponents[index] };
-
-        const newListComponents = [
-            ...listComponents.slice(0, index + 1), // Componentes antes del duplicado
-            duplicatedComponent, // Componente duplicado
-            ...listComponents.slice(index + 1) // Componentes después del duplicado
-        ];
-
-        setListComponents(newListComponents);
-        setContextMenuVisible(false);
-    }
-
-    const handleCopy = () => {
-        const componentToCopy = listComponents[index];
-
-        // Convierte el componente a JSON y copia al portapapeles
-        const jsonString = JSON.stringify(componentToCopy);
-        navigator.clipboard.writeText(jsonString)
-        setContextMenuVisible(false);
-    }
-
-    const handlePaste = () => {
-
-        navigator.clipboard.readText()
-            .then((pastedText) => {
-                try {
-                    const parsedComponent = JSON.parse(pastedText);
-                    const newListComponents = [...listComponents];
-                    newListComponents[index] = parsedComponent;
-                    setListComponents(newListComponents);
-
-                    setContextMenuVisible(false);
-                } catch (error) {
-                    console.error('Error al analizar el componente pegado:', error);
-                }
-            })
-
-        setContextMenuVisible(false);
-    }
-
-    const handleEarse = () => {
-        const updatedComponents = listComponents.filter((_, i) => i !== index);
-
-        setListComponents(updatedComponents);
-        setContextMenuVisible(false);
-    }
-
-    const handleDelete = () => {
-        setNodes(prevNodes => prevNodes.filter(node => node.id !== templateId));
-        setContextMenuVisible(false);
-    }
+//     }, [])
 
 
-    const handleDuplicateTemplate = () => {
-        // Encontrar el nodo correspondiente a templateId
-        const templateNode = nodes.find(node => node.id === templateId);
+//     const handleDuplicate = () => {
+//         const duplicatedComponent = { ...listComponents[index] };
 
-        console.log('templateNode', templateNode)
-        if (templateNode) {
-            // Copiar el nodo
-            const duplicatedNode = { ...templateNode };
+//         const newListComponents = [
+//             ...listComponents.slice(0, index + 1), // Componentes antes del duplicado
+//             duplicatedComponent, // Componente duplicado
+//             ...listComponents.slice(index + 1) // Componentes después del duplicado
+//         ];
 
-            // Asignar un nuevo ID al nodo duplicado para evitar duplicados
-            duplicatedNode.id = uuidv4()
+//         setListComponents(newListComponents);
+//         setContextMenuVisible(false);
+//     }
 
-            // Agregar el nodo duplicado al estado de nodes
-            setNodes(prevNodes => [...prevNodes, duplicatedNode]);
-        }
-    }
+//     const handleCopy = () => {
+//         const componentToCopy = listComponents[index];
+
+//         // Convierte el componente a JSON y copia al portapapeles
+//         const jsonString = JSON.stringify(componentToCopy);
+//         navigator.clipboard.writeText(jsonString)
+//         setContextMenuVisible(false);
+//     }
+
+//     const handlePaste = () => {
+
+//         navigator.clipboard.readText()
+//             .then((pastedText) => {
+//                 try {
+//                     const parsedComponent = JSON.parse(pastedText);
+//                     const newListComponents = [...listComponents];
+//                     newListComponents[index] = parsedComponent;
+//                     setListComponents(newListComponents);
+
+//                     setContextMenuVisible(false);
+//                 } catch (error) {
+//                     console.error('Error al analizar el componente pegado:', error);
+//                 }
+//             })
+
+//         setContextMenuVisible(false);
+//     }
+
+//     const handleEarse = () => {
+//         const updatedComponents = listComponents.filter((_, i) => i !== index);
+
+//         setListComponents(updatedComponents);
+//         setContextMenuVisible(false);
+//     }
+
+//     const handleDelete = () => {
+//         setNodes(prevNodes => prevNodes.filter(node => node.id !== templateId));
+//         setContextMenuVisible(false);
+//     }
 
 
-    return (
-        <div
-            className={styles.contextMenu}
-            style={{
-                top: position.y,
-                left: position.x
-            }}
-        >
-            <ul>
-                <li onClick={() => handleDuplicate()} >
-                    Duplicar
-                </li>
-                <li onClick={() => handleCopy()}>
-                    Copiar
-                </li>
-                <li onClick={() => handlePaste()}>
-                    Pegar
-                </li>
-                <li onClick={() => handleEarse()}>
-                    Borrar Component
-                </li>
-                <li onClick={() => handleDelete()}>
-                    Eliminar template
-                </li>
-                <li onClick={() => handleDuplicateTemplate()}>
-                    Duplicar template
-                </li>
-            </ul>
-        </div>
-    )
-}
+//     const handleDuplicateTemplate = () => {
+//         // Encontrar el nodo correspondiente a templateId
+//         const templateNode = nodes.find(node => node.id === templateId);
+
+//         console.log('templateNode', templateNode)
+//         if (templateNode) {
+//             // Copiar el nodo
+//             const duplicatedNode = { ...templateNode };
+
+//             // Asignar un nuevo ID al nodo duplicado para evitar duplicados
+//             duplicatedNode.id = uuidv4()
+
+//             // Agregar el nodo duplicado al estado de nodes
+//             setNodes(prevNodes => [...prevNodes, duplicatedNode]);
+//         }
+//     }
+
+
+//     return (
+//         <div
+//             className={styles.contextMenu}
+//             style={{
+//                 top: position.y,
+//                 left: position.x
+//             }}
+//         >
+//             <ul>
+//                 <li onClick={() => handleDuplicate()} >
+//                     Duplicar
+//                 </li>
+//                 <li onClick={() => handleCopy()}>
+//                     Copiar
+//                 </li>
+//                 <li onClick={() => handlePaste()}>
+//                     Pegar
+//                 </li>
+//                 <li onClick={() => handleEarse()}>
+//                     Borrar Component
+//                 </li>
+//                 <li onClick={() => handleDelete()}>
+//                     Eliminar template
+//                 </li>
+//                 <li onClick={() => handleDuplicateTemplate()}>
+//                     Duplicar template
+//                 </li>
+//             </ul>
+//         </div>
+//     )
+// }

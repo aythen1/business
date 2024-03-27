@@ -7,12 +7,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import 'reactflow/dist/style.css';
 
+
+import ModalLink from './ModalLink'
+import ModalTemplate from './ModalTemplate'
+
+
 import { useOpenAI } from '../openai'
 
-import ReactFlow, { useReactFlow, MiniMap, Background, addEdge, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, { useReactFlow, MiniMap, Background, addEdge, useZoomPanHelper, useStoreState, SelectionMode, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import { v4 as uuidv4 } from 'uuid';
 
 import styles from './index.module.css'
+import stylesLoader from './node/loader.module.css'
 
 
 import CustomEdge from "./edge/CustomEdge";
@@ -27,10 +33,14 @@ import {
     setStatus
 } from '@/slices/addonSlice'
 
+// import {
+//     parseChartString,
+//     generatePromptTree
+// } from './prompt'
+
 import {
-    parseChartString,
-    generatePromptTree
-} from './prompt'
+    setModal
+} from '@/slices/iamSlice'
 
 
 
@@ -42,6 +52,7 @@ import {
     fetchsVectorAddon,
     addVectorAddon
 } from '@/actions/addon'
+// import { position } from 'html2canvas/dist/types/css/property-descriptors/position';
 
 
 
@@ -108,9 +119,10 @@ export const AddonFlow = ({
     const [nodes, setNodes] = useState([])
     const [edges, setEdges] = useState([])
     const [selectedEdge, setSelectedEdge] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [miniMapVisible, setMiniMapVisible] = useState(false);
-    const [zoomInitial, setZoomInitial] = useState(false);
+    // const [zoomInitial, setZoomInitial] = useState(false);
 
 
     // ------------------------------
@@ -118,42 +130,70 @@ export const AddonFlow = ({
 
     const {
         addon,
+        vectors
     } = useSelector((state) => state.addon)
 
 
     useEffect(() => {
-        const fetchItem = async () => {
-            const nodes = JSON.parse(addon.nodes)
+        // const fetchItem = async () => {
+        //     const nodes = JSON.parse(addon.nodes)
 
-            for (var i = 0; i < nodes.length; i++) {
-                const node = nodes[i]
+        //     for (var i = 0; i < nodes.length; i++) {
+        //         const node = nodes[i]
 
-                let id = iniVector({
-                    path0: 'addon',
-                    path1: addonId,
-                    path2: node.id
-                })
+        //         let id = iniVector({
+        //             path0: 'addon',
+        //             path1: addonId,
+        //             path2: node.id
+        //         })
 
-                const resp = await dispatch(fetchsVectorAddon({
-                    id: id,
-                    name: 'templates'
-                }))
+        //         const resp = await dispatch(fetchsVectorAddon({
+        //             id: id,
+        //             name: 'templates'
+        //         }))
 
-                if (resp.payload.length > 0) {
-                    nodes[i].data.components = JSON.parse(resp.payload[0].components)
-                }
-            }
-            setNodes(nodes)
-            setEdges(JSON.parse(addon.edges))
-        }
+        //         if (resp.payload.length > 0) {
+        //             nodes[i].data.components = JSON.parse(resp.payload[0].components)
+        //         }
+        //     }
+        //     setNodes(nodes)
+        //     setEdges(JSON.parse(addon.edges))
+        //     setIsLoading(false)
+        // }
+
+        // const fetchItem = async () => {
+        //     setEdges(JSON.parse(addon.edges))
+            
+        // }
 
         if (addon.id) {
-            fetchItem()
+            // fetchItem()
+            // setIsLoading(false)
+            setIsLoading(false)
         } else if (addonId) {
+            console.log('wrfr')
             dispatch(fetchAddon(addonId))
             dispatch(setStatus('active'))
         }
     }, [addon])
+
+
+    useEffect(() => {
+        if(vectors.length > 0){
+            // console.log('eee')
+            const nodes = JSON.parse(addon.nodes)
+            // console.log('nodes', nodes)
+            // const nodes = vectors
+            for(var i = 0; i<nodes.length; i++){
+                nodes[i].data.components = JSON.parse(vectors[i].components)
+            }
+            
+            // console.log('vv', vectors)
+            setEdges(JSON.parse(addon.edges))
+            setNodes(nodes)
+            
+        }
+    }, [vectors])
 
 
 
@@ -333,13 +373,13 @@ export const AddonFlow = ({
         return false;
     };
 
-    useEffect(() => {
-        if (reactFlowWrapper.current) {
-            setTimeout(function () {
-                setZoomInitial(true)
-            }, 100)
-        }
-    }, [reactFlowWrapper]);
+    // useEffect(() => {
+    //     if (reactFlowWrapper.current) {
+    //         setTimeout(function () {
+    //             setZoomInitial(true)
+    //         }, 100)
+    //     }
+    // }, [reactFlowWrapper]);
 
 
 
@@ -380,6 +420,9 @@ export const AddonFlow = ({
 
 
 
+
+
+
     // ---------------------------------------------------------------
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
 
@@ -388,10 +431,10 @@ export const AddonFlow = ({
     };
 
 
-    const defaultViewport = {
-        zoom: 0.01,
+    const [defaultViewport, setDefaultViewport] = useState({
+        zoom: 0.2,
         position: { x: 0, y: 0 }
-    };
+    });
 
 
     // ---------------------------------------------------------------
@@ -412,18 +455,31 @@ export const AddonFlow = ({
     return (
         <GraphContext.Provider value={value}>
             <div
+                // onKeyDown={onKeyDown}
+                // tabIndex={0}
                 ref={reactFlowWrapper}
-                style={{ width: '100%', height: 'calc(100vh - 55px)' }}
+                style={{ width: '100%', height: 'calc(100vh - 45px)' }}
             >
+                {isLoading && (
+                    <div className={styles.loading}>
+                        <div className={stylesLoader.loader29} />
+                    </div>
+                )}
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
                     onInit={handleReactFlowInit}
-                    fitView
+                    // fitView
                     minZoom={0.2}
                     maxZoom={3}
-                    defaultZoom={defaultViewport.zoom}
-                    defaultPosition={defaultViewport.position}
+                    defaultViewport={{
+                        x: defaultViewport.position.x,
+                        y: defaultViewport.position.y,
+                        zoom: defaultViewport.zoom
+                    }}
+                    // defaultZoom={defaultViewport.zoom}
+                    // transform={position}
+                    // defaultPosition={defaultViewport.position}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     edgeTypes={edgeTypes}
@@ -435,6 +491,7 @@ export const AddonFlow = ({
                     panOnDrag={panOnDrag}
                     selectionMode={SelectionMode.Partial}
                     connectionLineComponent={ConnectionLine}
+
                 >
                     <Background
                         id="1"
@@ -452,7 +509,7 @@ export const AddonFlow = ({
                         variant={backgroundVariant[1].variant}
                         color="var(--color-primary-4)"
                     />
-                    <div className={styles.buttons} style={{ top: '18px' }} >
+                    <div className={styles.buttons} style={{ top: '30px' }} >
                         <button onClick={saveNode} >
                             <ButtonSave save={false} />
                         </button>
@@ -469,33 +526,44 @@ export const AddonFlow = ({
                             <PositionComponent position="row" nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges} />
                         </button>
                     </div>
-                    <div className={styles.barLoading}>
-                        <BarMana />
-                        <BarBalance />
-                    </div>
-                    <div className={styles.buttons} style={{ bottom: '22px' }}>
-                        <button>
-                            <ButtonPlus />
-                        </button>
-                        <button>
-                            <ButtonLess />
-                        </button>
-                        <button>
-                            <TypeBackground handleTypeBackground={handleTypeBackground} />
-                        </button>
-                        <button style={{ marginLeft: 'auto' }}>
-                            <ButtonHeadMap setMiniMapVisible={setMiniMapVisible} />
-                        </button>
-                        <button >
-                            <ButtonMap setMiniMapVisible={setMiniMapVisible} />
-                        </button>
+                    <div className={styles.buttons} style={{ bottom: '30px' }}>
+                        <div>
+                            <button>
+                                <ButtonPlus />
+                            </button>
+                            <button>
+                                <ButtonLess />
+                            </button>
+                            <button>
+                                <TypeBackground handleTypeBackground={handleTypeBackground} />
+                            </button>
+                        </div>
+                        <div className={styles.barLoading}>
+                            <BarMana />
+                            <BarBalance />
+                        </div>
+                        <div>
+                            <button >
+                                <ButtonHeadMap setMiniMapVisible={setMiniMapVisible} />
+                            </button>
+                            <button >
+                                <ButtonLink />
+                            </button>
+                            <button >
+                                <ButtonMap setMiniMapVisible={setMiniMapVisible} />
+                            </button>
+                        </div>
                     </div>
                     {miniMapVisible && (
-                        <MiniMap />
+                        <MiniMap
+                            nodeColor={'var(--color-primary-4)'}
+                            style={{ background: 'var(--background)', color: 'var(--background-secondary)' }}
+                        />
                     )}
-                    {zoomInitial && (
+                    <ControllMoveKey position={defaultViewport.position} zoom={defaultViewport.zoom} setViewport={setDefaultViewport} />
+                    {/* {zoomInitial && (
                         <ZoomInitial nodes={nodes} />
-                    )}
+                    )} */}
                     <ZoomFunction direction={zoomType} />
                 </ReactFlow>
             </div>
@@ -509,7 +577,53 @@ export const AddonFlow = ({
 
 
 
+const ControllMoveKey = ({position: pos, zoom, setViewport}) => {
+    const { setCenter } = useReactFlow();
 
+    const [position, setPosition] = useState({ x: pos.x, y: pos.y });
+
+    useEffect(() => {
+        setViewport({
+            position: { x: position.x, y: position.y },
+            zoom: zoom
+        });
+        setCenter(position.x, position.y, { zoom: zoom, duration: 300 })
+    }, [position]);
+
+
+    const onKeyDown = (event) => {
+        switch (event.key) {
+            case 'ArrowUp':
+                setPosition((prevPosition) => ({ ...prevPosition, y: prevPosition.y - 100 }));
+                break;
+            case 'ArrowDown':
+                setPosition((prevPosition) => ({ ...prevPosition, y: prevPosition.y + 100 }));
+                break;
+            case 'ArrowLeft':
+                setPosition((prevPosition) => ({ ...prevPosition, x: prevPosition.x - 100 }));
+                break;
+            case 'ArrowRight':
+                setPosition((prevPosition) => ({ ...prevPosition, x: prevPosition.x + 100 }));
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    useEffect(() => {
+        window.addEventListener('keydown', onKeyDown);
+        return () => {
+            window.removeEventListener('keydown', onKeyDown);
+        };
+    }, []);
+
+
+
+
+
+    return <></>
+}
 
 
 
@@ -583,6 +697,31 @@ const ButtonHeadMap = ({ setMiniMapVisible }) => {
 }
 
 
+
+const ButtonLink = ({ }) => {
+    const dispatch = useDispatch()
+
+    const handleLink = () => {
+        dispatch(setModal(<ModalLink />))
+    }
+
+    return (
+        <div
+            className={styles.button}
+            onClick={handleLink}
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m15.141 6 5.518 4.95a1.05 1.05 0 0 1 0 1.549l-5.612 5.088m-6.154-3.214v1.615a.95.95 0 0 0 1.525.845l5.108-4.251a1.1 1.1 0 0 0 0-1.646l-5.108-4.251a.95.95 0 0 0-1.525.846v1.7c-3.312 0-6 2.979-6 6.654v1.329a.7.7 0 0 0 1.344.353 5.174 5.174 0 0 1 4.652-3.191l.004-.003Z" />
+            </svg>
+            <span>
+                Link
+            </span>
+        </div>
+    )
+}
+
+
+
 const ButtonMap = ({ setMiniMapVisible }) => {
     const handleButtonMap = () => {
         setMiniMapVisible((prevVisible) => !prevVisible);
@@ -646,50 +785,11 @@ const ButtonAdd = ({ addNode, setNodes, nodes, setEdges, edges }) => {
 
 
 const ButtonTree = ({ save = false }) => {
-    const [isLoading, setIsLoading] = useState(false)
+    // const [isLoading, setIsLoading] = useState(false)
+    const dispatch = useDispatch()
 
     const handleClickTree = async () => {
-        if (!isLoading) {
-            setIsLoading(true)
-
-            const messages = [{
-                role: 'user',
-                content: generatePromptTree('calders web')
-            }];
-
-            console.log('mess', messages);
-            let accumulatedText = '';
-
-            try {
-                const openai = await useOpenAI();
-                const resp = await openai.chat.completions.create({
-                    model: 'gpt-4',
-                    messages,
-                    // stream: true,
-                });
-
-
-                const response = resp.choices[0].message.content
-                console.log('response', response)
-
-                const json = parseChartString(response)
-                console.log('json', json)
-
-                json.nodes = json.nodes.map(node => ({
-                    ...node,
-                    type: 'selectorTemplate'
-                }));
-
-
-
-                setNodes((prevNodes) => [...prevNodes, ...json.nodes]);
-                setEdges((prevEdges) => [...prevEdges, ...json.edges]);
-
-                setIsLoading(false)
-            } catch (err) {
-                console.log('err', err);
-            }
-        }
+        dispatch(setModal(<ModalTemplate />))
     };
 
     return (
@@ -709,9 +809,72 @@ const ButtonTree = ({ save = false }) => {
 }
 
 
+// const ButtonTree = ({ save = false }) => {
+//     const [isLoading, setIsLoading] = useState(false)
+
+//     const handleClickTree = async () => {
+//         if (!isLoading) {
+//             setIsLoading(true)
+
+//             const messages = [{
+//                 role: 'user',
+//                 // content: generatePromptTree('calders web')
+//             }];
+
+//             console.log('mess', messages);
+//             let accumulatedText = '';
+
+//             try {
+//                 const openai = await useOpenAI();
+//                 const resp = await openai.chat.completions.create({
+//                     model: 'gpt-4',
+//                     messages,
+//                     // stream: true,
+//                 });
+
+
+//                 const response = resp.choices[0].message.content
+//                 console.log('response', response)
+
+//                 // const json = parseChartString(response)
+//                 console.log('json', json)
+
+//                 json.nodes = json.nodes.map(node => ({
+//                     ...node,
+//                     type: 'selectorTemplate'
+//                 }));
+
+
+
+//                 setNodes((prevNodes) => [...prevNodes, ...json.nodes]);
+//                 setEdges((prevEdges) => [...prevEdges, ...json.edges]);
+
+//                 setIsLoading(false)
+//             } catch (err) {
+//                 console.log('err', err);
+//             }
+//         }
+//     };
+
+//     return (
+//         <div
+//             className={styles.button}
+//             onClick={() => handleClickTree()}
+//         >
+
+//             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+//                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 12v4m0 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM8 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 0v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V8m0 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
+//             </svg>
+//             <span>
+//                 Tree
+//             </span>
+//         </div>
+//     )
+// }
+
+
 
 const ButtonSave = ({ save = true }) => {
-    console.log('save', save)
     return (
         <div>
             {save ? (
@@ -760,29 +923,29 @@ const ZoomFunction = ({ direction }) => {
 
 
 
-const ZoomInitial = ({ nodes }) => {
-    const { fitView, setCenter } = useReactFlow();
+// const ZoomInitial = ({ nodes }) => {
+//     const { fitView, setCenter } = useReactFlow();
 
-    useEffect(() => {
-        const waitForLoad = async () => {
-            if (fitView && setCenter) {
-                const lastNode = nodes[nodes.length - 1];
+//     useEffect(() => {
+//         const waitForLoad = async () => {
+//             if (fitView && setCenter) {
+//                 const lastNode = nodes[nodes.length - 1];
 
-                let newX = 0
-                let newY = 0
+//                 let newX = 0
+//                 let newY = 0
 
-                if (lastNode) {
-                    newY = lastNode.position.y;
-                    newX = lastNode.position.x + lastNode.width + 1
-                }
+//                 if (lastNode) {
+//                     newY = lastNode.position.y;
+//                     newX = lastNode.position.x + lastNode.width + 1
+//                 }
 
-                setCenter(newX - 200, newY + 270, { zoom: 0.8, duration: 500 });
-            }
-        };
+//                 setCenter(newX - 200, newY + 270, { zoom: 0.8, duration: 500 });
+//             }
+//         };
 
-        waitForLoad();
-    }, [fitView, setCenter]);
-}
+//         waitForLoad();
+//     }, [fitView, setCenter]);
+// }
 
 
 
@@ -934,19 +1097,19 @@ const PositionComponent = ({ position, nodes, edges, setNodes, setEdges }) => {
 const BarMana = () => {
     return (
         <div className={styles.barMana}>
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
             <div className={styles.line} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
         </div>
     )
 }
@@ -954,19 +1117,19 @@ const BarMana = () => {
 const BarBalance = () => {
     return (
         <div className={styles.barBalance}>
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={`${styles.bar} ${styles.active}`} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
-            <div className={styles.bar} />
             <div className={styles.line} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={styles.bar} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
+            <div className={`${styles.bar} ${styles.active}`} />
         </div>
     )
 }

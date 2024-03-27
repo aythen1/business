@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ import styles from "./index.module.css";
 
 
 import Pricing from '@/views/web/pricing'
-import Report from '@/views/app/components/TopBar/Report'
+// import Report from '@/views/app/components/TopBar/Report'
 import ModalAddon from '@/views/app/pages/Addon/Vector'
 
 import {
@@ -47,6 +47,21 @@ export const TopBar = ({
   const [stateUpgrade, setStateUpgrade] = useState(false)
 
   const [isShowDashBoard, setIsShowDashBoard] = useState(false)
+
+  // --------------------------------------------------------------
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1500) {
+        setOpenMenuMobile(true);
+      } else {
+        setOpenMenuMobile(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   // --------------------------------------------------------------
   useEffect(() => {
@@ -125,17 +140,17 @@ export const TopBar = ({
 
 
 
-  const handleClickReport = () => {
-    setOpenMenuMobile(false)
+  // const handleClickReport = () => {
+  //   setOpenMenuMobile(false)
 
-    dispatch(setOpenChatBot(false))
-    dispatch(setOpenMenuLeft(false))
-    dispatch(setModal(
-      <div >
-        <Report />
-      </div>
-    ))
-  }
+  //   dispatch(setOpenChatBot(false))
+  //   dispatch(setOpenMenuLeft(false))
+  //   dispatch(setModal(
+  //     <div >
+  //       <Report />
+  //     </div>
+  //   ))
+  // }
 
   const handleClickDrive = () => {
     setOpenMenuMobile(false)
@@ -214,6 +229,14 @@ export const TopBar = ({
     setImageError(true);
   };
 
+  // -------------------------------------
+  const [subMenu, setSubMenu] = useState(false)
+
+  // const handleSubMenu = (e) => {
+  //   e.stopPropagation()
+  //   setSubmenu(false)
+  // }
+
 
   return (
     <div className={styles["frame-2087325960"]}>
@@ -229,6 +252,15 @@ export const TopBar = ({
           ) : (
             <img src={`http://localhost:3001/service/v1/iam/user/${user?.id}`} onError={handleImageError} />
           )}
+          <div
+            className={styles.buttonSubMenu}
+            onClick={() => setSubMenu(!subMenu)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m8 10 4 4 4-4" />
+            </svg>
+            {subMenu && <SubMenu setSubMenu={setSubMenu} />}
+          </div>
         </div>
         <div className={styles["frame-23415"]}>
           <div className={styles["welcome-john-doe"]}>
@@ -294,7 +326,7 @@ export const TopBar = ({
             </div>
           ) : (
             <div className={styles["component-7"]}>
-              {isShowDashBoard ? (
+              {/* {isShowDashBoard ? (
                 <div
                   onClick={() => handleClickReport()}
                   className={styles["informe"]}
@@ -314,16 +346,16 @@ export const TopBar = ({
                   </svg>
                   <span className={styles["informe-span2"]}>Informe</span>
                 </div>
-              ) : (
-                <div
-                  className={styles["informe-span2"]}
-                  onClick={() => handleClickDashboard()}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="20" viewBox="0 0 24 24">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 6c0 1.7-3.1 3-7 3S5 7.7 5 6m14 0c0-1.7-3.1-3-7-3S5 4.3 5 6m14 0v6M5 6v6m0 0c0 1.7 3.1 3 7 3s7-1.3 7-3M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
-                  </svg>
-                </div>
-              )}
+              ) : ( */}
+              <div
+                className={styles["informe-span2"]}
+                onClick={() => handleClickDashboard()}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="20" viewBox="0 0 24 24">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 6c0 1.7-3.1 3-7 3S5 7.7 5 6m14 0c0-1.7-3.1-3-7-3S5 4.3 5 6m14 0v6M5 6v6m0 0c0 1.7 3.1 3 7 3s7-1.3 7-3M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
+                </svg>
+              </div>
+              {/* )} */}
             </div>
           )}
         </div>
@@ -630,9 +662,9 @@ export const TopBar = ({
               </li>
               <li className={styles['item']}>
                 {themeMode == 'dark' ? (
-                  <button 
-                  className={styles['button']}
-                  onClick={() => handleClickTheme('light')}
+                  <button
+                    className={styles['button']}
+                    onClick={() => handleClickTheme('light')}
                   >
                     <div className={styles['square']}>
                       <svg
@@ -654,9 +686,9 @@ export const TopBar = ({
                     </span>
                   </button>
                 ) : (
-                  <button 
-                  className={styles['button']}
-                  onClick={() => handleClickTheme('dark')}
+                  <button
+                    className={styles['button']}
+                    onClick={() => handleClickTheme('dark')}
                   >
                     <div className={styles['square']}>
                       <svg
@@ -736,3 +768,131 @@ export const TopBar = ({
 
 export default TopBar;
 
+
+
+
+
+
+
+const SubMenu = ({setSubMenu}) => {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setSubMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={menuRef}
+      className={styles.subMenu}
+    >
+      <ul className={styles.top}>
+        <li>
+          <div>
+            <img src={'http://localhost:3001/service/v1/iam/user/7da006aa-37b2-4241-9f7a-e1e2c6ea1fcd'} />
+          </div>
+          Karl Vald
+        </li>
+        <li style={{ borderTop: '1px solid var(--border-color)' }}>
+          <div>
+            <img src={'http://localhost:3001/service/v1/iam/user/7da006aa-37b2-4241-9f7a-e1e2c6ea1fcd'} />
+          </div>
+          RightCow
+        </li>
+        <li style={{ borderBottom: '1px solid var(--border-color)' }}>
+          <div>
+            <img src={'http://localhost:3001/service/v1/iam/user/7da006aa-37b2-4241-9f7a-e1e2c6ea1fcd'} />
+          </div>
+          StartPymes
+        </li>
+        <li className={styles.button}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <path fillRule="evenodd" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H6Zm7.25-2.095c.478-.86.75-1.85.75-2.905a5.973 5.973 0 0 0-.75-2.906 4 4 0 1 1 0 5.811ZM15.466 20c.34-.588.535-1.271.535-2v-1a5.978 5.978 0 0 0-1.528-4H18a4 4 0 0 1 4 4v1a2 2 0 0 1-2 2h-4.535Z" clip-rule="evenodd" />
+          </svg>
+          Ver todos los perfiles
+        </li>
+      </ul>
+      <ul className={styles.bottom}>
+        <li>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M9.586 2.586A2 2 0 0 1 11 2h2a2 2 0 0 1 2 2v.089l.473.196.063-.063a2.002 2.002 0 0 1 2.828 0l1.414 1.414a2 2 0 0 1 0 2.827l-.063.064.196.473H20a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-.089l-.196.473.063.063a2.002 2.002 0 0 1 0 2.828l-1.414 1.414a2 2 0 0 1-2.828 0l-.063-.063-.473.196V20a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-.089l-.473-.196-.063.063a2.002 2.002 0 0 1-2.828 0l-1.414-1.414a2 2 0 0 1 0-2.827l.063-.064L4.089 15H4a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h.09l.195-.473-.063-.063a2 2 0 0 1 0-2.828l1.414-1.414a2 2 0 0 1 2.827 0l.064.063L9 4.089V4a2 2 0 0 1 .586-1.414ZM8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          Configuraciones y privacidad
+          <svg className={styles.left} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m10 16 4-4-4-4" />
+          </svg>
+        </li>
+        <li>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.008-3.018a1.502 1.502 0 0 1 2.522 1.159v.024a1.44 1.44 0 0 1-1.493 1.418 1 1 0 0 0-1.037.999V14a1 1 0 1 0 2 0v-.539a3.44 3.44 0 0 0 2.529-3.256 3.502 3.502 0 0 0-7-.255 1 1 0 0 0 2 .076c.014-.398.187-.774.48-1.044Zm.982 7.026a1 1 0 1 0 0 2H12a1 1 0 1 0 0-2h-.01Z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          Ayuda y accesibilidad
+          <svg className={styles.left} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m10 16 4-4-4-4" />
+          </svg>
+        </li>
+        <li>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M11.209 3.816a1 1 0 0 0-1.966.368l.325 1.74a5.338 5.338 0 0 0-2.8 5.762l.276 1.473.055.296c.258 1.374-.228 2.262-.63 2.998-.285.52-.527.964-.437 1.449.11.586.22 1.173.75 1.074l12.7-2.377c.528-.1.418-.685.308-1.27-.103-.564-.636-1.123-1.195-1.711-.606-.636-1.243-1.306-1.404-2.051-.233-1.085-.275-1.387-.303-1.587-.009-.063-.016-.117-.028-.182a5.338 5.338 0 0 0-5.353-4.39l-.298-1.592Z" />
+              <path fillRule="evenodd" d="M6.539 4.278a1 1 0 0 1 .07 1.412c-1.115 1.23-1.705 2.605-1.83 4.26a1 1 0 0 1-1.995-.15c.16-2.099.929-3.893 2.342-5.453a1 1 0 0 1 1.413-.069Z" clip-rule="evenodd" />
+              <path d="M8.95 19.7c.7.8 1.7 1.3 2.8 1.3 1.6 0 2.9-1.1 3.3-2.5l-6.1 1.2Z" />
+            </svg>
+          </div>
+          Pantalla y accesibilidad
+          <svg className={styles.left} xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m10 16 4-4-4-4" />
+          </svg>
+        </li>
+        <li>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M4 3a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h1v2a1 1 0 0 0 1.707.707L9.414 13H15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4Z" clip-rule="evenodd" />
+              <path fillRule="evenodd" d="M8.023 17.215c.033-.03.066-.062.098-.094L10.243 15H15a3 3 0 0 0 3-3V8h2a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-1v2a1 1 0 0 1-1.707.707L14.586 18H9a1 1 0 0 1-.977-.785Z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          Enviar comentarios
+        </li>
+        <li>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
+            </svg>
+          </div>
+          Cerrar sesión
+        </li>
+      </ul>
+      <div className={styles.footer}>
+        <a>
+          Privacidad
+        </a>
+        ·
+        <a>
+          Condiciones
+        </a>
+        ·
+        <a>
+          Cookies
+        </a>
+        ·
+        <a>
+          Condiciones
+        </a>
+      </div>
+    </div>
+  )
+}

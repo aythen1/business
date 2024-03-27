@@ -22,12 +22,11 @@ import NotFound from '../pages/NotFound'
 
 import Meet from './pages/Meet'
 import DashBoard from './pages/DashBoard'
-import Search from './pages/Search'
 
-import Support from './pages/Support'
 
-import Ticket from './pages/Support/ticket'
-import Tickets from './pages/Support/tickets'
+// import Support from './pages/Support'
+// import Ticket from './pages/Support/ticket'
+// import Tickets from './pages/Support/tickets'
 
 
 import Settings from './pages/Settings'
@@ -178,7 +177,7 @@ export const App = ({ }) => {
         >
           <Routes>
             <Route path="board/*" element={<DashBoard />} />
-              <Route path="/" element={<Search />} />
+              
             <Route path="/*" element={<Outlet />}>
 
               <Route path="meet/:room" element={<Meet />} />
@@ -190,9 +189,9 @@ export const App = ({ }) => {
               {/* <Route path="vector" element={<Vector />} /> */}
               <Route path="vector/:vectorId" element={<Vector />} />
 
-              <Route path="support" element={<Support />} />
-              <Route path="support/tickets" element={<Tickets />} />
-              <Route path="support/ticket/:ticketId" element={<Ticket />} />
+              {/* <Route path="support" element={<Support />} /> */}
+              {/* <Route path="support/tickets" element={<Tickets />} /> */}
+              {/* <Route path="support/ticket/:ticketId" element={<Ticket />} /> */}
 
               <Route path="addon/:addonId" element={<Addon />} />
               <Route path="addon/:addonId/:templateId" element={<Addon />} />
