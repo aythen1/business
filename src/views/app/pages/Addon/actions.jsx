@@ -251,7 +251,8 @@ export const addSectionsToElement = (sections) => {
     console.log('ejdiewjifi', sections)
     for (var i = 0; i < sections.length; i++) {
         const sectionsDiv = document.createElement('div');
-        sectionsDiv.className = 'customSections notHover';
+        // sectionsDiv.class = 'customSections notHover';
+        // sectionsDiv.className = 'customSections notHover';
         ReactDOM.render(<CustomSections />, sectionsDiv);
         console.log('--------------')
         sections[i].appendChild(sectionsDiv);
@@ -369,6 +370,7 @@ export const handleGPT = async ({ prompt = false }) => {
             return accumulatedText
 
         } catch (err) {
+            console.log('ewdnfujrbu')
             throw err
         }
     }
@@ -480,9 +482,9 @@ export const handleDeleteComponent = async (hoveredElement) => {
 
 
 
-export const handleOpenBlock = async (dispatch, Modal, data) => {
-    dispatch(setOpenModal(<Modal />))
-};
+// export const handleOpenBlock = async (dispatch, Modal, data) => {
+//     dispatch(setOpenModal(<Modal />))
+// };
 
 
 

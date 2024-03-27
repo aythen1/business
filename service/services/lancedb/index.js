@@ -11,6 +11,9 @@ const {
 
 const allSchemas = require("./schema");
 
+
+
+
 const decodeVector = (base64Str) => {
   const str = atob(base64Str);
 
@@ -592,9 +595,14 @@ async function deleteVector(id, name, data) {
 }
 
 async function removeVector(id, name) {
-  const { path0, path1 } = decodeVector(id);
+  const { path0, path1, path2 } = decodeVector(id);
 
-  const uri = "data/vector/" + path0 + "/" + path1 + "/" + name + ".lance/";
+  let uri
+  if(path2){
+    uri = "data/vector/" + path0 + "/" + path1 + "/" + path2 + "/" + name + ".lance/";
+  }else{
+    uri = "data/vector/" + path0 + "/" + path1 + "/" + name + ".lance/";
+  }
 
   //   const tablePath = path.join(uri, `${name}.ldb`)
 

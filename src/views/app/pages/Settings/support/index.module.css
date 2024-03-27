@@ -75,6 +75,7 @@
       text-decoration: none;
       text-align: center;
       color: var(--text-color);
+      z-index: 1;
     }
 
     .input {
@@ -534,3 +535,6 @@
     }
   }
 }
+
+
+

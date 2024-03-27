@@ -1,0 +1,136 @@
+.modal {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
+  min-width: 600px;
+  .template {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 70vh;
+    > div {
+      zoom: 0.5;
+    }
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: scroll;
+    height: 60vh;
+    gap: 10px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    h3 {
+      font-size: 50px;
+      font-weight: 600;
+    }
+    .date {
+      padding: 4px 10px;
+      background: var(--color-primary-4);
+      color: var(--color-primary-0);
+      font-size: 12px;
+    }
+    .shortcut {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      label {
+        font-size: 12px;
+        padding: 4px 8px;
+        background: var(--color-primary-0);
+        color: var(--color-primary-4);
+      }
+    }
+    .vectors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      label {
+        font-size: 12px;
+        padding: 4px 8px;
+        background: var(--color-primary-4);
+        color: var(--color-primary-1);
+      }
+    }
+    .chats {
+      margin-top: auto;
+      width: 100%;
+      .chat {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        > div {
+          padding: 5px 10px;
+          border-radius: 20px;
+          font-size: 12px;
+        }
+        .me {
+          background: var(--color-primary-4);
+          color: var(--color-primary-0);
+          border-top-left-radius: 0px;
+          margin-right: auto;
+        }
+        .you {
+          background: var(--color-primary-1);
+          color: var(--color-primary-4);
+          margin-left: auto;
+          border-top-right-radius: 0px;
+        }
+      }
+      .textarea {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 1px solid var(--border-color);
+        padding: 10px;
+        border-radius: 8px;
+        textarea {
+          width: calc(100% - 100px);
+        }
+        button {
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--color-primary-4);
+          color: var(--color-primary-0);
+        }
+      }
+    }
+  }
+}
+
+.styles {
+  > div {
+    b {
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    > div {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      label {
+        padding: 2px 8px;
+        font-size: 10px;
+        background: var(--color-primary-4);
+        color: var(--color-primary-1);
+        cursor: pointer;
+        &.active{
+            background: var(--color-primary-0);
+            color: var(--color-primary-4);
+        }
+        &:hover {
+          background: var(--color-primary-3);
+        }
+      }
+    }
+  }
+}

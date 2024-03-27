@@ -22,6 +22,7 @@ import { useGraph } from '../index';
 import Template from './Template'
 import Vector from './Vector'
 
+import stylesLoader from './loader.module.css'
 
 
 // import {
@@ -250,15 +251,11 @@ export default memo(({ id, data, isConnectable, }) => {
 
 
   //
-  const onEditor = (offset) => {
+  const onEditor = (index, offset) => {
     const node = nodes.filter((node) => node.id === id)[0]
 
-    const code = node.data.components.map(component => {
-      return `<div class="customSection">
-      ${component.code}
-</div>`
-
-      return component.code
+    const code = node.data.components.map((component, i) => {
+      return `<div class="customSection" tab-section="${i}">${component.code}</div>`
     }).join('\n')
 
 
@@ -269,7 +266,7 @@ export default memo(({ id, data, isConnectable, }) => {
         setIsEditor({
           id,
           content: code,
-          offset
+          index
         })
         setCenter(template.position?.x + 100, template.position?.y - 50 + offset, { zoom: 2, duration: 1000 })
       }, 800)

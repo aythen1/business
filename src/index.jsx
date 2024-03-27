@@ -7,6 +7,7 @@ import './global.css'
 
 import { Provider } from 'react-redux';
 
+
 import store from '@/utils/store';
 import generateColors from '@/utils/colors'
 
@@ -20,6 +21,7 @@ import { createRoot } from 'react-dom/client';
 import Admin from './admin';
 import Test from './test';
 
+import Search from './views/app/pages/Search'
 import DynamicRoute from './DynamicRoute';
 import Register from './views/app/auth/register';
 import Login from './views/app/auth/login';
@@ -109,7 +111,7 @@ const ProtectedRoute = ({ element, setIsAuth }) => {
 
 // -----------------------
 const supportedLanguages = ['es', 'en', 'pt', 'fr'];
-const defaultLanguage = 'es'; 
+const defaultLanguage = 'es';
 
 const { pathname } = window.location;
 const languageFromPath = pathname.split('/')[1];
@@ -176,11 +178,14 @@ const Layout = () => {
                   element={<Test />}
                 />
 
+
                 <Route
                   path="/:lng/vector/:vectorId"
                   element={<Test />}
                 />
 
+                <Route path="/:lng/" element={<Search />} />
+                
                 <Route
                   path="/:lng/*"
                   element={<DynamicRoute />}

@@ -1,0 +1,91 @@
+.modal{
+    max-width: 600px;
+    overflow-y: scroll;
+    height: 80vh;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    .header{
+        border-bottom: 1px solid var(--border-color);
+        padding: 0px 0px 6px;
+        h2{
+            font-size: 20px;
+            font-weight: 600;
+        }
+    }
+    .filter{
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .input{
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 6px;
+            svg{
+                width: 14px;
+                height: 14px;
+            }
+            input{
+                background: transparent;
+            }
+        }
+        .select{
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 6px;
+            svg{
+                width: 14px;
+                height: 14px;
+            }
+            input{
+                background: transparent;
+            }
+        }
+    }
+    .list{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 10px 0px;
+        .item{
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            cursor: pointer;
+            &:hover{
+                background: var(--background-secondary);
+            }
+            .content{
+                b{
+                    font-size: 12px;
+                    line-height: 17px;
+                    color: var(--color-primary-0);
+                    float: left;
+                    width: 100%;
+                }
+                p{
+                    font-size: 12px;
+                    color: var(--text-color-secondary);
+                }
+                span{
+                    font-size: 10px;
+                    font-weight: 600;
+                }
+            }
+            .logo{
+
+            }
+        }
+    }
+}

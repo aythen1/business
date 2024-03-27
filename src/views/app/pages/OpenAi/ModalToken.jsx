@@ -1,18 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 
 import styles from './ModalToken.module.css'
 
+
+import {
+    setModal
+} from '@/slices/iamSlice'
+
+
 const ModalToken = () => {
+    const dispatch = useDispatch()
 
+    const [isSave, setIsSave] = useState(false);
+
+    const [name, setName] = useState('wrfr');
     const [token, setToken] = useState('');
-    const inputRef = useRef(null);
+    // const [token1, setToken1] = useState('');
+
+    // const inputRef = useRef(null);
 
 
-    useEffect(() => {
-        if(token){
-            localStorage.setItem('token-gpt', token);
-        }
-    }, [token]);
+    // useEffect(() => {
+    //     if (token) {
+    //         localStorage.setItem('token-gpt', token);
+    //     }
+    // }, [token]);
 
 
     useEffect(() => {
@@ -35,6 +48,22 @@ const ModalToken = () => {
         setToken('')
     }
 
+    // const handleChange = (event) => {
+    //     setToken(event.target.value);
+    //   };
+
+    const handleCancel = () => {
+        dispatch(setModal(null))
+    }
+
+    const handleSave = () => {
+        localStorage.setItem('token-gpt', token);
+        setIsSave(true)
+    }
+
+
+
+
 
     return (
         <div className={styles.modal}>
@@ -51,7 +80,7 @@ const ModalToken = () => {
                     Usage page.
                 </a>
             </div>
-            {token ? (
+            {(isSave && token) ? (
                 <div className={styles.isToken}>
                     <b>
                         Este es tu nuevo token
@@ -62,7 +91,7 @@ const ModalToken = () => {
                             {token}
                         </span>
                     </div>
-                    <button 
+                    <button
                         className={styles.buttonDelete}
                         onClick={() => handleDeleteToken()}
                     >
@@ -89,18 +118,25 @@ const ModalToken = () => {
                             </label>
                             <input
                                 type="text"
-                            />
+                                placeholder="Insert name"
+                                spellCheck={false}
+                                value={name}
+                                onChange={(event) => setName(event.target.value)}
+                                />
                         </div>
                         <div className={styles.inputToken}>
                             <input
-                                ref={inputRef}
+                                // ref={inputRef}
                                 type="text"
                                 placeholder='Insert Token Api'
+                                spellCheck={false}
+                                value={token}
+                                onChange={(event) => setToken(event.target.value)}
                             />
                             <button
                                 onClick={() => handlePasteToken()}
                             >
-                                <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" strokeLinejoin="round" strokeWidth="2" d="M9 8v3c0 .6-.4 1-1 1H5m11 4h2c.6 0 1-.4 1-1V5c0-.6-.4-1-1-1h-7a1 1 0 0 0-1 1v1m4 3v10c0 .6-.4 1-1 1H6a1 1 0 0 1-1-1v-7.1c0-.3 0-.5.2-.7l2.5-2.9c.2-.2.5-.3.8-.3H13c.6 0 1 .4 1 1Z" />
                                 </svg>
                                 Paste
@@ -119,11 +155,16 @@ const ModalToken = () => {
                 </span>
             </div>
             <div className={styles.buttons}>
-                <button className={styles.search}>
-                    Search Addon
+                <button
+                    className={styles.search}
+                    onClick={() => handleCancel()}
+                >
+                    Cerrar Modal
                 </button>
-                <button>
-                    Create Addon
+                <button
+                    onClick={() => handleSave()}
+                >
+                    Guardar Token
                 </button>
             </div>
         </div>

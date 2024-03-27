@@ -163,6 +163,10 @@
         }
         .photo {
           margin-top: 10px;
+          svg{
+            width: 100%;
+            height: inherit;
+          }
         }
         .buttons {
           margin-top: 10px;

@@ -130,6 +130,7 @@ const Addon = ({
       <div
         style={{ display: isEditor.id ? 'none' : 'block' }}
       >
+ 
         <AddonFlow
           setIsEditor={setIsEditor}
         />
@@ -139,3 +140,12 @@ const Addon = ({
 }
 
 export default Addon
+
+
+
+
+
+
+
+
+

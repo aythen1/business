@@ -89,28 +89,24 @@ const fetchAddon = async (req, res) => {
     const { id } = req.params
     const pathAddon = encodeVector(ID)
 
-    console.log('wcxwc')
     const options = [
       { field: 'id', operator: '==', value: id },
     ];
 
     const respAddon = await getVector(pathAddon, 'addons', [0, 0], options)
 
-    console.log('respAddon', respAddon)
     if (respAddon.length == 0) {
       return res.status(404).send('Not exist')
     }
 
     const addon = respAddon[0]
-    const nameAddon = addon.title || 'shared'
-    const pathVector = encodeVector(`addon/${nameAddon}`)
-
-    const arr = await getFolderFromDirectory(`data/vector/addon/${nameAddon}`)
-
+    const nodes = JSON.parse(addon.nodes)
 
     const vectors = []
-    for (var i = 0; i < arr.length; i++) {
-      const respVector = await getVector(pathVector, arr[i])
+    for (var i = 0; i < nodes.length; i++) {
+      const node = nodes[i]
+      let id = encodeVector(`addon/${addon.id}/${node.id}`)
+      const respVector = await getVector(id, 'templates')
       if (respVector.length !== 0) {
         vectors.push(respVector[0])
       }
@@ -134,7 +130,36 @@ const deleteAddon = async (req, res) => {
     const { id } = req.body
     const path = encodeVector(ID)
 
+    // const resp = await deleteVector(path, 'addons', { id })
+
+    // const { id } = req.params
+    // const pathAddon = encodeVector(ID)
+
+    const options = [
+      { field: 'id', operator: '==', value: id },
+    ];
+
+    const respAddon = await getVector(path, 'addons', [0, 0], options)
     const resp = await deleteVector(path, 'addons', { id })
+
+    if (respAddon.length == 0) {
+      return res.status(404).send('Not exist')
+    }
+
+    const addon = respAddon[0]
+    const nodes = JSON.parse(addon.nodes)
+
+    const vectors = []
+    for (var i = 0; i < nodes.length; i++) {
+      const node = nodes[i]
+      let uri = encodeVector(`addon/${addon.id}/${node.id}`)
+      // const respVector = await getVector(id, 'templates')
+      // if (respVector.length !== 0) {
+      //   vectors.push(respVector[0])
+      // }
+      await removeVector(uri, 'templates')
+    }
+
 
     return res.status(200).send(id)
   } catch (err) {
